@@ -1,0 +1,60 @@
+{itemplate 'public/header'}
+<div class="page clearfix" ng-controller="processor">
+	<form class="form-horizontal form" id="form1" action="" method="post" enctype="multipart/form-data">
+		<h2>{$superRedpacket['name']}</h2>
+		<div class="progress">
+			<div class="progress-bar progress-bar-danger" ng-style="style">
+				{{pragress}}
+			</div>
+		</div>
+		<span class="help-block">红包正在发送中，请勿关闭浏览器</span>
+		<div class="alert alert-danger" ng-show="fails.length > 0">
+			<i class="fa fa-info-circle"></i> 有{{fails.length}}个顾客发送失败,您可以选择重新发送
+		</div>
+	</form>
+</div>
+<script>
+	require(['angular'], function(angular) {
+		var running = true;
+		window.onbeforeunload = function(e) {
+			if(running) {
+				return (e || window.event).returnValue = '正在发送红包中,确定离开页面吗?';
+			}
+		}
+		angular.module('app', []).controller('processor', function($scope, $http) {
+			$scope.uids = {php echo json_encode($superRedpacket['grant_object'])};
+			$scope.fails = [];
+			var total = $scope.uids.grant_uid.length;
+			var i = 1;
+			running = true;
+			var proc = function() {
+				var uid = $scope.uids.unissued_uid.pop();
+				if(!uid) {
+					running = false;
+					Notify.success('发送完成', "{php echo iurl('superRedpacket/grant/list')}");
+					return;
+				}
+				$scope.uid = uid;
+				$scope.pragress = (i / total).toFixed(2) * 100 + "%";
+				$scope.style = {'width': (i / total).toFixed(2) * 100 + "%"};
+				var params = {uid: uid};
+				$http.post(location.href, params).success(function(data) {
+					i++;
+					if(data.message.errno != 0) {
+						$scope.fails.push(uid);
+						Notify.error(data.message.message);
+						return;
+					}
+					proc();
+				}).error(function() {
+					i++;
+					$scope.fails.push(uid);
+					proc();
+				});
+			}
+			proc();
+		});
+		angular.bootstrap(document, ['app']);
+	});
+</script>
+{itemplate 'public/footer'}

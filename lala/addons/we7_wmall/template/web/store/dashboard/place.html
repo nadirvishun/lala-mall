@@ -1,0 +1,302 @@
+{itemplate 'public/header'}
+<div class="clearfix" id="placeOrder" ng-controller="placeOrder">
+	<div class="pull-left col-lg-3 cart-content">
+		<div class="panel panel-stat">
+			<nav role="navigation" class="navbar navbar-default navbar-static-top">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a href="javascript:;" class="navbar-brand">已点菜品</a>
+					</div>
+				</div>
+			</nav>
+			<div class="panel-body">
+				<div class="table-responsive">
+					<form class="form-horizontal form" id="form1" action="" method="post" enctype="multipart/form-data">
+						<table class="table table-hover table-bordered" style="max-width:500px">
+							<thead>
+							<tr>
+								<th width="120">数量</th>
+								<th width="150">菜名</th>
+								<th width="50">单价</th>
+								<th width="50">小计</th>
+							</tr>
+							</thead>
+						</table>
+						<div class="goods-list">
+							<table class="table table-hover table-bordered">
+								<tr ng-repeat="goods in place.cart">
+									<td width="120">
+										<div class="input-group">
+											<span class="input-group-addon" ng-click="place.goodsCart(goods.good, goods.option, '-')">-</span>
+											<input type="text" class="form-control stat-num" value="{{goods.num}}" name="nums[]">
+											<span class="input-group-addon" ng-click="place.goodsCart(goods.good, goods.option, '+')">+</span>
+										</div>
+									</td>
+									<td width="150">{{goods.title}}</td>
+									<td width="50">{{goods.price}}</td>
+									<td width="50">{{goods.total_price}}</td>
+								</tr>
+							</table>
+						</div>
+						<table class="table table-hover table-bordered">
+							<tr>
+								<th colspan="2">
+									配送费：
+									<br>
+									<span class="text-high" ng-bind="place.store.delivery_price = (place.totalPrice >= place.store.delivery_free_price) ? 0 : place.store.delivery_price"></span>
+									<br>
+									<span ng-show="place.store.delivery_free_price > 0" ng-bind="'(满' + place.store.delivery_free_price + '元免费)'"></span>
+								</th>
+								<th colspan="2">
+									打包费：
+									<br>
+									<span class="text-high" ng-bind="place.store.pack_price"></span>
+								</th>
+							</tr>
+							<tr>
+								<th colspan="2">商品费：<br><span class="text-high" ng-bind="place.totalNum + '份/' + place.totalPrice + '元'"></span></th>
+								<th colspan="2">总计：<br><span class="text-high" ng-bind="(place.totalPrice - 0 + (place.store.delivery_price - 0) + (place.store.pack_price - 0)).toFixed(2) + '元'"></span></th>
+							</tr>
+							<tr>
+								<th colspan="4">
+									<input type="text" ng-model="place.user.mobile" class="form-control" style="margin-bottom:10px;" placeholder="手机号">
+									<input type="text" ng-model="place.user.username" class="form-control" style="margin-bottom:10px;" placeholder="收货人">
+									<input type="text" ng-model="place.user.address" class="form-control" placeholder="送餐地址">
+								</th>
+							</tr>
+							<tr>
+								<th colspan="4">
+									<textarea ng-model="place.user.note" class="form-control" placeholder="备注"></textarea>
+								</th>
+							</tr>
+							<tr>
+								<td colspan="2"><a href="javascript:;" ng-click="place.submitCart()" class="btn btn-primary" ng-class="{'disabled': place.disabled == 1}" style="width:130px">提交</a></td>
+								<input type="hidden" name="token" value="{$_W['token']}">
+								<td colspan="2"><a href="javascript:;" id="turncateCart" ng-click="place.turncateCart()" class="btn btn-danger" style="width:130px">清空</a></td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="pull-left col-lg-9 goods-content">
+		<div class="pull-left col-lg-12">
+			<div class="panel panel-stat">
+				<nav role="navigation" class="navbar navbar-default navbar-static-top">
+					<div class="container-fluid">
+						<ul class="nav navbar-nav nav-btns">
+							<li ng-click="place.toggleCategory(0);" ng-class="{'active': place.activeCategory == 0}"><a href="javascript:;">全部</a></li>
+							<li ng-repeat="category in place.categorys" ng-click="place.toggleCategory(category.id);" ng-class="{'active': place.activeCategory == category.id}"><a href="javascript:;" ng-bind="category.title"></a></li>
+						</ul>
+					</div>
+				</nav>
+				<div class="panel-body">
+					<div class="goods-item" ng-repeat="good in place.goods" ng-show="good.cid == place.activeCategory || place.activeCategory == 0" ng-class="{'active': good.totalNum > 0}">
+						<a href="javascript:;" class="goods-block" ng-click="place.goodsClick(good)">
+							<div class="goods-image">
+								<img src="{{good.thumb}}" alt="">
+								<div class="goods-title" ng-bind="good.title"></div>
+							</div>
+							<div class="price" ng-bind="good.price + '元/份'"></div>
+							<span class="num">{{good.totalNum}}</span>
+						</a>
+						<div ng-if="good.is_options == 1" ng-show="place.activeGoods.id == good.id" class="popover fade bottom" ng-class="{'in': place.activeGoods.id == good.id}">
+							<div class="arrow"></div>
+							<h3 class="popover-title">{{good.title}}规格</h3>
+							<div class="popover-content">
+								<div class="list-group">
+									<a href="javascript:;" class="list-group-item" ng-repeat="option in good.options" ng-init="option.num = 0" ng-click="place.goodsCart(good, option, '+');">{{option.name}}({{option.price}}元) <span class="badge" ng-show="option.num > 0">{{option.num}}</span></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+require(['angular', 'underscore'], function(angular, _){
+	irequire(['tiny'], function(tiny){
+		angular.module('app', []).controller('placeOrder', function($scope, $http){
+			$scope.place = {
+				user: {
+					mobile: '',
+					username: '',
+					address: '',
+					note: ''
+				},
+			store: {php echo json_encode($store);},
+			categorys: {php echo json_encode($categorys);},
+			goods: {php echo json_encode($goods);},
+			activeCategory: 0,
+					activeGoodsIndex: -1,
+					activeGoods: {},
+			activeOptionIndex: -1,
+					activeOption: {},
+			totalNum: 0,
+					totalPrice: 0,
+					cart: [],
+					toggleCategory: function(id) {
+				$scope.place.activeCategory = id;
+			},
+			disabled: 0,
+
+			turncateCart: function(force) {
+				tiny.confirm($('#turncateCart'), '确定清空购物车?', function(){
+					$scope.place.activeGoodsIndex = -1;
+					$scope.place.activeGoods = {};
+					$scope.place.activeOptionIndex = -1;
+					$scope.place.activeOption = {};
+					$scope.place.totalNum = 0;
+					$scope.place.totalPrice = 0;
+					$scope.place.cart = [];
+					angular.forEach($scope.place.goods, function(goods){
+						goods.totalNum = 0;
+						if(goods.is_options == 1 && goods.options) {
+							angular.forEach(goods.options, function(option){
+								option.num = 0;
+							});
+						}
+					});
+					$scope.$apply();
+				});
+			},
+			submitCart: function() {
+				var user = $scope.place.user;
+				if(!user.mobile) {
+					util.message('收货人手机号不能为空', '', 'info');
+					return false;
+				}
+				if(!user.username) {
+					util.message('收货人姓名不能为空', '', 'info');
+					return false;
+				}
+				if(!user.address) {
+					util.message('收货地址不能为空', '', 'info');
+					return false;
+				}
+				var cart = $scope.place.cart;
+				if(cart.length == 0) {
+					util.message('购物车不能为空', '', 'info');
+					return false;
+				}
+				$scope.place.disabled = 1;
+				$http.post("{php echo iurl('store/dashboard/place/post');}", {user: user, cart: cart, method: 'save'}).success(function(dat){
+					if(dat.message.errno != 0) {
+						util.message(dat.message.message, '', 'error');
+					} else {
+						util.message('下单成功', location.href, 'success');
+					}
+					$scope.place.disabled = 0;
+				});
+			},
+
+			toggleActiveGoods: function(goods, option) {
+				$scope.place.activeGoodsIndex = $.inArray(goods, $scope.place.goods);
+				$scope.place.activeGoods = $scope.place.goods[$scope.place.activeGoodsIndex];
+				if(option && $scope.place.activeGoods.is_options) {
+					$scope.place.activeOptionIndex = $.inArray(option, $scope.place.activeGoods.options);
+					if($scope.place.activeOptionIndex != -1) {
+						$scope.place.activeOption =  $scope.place.activeGoods.options[$scope.place.activeOptionIndex];
+					}
+				}
+			},
+			goodsClick: function(good) {
+				if(good.total == 0) {
+					util.message('库存不足', '', 'error');
+					return false;
+				}
+				if(good.is_options == 1) {
+					if($scope.place.activeGoods.id == good.id) {
+						$scope.place.activeGoodsIndex = -1;
+						$scope.place.activeGoods = {};
+						return false;
+					}
+					$scope.place.toggleActiveGoods(good);
+					return false;
+				} else {
+					if($scope.place.activeGoods.is_options == 1) {
+						$scope.place.toggleActiveGoods(good);
+						return false;
+					}
+				}
+				$scope.place.toggleActiveGoods(good);
+				$scope.place.goodsCart(good, {id: 0, title: '', price: good.price}, '+');
+			},
+
+			goodsCart: function(good, option, sign) {
+				var cart = $scope.place.cart;
+				$scope.place.toggleActiveGoods(good, option);
+				var marks = 0;
+				for(var n in cart) {
+					if (cart[n].goods_id == good.id) {
+						if(cart[n].option_id == option.id) {
+							if (sign == '+') {
+								if(good.total != -1 && cart[n].num >= good.total) {
+									util.message('库存不足', '', 'error');
+									return false;
+								}
+								$scope.place.activeGoods.totalNum++;
+								if(option.id > 0) {
+									$scope.place.activeOption.num++;
+								}
+								cart[n].num += 1;
+								$scope.place.totalNum++;
+								$scope.place.totalPrice = $scope.place.totalPrice - 0 + (cart[n].price - 0);
+								$scope.place.totalPrice = $scope.place.totalPrice.toFixed(2);
+							} else {
+								$scope.place.activeGoods.totalNum--;
+								if(option.id > 0) {
+									$scope.place.activeOption.num--;
+								}
+								cart[n].num -= 1;
+								$scope.place.totalNum--;
+								$scope.place.totalPrice = $scope.place.totalPrice - 0 - (cart[n].price - 0);
+								$scope.place.totalPrice = $scope.place.totalPrice.toFixed(2);
+							}
+							if(cart[n].num < 1) {
+								cart.splice(n, 1);
+							} else {
+								cart[n].total_price = (cart[n].num * cart[n].price).toFixed(2);
+							}
+							marks = 1;
+							break;
+						}
+					}
+				}
+				if (!marks) {
+					var goods = {
+						id: good.id,
+						goods_id: good.id,
+						option_id: option.id,
+						num: 1,
+						option_name: option.name,
+						price: option.price,
+						total_price: option.price,
+						good: good,
+						option: option
+					};
+					if(option.id > 0) {
+						goods.title = good.title + '(' + option.name + ')';
+					} else {
+						goods.title = good.title;
+					}
+					$scope.place.activeGoods.totalNum++;
+					if(option.id > 0) {
+						$scope.place.activeOption.num++;
+					}
+					cart.push(goods);
+					$scope.place.totalNum++;
+					$scope.place.totalPrice = $scope.place.totalPrice - 0 + (option.price - 0);
+					$scope.place.totalPrice = $scope.place.totalPrice.toFixed(2);
+				}
+			}
+		};
+		});
+		angular.bootstrap($('#placeOrder')[0], ['app']);
+	});
+});
+</script>
+{itemplate 'public/footer'}

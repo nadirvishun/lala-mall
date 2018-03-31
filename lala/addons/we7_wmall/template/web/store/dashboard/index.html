@@ -1,0 +1,144 @@
+{itemplate 'public/header'}
+{if $ta == 'index'}
+<div class="clearfix panel-business">
+	<div class="panel panel-stat">
+		<div class="panel-heading">
+			<h3>总览</h3>
+			<div class="pull-right">
+				<a href="{php echo iurl('store/statistic/order');}">查看详情 <i class="fa fa-angle-right"></i></a>
+			</div>
+		</div>
+		<div class="panel-body">
+			<div class="col-md-3">
+				<div class="title">
+					营业总额(元)
+					<i class="fa fa-info-circle" data-toggle="popover" data-placement="top" data-content="商家通过销售商品获得的有效订单的总金额。（参考公式：流水=在线支付金额+线下支付金额+商家补贴+平台补贴）"></i>
+				</div>
+				<div class="num-wrapper">
+					<a class="num" href="javascript:;">
+						<span id="html-total-fee">￥--</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="title">
+					总收入
+					<i class="fa fa-info-circle" data-toggle="popover" data-placement="top" data-content="商家通过销售商品获得的有效订单的总收入。（参考公式：总收入=在线支付金额+线下支付金额+平台补贴-商家优惠-平台服务佣金-平台配送费）"></i>
+				</div>
+				<div class="num-wrapper">
+					<a class="num" href="javascript:;">
+						<span id="html-store-final-fee">￥--</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="title">
+					有效订单量
+					<i class="fa fa-info-circle" data-toggle="popover" data-placement="top" data-content="有效订单量：交易成功且用户未退单的订单。客单价：每笔订单的平均交易金额。（公式：客单价=营业总额÷有效订单数）"></i>
+				</div>
+				<div class="num-wrapper">
+					<a class="num" href="javascript:;">
+						<span id="html-total-success-order">--</span>
+					</a>
+					<span class="info" id="html-avg-pre-order">--</span>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="title">
+					无效订单量
+					<i class="fa fa-info-circle" data-toggle="popover" data-placement="top" data-content="无效订单量：用户支付成功但最终被取消的订单。包括用户取消、商家取消和系统因超时未处理取消的订单。损失营业额约：根据被取消的订单估算出的商家未获得的营业总额。"></i>
+				</div>
+				<div class="num-wrapper">
+					<a class="num" href="javascript:;">
+						<span id="html-total-cancel-order">--</span>
+					</a>
+					<span class="info" id="html-total-cancel-fee">--</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content clearfix">
+		<div class="main-content col-md-7 col-sm-7 col-xs-7">
+			{if !empty($ads)}
+				<div class="branner">
+					<div id="carousel" class="carousel slide" data-ride="carousel">
+						<ol class="carousel-indicators">
+							{loop $ads $key $ad}
+								<li data-target="#carousel" data-slide-to="{$key}" {if $key == 0}class="active"{/if}></li>
+							{/loop}
+						</ol>
+						<div class="carousel-inner" role="listbox">
+							{loop $ads $key $ad}
+								<div class="item {if $key == 0}active{/if}">
+									<a href="{$ad['link']}" target="_blank">
+										<img style="height: 150px" src="{php echo tomedia($ad['thumb'])}">
+									</a>
+								</div>
+							{/loop}
+						</div>
+						<a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
+							<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+							<span class="sr-only">Previous</span>
+						</a>
+						<a class="right carousel-control" href="#carousel" role="button" data-slide="next">
+							<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+							<span class="sr-only">Next</span>
+						</a>
+					</div>
+				</div>
+			{/if}
+		</div>
+		{if !empty($news_one)}
+			<div class="sub-content col-md-5 col-sm-5 col-xs-5">
+				<div class="panel panel-stat">
+					<div class="panel-heading clearfix">
+						<h3 class="panel-title pull-left"><strong>资讯</strong></h3>
+						<div class="pull-right grayest scan-all"><a href="{php echo iurl('store/shop/news')}" class="scan-all">查看全部 <i class="fa fa-angle-right"></i></a></div>
+					</div>
+					<div class="kangaroo">
+						<div class="kangaroo-image">
+							<a href="{php echo iurl('store/shop/news/detail', array('id' => $news_one['id']))}">
+								<img src="{php echo tomedia($news_one['thumb'])}" alt="">
+								<div class="des clearfix">
+									<div class="pull-left title">{$news_one['desc']}</div>
+									<div class="pull-right num f-small">{$news_one['click']}人阅读</div>
+								</div>
+							</a>
+						</div>
+						<ul class="kangaroo-list">
+							{loop $news $new}
+								<li class="kangaroo-item clearfix">
+									<a href="{php echo iurl('store/shop/news/detail', array('id' => $new['id']))}">
+										<div class="kangaroo-item-image pull-left">
+											<img src="{php echo tomedia($new['thumb'])}" alt="">
+										</div>
+										<div class="kangaroo-info pull-left">
+											<p>{$new['title']}</p>
+											<p class="grayest kangaroo-info-main"><span>{$new['desc']}</span> <span>{$new['click']}人阅读</span></p>
+										</div>
+									</a>
+								</li>
+							{/loop}
+						</ul>
+					</div>
+				</div>
+			</div>
+		{/if}
+	</div>
+</div>
+{/if}
+<script>
+$(function(){
+	$.post("{php echo iurl('store/statistic/order/index');}", function(data){
+		var result = $.parseJSON(data);
+		var stat = result.message.message.stat;
+		$('#html-total-fee').html('￥' + stat.total_fee);
+		$('#html-store-final-fee').html('￥' + stat.store_final_fee);
+		$('#html-total-success-order').html(stat.total_success_order);
+		$('#html-avg-pre-order').html('客单价:￥' + stat.avg_pre_order);
+		$('#html-total-cancel-order').html(stat.total_cancel_order);
+		$('#html-total-cancel-fee').html('损失营业额约:￥' + stat.total_cancel_fee);
+	});
+});
+</script>
+{itemplate 'public/footer'}

@@ -1,0 +1,75 @@
+{itemplate 'public/header'}
+<form action="./index.php" class="form-horizontal form-filter">
+	{php echo tpl_form_filter_hidden('ordergrant/record');}
+	<input type="hidden" name="type" value="{$type}">
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">奖励类型</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('type:-1');}" class="btn {if $type == -1}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo ifilter_url('type:0');}" class="btn {if $type == 0}btn-primary{else}btn-default{/if}">日常奖励</a>
+				<a href="{php echo ifilter_url('type:1');}" class="btn {if $type == 1}btn-primary{else}btn-default{/if}">连续下单奖励</a>
+				<a href="{php echo ifilter_url('type:2');}" class="btn {if $type == 2}btn-primary{else}btn-default{/if}">累计下单奖励</a>
+				<a href="{php echo ifilter_url('type:3');}" class="btn {if $type == 3}btn-primary{else}btn-default{/if}">首单奖励</a>
+				<a href="{php echo ifilter_url('type:4');}" class="btn {if $type == 4}btn-primary{else}btn-default{/if}">特殊奖励</a>
+				<a href="{php echo ifilter_url('type:5');}" class="btn {if $type == 4}btn-primary{else}btn-default{/if}">分享奖励</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">奖励时间</label>
+		<div class="col-sm-4 col-xs-4">
+			{php echo tpl_form_field_daterange('addtime', array('start' => date('Y-m-d', $starttime), 'end' => date('Y-m-d', $endtime)));}
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">搜索</label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="text" name="keyword" class="form-control" value="{$keyword}" placeholder="搜索会员的姓名、昵称、手机号">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="submit" value="筛选" class="btn btn-primary">
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			{if empty($records)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<table class="table table-hover">
+					<thead>
+					<tr>
+						<th>会员</th>
+						<th>奖励类型</th>
+						<th>奖励</th>
+						<th style="width: 200px; text-align: right">发放或领取时间</th>
+					</tr>
+					</thead>
+					<tbody>
+						{loop $records $record}
+							<tr>
+								<td><img width="50" height="50" src="{$record['avatar']}" alt="">&nbsp;&nbsp;{$record['realname']}</td>
+								<td><span class="label {$labels[$record['type']]['css']}">{$labels[$record['type']]['text']}</span></td>
+								<td>{php echo floatval($record['grant'])}{if $record['credittype'] == 'credit1'}积分{else}余额{/if}</td>
+								<td align="right">{php echo date('Y-m-d H:i:s', $record['addtime'])}</td>
+							</tr>
+						{/loop}
+					</tbody>
+				</table>
+				<div class="btn-region clearfix">
+					<div class="pull-right">
+						{$pager}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{itemplate 'public/footer'}

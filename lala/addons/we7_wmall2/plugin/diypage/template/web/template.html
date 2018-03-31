@@ -1,0 +1,65 @@
+{itemplate 'public/header'}
+{itemplate 'common'}
+<form action="./index.php?" class="form-horizontal form-filter" id="form-takeout">
+	<input type="hidden" name="type" value="{$type}"/>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">模板类型</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<div class="btn-group">
+					<a href="{php echo ifilter_url('type:0');}" class="btn {if $type == 0}btn-primary{else}btn-default{/if}">全部类型</a>
+					<a href="{php echo ifilter_url('type:1');}" class="btn {if $type == 1}btn-primary{else}btn-default{/if}">自定义页面</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table js-table">
+		<div class="panel-body table-responsive">
+			{if empty($templates)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<div class="diy-row">
+					{loop $templates $item}
+						<div class="item">
+							<img src="{$item['preview']}" alt="">
+							<div class="cate">
+								<span class='label label-primary'>系统</span>
+								<span class='label label-custom'>自定义页面</span>
+							</div>
+							<div class="title">{$item['name']}</div>
+							<div class="mask">
+								<div class="btns">
+									<a href="{php echo iurl('diypage/template/create', array('id' => $item['id']));}" class='btn btn-primary' data-id="{$item['id']}">创建页面</a>
+									{if !empty($item['uniacid'])}
+										<a href="{php echo iurl('diypage/template/del', array('id' => $item['id']));}" class="btn btn-default js-remove"  data-confirm="确定删除该模板吗？">删除模板</a>
+									{/if}
+								</div>
+							</div>
+						</div>
+					{/loop}
+				</div>
+				<div class="btn-region clearfix">
+					<div class="pull-right">
+						{$pager}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+<script>
+$(function(){
+	$('.diy-row>.item').hover(function(){
+		$(this).find('.title').fadeIn(300);
+		$(this).find('.mask').fadeIn(300);
+	},function(){
+		$(this).find('.title').fadeOut(200);
+		$(this).find('.mask').fadeOut(200);
+	});
+})
+</script>
+{itemplate 'public/footer'}

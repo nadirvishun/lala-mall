@@ -1,0 +1,151 @@
+{itemplate 'public/header'}
+<link rel="stylesheet" href="../addons/we7_wmall/plugin/spread/static/css/index.css">
+<div class="page spread-register">
+	<div class="content">
+		<img src="{php echo tomedia($configTemplate['avatar'])}" alt="" width="100%" style="max-height: 8rem;">
+		{if $configRelate['become'] == 2}
+			<div class="list-group border-1px-tb">
+				<div class="list-group-title">
+					<i class="icon icon-lights"></i>友情提醒
+				</div>
+				<div class="list">
+					<div class="list-inner">
+						{if $frquency > $configRelate['become_ordercount']}
+							<div class="text">
+								本店累计消费满 <span>{$configRelate['become_ordercount']}</span>次，才可能成为<<span>{$_config_mall['title']}</span>>平台推广员，您已消费<span>{$frquency}</span>次
+								，请点击下方按钮申请成为推广员
+							</div>
+						{else}
+							<div class="text">
+								本店累计消费满 <span>{$configRelate['become_ordercount']}</span>次，才可能成为<<span>{$_config_mall['title']}</span>>平台推广员，您已消费<span>{$frquency}</span>次
+								，请继续努力！
+							</div>
+						{/if}
+					</div>
+				</div>
+			</div>
+			{if $frquency > $configRelate['become_ordercount']}
+		        <a href="javascript:;" class="button button-fill button-danger" id="confirm">申请成为推广员</a>
+			{else}
+				<a href="{php echo imurl('wmall/home/index')}" class="button button-fill button-danger">继续去购物</a>
+			{/if}
+		{elseif $configRelate['become'] == 3}
+			<div class="list-group border-1px-tb">
+				<div class="list-group-title">
+					<i class="icon icon-lights"></i>友情提醒
+				</div>
+				<div class="list">
+					<div class="list-inner">
+						{if $price > $configRelate['become_moneycount']}
+							<div class="text">
+								本店累计消费满 <span>{$configRelate['become_moneycount']}</span>元，才可能成为<<span>{$_config_mall['title']}</span>>平台推广员，您已消费<span>{$price}</span>元 ,请点击下方按钮申请成为推广员
+							</div>
+						{else}
+							<div class="text">
+								本店累计消费满 <span>{$configRelate['become_moneycount']}</span>元，才可能成为<<span>{$_config_mall['title']}</span>>平台推广员，您已消费<span>{$price}</span>元 {if $price < $configRelate['become_moneycount']}，请继续努力！{/if}
+							</div>
+						{/if}
+					</div>
+				</div>
+			</div>
+			{if $price > $configRelate['become_moneycount']}
+				<a href="javascript:;" class="button button-fill button-danger" id="confirm">申请成为推广员</a>
+			{else}
+				<a href="{php echo imurl('wmall/home/index')}" class="button button-fill button-danger">继续去购物</a>
+			{/if}
+		{elseif $configRelate['become'] == 1}
+			<div class="cell-group border-1px-tb">
+				<div class="cell-title">
+					欢迎加入 <span>{$_config_mall['title']}</span>，请填写申请信息
+				</div>
+				<div class="cell must">
+					<div class="cell-label">姓名</div>
+					<div class="cell-info overflow">
+						<input type="text" class="cell-input" name="realname" value="{$spread['realname']}" placeholder="请填写真实姓名，用于结算">
+					</div>
+				</div>
+				<div class="cell must">
+					<div class="cell-label">手机号</div>
+					<div class="cell-info overflow">
+						<input type="text" class="cell-input" name="mobile" value="{$spread['mobile']}" placeholder="填写手机号方便联系">
+					</div>
+				</div>
+				{if $configRelate['open_protocol'] == 1}
+					<div class="cell-group">
+						<div class="cell">
+							<label class="checkbox-inline">
+								<input type="checkbox" name="protocol">
+								我已经阅读并了解了
+								<a href="javascript:;" class="open-popup" data-popup=".popup-spread">【推广员申请协议】</a>
+							</label>
+						</div>
+					</div>
+				{/if}
+			</div>
+			<a href="javascript:;" class="button button-fill button-danger" id="application">申请成为推广员</a>
+		{/if}
+	</div>
+</div>
+<div class="popup popup-spread">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="icon icon icon-arrow-left pull-left close-popup" href="javascript:;"></a>
+		<h1 class="title">入驻协议</h1>
+	</header>
+	<div class="content" style="background: #fff;">
+		<div class="content-padded">
+			{$protocol}
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	$(document).on('click', '#application', function(){
+		var configRelate = "{$configRelate['open_protocol']}";
+		var name = $.trim($(':text[name="realname"]').val());
+		if(!name) {
+			$.toast('姓名不能为空');
+			return false;
+		}
+		var mobile = $.trim($(':text[name="mobile"]').val());
+		if(!mobile) {
+			$.toast('手机号不能为空');
+			return false;
+		}
+		var reg = /^[01][3456789][0-9]{9}/;
+		if(!reg.test(mobile)) {
+			$.toast('手机号格式错误');
+			return false;
+		}
+		if(configRelate == 1) {
+			if(!$(':checkbox[name="protocol"]:checked').size()) {
+				$.toast('确定已阅读推广员申请协议');
+				return false;
+			}
+		}
+		var params = {
+			name: name,
+			mobile: mobile
+		};
+		$.post("{php echo imurl('spread/register/application');}", params, function(data){
+			var result = $.parseJSON(data);
+			if(result.message.errno != 0) {
+				$.toast(result.message.message);
+				return false;
+			}
+			$.toast('申请提交成功', result.message.url);
+		})
+	});
+
+	$(document).on('click', '#confirm', function(){
+		$.post("{php echo imurl('spread/register/index');}", function(data){
+			var result = $.parseJSON(data);
+			if(result.message.errno != 0) {
+				$.toast(result.message.message);
+				return false;
+			}
+			$.toast('申请提交成功', result.message.url);
+		})
+	})
+})
+</script>
+{itemplate 'public/footer'}

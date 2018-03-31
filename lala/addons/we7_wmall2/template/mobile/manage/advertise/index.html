@@ -1,0 +1,127 @@
+{itemplate 'public/header'}
+<div class="page page-advertise">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">店铺推广</h1>
+	</header>
+	<div class="buttons-tab">
+		<a href="javascript:;" class="button active" id="create-new">新建推广</a>
+		<a href="{php echo imurl('manage/advertise/list')}" class="button" id="activityList">已推广的活动</a>
+	</div>
+	{itemplate 'public/nav'}
+	<div class="content">
+		<div class="main">
+			<ul>
+				<li class="activity-col clearfix">
+					<div class="col-left">
+						<span class="text-yellow">优选</span>
+					</div>
+					<div class="col-right border-1px-b">
+						<div class="right-content">
+							<h3>为您优选</h3>
+							<p>购买商户为您优选推广,吸引更多用户下单</p>
+							{if $advertise['type']['recommend']['status'] == 1}
+								<a href="{php echo imurl('manage/advertise/recommend');}" class="activity-link">立即推广</a>
+							{else}
+							<a href="javascript:;" class="activity-link add">
+								广告未开售,敬请关注
+							</a>
+							{/if}
+						</div>
+					</div>
+				</li>
+				<li class="activity-col clearfix">
+					<div class="col-left">
+						<span class="text-green">置顶</span>
+					</div>
+					<div class="col-right border-1px-b">
+						<div class="right-content">
+							<h3>商户置顶</h3>
+							<p>购买商户置顶推广,吸引更多用户下单</p>
+							{if $advertise['type']['stick']['status'] == 1}
+								<a href="{php echo imurl('manage/advertise/stick');}" class="activity-link">立即推广</a>
+							{else}
+							<a href="javascript:;" class="activity-link add">
+								广告未开售,敬请关注
+							</a>
+							{/if}
+						</div>
+					</div>
+				</li>
+				<li class="activity-col clearfix">
+					<div class="col-left">
+						<span class="text-red">顶部</span>
+					</div>
+					<div class="col-right border-1px-b">
+						<div class="right-content">
+							<h3>首页顶部</h3>
+							<p>购买首页顶部幻灯片推广,吸引更多用户下单</p>
+							{if $advertise['type']['slideHomeTop']['status'] == 1}
+							<a href="{php echo imurl('manage/advertise/slide', array('slide_type' => 'slideHomeTop'));}" class="activity-link">立即推广</a>
+							{else}
+							<a href="javascript:;" class="activity-link add">
+								广告未开售,敬请关注
+							</a>
+							{/if}
+						</div>
+					</div>
+				</li>
+				<li class="activity-col clearfix">
+					<div class="col-left">
+						<span class="text-gold">会员</span>
+					</div>
+					<div class="col-right border-1px-b">
+						<div class="right-content">
+							<h3>会员中心</h3>
+							<p>购买会员中心幻灯片推广,吸引更多用户下单</p>
+							{if $advertise['type']['slideMember']['status'] == 1}
+							<a href="{php echo imurl('manage/advertise/slide', array('slide_type' => 'slideMember'));}" class="activity-link">立即推广</a>
+							{else}
+							<a href="javascript:;" class="activity-link add">
+								广告未开售,敬请关注
+							</a>
+							{/if}
+						</div>
+					</div>
+				</li>
+				<li class="activity-col clearfix">
+					<div class="col-left">
+						<span class="text-orange">收银台</span>
+					</div>
+					<div class="col-right border-1px-b">
+						<div class="right-content">
+							<h3>顾客支付页</h3>
+							<p>购支付页幻灯片推广,吸引更多用户下单</p>
+							{if $advertise['type']['slidePaycenter']['status'] == 1}
+							<a href="{php echo imurl('manage/advertise/slide', array('slide_type' => 'slidePaycenter'));}" class="activity-link">立即推广</a>
+							{else}
+							<a href="javascript:;" class="activity-link add">
+								广告未开售,敬请关注
+							</a>
+							{/if}
+						</div>
+					</div>
+				</li>
+				<li class="activity-col clearfix">
+					<div class="col-left">
+						<span class="text-blue">订单</span>
+					</div>
+					<div class="col-right border-1px-b">
+						<div class="right-content">
+							<h3>订单详情页</h3>
+							<p>购买订单详情页幻灯片推广,吸引更多用户下单</p>
+							{if $advertise['type']['slideOrderDetail']['status'] == 1}
+							<a href="{php echo imurl('manage/advertise/slide', array('slide_type' => 'slideOrderDetail'));}" class="activity-link">立即推广</a>
+							{else}
+							<a href="javascript:;" class="activity-link add">
+								广告未开售,敬请关注
+							</a>
+							{/if}
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+{itemplate 'public/footer'}

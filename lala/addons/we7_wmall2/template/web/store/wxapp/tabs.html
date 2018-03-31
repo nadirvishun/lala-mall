@@ -1,0 +1,13 @@
+<div class="second-sidebar-title">
+	小程序
+</div>
+<div class="nav slimscroll">
+	<ul class="menu-item">
+		<li {if $_W['_ta'] == 'index'}class="active"{/if}>
+			<a href="{php echo iurl('store/wxapp/index/index');}">页面配置</a>
+		</li>
+		<li {if $_W['_ta'] == 'code'}class="active"{/if}>
+			<a href="{php echo iurl('store/wxapp/index/cover');}">链接和二维码</a>
+		</li>
+	</ul>
+</div>

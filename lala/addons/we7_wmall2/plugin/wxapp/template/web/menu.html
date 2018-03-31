@@ -1,0 +1,92 @@
+{itemplate 'public/header'}
+{itemplate 'common'}
+
+{if $op == 'post'}
+<div class="clearfix">
+	<div class="alert alert-warning">
+		提醒：底部导航改动后需重新提交微信审核，并且审核通过后才可生效。
+	</div>
+	<div class="app-preview">
+		<div class="app-header"></div>
+		<div class="app-body">
+			<div class="title">自定义菜单</div>
+			<div class="main" id="app-preview">
+			</div>
+		</div>
+		<div class="app-footer"></div>
+	</div>
+	<div class="app-editor form-horizontal" id="app-editor">
+		<div class="editor-arrow"></div>
+		<div class="inner">
+		</div>
+	</div>
+</div>
+<div class="app-action">
+	<div class="action">
+		<nav class="btn btn-default btn-sm pull-left" id="gotop">返回顶部</nav>
+		<nav class="btn btn-primary btn-sm btn-save">保存导航</nav>
+	</div>
+</div>
+<script type="text/html" id="tpl-show-menu">
+	<div class="app-menu">
+		<(each data as item)>
+			<a class="tab-item" href="javascript:;">
+				<img class="item-icon" src="../addons/we7_wmall/plugin/wxapp/<(item.iconPath)>">
+				<span class="tab-label"><(item.text)></span>
+			</a>
+		<(/each)>
+	</div>
+</script>
+
+<script type="text/html" id="tpl-edit-menu">
+	<div class="form-items" data-min="1" data-max="5">
+		<div class="inner">
+			<(each data as item index)>
+				<(if params.navstyle == 0 )>
+					<div class="item" data-id="<(index)>">
+						<span class="btn-del del-item" title="删除"></span>
+						<div class="item-body">
+							<div class="item-image">
+								<div class="tabbar-icon" id="icon-show-<(index)>">
+									<img src="../addons/we7_wmall/plugin/wxapp/<(item.iconPath)>">
+									<img src="../addons/we7_wmall/plugin/wxapp/<(item.selectedIconPath)>">
+								</div>
+								<div style="display: none" id="icon-input-<(index)>">
+									<input type="hidden" class="diy-bind" data-bind="iconPath" data-bind-child="data" data-bind-parent="<(index)>">
+									<input type="hidden" class="diy-bind" data-bind="selectedIconPath" data-bind-child="data" data-bind-parent="<(index)>">
+								</div>
+								<div class="select-icon js-selectWxappIcon" data-input="#icon-input-<(index)>" data-element="#icon-show-<(index)>">选择图标</div>
+							</div>
+							<div class="item-form">
+								<div class="input-group">
+									<span class="input-group-addon">文字</span>
+									<input type="text" class="form-control input-sm diy-bind" value="<(item.text)>" placeholder="留空则不显示文字" data-bind-parent="<(index)>" data-bind-child="data" data-bind="text">
+								</div>
+								<div class="input-group">
+									<input type="text" class="form-control input-sm diy-bind" value="<(item.pagePath)>" placeholder="请选择链接或输入链接地址" id="pagePath-<(index)>" data-bind-parent="<(index)>" data-bind-child="data" data-bind="pagePath">
+									<span class="input-group-addon btn btn-default js-selectWxappLink" data-input="#pagePath-<(index)>" data-type="wmall,errander">选择链接</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				<(/if)>
+			<(/each)>
+		</div>
+		<div class="btn btn-default btn-block" id="addItem"><i class="icon icon-plus"></i> 添加一个</div>
+	</div>
+</script>
+
+<script language="javascript">
+	var path = '../../plugin/wxapp/static/js/diy.menu';
+	irequire([path, 'tmodtpl'],function(diyMenu, tmodtpl){
+		diyMenu.init({
+			tmodtpl: tmodtpl,
+			attachurl: "{$_W['attachurl']}",
+			id: '{php echo intval($_GPC["id"])}',
+			menu: {if !empty($menu)}{php echo json_encode($menu)}{else}null{/if}
+		});
+	});
+</script>
+{/if}
+
+{itemplate 'public/footer'}

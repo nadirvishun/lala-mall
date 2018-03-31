@@ -1,0 +1,25 @@
+{itemplate 'public/header'}
+<div class="page ">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="fa fa-arrow-left"></i></a>
+		<h1 class="title"></h1>
+	</header>
+	<div class="content">
+		<a href="javascript:;" class="button button-big js-open-modal" data-modal="#concern">模态</a>
+	</div>
+</div>
+<div class="modal modal-no-buttons" id="concern">
+	<div class="code-warpper">
+		<img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=1598552568,4236159349&fm=58" alt="">
+	</div>
+	<div class="notice">长按识别二维码关注</div>
+	<a href="javascript:;" class="close-modal">&times;</a>
+</div>
+<script>
+	$(function() {
+		$(document).on('click', '.close-modal', function() {
+			$.closeModal('#concern');
+		});
+	});
+</script>
+{itemplate 'public/footer'}

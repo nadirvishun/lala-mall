@@ -1,0 +1,25 @@
+{itemplate 'public/header'}
+<div class="clearfix page-application">
+	{loop $_W['plugin_types'] $type}
+		{if !empty($_W['plugins'][$type['name']])}
+			<h2>{$type['title']}</h2>
+			<div class="application-list clearfix">
+				{loop $_W['plugins'][$type['name']] $plugin}
+					{ifp $plugin['name']}
+						{php $url = $plugin['name'] . '/index/index'}
+						<div class="application-item clearfix">
+							<a href="{php echo iurl($url);}">
+								<span class="application-image"><img src="{$plugin['thumb']}" alt=""></span>
+								<div class="application-info">
+									<p class="application-name">{$plugin['title']}</p>
+									<p class="application-description">{$plugin['title']}</p>
+								</div>
+							</a>
+						</div>
+					{/if}
+				{/loop}
+			</div>
+		{/if}
+	{/loop}
+</div>
+{itemplate 'public/footer'}

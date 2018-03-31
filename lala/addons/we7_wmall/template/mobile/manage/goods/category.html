@@ -1,0 +1,132 @@
+{itemplate 'public/header'}
+<div class="page" id="page-manage-goods">
+	<header class="bar bar-nav common-buttons-nav">
+		<div class="row">
+			<div class="col-10 align-left">
+				<a class="back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+			</div>
+			<div class="col-80">
+				<div class="buttons-row align-center">
+					<a href="{php echo imurl('manage/goods/index/list');}" class="button">商品列表</a>
+					<a href="{php echo imurl('manage/goods/category/list');}" class="active button">商品分组</a>
+				</div>
+			</div>
+			<div class="col-10 align-right">
+				<a class="pull-right goods-category-edit" href="javascript:;"><i class="icon icon-plus"></i></a>
+			</div>
+		</div>
+	</header>
+	{itemplate 'public/nav'}
+	<div class="content">
+		<div class="buttons-tab">
+			<a href="{php echo imurl('manage/goods/category/list', array('status' => -1));}" class="button {if $status == -1}active{/if}">所有分组</a>
+			<a href="{php echo imurl('manage/goods/category/list', array('status' => 1));}" class="button {if $status == 1}active{/if}">上架中</a>
+			<a href="{php echo imurl('manage/goods/category/list', array('status' => 0));}" class="button {if $status == 0}active{/if}">已下架</a>
+		</div>
+		{if empty($lists)}
+			<div class="no-data">
+				<div class="bg"></div>
+				<p>暂无商品分组～</p>
+			</div>
+		{else}
+			{loop $lists $list}
+				<div class="group-item border-1px-tb">
+					<div class="group-item-title">{$list['title']}<span>共 {php echo intval($nums[$list['id']]['num'])} 件</span>
+						{if $list['status'] == 1}
+							<p class="color-success">上架中</p>
+						{else}
+							<p class="color-danger">已下架</p>
+						{/if}
+					</div>
+					<div class="group-item-operate">
+						<a href="{php echo imurl('manage/goods/category/del', array('id' => $list['id']))}" class="js-post border-1px-r" data-confirm="删除分组后, 分组下面的商品也会被删除, 确定删除?">删除</a>
+						<a href="javascript:;" class="goods-category-edit border-1px-r" data-id="{$list['id']}" data-title="{$list['title']}" data-displayorder="{$list['displayorder']}">编辑</a>
+						{if $list['status'] == 1}
+							<a href="{php echo imurl('manage/goods/category/status', array('id' => $list['id'], 'status' => 0))}" data-confirm="确定下架该分组吗?" class="js-post border-1px-r">下架</a>
+						{else}
+							<a href="{php echo imurl('manage/goods/category/status', array('id' => $list['id'], 'status' => 1))}" data-confirm="确定上架该分组吗?" class="js-post border-1px-r">上架</a>
+						{/if}
+						<a href="{php echo imurl('manage/goods/index/list', array('cid' => $list['id']));}">商品</a>
+					</div>
+				</div>
+			{/loop}
+		{/if}
+	</div>
+</div>
+<div class="popup popup-goods-category">
+	<div class="page">
+		<header class="bar bar-nav common-bar-nav">
+			<h1 class="title">商品分组</h1>
+			<a href="javascript:;" class="pull-right close-popup">关闭</a>
+		</header>
+		<div class="content">
+			<form action="" method="post" id="goods-category-form">
+				<div class="list-block ">
+					<ul class="border-1px-tb">
+						<li>
+							<div class="item-content">
+								<div class="item-inner border-1px-b">
+									<div class="item-title label">分组名称</div>
+									<div class="item-input">
+										<input type="text" name="title" class="category-title" placeholder="输入分组名称">
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item-content">
+								<div class="item-inner">
+									<div class="item-title label">分组排序</div>
+									<div class="item-input">
+										<input type="text" name="displayorder" class="category-displayorder" placeholder="输入分组排序">
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="content-padded">
+					<a href="javascript:;" class="button button-big button-fill button-danger button-submit">保存</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	$('.goods-category-edit').click(function(){
+		var id = parseInt($(this).data('id'));
+		if(id > 0) {
+			$('#goods-category-form .category-title').val($(this).data('title'));
+			$('#goods-category-form .category-displayorder').val($(this).data('displayorder'));
+		}
+		$.popup('.popup-goods-category');
+		$('#goods-category-form .button-submit').click(function(){
+			var title = $.trim($('.category-title').val());
+			if(!title) {
+				$.toast('分组名称不能为空');
+				return false;
+			}
+			var displayorder = parseInt($.trim($('.category-displayorder').val()));
+			if(isNaN(displayorder)) {
+				$.toast('排序只能是数字');
+				return false;
+			}
+			var params = {
+				id: id,
+				title: title,
+				displayorder: displayorder
+			};
+			$.post("{php echo imurl('manage/goods/category/post');}", params, function(data){
+				var result = $.parseJSON(data);
+				if(result.message.errno != 0) {
+					$.toast(result.message.message);
+					return false;
+				}
+				$.toast('编辑商品分组成功', location.href, 1000);
+			});
+		});
+	});
+});
+</script>
+{itemplate 'public/footer'}

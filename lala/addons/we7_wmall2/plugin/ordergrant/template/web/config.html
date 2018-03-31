@@ -1,0 +1,220 @@
+{itemplate 'public/header'}
+<link href="../addons/we7_wmall/plugin/ordergrant/static/css/web/ordergrant.css" rel="stylesheet" type="text/css"/>
+<div class="page clearfix ordergrant">
+	<div class="alert alert-warning">
+		下单有礼规则:<br>
+		1. 一天内多次下单，只奖励一次日常奖励,该奖励在订单完成后由系统自动发放。<br>
+		2. 连续下单奖励和累计下单奖励需要顾客主动领取。<br>
+		3. 特殊节日奖励由系统自动发放。<br>
+	</div>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<h3>基本设置</h3>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="status" id="status-1" {if $config_ordergrant['status'] == 1}checked{/if}>
+					<label for="status-1">开启</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="status" id="status-0" {if $config_ordergrant['status'] == 0}checked{/if}>
+					<label for="status-0">关闭</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">下单周期</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="cycle" id="cycle-0" {if $config_ordergrant['cycle'] == 0}checked{/if}>
+					<label for="cycle-0">不限</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="cycle" id="cycle-1" {if $config_ordergrant['cycle'] == 1}checked{/if}>
+					<label for="cycle-1">自然月</label>
+				</div>
+				<span class="help-block">不限制签到周期则统计时间为平台上线至今日，自然月统计周期则为本月，下月清空</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">奖励类型</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="credit1" name="grantType" id="credit1" {if $config_ordergrant['grantType'] == credit1 || empty($config_ordergrant['grantType'])}checked{/if}>
+					<label for="credit1">积分</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="credit2" name="grantType" id="credit2" {if $config_ordergrant['grantType'] == credit2}checked{/if}>
+					<label for="credit2">余额</label>
+				</div>
+				<span class="help-block">设置后请勿频繁变更</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">普通奖励<br><small>(自动发放)</small></label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon">首次奖励</span>
+					<input class="form-control" type="number" value="{$config_ordergrant['first_order_grant']}" name="first_order_grant">
+					<span class="input-group-addon border-0-lr"> 日常奖励</span>
+					<input class="form-control" type="number" value="{$config_ordergrant['days_order_grant']}" name="days_order_grant">
+				</div>
+			</div>
+		</div>
+		<div class="form-group reward">
+			<label class="col-sm-2 control-label">连续下单奖励<br><small>(需手动领取)</small></label>
+			<div class="col-sm-9 col-xs-12">
+				<div id="continuous-container">
+					{if !empty($config_ordergrant['continuous'])}
+						{loop $config_ordergrant['continuous'] $continuous}
+							<div class="input-group">
+								<span class="input-group-addon">连续下单</span>
+								<input class="form-control" type="number" value="{$continuous['days']}" name="continuous_days[]">
+								<span class="input-group-addon border-0-lr">天 奖励</span>
+								<input class="form-control" type="number" value="{$continuous['grant']}" name="continuous_grant[]">
+								<div class="input-group-btn">
+									<span class="btn btn-danger btn-del">删除</span>
+								</div>
+							</div>
+						{/loop}
+					{/if}
+				</div>
+				<div class="input-group form-control btn btn-default additem" data-type="continuous"><i class="fa fa-plus"></i> 添加一个连续下单奖励规则</div>
+			</div>
+		</div>
+		<div class="form-group reward">
+			<label class="col-sm-2 control-label">累计下单奖励<br><small>(需手动领取)</small></label>
+			<div class="col-sm-9 col-xs-12">
+				<div id="all-container">
+					{if !empty($config_ordergrant['all'])}
+						{loop $config_ordergrant['all'] $all}
+							<div class="input-group">
+								<span class="input-group-addon">累计下单</span>
+								<input class="form-control" type="number" value="{$all['days']}" name="all_days[]">
+								<span class="input-group-addon border-0-lr">天 奖励</span>
+								<input class="form-control" type="number" value="{$all['grant']}" name="all_grant[]">
+								<div class="input-group-btn">
+									<span class="btn btn-danger btn-del">删除</span>
+								</div>
+							</div>
+						{/loop}
+					{/if}
+				</div>
+				<div class="input-group form-control btn btn-default additem" data-type="all"><i class="fa fa-plus"></i> 添加一个累计下单奖励规则</div>
+			</div>
+		</div>
+		<div class="form-group reward">
+			<label class="col-sm-2 control-label">特殊奖励<br><small>(自动发放)</small></label>
+			<div class="col-sm-9 col-xs-12">
+				<div id="special-container">
+					{if !empty($config_ordergrant['special'])}
+						{loop $config_ordergrant['special'] $special}
+							<div class="input-group">
+								<span class="input-group-addon">日期</span>
+								<input type="text" name="special_date[]" value="{$special['date']}" placeholder="请选择日期时间" readonly="readonly" class="datetimepicker form-control">
+								<span class="input-group-addon border-0-lr">标题</span>
+								<input class="form-control" value="{$special['title']}" placeholder="非必填" name="special_title[]">
+								<span class="input-group-addon border-0-lr">颜色</span>
+								<input class="form-control select-color" value="{$special['color']}" type="color" name="special_color[]">
+								<span class="input-group-addon border-0-lr">奖励</span>
+								<input class="form-control" type="number" value="{$special['grant']}" name="special_grant[]">
+								<div class="input-group-btn">
+									<span class="btn btn-danger btn-del">删除</span>
+								</div>
+							</div>
+						{/loop}
+					{/if}
+				</div>
+				<div class="input-group form-control btn btn-default add-special-item"><i class="fa fa-plus"></i> 添加一个特殊奖励规则</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动规则</label>
+			<div class="col-sm-9 col-xs-12">
+				{php echo tpl_ueditor('agreement', $config_ordergrant['agreement']);}
+			</div>
+		</div>
+		<h3>分享设置</h3>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享标题</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="title" value="{$config_ordergrant['ordergrant_share']['title']}" class="form-control" required="true">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享描述</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="desc" value="{$config_ordergrant['ordergrant_share']['desc']}" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动图片</label>
+			<div class="col-sm-9 col-xs-12">
+				{php echo tpl_form_field_image('imgUrl', $config_ordergrant['ordergrant_share']['imgUrl'])}
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-12">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+
+<script>
+require(["datetimepicker"], function() {
+	$(document).on('click', '.additem', function() {
+		var type = $(this).data('type');
+		var typeText = '连续下单';
+		var days = "continuous_days[]";
+		var grant = "continuous_grant[]";
+		if(type == 'all') {
+			typeText = '累计下单';
+			days = "all_days[]";
+			grant = "all_grant[]";
+		}
+		var html = '<div class="input-group">'+
+				'	<span class="input-group-addon">' + typeText + '</span>'+
+				'	<input class="form-control" type="number" value="" name="'+ days +'">'+
+				'	<span class="input-group-addon border-0-lr">天 奖励</span>'+
+				'	<input class="form-control" type="number" value="" name="'+ grant +'">'+
+				'	<div class="input-group-btn border-0-lr"><span class="btn btn-danger btn-del">删除</span></div>'+
+				'</div>';
+		if(type == 'all') {
+			$("#all-container").append(html);
+		} else {
+			$("#continuous-container").append(html);
+		}
+	});
+
+	$(document).on('click', '.add-special-item', function() {
+		var html = '<div class="input-group">'+
+				'	<span class="input-group-addon">日期</span>'+
+				'	<input type="text" name="special_date[]" value="" placeholder="请选择日期时间" readonly="readonly" class="datetimepicker form-control">'+
+				'	<span class="input-group-addon border-0-lr">标题</span>'+
+				'	<input class="form-control" value="" placeholder="非必填" name="special_title[]">'+
+				'	<span class="input-group-addon border-0-lr">颜色</span>'+
+				'	<input class="form-control select-color" value="" type="color" name="special_color[]">'+
+				'	<span class="input-group-addon border-0-lr">奖励</span>'+
+				'	<input class="form-control" type="number" value="" name="special_grant[]">'+
+				'	<div class="input-group-btn border-0-lr"><span class="btn btn-danger btn-del">删除</span></div>'+
+				'</div>';
+
+		$("#special-container").append(html);
+		$(".datetimepicker").each(function() {
+			var option = {
+				lang: "zh",
+				step: "10",
+				timepicker: false,
+				closeOnDateSelect: true,
+				format: "Y-m-d"
+			};
+			$(this).datetimepicker(option);
+		});
+	});
+	$(document).on('click', '.btn-del', function() {
+		$(this).parent().parent().remove();
+	});
+});
+</script>
+{itemplate 'public/footer'}

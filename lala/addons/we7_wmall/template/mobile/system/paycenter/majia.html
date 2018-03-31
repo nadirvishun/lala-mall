@@ -1,0 +1,33 @@
+{itemplate 'public/header'}
+<script src='http://app.lxh.magcloud.cc/public/static/dest/js/libs/magjs-x.js'></script>
+<script type="text/javascript">
+	var payinfo = {php echo json_encode($payinfo);};
+	mag.pay(payinfo, function(data){
+		alert(data)
+		$.toast('订单支付成功', payinfo.url_detail);
+	}, function(data){
+		alert(data)
+		$.toast(data.error, payinfo.url_pay);
+	});
+/*
+	function QFH5ready() {
+		QFH5.createOrder(QFdata['type'], QFdata['item'], QFdata['send_type'], QFdata['address'], QFdata['allow_pay_type'], function(state, data){
+			if(state == 1){
+				var order_id = data.order_id;
+				$.post("{php echo imurl('system/paycenter/sync/qianfan');}", {tid: payinfo.tid, order_id: order_id}, function(){
+					QFH5.jumpPayOrder(order_id, function(state, data){
+						if(state == 1){
+							$.toast('订单支付成功', payinfo.url_detail);
+						} else {
+							$.toast(data.error, payinfo.url_pay);
+						}
+					});
+				});
+			} else {
+				$.toast('创建交易订单失败:' + data.error, payinfo.url_pay);
+			}
+		});
+	}
+*/
+</script>
+{itemplate 'public/footer'}

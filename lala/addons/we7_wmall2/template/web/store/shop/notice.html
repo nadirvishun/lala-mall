@@ -1,0 +1,60 @@
+{itemplate 'public/header'}
+{if $ta == 'list'}
+<form action="" class="form-table form news-list" id="form-deliveryer" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			{if empty($data)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+					<tr>
+						{if !empty($_W['clerk'])}
+						<th width="20"></th>
+						{/if}
+						<th>信息</th>
+						<th>时间</th>
+						<th style="width:350px; text-align: right">详情</th>
+					</tr>
+					</thead>
+					<tbody>
+					{loop $data $item}
+					<tr>
+						{if !empty($_W['clerk'])}
+							<td>
+								{if $item['is_new'] == 1}
+								<i class="fa fa-circle" style="color: #06c1ae"></i>
+								{else}
+								<i class="fa fa-circle" style="color: #d5d5d5;"></i>
+								{/if}
+							</td>
+						{/if}
+						<td>{$item['title']}</td>
+						<td>{php echo date('Y-m-d H:i', $item['addtime']);}</td>
+						<td align="right">
+							<a href="{php echo iurl('store/shop/notice/detail', array('id' => $item['id']))}" class="btn btn-default btn-sm" >查看</a>
+						</td>
+					</tr>
+					{/loop}
+					</tbody>
+				</table>
+				<div class="btn-region clearfix">
+					<div class="pull-right">
+						{$pager}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{/if}
+
+{if $ta == 'detail'}
+<div class="page news-detail clearfix">
+	<h2 class="text-center">{$item['title']}</h2>
+	<div>{$item['content']}</div>
+</div>
+{/if}
+{itemplate 'public/footer'}

@@ -1,0 +1,118 @@
+{itemplate 'public/header'}
+<div class="page search-result search-corr">
+	<div class="bar bar-header-secondary">
+		<div class="searchbar">
+			<a class="searchbar-arrow back"><i class="icon icon-arrow-left"></i></a>
+			<a class="searchbar-cancel">搜索</a>
+			<div class="search-input">
+				<label class="icon icon-search" for="search"></label>
+				<input type="search" id='search' name="search" value="{$_GPC['key']}" placeholder='请输入商户或商品名称'/>
+			</div>
+		</div>
+	</div>
+	{php get_mall_menu();}
+	<div class="content">
+		{if empty($stores)}
+			<div class="search-noany">
+				<span></span>
+				<p>抱歉，没有找到合适的商户</p>
+			</div>
+		{else}
+			{loop $stores $store}
+				<div class="store-list">
+					<div class="list-item">
+						<a href="{$store['url']}&from=search">
+							<div class="store-info row no-gutter">
+								<div class="store-img col-25">
+									<img src="{php echo tomedia($store['logo']);}" alt="{$store['title']}"/>
+								</div>
+								<div class="col-75">
+									<div class="row no-gutter">
+										<div class="col-60 lineheight">{$store['title']}</div>
+										{if $store['delivery_mode'] == 2}
+											<div class="plateform-delivery"><span>{$_config_mall['delivery_title']}</span></div>
+										{/if}
+									</div>
+									<div class="rel-info">
+										<div class="row delivery-conditions">
+											<div class="col-60">起送<span>￥{$store['send_price']}</span><span class="pipe">|</span>配送<span>￥{$store['delivery_price']}</span></div>
+											<div class="col-40 textright color-danger">{$store['delivery_time']}分钟</div>
+										</div>
+										{if !empty($store['activity']['items']['discount'])}
+											<div class="discount">
+												{$store['activity']['items']['discount']['title']}
+											</div>
+										{/if}
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					{if !empty($store['goods'])}
+						<div class="search-text-list">
+							<ul>
+								{loop $store['goods'] $goods}
+									<li><a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id'], 'from' => 'search', 'key' => $goods['title']));}">{$goods['title']}<span>¥{$goods['price']}</span></a></li>
+								{/loop}
+							</ul>
+						</div>
+					{/if}
+				</div>
+			{/loop}
+		{/if}
+		{if !empty($recommend_stores)}
+		<div class="store-list search-mar-top">
+			<div class="search-r-like">
+				<span><i class="icon icon-dianzan"></i>为您推荐</span>
+			</div>
+			{loop $recommend_stores $store}
+				<div class="list-item">
+					<a href="{$store['url']}">
+						<div class="store-info row no-gutter">
+							<div class="store-img col-25">
+								<img src="{php echo tomedia($store['logo']);}" alt="{$store['title']}"/>
+							</div>
+							<div class="col-75">
+								<div class="row no-gutter">
+									<div class="col-60 lineheight">{$store['title']}</div>
+									<div class="col-40 money-info text-right"></div>
+								</div>
+								<div class="rel-info">
+									<div class="row delivery-conditions">
+										<div class="col-60">起送<span>￥{$store['send_price']}</span><span class="pipe">|</span>配送<span>￥{$store['delivery_price']}</span></div>
+										<div class="col-40 textright color-danger">{$store['delivery_time']}分钟</div>
+									</div>
+									{if !empty($store['activity']['discount_status'])}
+										<div class="jian">
+											在线支付
+											{loop $store['activity']['discount_data'] $discount}
+											满{$discount['condition']}元减{$discount['back']}元
+											{/loop}
+										</div>
+									{/if}
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+			{/loop}
+		</div>
+		{/if}
+	</div>
+</div>
+<script>
+$(function(){
+	$(document).on('click', '.searchbar-cancel', function(){
+		var key = $('.search-input input').val();
+		if(!key) {
+			return false;
+		}
+		$.showIndicator();
+		$.post("{php echo imurl('wmall/home/hunt/search_data');}", {key: key}, function(data){
+			location.href = "{php echo imurl('wmall/home/hunt/search');}&key=" + key;
+		});
+		return false;
+	});
+});
+</script>
+{itemplate 'public/footer'}

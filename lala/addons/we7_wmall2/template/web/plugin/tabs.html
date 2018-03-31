@@ -1,0 +1,32 @@
+<div class="second-sidebar-title">应用</div>
+<div class="nav slimscroll">
+	<div class="menu-header">应用</div>
+	<ul class="menu-item">
+		<li class="active">
+			<a href="{php echo iurl('plugin/index/index');}">应用列表</a>
+		</li>
+	</ul>
+	{loop $_W['plugin_types'] $type}
+		{if !empty($_W['plugins'][$type['name']])}
+			<div class="menu-header">{$type['title']}</div>
+			<ul class="menu-item">
+				{loop $_W['plugins'][$type['name']] $plugin}
+					{ifp $plugin['name']}
+						{php $url = $plugin['name'] . '/index/index'}
+						<li>
+							<a href="{php echo iurl($url);}">{$plugin['title']}</a>
+						</li>
+					{/if}
+				{/loop}
+			</ul>
+		{/if}
+	{/loop}
+	{if !empty($_W['isfounder'])}
+		<div class="menu-header">更多应用</div>
+		<ul class="menu-item">
+			<li>
+				<a href="{php echo cloud_store_url();}" target="_blank" style="color: #ff2d4b">应用中心</a>
+			</li>
+		</ul>
+	{/if}
+</div>

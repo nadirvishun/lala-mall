@@ -1,0 +1,23 @@
+<form class="form-horizontal form-validate" id="form-add-ptf-deliveryer" action="{php echo iurl('deliveryer/plateform/add_ptf_deliveryer');}" method="post" enctype="multipart/form-data">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">添加平台配送员</h4>
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-info">添加平台配送员之前, 你需要新增一个配送员账户, 然后通过搜索"手机号"把他添加进来</div>
+				<div class="form-group">
+					<label for="mobile">配送员手机号</label>
+					<input type="text" class="form-control" id="mobile" name="mobile" placeholder="请输入配送员手机号" required="true">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="submit" class="btn btn-primary btn-submit">添加</button>
+			</div>
+		</div>
+	</div>
+</form>
+
+

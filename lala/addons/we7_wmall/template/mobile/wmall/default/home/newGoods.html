@@ -1,0 +1,312 @@
+{itemplate 'public/header'}
+<style>
+	.new-goods .tab-bluefill{display: inline-block; padding: 0.05rem .1rem; height: 0.6rem; line-height: 0.6rem; border: 1px solid #44a5ff; background-color: #2395ff; color: #fff; font-size: 0.5rem; border-radius: 0.1rem}
+	.new-goods .goods-label{display: block; background-image: linear-gradient(135deg,#4cd964 50%,transparent 0); width: 1.5rem; height: 1.5rem; font-weight: 700; font-size: .2rem;}
+	.new-goods .goods-label span{display: block; transform: rotate(-45deg); color: #fff}
+	.new-goods .header-bar{background-image: url("//fuss10.elemecdn.com/b/53/d67d6cae00b5f95d550b63db9cd91jpeg.jpeg?imageMogr/format/webp/thumbnail/!40p/blur/50x40/"); width: 100%; background-size: cover; background-repeat: no-repeat; position: relative; z-index: 15500;}
+	.new-goods .header-bar .backwarpper{height: 2.2rem;}
+	.new-goods .header-bar a.back{color: #fff; line-height: 2.2rem; font-size: .8rem; margin-left: 0.4rem;}
+	.new-goods .header-bar-fixed{position: fixed; z-index: 160000; width: 100%; max-width: 640px;}
+	.new-goods .header-bar-fixed .title{top: 0; margin: 0; color: #fff;}
+	.new-goods .header-bar a i{font-size: 1rem;}
+	.new-goods .bar.bar-tab{background-color: #3d3d3f; opacity: 1; border-top: 0; z-index: 15000;}
+	.new-goods .bar.bar-tab .icon-cart{position: absolute; left: .5rem; bottom: 0.4rem; width: 2.8rem; height: 2.8rem; box-sizing: border-box; border-radius: 100%; background-color: #3190e8; border: .2rem solid #444; box-shadow: 0 -.08rem .06rem 0 rgba(0,0,0,.1); will-change: transform; background-image: radial-gradient(circle,#363636 1.1rem,#444 0);}
+	.new-goods .bar.bar-tab .icon-cart.active{background-image: none}
+	.new-goods .bar.bar-tab .icon-cart:before{color: #fff; font-size: 1.6rem; position: absolute; left: 0.4rem; top: 0.6rem;}
+	.new-goods .bar.bar-tab .badge{position: absolute; left: 1.8rem; top: -0.6rem; padding: 0; width: 1rem; height: 1rem; text-align: center; line-height: 1rem; z-index: 10000;}
+	.new-goods .bar.bar-tab .bg-danger{color: #fff; background: #ff2d4b;}
+	.new-goods .bar.bar-tab .amount-empty{padding-left: 20%;}
+	.new-goods .bar.bar-tab .amount-empty .cart-empty{font-weight: 700; color: #fff; height: 2.5rem; line-height: 2.5rem; font-size: 0.6rem}
+	.new-goods .bar.bar-tab .amount-empty .delivery-condition{background-color: #535356; position: absolute; top: 0; right: 0; bottom: 0; width: 4rem; color: #fff; text-align: center; text-decoration: none; font-size: 0.8rem; font-weight: 700; line-height: 2.5rem;}
+	.new-goods .bar.bar-tab .cart-account{padding-left: 20%; color: #fff; height: 2.5rem;}
+	.new-goods .bar.bar-tab .cart-account .amount-price{margin-top: 0.2rem}
+	.new-goods .bar.bar-tab .cart-account .delivery-fee{font-size: 0.5rem}
+	.new-goods .bar.bar-tab .amount .go-account{background-color: #4cd964; position: absolute; top: 0; right: 0; bottom: 0; width: 4rem; color: #fff; text-align: center; text-decoration: none; font-size: 0.8rem; font-weight: 700; line-height: 2.5rem;}
+	.new-goods .bar.bar-tab .amount .delivery-condition{background-color: #535356; position: absolute; top: 0; right: 0; bottom: 0; width: 6rem; color: #fff; text-align: center; text-decoration: none; font-size: 0.8rem; font-weight: 700; line-height: 2.5rem;}
+	.new-goods .store-info{width: 100%; margin-left: 0; color: #fff; display: block;}
+	.new-goods .store-info img{width: 3rem; height: 3rem; border-radius: 0.2rem; margin: 0 auto}
+	.new-goods .store-info .col-75{margin-left: 0; height: 3.4rem; position: relative}
+	.new-goods .store-info .store-title{font-weight: bold}
+	.new-goods .store-info .col-75 .icon.icon-right{position: absolute; right: 0; top :50%; margin-top: -0.3rem; font-size: 0.4rem;}
+	.new-goods .store-info .store-delivery{font-size: 0.5rem; margin-top: 0.2rem}
+	.new-goods .store-info .store-notice{font-size: 0.5rem; margin-top: 0.2rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-bottom: 0.3rem; }
+	.new-goods .activity-container{font-size: 0.5rem; padding: 0 4% 0.3rem; color: #fff; position: relative; z-index: 15000}
+	.new-goods .buttons-tab.select-tab{border: none; position: relative; width: 100%; max-width: 640px; z-index: 15001;}
+	.new-goods .buttons-tab.select-tab .button.active{border: none; font-weight: bold}
+	.new-goods .buttons-tab.select-tab .button.active span{color: #0894ec;}
+	.new-goods .buttons-tab.select-tab .button.active span:after{content: ""; position: absolute; bottom: 0.05rem; left: -.02rem; right: -.02rem; height: .1rem; background-color: #3190e8; border-radius: .04rem; margin: 0 auto}
+	.new-goods .content .container{position: relative; z-index: 15000;}
+	.new-goods .parent-category-wrapper{overflow: hidden; padding: 0; position: relative; width: 25%; top: 0.05rem; left: 0; z-index: 10200; max-width: 640px;}
+	.new-goods .parent-category-wrapper .parent-category{max-width: 160px; min-height: 100%; padding-top: 0; overflow: hidden;}
+	.new-goods .parent-category-wrapper .parent-category .category-list{background-color: #f8f8f8;}
+	.new-goods .parent-category-wrapper .parent-category .category-list li{padding: 0.8rem 0.3rem; width: 100%;}
+	.new-goods .parent-category-wrapper .parent-category .category-list li.active{background: #fff; border-left: 3px solid #0894ec; border-right: 0;}
+	.new-goods .parent-category-wrapper .parent-category .category-list li a{display: block; word-wrap: break-word; text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; color: #666; font-size: .65rem; text-align: center}
+	.new-goods .parent-category-wrapper .parent-category .category-list li.active a{font-weight: bold}
+	.new-goods .category-container{width: 75%; overflow: hidden; left: 25%; position: absolute; z-index: 10199; top: 0}
+	.new-goods .category-container .coupon-show-container{padding: 0 0.3rem; font-size: 0.8rem; margin: 0.3rem 0;}
+	.new-goods .category-container .coupon-show{background: #fff; height: 3.5rem; border-radius: 0.1rem}
+	.new-goods .category-container .coupon-show .coupon-sum{width: 30%; color: #f6383a; line-height: 3.5rem; text-align: center; border-left: 2px solid #f6383a;}
+	.new-goods .category-container .coupon-show .coupon-info{width: 35%;  text-align: center}
+	.new-goods .category-container .coupon-show .coupon-info .coupon-title{font-size: 0.7rem; font-weight: bold; color: #333; margin-top: 0.9rem;}
+	.new-goods .category-container .coupon-show .coupon-info .condition{font-size: 0.5rem; color: #999}
+	.new-goods .category-container .coupon-show .get{width: 35%; height: 3.5rem; line-height: 3.5rem; border-left: 1px dashed #e0e0e0; position: relative}
+	.new-goods .category-container .coupon-show .get .btn-get{display: block; font-size: 0.6rem; color: #fff; width: 3rem; height: 1.2rem; line-height: 1.2rem; border-radius: 0.6rem; background: #f6383a; margin: 1.2rem auto; text-align: center}
+	.new-goods .category-container .coupon-show .get .circle{display: block; width: 0.6rem; height: 0.6rem; background :#eee; position: absolute; border-radius: 0.6rem; left: -0.3rem; z-index: 20;}
+	.new-goods .category-container .coupon-show .get .circle-top{top: -0.35rem; border-bottom: 1px solid #e0e0e0}
+	.new-goods .category-container .coupon-show .get .circle-bottom{bottom: -0.35rem; border-top: 1px solid #e0e0e0}
+	.new-goods .category-container .children-category-wrapper .heading{position: relative; padding: 0.4rem 0.5rem; background-color: #f1f1f1; font-weight: bold; color: #666; font-size: 0.55rem; border-left: 3px solid #e0e0e0}
+	.new-goods .category-container .children-category-wrapper .heading small{font-size: .4rem; color: #ef1e15; margin-left: 0.3rem;}
+	.new-goods .category-container .list-block{margin: 0; background-color: #fff}
+	.new-goods .category-container .list-block .item-content{align-items: flex-start}
+	.new-goods .category-container .list-block .item-content .item-media{padding-top: 0.7rem; position: relative;}
+	.new-goods .category-container .list-block .item-content .item-media img{width: 2.5rem; height: 2.5rem; border-radius: 0.2rem}
+	.new-goods .category-container .list-block .item-content .item-media .goods-label{position: absolute; top: 0; left: -0.6rem}
+	.new-goods .category-container .list-block .item-content .item-inner{padding: 0.7rem 0.7rem 0.7rem 0}
+	.new-goods .category-container .list-block .item-title{color: #333; font-size: 0.7rem; font-weight: bold}
+	.new-goods .category-container .list-block .item-subtitle{color: #666; font-size: 0.55rem}
+	.new-goods .category-container .list-block .item-text{color: #999; font-size: 0.45rem; line-height: 1.6; -webkit-line-clamp: 3;}
+	.new-goods .category-container .list-block li{position: relative; padding-left: 0.6rem}
+	.new-goods .category-container .list-block li .item-content{padding-left: 0}
+	.new-goods .category-container .list-block li .item-content .discount-info{font-size: 0.45rem; line-height: 0.45rem; margin: 0.2rem 0 0.1rem;}
+	.new-goods .category-container .list-block li .item-content .discount-info .discount-num{border: 1px solid rgb(243,108,114); background: rgb(243,108,114); color: #fff; padding: 0.1rem 0.1rem 0}
+	.new-goods .category-container .list-block li .item-content .discount-info .discount-limit{border: 1px solid rgb(243,108,114); color: rgb(243,108,114); padding: 0.1rem 0.1rem 0}
+	.new-goods .category-container .list-block li .price .fee{color: #f90; font-size: 0.9rem; font-weight: bold}
+	.new-goods .category-container .list-block li .price .fee span{font-size: 0.6rem;}
+	.new-goods .category-container .list-block li .price .original-fee{font-size: 0.5rem; text-decoration: line-through; color: #999;}
+	.new-goods .category-container .list-block li .operate-num{position: absolute; right: 0.5rem; bottom: 0.7rem}
+	.new-goods .category-container .list-block li .operate-num .icon.icon-plus{background: #0894ec; font-size: .6rem; color: #fff; display: inline-block; height: 1.2rem; width: 1.2rem; line-height: 1.2rem; text-align: center; border: 1px solid #0894ec; border-radius: 100%; font-weight: bold}
+	.new-goods .category-container .list-block li .operate-num .icon.icon-minus{background: #fff; font-size: .6rem; color: #0894ec; display: inline-block; height: 1.2rem; width: 1.2rem; line-height: 1.2rem; text-align: center; border: 1px solid #0894ec; border-radius: 100%; font-weight: bold}
+	.new-goods .category-container .list-block li .operate-goods{position: absolute; right: 0.5rem; bottom: 0.7rem}
+	.new-goods .category-container .list-block li .operate-goods .select-spec{display: inline-block; height: 1.3rem; line-height: 1.3rem!important; font-size: .6rem; border: 1px solid #ddd; color: #0894ec; border-radius: 1.3rem; padding: 0 .4rem;}
+	.new-goods .category-container .list-block li .goods-tips{position: absolute; right: 0.5rem; bottom: 0.7rem}
+	.popup-shop-cart .popup-shop-cart-header .col-50:first-child span{padding-left: 0.5rem;  border-left: 3px solid #0894ec}
+</style>
+{if $ta == 'index'}
+<div class="page new-goods">
+	<nav class="bar bar-tab">
+		<span class="icon icon-cart" id="cart">
+			<span class="badge bg-danger hide" id="cartNum">0</span>
+		</span>
+		<div class="amount-empty" id="cartEmpty">
+			<div class="cart-empty">购物车为空</div>
+			<a href="javascript:;" class="delivery-condition">¥{$store['send_price']} 起送</a>
+		</div>
+		<div class="amount hide" id="cartNotEmpty">
+			<div class="cart-account">
+				<div class="amount-price">¥<span id="totalPrice"></span></div>
+				<div class="delivery-fee">另需配送费元</div>
+			</div>
+			{if !$store['is_in_business_hours']}
+			<div class="delivery-condition" id="btnSubmit">休息中</div>
+			{else}
+				<div class="delivery-condition">还差<span id="sendCondition">{$store['send_price']}</span>元起送</div>
+				<div class="go-account" id="btnSubmit">去结算</div>
+			{/if}
+		</div>
+	</nav>
+	<div class="content lazyload-container">
+		<div class="header-bar header-bar-fixed">
+			<div class="backwarpper">
+				<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+			</div>
+			<div class="title hide">{$store['title']}</div>
+		</div>
+		<div class="header-bar">
+			<div class="backwarpper"></div>
+			<a href="{php echo imurl('wmall/home/newStore', array('sid' => $sid))}" class="store-info row">
+				<div class="col-25">
+					<img src="{php echo tomedia($store['logo'])}" alt="">
+				</div>
+				<div class="col-75">
+					<div class="store-title">{$store['title']}</div>
+					<div class="store-delivery">{if $store['delivery_mode'] == 2}<span class="tab-bluefill">{$_config_mall['delivery_title']}</span>{/if}  {$store['delivery_time']}分钟送达 {if $store['delivery_free_price'] > 0}| 满{$store['delivery_free_price']}免配送费{/if}</div>
+					<div class="store-notice"><span>公告:</span>{$store['notice']}</div>
+					<span class="icon icon-right"></span>
+				</div>
+			</a>
+			<div class="activity-container">
+				{if $activity['num'] > 0}
+					{if $activity['num'] > 1}
+						{php $num = 0}
+						<div class="activity-num pull-right">{$activity['num']}个活动 <i class="icon icon-arrow-down"></i></div>
+					{/if}
+					{loop $activity['items'] $item}
+						{php $num++}
+						<div class="tags tags-{$item['type']}  {if $num > 1}activity-row hide{/if}">{$item['title']}</div>
+					{/loop}
+				{/if}
+				{if $store['delivery_free_price'] > 0}
+					<div class="activity-row free <{# if(num > 2){ }>hide<{# } }>">
+						满{$store['delivery_free_price']}元免配送费
+					</div>
+				{/if}
+				{if !empty($store['hot_goods'])}
+					<div class="dashed-line"></div>
+					<div class="hot">
+						热销:
+						{loop $store['hot_goods'] $hot}
+							{$hot['goods']}
+						{/loop}
+					</div>
+				{/if}
+			</div>
+		</div>
+		<div class="buttons-tab select-tab border-1px-b">
+			<a href="{php echo imurl('wmall/home/newGoods', array('sid' => $sid))}" class="button active"><span>商品</span></a>
+			<a href="{php echo imurl('wmall/home/newComment', array('sid' => $sid))}" class="button"><span>评价</span></a>
+		</div>
+		<div class="container">
+			<div class="parent-category-wrapper">
+				<div class="parent-category">
+					<ul class="category-list">
+						{loop $categorys $category}
+							{if !empty($cate_goods[$category['id']])}
+								<li class="border-1px-b">
+									<a href="javascript:;">
+										{if $category['bargain_id'] > 0}
+											<svg class="svg" aria-hidden="true">
+												<use xlink:href="#svg-tag"></use>
+											</svg>
+										{/if}
+										{$category['title']}
+									</a>
+								</li>
+							{/if}
+						{/loop}
+					</ul>
+				</div>
+			</div>
+			<div class="category-container row no-gutter" id="category-container">
+				{if !empty($tokens)}
+					<div class="coupon-show-container">
+						<div class="coupon-show border-1px">
+							<div class="coupon-sum pull-left">
+								<span>￥{$token_price}</span>
+							</div>
+							<div class="coupon-info pull-left">
+								<div class="coupon-title">商家代金券</div>
+								{if $token_nums > 1}
+									<div class="condition">内含{$token_nums}张券</div>
+								{else}
+									<div class="condition">满{$token['condition']}元可用</div>
+								{/if}
+							</div>
+							<div class="get pull-left">
+								<span class="circle circle-top"></span>
+								<span class="circle circle-bottom"></span>
+								<span class="btn-get" id="get-coupon">去领取</span>
+							</div>
+						</div>
+					</div>
+				{/if}
+				<div class="children-category col-100">
+					<form action="{php echo imurl('wmall/order/create/goods', array('sid' => $sid));}" method="post" id="goods-form">
+						<input type="hidden" name="goods" value=""/>
+						{loop $categorys $cate_row}
+							{if !empty($cate_goods[$cate_row['id']])}
+								<div class="children-category-wrapper">
+									<div class="heading">{$cate_row['title']} {if $cate_row['min_fee'] > 0}<small>最低消费{$cate_row['min_fee']}元</small>{/if}</div>
+									<ul class="list-block media-list">
+										{loop $cate_goods[$cate_row['id']] $ds}
+											<li id="goods-{$ds['id']}" {if $_GPC['goods_id'] == $ds['id']}class="active"{/if}>
+												<div class="item-content goods-popup border-1px-b" data-id="{$ds['id']}">
+													<div class="item-media">
+														<img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="lazyload" data-original="{php echo tomedia($ds['thumb']);}" alt=""/>
+														{if !empty($ds['label'])}
+															<div class="goods-label">
+																<span>{$ds['label']}</span>
+															</div>
+														{/if}
+													</div>
+													<div class="item-inner">
+														<div class="item-title-row">
+															<div class="item-title">{$ds['title']}</div>
+														</div>
+														{if !empty($ds['content'])}
+															<div class="item-text">{$ds['content']}</div>
+														{/if}
+														<div class="item-subtitle">已售{$ds['sailed']}{$ds['unitname']}&nbsp;&nbsp; 好评{$ds['comment_good']}</div>
+														{if !empty($ds['discount'])}
+															<div class="discount-info">
+																<span class="discount-num">{$ds['discount']}折</span><span class="discount-limit">{if $ds['poi_user_type'] == 'new'}新用户专享{/if} 每单仅限{$ds['max_buy_limit']}份</span>
+															</div>
+														{/if}
+														<div class="price">
+															<span class="fee"><span>￥</span>{$ds['discount_price']}</span>
+															{if !empty($ds['bargain_id'])}
+																<span class="original-fee">￥{$ds['price']}</span>
+															{/if}
+														</div>
+													</div>
+												</div>
+												{if $store['is_in_business_hours']}
+													{if !$ds['is_options']}
+														{if !$ds['discount_available_total'] && !$ds['total']}
+															<div class="goods-tips">已售完</div>
+														{else}
+															<div class="operate-num operate-goods">
+																<span class="hide minus">
+																	<span class="icon icon-minus" data-goods-id="{$ds['id']}" data-option-id="0"></span>
+																	<span class="num">0</span>
+																</span>
+																<span class="icon icon-plus" data-goods-id="{$ds['id']}" data-option-id="0"></span>
+															</div>
+														{/if}
+													{elseif $ds['is_options'] == 1}
+														<div class="operate-goods">
+															<span class="select-spec goods-option" data-id="{$ds['id']}">可选规格</span>
+														</div>
+													{/if}
+												{else}
+													<div class="goods-tips">店铺休息中</div>
+												{/if}
+											</li>
+										{/loop}
+									</ul>
+								</div>
+							{/if}
+						{/loop}
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{/if}
+{itemplate 'home/goodsCommon'}
+<script>
+$(function(){
+	$(document).on('click', '.activity-container', function(){
+		if($(this).hasClass('active')) {
+			$(this).find('.activity-row').addClass('hide');
+			$(this).find('.activity-num i').addClass('fa-arrow-down').removeClass('fa-arrow-up');
+		} else {
+			$(this).find('.activity-row').removeClass('hide');
+			$(this).find('.activity-num i').addClass('fa-arrow-up').removeClass('fa-arrow-down');
+		}
+		$(this).toggleClass('active');
+	});
+
+	$(document).on('click', '.modal-overlay-visible', function() {
+		$("#cart").removeClass('show');
+	});
+
+	$(".content").on('scroll', function() {
+		var scrollTop = $(".content").scrollTop();
+		if(scrollTop > 0) {
+			$('.header-bar-fixed .title').fadeIn();
+		} else {
+			$('.header-bar-fixed .title').fadeOut();
+		}
+		if(scrollTop > 86) {
+			$(".parent-category").css({'position': 'fixed', 'top': '4.2rem', 'width': '25%'});
+			$('.buttons-tab.select-tab').css({'position': 'fixed', 'top': '2.2rem'});
+		} else {
+			$(".parent-category").css({'position': 'relative', 'top': '0', 'width': '100%'});
+			$('.buttons-tab.select-tab').css({'position': 'relative', 'top': '0'});
+		}
+	});
+});
+</script>
+{itemplate 'public/footer'}

@@ -1,0 +1,39 @@
+{itemplate 'public/header'}
+<div class="page clearfix">
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<h3>平台门店推广位招商信息</h3>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">广告位详情</label>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">平台首页顶部</label>
+			<div class="col-sm-8">
+				<div class="input-group">
+					<span class="input-group-addon">广告位总数</span>
+					<span class="input-group-addon">{$config_top['num']}个展示位</span>
+					<span class="input-group-addon">还有</span>
+					<span class="input-group-addon">value个位置可抢</span>
+					<span class="input-group-addon">展示方式</span>
+					<input type="text" name="" value="1" class="form-control">
+				</div>
+				{loop $prices $price}
+					<div class="input-group">
+						<span class="input-group-addon">购买</span>
+						<input type="text" name="[days][]" value="{$price['day']}" class="form-control" placeholder="" disabled>
+						<span class="input-group-addon">天</span>
+						<input type="text" name="[fees][]" value="{$price['fee']}" class="form-control" placeholder="" disabled>
+						<span class="input-group-addon">元</span>
+					</div>
+				{/loop}
+			</div>
+
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="购买" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{itemplate 'public/footer'}

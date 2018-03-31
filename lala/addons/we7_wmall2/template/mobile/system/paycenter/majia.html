@@ -1,0 +1,13 @@
+{itemplate 'public/header'}
+<script src='http://app.lxh.magcloud.cc/public/static/dest/js/libs/magjs-x.js'></script>
+<script type="text/javascript">
+	var payinfo = {php echo json_encode($payinfo);};
+	mag.pay(payinfo, function(data){
+		alert(data)
+		$.toast('订单支付成功', payinfo.url_detail);
+	}, function(data){
+		alert(data)
+		$.toast(data.error, payinfo.url_pay);
+	});
+</script>
+{itemplate 'public/footer'}

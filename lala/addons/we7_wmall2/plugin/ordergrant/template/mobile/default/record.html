@@ -1,0 +1,44 @@
+{itemplate 'public/header'}
+<link href="../addons/we7_wmall/plugin/ordergrant/static/css/mobile/index.css" rel="stylesheet" type="text/css"/>
+<div class="page ordergrant-record">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">详细记录</h1>
+	</header>
+	{php get_mall_menu();}
+	<div class="content infinite-scroll js-infinite" data-distance="50" data-min="{$min}" data-container=".grant-list" data-tpl="tpl-grant" data-href="{php echo imurl('ordergrant/record')}">
+		<div class="grant-list">
+			{if empty($records)}
+				<div class="common-no-con">
+					<img src= "{WE7_WMALL_TPL_URL}static/img/order_no_con.png" alt="" />
+					<p>您还没有奖励记录</p>
+				</div>
+			{else}
+				{loop $records $record}
+					<div class="grant-item">
+						<div class="item-inner">
+							<div class="titles">{$record['mark']}</div>
+							<div class="text"><span class="label {$record['css']}">{$record['text']}</span> {$record['addtime']}</div>
+						</div>
+						<div class="grant">+{$record['grant']}</div>
+					</div>
+				{/loop}
+			{/if}
+		</div>
+		<div class="infinite-scroll-preloader hide">
+			<div class="preloader"></div>
+		</div>
+	</div>
+</div>
+<script id="tpl-grant" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<div class="grant-item">
+			<div class="item-inner">
+				<div class="titles"><{d[i].text}>+<{d[i].grant}><{d[i].credittype}></div>
+				<div class="text"><span class="label {$record['css']}"><{d[i].text}></span> <{d[i].addtime}></div>
+			</div>
+			<div class="grant">+<{d[i].grant}></div>
+		</div>
+	<{# } }>
+</script>
+{itemplate 'public/footer'}

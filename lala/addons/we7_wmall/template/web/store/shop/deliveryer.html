@@ -1,0 +1,238 @@
+{itemplate 'public/header'}
+{if $ta == 'list'}
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		<div class="panel-heading">
+			<a href="javascript:;" class="btn btn-primary btn-sm btn-add">添加配送员</a>
+		</div>
+		<div class="alert alert-warning">提示：添加店员配送员之前, 你需要新增一个配送员账户, 然后通过搜索"手机号"把他添加进来. 你可以点击"注册/登录",用微信扫一扫进行注册.</div>
+		<div class="panel-body table-responsive js-table">
+			{if empty($data)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+					<tr>
+						<th>配送员名称</th>
+						<th>微信昵称</th>
+						<th>手机号</th>
+						<th>性别/年龄</th>
+						<th>添加时间</th>
+						<th>今日配送</th>
+						<th>本月配送</th>
+						<th>总配送</th>
+						<th style="width:150px; text-align:right;">操作</th>
+					</tr>
+					</thead>
+					<tbody>
+					{loop $data $item}
+						<tr>
+							<td>{$item['deliveryer']['title']}</td>
+							<td>{$item['deliveryer']['nickname']}</td>
+							<td>{$item['deliveryer']['mobile']}</td>
+							<td>{$item['deliveryer']['sex']} /{$item['deliveryer']['age']}</td>
+							<td>{php echo date('Y-m-d H:i', $item['deliveryer']['addtime']);}</td>
+							<td>{$item['stat']['today_num']}</td>
+							<td>{$item['stat']['month_num']}</td>
+							<td>{$item['stat']['total_num']}</td>
+							<td style="text-align:right;">
+								<a href="{php echo iurl('store/shop/deliveryer/stat', array('id' => $item['deliveryer_id']))}" class="btn btn-default btn-sm" title="配送统计" data-toggle="tooltip" data-placement="top"><i class="fa fa-bar-chart"> </i></a>
+								<a href="{php echo iurl('store/shop/deliveryer/del', array('id' => $item['id']))}" class="btn btn-default btn-sm js-remove" title="取消店内配送权限" data-toggle="tooltip" data-placement="top" data-confirm="确定取消该配送员的店内配送权限吗?"><i class="fa fa-times"> </i></a>
+							</td>
+						</tr>
+					{/loop}
+					</tbody>
+				</table>
+			{/if}
+		</div>
+	</div>
+</form>
+<div class="modal fade" id="add-container">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">添加平台配送员</h4>
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-info">
+					添加平台配送员之前, 你需要新增一个配送员账户, 然后通过搜索"手机号"把他添加进来
+				</div>
+				<form>
+					<div class="form-group">
+						<label for="">配送员手机号</label>
+						<input type="text" class="form-control" id="mobile" name="mobile" placeholder="请输入配送员手机号">
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary btn-submit">添加</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function(){
+		$(document).on('click', '.btn-add', function(){
+			$('#add-container').modal('show');
+		});
+		$(document).on('click', '.btn-submit', function(){
+			var $this = $(this);
+			if($this.hasClass('disabled')) {
+				return false;
+			}
+			var mobile = $('#mobile').val();
+			if(!mobile) {
+				Notify.info('手机号不能为空');
+				return false;
+			}
+			$this.addClass('disabled');
+			$.post("{php echo iurl('store/shop/deliveryer/add');}", {mobile: mobile}, function(data){
+				$this.removeClass('disabled');
+				var result = $.parseJSON(data);
+				if(result.message.errno == -1) {
+					Notify.error(result.message.message);
+					return false;
+				} else {
+					Notify.success('添加配送员成功', location.href);
+				}
+			});
+		});
+	});
+</script>
+{/if}
+
+{if $ta == 'stat'}
+<div class="clearfix">
+	<div class="panel panel-stat">
+		<div class="panel-heading">
+			<h3>配送员: {$deliveryer['deliveryer']['title']}</h3>
+		</div>
+		<div class="panel-body">
+			<div class="col-md-3">
+				<div class="title">今日配送</div>
+				<div class="num-wrapper">
+					<a class="num" href="javascript:;">{$stat['today_num']}</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="title">昨日配送</div>
+				<div class="num-wrapper">
+					<a class="num" href="javascript:;">{$stat['yesterday_num']}</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="title">本月配送</div>
+				<div class="num-wrapper">
+					<a class="num" href="javascript:;">{$stat['month_num']}</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="title">总配送</div>
+				<div class="num-wrapper">
+					<a class="num" href="javascript:;">{$stat['total_num']}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-trend">
+		<div class="panel-heading">
+			详细数据统计
+		</div>
+		<form action="" id="trade">
+			{php echo tpl_form_field_daterange('time', array('start' => date('Y-m-d', $start),'end' => date('Y-m-d', $end)), '')}
+		</form>
+		<div class="panel-body">
+			<div id="chart-container">
+				<canvas id="myChart" width="1200" height="300"></canvas>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+require(['chart', 'daterangepicker'], function(c, $) {
+	$('.daterange').on('apply.daterangepicker', function(ev, picker) {
+		refresh();
+	});
+
+	var chart = null;
+	var templates = {
+		flow1: {
+			label: '配送(单)',
+			fillColor : "rgba(36,165,222,0.1)",
+			strokeColor : "rgba(36,165,222,1)",
+			pointColor : "rgba(36,165,222,1)",
+			pointStrokeColor : "#fff",
+			pointHighlightFill : "#fff",
+			pointHighlightStroke : "rgba(36,165,222,1)",
+		}
+	};
+
+	function refresh() {
+		$('#chart-container').html('<canvas id="myChart" width="1200" height="300"></canvas>');
+		var url = location.href + '&#aaaa';
+		var params = {
+			'start': $('#trade input[name="time[start]"]').val(),
+			'end': $('#trade input[name="time[end]"]').val()
+		};
+		$.post(url, params, function(data){
+			var data = $.parseJSON(data)
+			var datasets = data.datasets;
+			var label = data.label;
+			var ds = $.extend(true, {}, templates);
+			ds.flow1.data = datasets.flow1;
+			var lineChartData = {
+				labels : label,
+				datasets : [ds.flow1]
+			};
+			var ctx = document.getElementById("myChart").getContext("2d");
+			chart = new Chart(ctx).Line(lineChartData, {
+				responsive: true
+			});
+		});
+	}
+	refresh();
+});
+</script>
+{/if}
+
+{if $ta == 'cover'}
+<div class="page clearfix">
+	<form class="form-horizontal form" id="form1" action="" method="post" enctype="multipart/form-data">
+		<h3 class="margin-t-0">注册入口</h3>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">直接URL</label>
+			<div class="col-sm-9 col-xs-12">
+				<p class="form-control-static js-clip" data-text="{$urls['register']}">
+					<a href="javascript:;">{$urls['register']}</a>
+				</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">访问二维码</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="qrcode-block js-qrcode" data-text="{$urls['register']}"></div>
+			</div>
+		</div>
+		<h3>登陆入口</h3>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">直接URL</label>
+			<div class="col-sm-9 col-xs-12">
+				<p class="form-control-static js-clip" data-text="{$urls['login']}">
+					<a href="javascript:;">{$urls['login']}</a>
+				</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">访问二维码</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="qrcode-block js-qrcode" data-text="{$urls['login']}"></div>
+			</div>
+		</div>
+	</form>
+</div>
+{/if}
+{itemplate 'public/footer'}

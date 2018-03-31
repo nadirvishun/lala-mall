@@ -1,0 +1,441 @@
+{itemplate 'public/header'}
+{if $op == 'post'}
+<style>
+	.form-group.discount{display: none;}
+</style>
+<div class="page clearfix">
+	<h2>编辑跑腿分类</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">标题</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" class="form-control" name="title" value="{$item['title']}" required="true">
+				<div class="help-block">例如: 买香烟</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">图标</label>
+			<div class="col-sm-9 col-xs-12">
+				{php echo tpl_form_field_image('thumb', $item['thumb']);}
+				<div class="help-block">设置分类图标</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">顾客是否上传相关图片</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" name="goods_thumbs_status" value="1" id="goods-thumbs-status-1" {if $item['goods_thumbs_status'] == 1}checked{/if}>
+					<label for="goods-thumbs-status-1">是</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="goods_thumbs_status" value="0" id="goods-thumbs-status-0" {if $item['goods_thumbs_status'] == 0}checked{/if}>
+					<label for="goods-thumbs-status-0">否</label>
+				</div>
+				<div class="help-block">此处开启上传图片以便于明确顾客需求,可选填</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require"> </span>商品类型</label>
+			<div class="col-sm-9 col-xs-12">
+				{if !empty($item['label'])}
+					{loop $item['label'] $label}
+						<div class="btn-group btn-label">
+							<input type="hidden" name="label[]" value="{$label}">
+							<a class="btn btn-default">{$label}</a>
+							<a class="btn btn-default label-delete">
+								<span class="fa fa-times-circle"></span>
+							</a>
+						</div>
+					{/loop}
+				{/if}
+				<a class="btn btn-success label-add"><i class="icon icon-plus-circle"></i> 添加</a>
+				<div class="help-block">例如: 设置的标题是买香烟, 商品标签可设置为: 中南海, 红塔山, 中华, 玉溪等</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">跑腿类型</label>
+			<div class="col-sm-9 col-xs-12 toggle-tabs" data-content=".category-type">
+				<div class="radio radio-inline">
+					<input type="radio" name="type" value="buy" id="type-buy" {if $item['type'] == 'buy' || !$item['type']}checked{/if}>
+					<label for="type-buy" class="toggle-role" data-target="category-type-1">随意购</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="type" value="delivery" id="type-delivery" {if $item['type'] == 'delivery'}checked{/if}>
+					<label for="type-delivery" class="toggle-role" data-target="category-type-1">快速送</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="type" value="pickup" id="type-pickup" {if $item['type'] == 'pickup'}checked{/if}>
+					<label for="type-pickup" class="toggle-role" data-target="category-type-1">快速取</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="type" value="multiaddress" id="type-multiaddress" {if $item['type'] == 'multiaddress'}checked{/if}>
+					<label for="type-multiaddress" class="toggle-role" data-target="category-type-2">多地址(仅限随意购)</label>
+				</div>
+				<div class="help-block">随意购: 帮顾客购买商品. 例如: 香烟,咖啡,早餐等.</div>
+				<div class="help-block">快速送: 帮顾客送货.</div>
+				<div class="help-block">快速取: 帮顾客取货.</div>
+				<div class="help-block">多地址: 顾客下单时,可填写多个购买地址,运营方可以设置每个地址不同的配送费.注意:此类随意购不支持距离和重量计费</div>
+			</div>
+		</div>
+		<div class="toggle-content category-type">
+			<div class="toggle-pane {if $item['type'] != 'multiaddress'}active{/if}" id="category-type-1">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">配送费设置</label>
+					<div class="col-sm-9 col-xs-12">
+						<div class="input-group margin-b-10">
+							<span class="input-group-addon">起步价</span>
+							<input type="number" class="form-control" name="start_fee" value="{$item['start_fee']}">
+							<span class="input-group-addon border-0-lr">元包含</span>
+							<input type="number" class="form-control" name="start_km" value="{$item['start_km']}">
+							<span class="input-group-addon">公里</span>
+						</div>
+						<div class="input-group margin-b-10">
+							<span class="input-group-addon">每增加</span>
+							<input type="number" class="form-control" name="pre_km" value="{$item['pre_km']}">
+							<span class="input-group-addon border-0-lr">公里加</span>
+							<input type="number" class="form-control" name="pre_km_fee" value="{$item['pre_km_fee']}">
+							<span class="input-group-addon">元</span>
+						</div>
+						<div class="help-block"></div>
+						<div class="margin-b-10">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" name="weight_fee_status" value="1" id="weight-fee-status" {if $item['weight_fee_status'] == 1}checked{/if}>
+								<label for="weight-fee-status">是否启用重量计费</label>
+							</div>
+						</div>
+						<div id="weight-container" class="{if empty($item['weight_fee_status'])}hide{/if}">
+							<div class="input-group margin-b-10">
+								<span class="input-group-addon">起步价包含</span>
+								<input type="number" class="form-control" name="start_weight" value="{$item['weight_fee']['start_weight']}">
+								<span class="input-group-addon">千克</span>
+							</div>
+							{if !empty($item['weight_fee']['weight'])}
+								{loop $item['weight_fee']['weight'] $key $weight}
+									<div class="input-group margin-b-10">
+										<span class="input-group-addon">超过</span>
+										<input type="number" class="form-control" name="pre_kgs[]" value="{$key}">
+										<span class="input-group-addon border-0-lr">千克</span>
+										<span class="input-group-addon">每千克增加</span>
+										<input type="number" class="form-control border-0-lr" name="pre_kg_fees[]" value="{$weight}">
+										<span class="input-group-addon">元</span>
+										<div class="input-group-btn">
+											<a href="javascript:;" class="btn btn-danger weight-fee-del">删除</a>
+										</div>
+									</div>
+								{/loop}
+							{/if}
+						</div>
+						<a class="btn btn-default add-weight-fee {if empty($item['weight_fee_status'])}hide{/if}" href="javascript:;"><i class="fa fa-plus"></i> 添加收费规则</a>
+					</div>
+				</div>
+			</div>
+			<div class="toggle-pane {if $item['type'] == 'multiaddress'}active{/if}" id="category-type-2">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">配送费设置</label>
+					<div class="col-sm-9 col-xs-12">
+						<div class="input-group">
+							<span class="input-group-addon">最多可添加</span>
+							<input type="number" class="form-control" name="multiaddress[max]" value="{$item['multiaddress']['max']}">
+							<span class="input-group-addon">个地址</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">每个地址的配送费</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" class="form-control" name="multiaddress[fee]" value="{php echo implode(',', $item['multiaddress']['fee'])}">
+						<div class="help-block">每个地址的配送费用","隔开。例如：设置最多可添加3个地址,第一个地址配送费8元，第二个地址配送费5元， 第三个地址配送费3元，可设置为："8,5,3"</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">小费设置</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon">最低</span>
+					<input type="number" class="form-control" name="tip_min" value="{$item['tip_min']}">
+					<span class="input-group-addon border-0-lr">最高</span>
+					<input type="number" class="form-control" name="tip_max" value="{$item['tip_max']}">
+					<span class="input-group-addon">元</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">优惠方式</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" name="discount_type" value="0" id="discount-type-0" required="true" {if $item['group_discount']['type'] == 0 || !$item['group_discount']['type']}checked{/if} onclick="$('.discount').hide();">
+					<label for="discount-type-0">不优惠</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="discount_type" value="1" id="discount-type-1" required="true" {if $item['group_discount']['type'] == 1}checked{/if} onclick="$('.discount').hide();$('.discount-1').show();">
+					<label for="discount-type-1">按满减优惠</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="discount_type" value="2" id="discount-type-2" required="true" {if $item['group_discount']['type'] == 2}checked{/if} onclick="$('.discount').hide();$('.discount-2').show();">
+					<label for="discount-type-2">按折扣优惠</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group discount discount-1" {if $item['group_discount']['type'] == 1}style="display: block"{/if}>
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+			<div class="col-sm-9 col-xs-12 containter">
+				{loop $groups $group}
+					<div class="input-group margin-b-10">
+						<input type="hidden" name="groupids[]" value="{$group['id']}">
+						<span class="input-group-addon">{$group['title']}满</span>
+						<input type="number" class="form-control" name="condition1[]" value="{$item['group_discount']['data'][$group['id']]['condition']}">
+						<span class="input-group-addon">元,减</span>
+						<input type="number" class="form-control" name="back1[]" value="{$item['group_discount']['data'][$group['id']]['back']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				{/loop}
+			</div>
+		</div>
+		<div class="form-group discount discount-2" {if $item['group_discount']['type'] == 2}style="display: block"{/if}>
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+			<div class="col-sm-9 col-xs-12">
+				{loop $groups $group}
+					<div class="input-group margin-b-10">
+						<input type="hidden" name="groupid[]" value="{$group['id']}">
+						<span class="input-group-addon">{$group['title']}满</span>
+						<input type="number" class="form-control" name="condition2[]" value="{$item['group_discount']['data'][$group['id']]['condition']}">
+						<span class="input-group-addon">元,打</span>
+						<input type="number" class="form-control" name="back2[]" value="{$item['group_discount']['data'][$group['id']]['back']}">
+						<span class="input-group-addon">折</span>
+					</div>
+				{/loop}
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require"> </span>可提前几天下单</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" class="form-control" name="delivery_within_days" value="{$item['delivery_within_days']}"/>
+				<div class="help-block">单位：天，如果只接受当天订单，请填写0. 最多可提前6天</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">配送时间段</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon">间隔</span>
+					<input type="text" class="form-control" name="pre_delivery_time_minute" digits="true" value="{$item['pre_delivery_time_minute']}">
+					<span class="input-group-addon border-0-l">分钟</span>
+					<div class="input-group-btn btn-build-delivery-time">
+						<a href="javascript:;" class="btn btn-primary">生成配送时间段</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="delivery-times" class="delivery-times">
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+				<div class="col-sm-9 col-xs-12 containter">
+					{loop $item['delivery_times'] $time}
+						<div class="col-sm-6">
+							<div class="input-group">
+								<span class="input-group-addon">{$time['start']} ~ {$time['end']}</span>
+								<span class="input-group-addon">附加费</span>
+								<input type="text" class="form-control border-0-lr" name="times[fee][]" value="{$time['fee']}" placeholder="增加附加费">
+								<input type="hidden" name="times[start][]" value="{$time['start']}"/>
+								<input type="hidden" name="times[end][]" value="{$time['end']}"/>
+								<input type="hidden" name="times[status][]" value="{$time['status']}">
+								<span class="input-group-addon">元</span>
+								<div class="input-group-btn">
+									<a href="javascript:;" class="btn btn-delivery-time-item {if $time['status'] == 1}btn-success{else}btn-default{/if}">{if $time['status'] == 1}使用中{else}已弃用{/if}</a>
+								</div>
+							</div>
+						</div>
+					{/loop}
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="number" class="form-control" name="displayorder" value="{$item['displayorder']}">
+				<div class="help-block">数字越大越靠前</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">跑腿规则</label>
+			<div class="col-sm-9 col-xs-12">
+				{php echo itpl_ueditor('rule', $item['rule']);}
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+<script id="tpl-delivery-time" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<div class="col-sm-6">
+			<div class="input-group">
+				<span class="input-group-addon"><{d[i].start}> ~ <{d[i].end}></span>
+				<span class="input-group-addon">附加费</span>
+				<input type="text" class="form-control border-0-lr" name="times[fee][]" value="<{d[i].fee}>" placeholder="增加附加费">
+				<input type="hidden" name="times[start][]" value="<{d[i].start}>"/>
+				<input type="hidden" name="times[end][]" value="<{d[i].end}>"/>
+				<input type="hidden" name="times[status][]" value="1">
+				<span class="input-group-addon">元</span>
+				<div class="input-group-btn">
+					<a href="javascript:;" class="btn btn-success btn-delivery-time-item">使用中</a>
+				</div>
+			</div>
+		</div>
+	<{# } }>
+</script>
+<script type="text/javascript">
+irequire(['web/tiny'], function(tiny){
+	$(document).on('click', '.label-add', function(){
+		var $this = $(this);
+		tiny.prompt($(this), '', function(data) {
+			if(!data) {
+				return false;
+			}
+			var html = '<div class="btn-group btn-label">'+
+					'		<input type="hidden" name="label[]" value="'+ data +'">'+
+					'		<a class="btn btn-default">'+data+'</a>'+
+					'		<a class="btn btn-default label-delete">'+
+					'		    <span class="fa fa-times-circle"></span>'+
+					'	    </a>'+
+					'	</div>';
+			$this.before(html);
+		});
+	});
+
+	$(document).on('click', '.label-delete', function(){
+		$(this).parents('.btn-group').remove();
+	});
+
+	$(document).on('click', '.btn-build-delivery-time', function(){
+		var pre_minute = parseInt($.trim($(':text[name="pre_delivery_time_minute"]').val()));
+		if(!pre_minute) {
+			Notify.error('时间间隔必须大于0');
+			return false;
+		}
+		$.post("{php echo iurl('common/utility/build_time');}", {pre_minute: pre_minute}, function(data) {
+			var result = $.parseJSON(data);
+			if(result.message.errno == -1) {
+				Notify.error(result.message.message);
+				return false;
+			}
+			var gettpl = $('#tpl-delivery-time').html();
+			irequire(['laytpl'], function(laytpl){
+				laytpl(gettpl).render(result.message.message, function(html){
+					$('#delivery-times .containter').html(html);
+				});
+			});
+		});
+	});
+
+	$(document).on('click', '.btn-delivery-time-item', function(){
+		if($(this).hasClass('btn-success')) {
+			$(this).parent().prev().prev().val(0);
+			$(this).removeClass('btn-success').addClass('btn-default');
+			$(this).html('已弃用');
+		} else {
+			$(this).parent().prev().prev().val(1);
+			$(this).removeClass('btn-default').addClass('btn-success');
+			$(this).html('使用中');
+		}
+	});
+
+	$(document).on('click', 'input[name="weight_fee_status"]', function() {
+		$('#weight-container').addClass('hide');
+		$('.add-weight-fee').addClass('hide');
+		if($(this).prop('checked')) {
+			$('#weight-container').removeClass('hide');
+			$('.add-weight-fee').removeClass('hide');
+		}
+	});
+
+	$(document).on('click', '.add-weight-fee', function() {
+		var html = '<div class="input-group margin-b-10">'+
+				'		<span class="input-group-addon">超过</span>'+
+				'		<input type="number" class="form-control" name="pre_kgs[]">'+
+				'		<span class="input-group-addon border-0-lr">千克</span>'+
+				'		<span class="input-group-addon">每千克增加</span>'+
+				'		<input type="number" class="form-control border-0-lr" name="pre_kg_fees[]">'+
+				'		<span class="input-group-addon">元</span>'+
+				'		<div class="input-group-btn">'+
+				'			<a href="javascript:;" class="btn btn-danger weight-fee-del">删除</a>'+
+				'		</div>'+
+				'	</div>';
+		$("#weight-container").append(html);
+	});
+
+	$(document).on('click', '.weight-fee-del', function() {
+		$(this).parents('.input-group').remove();
+	});
+});
+</script>
+{/if}
+
+{if $op == 'list'}
+<form action="" class="form-table form form-validate" method="post">
+	<div class="panel panel-table">
+		<div class="panel-heading">
+			<a href="{php echo iurl('errander/category/post');}" class="btn btn-primary btn-sm">添加跑腿分类</a>
+		</div>
+		<div class="panel-body table-responsive js-table">
+			{if empty($categorys)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+						<tr>
+							<th width="70">图标</th>
+							<th>分类名称</th>
+							<th>排序</th>
+							<th>收费标准</th>
+							<th>小费设置</th>
+							<th>状态</th>
+							<th style="width:150px; text-align:right;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					{loop $categorys $item}
+						<tr>
+							<input type="hidden" name="ids[]" value="{$item['id']}">
+							<td><img src="{php echo tomedia($item['thumb']);}" width="50"></td>
+							<td><input type="text" name="title[]" class="form-control width-130" value="{$item['title']}"></td>
+							<td><input type="text" name="displayorder[]" class="form-control width-100" value="{$item['displayorder']}"></td>
+							<td>
+								<span class="label label-info">起步价{$item['start_fee']}元包含{$item['start_km']}公里</span>
+								<br>
+								<span class="label label-default label-br">每超过1公里增加{$item['pre_km_fee']}元</span>
+							</td>
+							<td>
+								<span class="label label-danger">最低{$item['tip_min']}元, 最高{$item['tip_max']}元</span>
+							</td>
+							<td>
+								<input type="checkbox" class="js-checkbox" data-href="{php echo iurl('errander/category/status', array('id' => $item['id']));}" data-name="status" value="1" {if $item['status'] == 1}checked{/if}>
+							</td>
+							<td style="text-align:right;">
+								<a href="{php echo iurl('errander/category/post', array('id' => $item['id']))}" class="btn btn-default btn-sm">编辑</a>
+								<a href="{php echo iurl('errander/category/del', array('id' => $item['id']))}" class="btn btn-default btn-sm js-remove" data-confirm="确定删除吗">删除</a>
+							</td>
+						</tr>
+					{/loop}
+					</tbody>
+				</table>
+				<div class="btn-region clearfix">
+					<div class="pull-left">
+						<input name="token" type="hidden" value="{$_W['token']}" />
+						<input type="submit" class="btn btn-primary btn-sm" name="submit" value="提交修改" />
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{/if}
+{itemplate 'public/footer'}

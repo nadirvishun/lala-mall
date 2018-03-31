@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://www.010xr.com" versionCode="0.8,1.0">
+	<application setting="false">
+		<name><![CDATA[啦啦外卖跑腿]]></name>
+		<identifie><![CDATA[we7_wmall]]></identifie>
+		<version><![CDATA[9.4.0]]></version>
+		<type><![CDATA[business]]></type>
+		<ability><![CDATA[啦啦外卖跑腿]]></ability>
+		<description><![CDATA[啦啦外卖跑腿]]></description>
+		<author><![CDATA[新睿社区]]></author>
+		<url><![CDATA[https://www.010xr.com]]></url>
+	</application>
+	<platform>
+		<subscribes>
+		</subscribes>
+		<handles>
+			<message type="text" />
+		</handles>
+		<rule embed="false" />
+		<card embed="true" />
+	</platform>
+	<bindings>
+		<cover>
+			<entry title="会员中心" do="mine" state="" direct="false" />
+			<entry title="我的订单" do="order" state="" direct="false" />
+			<entry title="商户入驻" do="settle" state="" direct="false" />
+			<entry title="配送员管理入口" do="dyindex" state="" direct="false" />
+			<entry title="门店管理入口" do="mgindex" state="" direct="false" />
+			<entry title="外卖入口" do="guide" state="" direct="false" />			
+		</cover>
+		<menu>
+			<entry title="后台管理" do="web" state="" direct="false" />
+		</menu>
+		<home>
+			<entry title="点外卖" do="index" state="" direct="false" />
+		</home>
+		<profile>
+			<entry title="点外卖" do="index" state="" direct="false" />
+		</profile>
+	</bindings>
+	<install><![CDATA[install.php]]></install>
+	<uninstall><![CDATA[]]></uninstall>
+	<upgrade><![CDATA[]]></upgrade>
+</manifest>

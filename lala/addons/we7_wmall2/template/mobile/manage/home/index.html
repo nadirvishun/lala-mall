@@ -1,0 +1,22 @@
+{itemplate 'public/header'}
+<div class="page" id="page-manage-store">
+	<header class="bar bar-nav common-bar-nav">
+		<h1 class="title">选择店铺</h1>
+	</header>
+	<div class="content">
+		<ul class="store-list">
+			{loop $stores $store}
+			<li>
+				<a href="{php echo imurl('manage/home/switch', array('sid' => $store['id']));}">
+					<div class="store-pic"><img src="{php echo tomedia($store['logo']);}" alt=""></div>
+					<div class="store-info">
+						{$store['title']}
+						<i class="icon icon-arrow-right"></i>
+					</div>
+				</a>
+			</li>
+			{/loop}
+		</ul>
+	</div>
+</div>
+{itemplate 'public/footer'}

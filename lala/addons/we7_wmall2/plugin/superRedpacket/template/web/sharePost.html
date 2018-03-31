@@ -1,0 +1,347 @@
+{itemplate 'public/header'}
+<link href="../addons/we7_wmall/plugin/superRedpacket/static/css/diy.web.css" rel="stylesheet" type="text/css"/>
+<div class="clearfix">
+	<div class="app-preview">
+		<div class="app-header"></div>
+		<div class="app-body">
+			<div class="title">超级红包设置</div>
+			<div class="main" id="app-preview"></div>
+		</div>
+		<div class="app-footer"></div>
+	</div>
+	<div class="app-editor form-horizontal" id="app-editor">
+		<div class="editor-arrow"></div>
+		<div class="inner"></div>
+	</div>
+</div>
+<div class="app-action">
+	<div class="action">
+		<nav class="btn btn-default btn-sm pull-left" id="gotop">返回顶部</nav>
+		<nav class="btn btn-primary btn-sm btn-save">保存</nav>
+	</div>
+</div>
+<script type="text/html" id="tpl-show-superRedpacket">
+	<style>
+		.share-redpacket-content{background: <(activity.backgroundColor)>; padding-bottom: 10px;}
+		.share-redpacket-content .banner img{width: 100%; height: 200px;}
+		.share-redpacket-content #sharemodal{top: 0;}
+		.share-redpacket-content #sharemodal .container{background: rgba(255,255,255,0.6); border-radius: 5px; padding: 10px;}
+		.share-redpacket-content #sharemodal .redpacket{overflow: hidden}
+		.share-redpacket-content #sharemodal .redpacket .circle-container .circle{background: <(activity.backgroundColor)>; opacity: 0.4}
+		.share-redpacket-content #sharemodal .redpacket .redpacket-info{color: <(activity.color)>;}
+		.share-redpacket-content .button-container .button{width: 100%; margin: 5px auto 0; display: block; text-align: center; padding: 10px; border-radius: 5px; background-color: <(activity.button.backgroundColor)>; color: <(activity.button.color)>;}
+		.share-redpacket-content .agreement{width: 94%; margin: -70px auto 0; background: rgba(255,255,255,0.6); border-radius: 5px; }
+		.share-redpacket-content .agreement .agreement-title{padding: 5px 0; text-align: center;}
+		.share-redpacket-content .agreement .agreement-content{min-height: 30px; padding: 0 10px;}
+	</style>
+	<div class="share-redpacket-content">
+		<div class="banner">
+			<img src="<(tomedia activity.image)>" alt=""/>
+		</div>
+		<div class="modal modal-no-buttons modal-in" id="sharemodal">
+			<div class="container">
+				<(each redpackets as redpacket index)>
+					<div class="redpacket">
+						<div class="redpacket-info row">
+							<div class="col-75 text-left">
+								<span class="redpacket-title"><(redpacket.name)></span>
+							</div>
+							<div class="col-25 price text-right">
+								￥<span><(redpacket.discount)></span>
+							</div>
+						</div>
+						<div class="circle-container">
+							<span class="circle circle-left"></span>
+							<span class="circle circle-right"></span>
+						</div>
+						<div class="redpacket-limit row">
+							<div class="col-50 use-days-limit text-left">还有一天可使用</div>
+							<div class="col-50 use-condition text-right">满<(redpacket.condition)>可用</div>
+						</div>
+					</div>
+				<(/each)>
+				<div class="button-container">
+					<a href="javascript:;" class="button">立即使用</a>
+					<a href="javascript:;" class="button">送好友红包，奖励拿不停</a>
+				</div>
+			</div>
+		</div>
+		<div class="agreement">
+			<div class="agreement-title">活动规则</div>
+			<div class="agreement-content">
+				<(activity.agreement)>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="tpl-edit-superRedpacket">
+	<div class="list-item">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启</label>
+			<div class="col-sm-10">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="status" class="diy-bind" data-bind="status" data-bind-child="activity" id="status-1" <(if activity.status == 1)>checked<(/if)>>
+					<label for="status-1">是</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="status" class="diy-bind" data-bind="status" data-bind-child="activity" id="status-0" <(if activity.status == 0)>checked<(/if)>>
+					<label for="status-0">否</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-2 control-label">顶部图片</div>
+			<div class="col-sm-10">
+				<div class="input-group">
+					<input type="text" class="form-control input-sm diy-bind" placeholder="请选择图片或输入图片地址" value="<(activity.image)>" data-bind-child="activity" data-bind="image" id="pimg">
+					<span class="input-group-addon btn btn-default js-selectImg" data-input="#pimg" data-element="#cimg">选择图片</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-2 control-label">页面背景色</div>
+			<div class="col-sm-5 color">
+				<div class="input-group">
+					<span class="input-group-addon">默认</span>
+					<input class="form-control input-sm diy-bind color" type="color" data-bind-child="activity" data-bind="backgroundColor" value="<(activity.backgroundColor)>" />
+					<span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#e36e07').trigger('propertychange')">清除</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-2 control-label">红包文字颜色</div>
+			<div class="col-sm-5 color">
+				<div class="input-group">
+					<span class="input-group-addon">默认</span>
+					<input class="form-control input-sm diy-bind color" type="color" data-bind-child="activity" data-bind="color" value="<(activity.color)>" />
+					<span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ef361e').trigger('propertychange')">清除</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-2 control-label">按钮文字颜色</div>
+			<div class="col-sm-5 color">
+				<div class="input-group">
+					<span class="input-group-addon">默认</span>
+					<input class="form-control input-sm diy-bind color" type="color" data-bind-child="activity" data-bind-parent="button" data-bind="color" value="<(activity.button.color)>" />
+					<span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-2 control-label">按钮背景色</div>
+			<div class="col-sm-5 color">
+				<div class="input-group">
+					<span class="input-group-addon">默认</span>
+					<input class="form-control input-sm diy-bind color" type="color" data-bind-child="activity" data-bind-parent="button" data-bind="backgroundColor" value="<(activity.button.backgroundColor)>" />
+					<span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ff3f26').trigger('propertychange')">清除</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动规则</label>
+			<div class="col-sm-10">
+				<textarea class="form-control diy-bind" rows="5" data-bind-child="activity" data-bind="agreement"><(activity.agreement)></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="line"></div>
+	<div class="list-item">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动名称</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control input-sm diy-bind" value="<(activity.name)>" data-bind="name" data-bind-child="activity" required="true">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享红包条件</label>
+			<div class="col-sm-10">
+				<div class="input-group">
+					<span class="input-group-addon">满</span>
+					<input type="text" class="form-control input-sm diy-bind" data-bind="condition" data-bind-child="activity" value="<(activity.condition)>">
+					<span class="input-group-addon">元可分享红包</span>
+				</div>
+				<div class="help-block">下单超过此金额后即可分享超级红包</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-2 control-label">可分享卡包数量</div>
+			<div class="col-sm-10">
+				<div class="input-group">
+					<input class="form-control input-sm diy-bind" type="text" data-bind="packet_min_num" data-bind-child="activity" value="<(activity.packet_min_num)>">
+					<span class="input-group-addon border-0-lr">至</span>
+					<input class="form-control input-sm diy-bind" type="text" data-bind="packet_max_num" data-bind-child="activity" value="<(activity.packet_max_num)>">
+					<span class="input-group-addon">个</span>
+				</div>
+				<div class="help-block">下单满足分享条件后，从此区间随机取一个值作为可分享卡包的数量，即本次分享可领取的次数</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-2 control-label">每个卡包内红包数量</div>
+			<div class="col-sm-10">
+				<div class="input-group">
+					<input class="form-control input-sm diy-bind" type="text" data-bind="redpacket_min_num" data-bind-child="activity" value="<(activity.redpacket_min_num)>">
+					<span class="input-group-addon border-0-lr">至</span>
+					<input class="form-control input-sm diy-bind" type="text" data-bind="redpacket_max_num" data-bind-child="activity" value="<(activity.redpacket_max_num)>">
+					<span class="input-group-addon">个</span>
+				</div>
+				<div class="help-block">领取红包时从此区间随机取一个值作为本次领取的卡包内红包的数量</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动开始时间</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control input-sm diy-bind datetimepicker" data-bind="starttime" data-bind-child="activity" value="<(activity.starttime)>" readonly>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动结束时间</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control input-sm diy-bind datetimepicker" data-bind="endtime" data-bind-child="activity" value="<(activity.endtime)>" readonly>
+			</div>
+		</div>
+	</div>
+	<div class="line"></div>
+	<div class="list-item">
+		<div class="form-items" data-min="1" data-max="2">
+			<div class="inner">
+				<(each redpackets as redpacket index)>
+					<div class="item" data-id="<(index)>">
+						<span class="btn-del del-item" title="删除"></span>
+						<div class="item-body">
+							<div class="form-group">
+								<div class="col-sm-2 control-label">红包名称及金额</div>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<span class="input-group-addon">名称</span>
+										<input class="form-control input-sm diy-bind" type="text" data-bind-child="redpackets" data-bind-parent="<(index)>" data-bind="name" value="<(redpacket.name)>">
+										<span class="input-group-addon border-0-lr">金额</span>
+										<input class="form-control input-sm diy-bind" type="text" data-bind-child="redpackets" data-bind-parent="<(index)>" data-bind="discount" value="<(redpacket.discount)>">
+										<span class="input-group-addon">元</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-2 control-label">红包数量</div>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<input class="form-control input-sm diy-bind" type="text" data-bind-child="redpackets" data-bind-parent="<(index)>" data-bind="nums" value="<(redpacket.nums)>">
+										<span class="input-group-addon">个</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-2 control-label">使用条件</div>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<span class="input-group-addon">满多少元可用</span>
+										<input class="form-control input-sm diy-bind" type="text" data-bind-child="redpackets" data-bind-parent="<(index)>" data-bind="condition" value="<(redpacket.condition)>">
+										<span class="input-group-addon">元</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-2 control-label">使用期限</div>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<span class="input-group-addon">领取后</span>
+										<input class="form-control input-sm diy-bind" type="text" data-bind-child="redpackets" data-bind-parent="<(index)>" data-bind="grant_days_effect" value="<(redpacket.grant_days_effect)>">
+										<span class="input-group-addon border-0-lr">天后生效</span>
+										<span class="input-group-addon">有效期</span>
+										<input class="form-control input-sm diy-bind border-0-l" type="text" data-bind-child="redpackets" data-bind-parent="<(index)>" data-bind="use_days_limit" value="<(redpacket.use_days_limit)>">
+										<span class="input-group-addon">天</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-2 control-label">使用时间段</div>
+								<div class="col-sm-10">
+									<a href="javascript:;" class="btn btn-default btn-sm hour-add"><i class="fa fa-plus-circle"></i> 添加时间段</a>
+								</div>
+							</div>
+							<div class="hour clockpicker">
+								<(each redpacket.times as time timeid)>
+									<div class="form-group">
+										<div class="col-sm-2 control-label"></div>
+										<div class="col-sm-9">
+											<div class="input-group">
+												<input type="text" readonly class="form-control input-sm diy-bind" data-bind-child="redpackets" data-bind-parent="<(index)>" data-bind="times" data-bind-category="<(timeid)>" data-bind-type="start_hour" value="<(time.start_hour)>">
+												<span class="input-group-addon border-0-lr">至</span>
+												<input type="text" readonly class="form-control input-sm diy-bind" data-bind-child="redpackets" data-bind-parent="<(index)>" data-bind="times" data-bind-category="<(timeid)>" data-bind-type="end_hour" value="<(time.end_hour)>">
+											</div>
+										</div>
+										<div class="col-sm-1">
+											<a href="javascript:;" class="btn-del hour-del" data-id="<(timeid)>"></a>
+										</div>
+									</div>
+								<(/each)>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-2 control-label">使用分类</div>
+								<div class="col-sm-10">
+									<a href="javascript:;" class="btn btn-default btn-sm category-add"><i class="fa fa-plus-circle"></i> 选择分类</a>
+								</div>
+							</div>
+							<div class="category-container">
+								<div class="col-sm-2 control-label"></div>
+								<div class="col-sm-10">
+									<(each redpacket.categorys as category categoryid)>
+										<div class="col-sm-3">
+											<div class="category-item" id="category-<(categoryid)>">
+												<a href="javascript:;" class="btn-del category-del" data-id="<(categoryid)>"></a>
+												<img src="<(tomedia category.src)>" alt=""/>
+												<div class="title js-selectCategory" data-id-input="#id-<(categoryid)>" data-title-input="#title-<(categoryid)>" data-src-input="#src-<(categoryid)>" data-element="#category-<(categoryid)>"><(category.title)></div>
+												<input type="hidden" class="diy-bind" value="<(category.id)>" id="id-<(categoryid)>" data-bind-child="redpackets" data-bind-parent="<(index)>" data-bind="categorys" data-bind-category="<(categoryid)>" data-bind-type="id">
+												<input type="hidden" class="diy-bind" value="<(category.title)>" id="title-<(categoryid)>" data-bind-child="redpackets" data-bind-parent="<(index)>" data-bind="categorys" data-bind-category="<(categoryid)>" data-bind-type="title">
+												<input type="hidden" class="diy-bind" value="<(tomedia category.src)>" id="src-<(categoryid)>" data-bind-child="redpackets" data-bind-parent="<(index)>" data-bind="categorys" data-bind-category="<(categoryid)>" data-bind-type="src">
+											</div>
+										</div>
+									<(/each)>
+								</div>
+							</div>
+						</div>
+					</div>
+				<(/each)>
+			</div>
+			<div class="btn btn-default btn-block" id="addItem"><i class="icon icon-plus"></i> 添加一个</div>
+		</div>
+	</div>
+	<div class="line"></div>
+	<div class="list-item share">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享标题</label>
+			<div class="col-sm-10">
+				<input type="text" value="<(share.title)>" class="form-control diy-bind" data-bind="title" data-bind-child="share" required="true">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享描述</label>
+			<div class="col-sm-10">
+				<input type="text" value="<(share.desc)>" data-bind="desc" data-bind-child="share" class="form-control diy-bind">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动图片</label>
+			<div class="col-sm-10">
+				<div class="input-group">
+					<input type="text" class="form-control input-sm diy-bind" id="pimg" data-bind="imgUrl" data-bind-child="share" value="<(share.imgUrl)>" disabled>
+					<span class="input-group-addon btn btn-default js-selectImg" data-input="#pimg">选择图片</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+<script language="javascript">
+	var path = '../../plugin/superRedpacket/static/js/superRedpacketShare';
+	irequire([path, 'tmodtpl'],function(superRedpacket, tmodtpl){
+		superRedpacket.init({
+			tmodtpl: tmodtpl,
+			id: '{php echo intval($_GPC["id"])}',
+			timestamp: "{php echo date('Y-m-d H:i:s', time())}",
+			attachurl: "{$_W['attachurl']}",
+			data: {if !empty($superRedpacket['data'])}{php echo json_encode($superRedpacket['data'])}{else}null{/if}
+		});
+	});
+</script>
+{itemplate 'public/footer'}

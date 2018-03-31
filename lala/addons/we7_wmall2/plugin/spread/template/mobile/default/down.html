@@ -1,0 +1,63 @@
+{itemplate 'public/header'}
+<link rel="stylesheet" href="../addons/we7_wmall/plugin/spread/static/css/index.css">
+<div class="page spread-down">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">我的团队</h1>
+	</header>
+	{itemplate 'nav'}
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('spread/down/index')}" data-distance="50" data-min="{$min}" data-container=".member-list" data-tpl="tpl-member">
+		{if $basic['level'] == 2}
+			<div class="buttons-tab activity_status">
+				<a href="{php echo ifilter_url('spreadid:spread1');}" class="button {if $spreadid == spread1} active {/if}">一级({$level1})</a>
+				<a href="{php echo ifilter_url('spreadid:spread2');}" class="button {if $spreadid == spread2} active {/if}">二级({$level2})</a>
+			</div>
+		{/if}
+		{if empty($members)}
+			<div class="no-data">
+				<div class="bg"></div>
+				<p>暂时没有下线哦～</p>
+			</div>
+		{else}
+			<div class="member-list">
+				{loop $members $member}
+					<div class="item clearfix border-1px-tb">
+						<div class="left clearfix">
+							<span class="user-avatar">
+								<img src="{php echo tomedia($member['avatar'])}" alt="">
+							</span>
+							<span class="user-info">
+								<div class="user-name">{$member['nickname']}</div>
+								<div class="time">注册时间：{$member['addtime']}</div>
+							</span>
+						</div>
+						<div class="right border-1px-l">
+							<div class="price">消费: {$member['price']}元</div>
+							<div class="orders">{$member['frquency']}个订单</div>
+						</div>
+					</div>
+				{/loop}
+			</div>
+		{/if}
+	</div>
+</div>
+<script id="tpl-member" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<div class="item clearfix border-1px-tb">
+			<div class="left clearfix">
+				<span class="user-avatar">
+					<img src="<{d[i].avatar}>" alt="">
+				</span>
+				<span class="user-info">
+					<div class="user-name"><{d[i].nickname}></div>
+					<div class="time">注册时间：<{d[i].addtime}></div>
+				</span>
+			</div>
+			<div class="right border-1px-l">
+				<div class="price">消费: <{d[i].price}>元</div>
+				<div class="orders"><{d[i].frquency}>个订单</div>
+			</div>
+		</div>
+	<{# } }>
+</script>
+{itemplate 'public/footer'}

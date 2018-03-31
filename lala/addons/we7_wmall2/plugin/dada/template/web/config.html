@@ -1,0 +1,47 @@
+{itemplate 'public/header'}
+<div class="page clearfix">
+	<h2>基础设置</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">达达第三方配送</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" name="status" id="status-1" value="1" {if $dada['status'] == 1}checked{/if}>
+					<label for="status-1">开启</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="status" id="status-0" value="0" {if !$dada['status']}checked{/if}>
+					<label for="status-0">关闭</label>
+				</div>
+				<span class="help-block">开启此功能需要向达达申请。</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">商户编号</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="sourceid" class="form-control" value="{$dada['sourceid']}" placeholder="商户编号" required="true">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">APPKey</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="appkey" class="form-control" value="{$dada['appkey']}" placeholder="请输入达达App的appkey" required="true">
+				<div class="help-block">若不知道APPKey，请联系达达官方。</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">AppSecret</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="appsecret" class="form-control" value="{$dada['appsecret']}" placeholder="请输入达达App的AppSecret" required="true">
+				<div class="help-block">若不知道appsecret，请联系达达官方</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提 交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{itemplate 'public/footer'}

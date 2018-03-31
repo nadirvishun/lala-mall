@@ -1,0 +1,22 @@
+{if !empty($diyitem['data'])}
+	<style>
+		.swiper-{$diyitemid} .swiper-pagination{bottom: 15px; padding: 0 {$diyitem['style']['leftright']}px; bottom: {$diyitem['style']['bottom']}px}
+		.swiper-{$diyitemid} .swiper-pagination-bullet-active {background: {$diyitem['style']['dotbackground']};}
+	</style>
+	<div class="swiper swiper-{$diyitemid} lazyload-container" data-element=".swiper-{$diyitemid}">
+		<div class="swiper-container diy-picture" data-pagination=".swiper-pagination-{$diyitemid}" data-autoplay="1100000" data-space-between="{$diyitem['style']['paddingleft']}" style="padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px; background: {$diyitem['style']['background']};">
+			<div class="swiper-wrapper">
+				{loop $diyitem['data'] $pictureitem}
+					<div class="swiper-slide">
+						<div class="item">
+							<a href="{$pictureitem['linkurl']}" data-nocache="true">
+								<img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="lazyload lazyload-store" data-original="{php echo tomedia($pictureitem['imgurl'])}">
+							</a>
+						</div>
+					</div>
+				{/loop}
+			</div>
+			<div class="swiper-pagination swiper-pagination-{$diyitemid} {$diyitem['style']['dotalign']}"></div>
+		</div>
+	</div>
+{/if}

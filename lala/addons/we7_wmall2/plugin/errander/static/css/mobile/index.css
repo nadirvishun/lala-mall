@@ -1,0 +1,13 @@
+.multiaddress .item-media>a{width: .8rem; height:.8rem; line-height: .8rem; text-align: center; margin-right: .6rem;}
+.multiaddress .item-media a .icon-add, .item-media a .icon-minus{font-size: 1rem; color: #C1C1C1;}
+.multiaddress .start-address input::-webkit-input-placeholder{color: #afafaf; font-size: .7rem;}
+.multiaddress .start-address input::-moz-input-placeholder{color: #afafaf; font-size: .7rem;}
+.multiaddress .start-address input::-ms-input-placeholder{color: #afafaf; font-size: .7rem;}
+
+.errander-submit .list-block .item-link .item-inner .item-after{font-size: 0.7rem;}
+
+.errander-submit textarea{border: 0; width: 100%; padding: .5rem .75rem; -webkit-appearance: none; font-size: 0.8rem;}
+.errander-submit #discount-box{display: none;}
+.errander-order-detail .list-block .item-inner.customer-thumb{display: block;}
+.errander-order-detail .list-block .item-inner.customer-thumb .row{padding-top: 0.4rem;}
+.errander-order-detail .list-block .item-inner.customer-thumb .row img{width: 3rem; height: 3rem;}

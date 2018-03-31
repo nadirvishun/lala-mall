@@ -1,0 +1,54 @@
+{itemplate 'public/header'}
+<div class="page page-auth">
+	<div class="content">
+		<div class="header">
+			<div class="logo">
+				{if !empty($config_mall['logo'])}
+				<img src="{php echo tomedia($config_mall['logo']);}" alt=""/>
+				{else}
+				<img src="{WE7_WMALL_TPL_URL}static/img/head.png" alt=""/>
+				{/if}
+			</div>
+			<div class="name">{$config_mall['title']}</div>
+		</div>
+		<div class="list-block">
+			<ul>
+				<li>
+					<div class="item-content">
+						<div class="item-media"><i class="icon icon-phone1"></i></div>
+						<div class="item-inner border-1px-b">
+							<div class="item-input">
+								<input type="number" max="11" name="mobile" placeholder="请输入手机号">
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item-content border-1px-b">
+						<div class="item-media"><i class="icon icon-lock"></i></div>
+						<div class="item-inner">
+							<div class="item-input">
+								<input type="password" name="password" placeholder="请输入密码">
+							</div>
+							<a class="item-remark" href="{php echo imurl('wmall/auth/forget');}">
+								忘记密码<i class="icon icon-arrow-right"></i>
+							</a>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<div class="content-padded">
+				<a href="javascript:;" class="button button-big button-fill button-round button-danger button-login">登陆</a>
+			</div>
+		</div>
+		<div class="text">
+			<p>还没有账号？<a href="{php echo imurl('wmall/auth/register');}">立即注册</a></p>
+		</div>
+	</div>
+</div>
+<script>
+	require(['auth'], function(auth){
+		auth.initLogin();
+	});
+</script>
+{itemplate 'public/footer'}

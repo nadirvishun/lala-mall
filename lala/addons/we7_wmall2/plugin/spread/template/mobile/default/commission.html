@@ -1,0 +1,81 @@
+{itemplate 'public/header'}
+<link rel="stylesheet" href="../addons/we7_wmall/plugin/spread/static/css/index.css">
+<div class="page page-commission">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">推广佣金</h1>
+	</header>
+	{itemplate 'nav'}
+	<div class="content">
+		<div class="detail clearfix">
+			<div class="left">
+				<div>累计佣金(元)</div>
+				<div class="price">{$data['commission_grandtotal']}</div>
+			</div>
+			<div class="right">
+				<a href="{php echo imurl('spread/getCash/index')}">提现明细</a>
+			</div>
+		</div>
+		<div class="list-block border-1px-tb">
+			<ul>
+				<li class="item-content">
+					<div class="item-media">
+						<i class="icon icon-recharge"></i>
+					</div>
+					<div class="item-inner">
+						<div class="item-title">可提现佣金</div>
+						<div class="item-after red">{$data['spreadcredit2']}元</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="list-block border-1px-tb">
+			<ul>
+				<li class="item-content border-1px-b">
+					<div class="item-media">
+						<i class="icon icon-time"></i>
+					</div>
+					<div class="item-inner">
+						<div class="item-title">累计佣金</div>
+						<div class="item-after">{$data['commission_grandtotal']}元</div>
+					</div>
+				</li>
+				<li class="item-content border-1px-b">
+					<div class="item-media">
+						<i class="icon icon-rest"></i>
+					</div>
+					<div class="item-inner">
+						<div class="item-title">待打款佣金</div>
+						<div class="item-after">{$data['commission_getcash_apply']}元</div>
+					</div>
+				</li>
+				<li class="item-content">
+					<div class="item-media">
+						<i class="icon icon-signboard"></i>
+					</div>
+					<div class="item-inner">
+						<div class="item-title">成功提现佣金</div>
+						<div class="item-after">{$data['commission_getcash_success']}元</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="must border-1px-tb">
+			<div class="text-title">用户须知</div>
+			<div class="text">
+				<p>{if $settle['balance_condition'] == 1}买家确认收货{else}买家确认收货并评价{/if}后,佣金将自动打入您的佣金账户余额。</p>
+				<p>注意:可用佣金满<span>{$settle['withdraw']}</span>元后才能申请提现</p>
+			</div>
+			<div class="icon icon-unfold1"></div>
+		</div>
+		<div class="tab">
+			{if !empty($data['spreadcredit2'])}
+				<a href="{php echo imurl('spread/getCash/application')}" class="button button-fill button-danger">我要提现</a>
+			{else}
+				<a href="javascript:;" class="button button-fill disabled">我要提现</a>
+			{/if}
+		</div>
+	</div>
+</div>
+{itemplate 'public/footer'}
+

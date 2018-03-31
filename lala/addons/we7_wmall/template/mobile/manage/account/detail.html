@@ -1,0 +1,48 @@
+{itemplate 'public/header'}
+<div class="page page-current-detail">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="icon pull-left fa fa-arrow-left back"></a>
+		<h1 class="title">交易详情</h1>
+	</header>
+	{itemplate 'public/nav'}
+	<div class="content trade-details border-1px-tb">
+		<div class="inner-con border-1px-b">
+			<div class="row no-gutter">
+				<div class="col-20 color-gray">到账金额</div>
+				<div class="col-80 text-right color-success">￥{if $record['status'] == 1}{$record['final_fee']}{else}0.00{/if}</div>
+			</div>
+		</div>
+		<div class="inner-con border-1px-b">
+			<div class="row no-gutter">
+				<div class="col-20 color-gray">订单号</div>
+				<div class="col-80 text-right color-black">{$record['trade_no']}</div>
+			</div>
+			<div class="row no-gutter">
+				<div class="col-20 color-gray">提现金额</div>
+				<div class="col-80 text-right color-black">￥{$record['get_fee']}</div>
+			</div>
+			<div class="row no-gutter">
+				<div class="col-20 color-gray">手续费</div>
+				<div class="col-80 text-right color-black">￥{$record['take_fee']}</div>
+			</div>
+			<div class="row no-gutter">
+				<div class="col-20  color-gray">实际到账</div>
+				<div class="col-80 text-right color-black">￥{$record['final_fee']}</div>
+			</div>
+			<div class="row no-gutter">
+				<div class="col-20 color-gray">提现人</div>
+				<div class="col-80 text-right color-black">{$record['account']['nickname']}</div>
+			</div>
+			<div class="row no-gutter">
+				<div class="col-20 color-gray">开始时间</div>
+				<div class="col-80 text-right color-black">{php echo date('Y-m-d H:i', $record['addtime'])}</div>
+			</div>
+			<div class="row no-gutter">
+				<div class="col-20 color-gray">当前状态</div>
+				<div class="col-80 text-right color-black">{if $record['status'] == 1}申请成功{else}申请中{/if}</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{itemplate 'public/footer'}

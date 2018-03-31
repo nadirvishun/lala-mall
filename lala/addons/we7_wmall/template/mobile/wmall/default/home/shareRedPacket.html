@@ -1,0 +1,97 @@
+{itemplate 'public/header'}
+<style>
+	.share-redpacket .content{background: #F7AE18; padding-bottom: 1rem;}
+	.share-redpacket .banner{line-height: 0.9}
+	.share-redpacket .receive{width: 95%; margin: 0 auto; background: rgba(255,255,255,0.6); border-radius: 0.15rem; padding: .5rem 5%;}
+	.share-redpacket .receive .mobile-input{height: 2.4rem; width: 100%; border: none; font-size: 0.8rem;  padding-left: 10px; border-radius: 4px; margin-bottom: 0.8rem;}
+	.share-redpacket .receive .mobile-input::-webkit-input-placeholder { color: #999; }
+	.share-redpacket .agreement{width: 95%; margin: 0.5rem auto 0; background: rgba(255,255,255,0.6); border-radius: 0.15rem; padding: .5rem 0;}
+	.share-redpacket .agreement-title{background: url(../addons/we7_wmall/template/mobile/wmall/default/static/img/bg-ling.png) no-repeat; background-size: 100% auto; background-position: 0; color: #333333; text-align: center; font-weight: normal; margin: 0.25rem auto 0; width: 93%; font-size: 0.9rem;}
+	.share-redpacket .agreement-inner{padding: 0 5%;}
+	.share-redpacket .agreement-inner ul{font-size: 0.7rem;}
+	.share-redpacket .redpacket{width: 95%; margin: 0 auto; background: rgba(255,255,255,0.6); border-radius: 0.15rem; padding: .5rem;}
+	.share-redpacket .redpacket-item{box-sizing: border-box; min-height: 3.2rem; background: url(https://xs01.meituan.net/waimai_c_activity_web/img/resource/red-enve2/result-bg.c1682c6b.png) no-repeat; background-size: 100% 100%; text-align: center; padding: 0.2rem 0.8rem 0}
+	.share-redpacket .redpacket-item .image{width: 2.5rem; margin: 0.3rem 0.5rem 0 0;}
+	.share-redpacket .redpacket-item .image img{width: 2.5rem; height: 2.5rem;}
+	.share-redpacket .redpacket-item .redpacket-info{max-width: 5.9rem; height: 2.8rem;}
+	.share-redpacket .redpacket-item .redpacket-info span{display: block;}
+	.share-redpacket .redpacket-item .redpacket-info .redpacket-title{max-width: 4.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #ef361e; font-size: 0.8rem; margin-top: 0.5rem; margin-bottom: 0.2rem;}
+	.share-redpacket .redpacket-item .redpacket-info .use-condition{font-size: 0.7rem; color: #666;}
+	.share-redpacket .redpacket-item .price{font-size: 2.2rem; color: #ef361e;}
+	.share-redpacket .redpacket-item .price span{font-size: 1rem; font-weight: bold;}
+	.share-redpacket .redpacket-item .redpacket-bottom{border-top: 1px dashed #eaeaea; color: #a9a9a9; font-size: 0.6rem; padding: 0.2rem 0;}
+	.share-redpacket .redpacket-item .redpacket-bottom a{display: table-cell; vertical-align: middle; padding-left: 0.3rem; color: #ef361e;}
+	.share-redpacket .redpacket .other{margin-top: .5rem;}
+	.share-redpacket .redpacket .other .other-title{background: url(../addons/we7_wmall/template/mobile/wmall/default/static/img/bg-ling.png) no-repeat; background-size: 100% auto; background-position: 0; color: #666; text-align: center; font-weight: normal; margin: 0.5rem auto; width: 93%;}
+	.share-redpacket .redpacket .get-success{margin: 0.5rem 0; text-align: center; font-size: 0.75rem; color: #333;}
+	.share-redpacket .redpacket .get-success a{color: #ef361e;}
+	.share-redpacket .redpacket .give-redpacket{margin-top: 0.8rem;}
+</style>
+<div class="page share-redpacket">
+	<div class="content">
+		<div class="banner">
+			<img src="https://p0.meituan.net/coupon/474d7b2b2a7e0b217575d7676ffa59c9170680.jpg@!style1" alt="">
+		</div>
+		<div class="receive hide">
+			<input type="text" name="mobile" placeholder="请输入您的手机号" class="mobile-input">
+			<a href="" class="button button-danger button-fill button-big">立即领取</a>
+		</div>
+		<div class="redpacket">
+			<div class="redpacket-item">
+				<div class="clearfix">
+					<div class="pull-left redpacket-info">
+						<span class="redpacket-title">通用红包</span>
+						<span class="use-condition">满20可用</span>
+					</div>
+					<div class="price pull-right"><span>￥</span>8</div>
+				</div>
+				<div class="clearfix redpacket-bottom">
+					<div class="pull-left use-days-limit">2天后过期</div>
+					<a href="" class="pull-right">去使用></a>
+				</div>
+			</div>
+			<div class="other">
+				<div class="other-title">其他福利</div>
+				<div class="redpacket-item">
+					<div class="clearfix">
+						<div class="pull-left image">
+							<img src="https://p0.meituan.net/184.184.100/codeman/70bcc91303706a78759e9cb2f12379552697.png" alt="">
+						</div>
+						<div class="pull-left redpacket-info">
+							<span class="redpacket-title">通用红包</span>
+							<span class="use-condition">满20可用</span>
+						</div>
+						<div class="price pull-right"><span>￥</span>8</div>
+					</div>
+					<div class="clearfix redpacket-bottom">
+						<div class="pull-left use-days-limit">2天后过期</div>
+						<a href="" class="pull-right">去使用></a>
+					</div>
+				</div>
+			</div>
+			<div class="get-success">
+				<span>红包已放入账号:</span>
+				<span>18603533782</span>
+				<a href="">修改></a>
+			</div>
+			<a href="" class="button button-danger button-fill button-big immediate-use">立即使用</a>
+			<a href="" class="button button-danger button-fill button-big give-redpacket">送好友红包，奖励拿不停</a>
+		</div>
+		<div class="agreement">
+			<div class="agreement-title">活动规则</div>
+			<div class="agreement-inner">
+				<ul>
+					<li>1.红包新老用户同享</li>
+					<li>2.红包可与其他优惠叠加使用，首单支付红包不可叠加</li>
+					<li>3.红包仅限在美团外卖最新版客户端下单且选择在线支付时使用</li>
+					<li>4.仅限在线支付使用，且收餐人手机号、领取红包时输入的手机号和账号中的手机号需为同一手机号</li>
+					<li>5.部分用户可领取大额“美团专送支付红包”(优惠券详情可见客户端“我的-美团红包”)，可与满减、再减等多种优惠活动同享</li>
+					<li>6.敬请关注标有“美团专送”商家的“再减3元”活动，可在优惠活动的基础上再减3元</li>
+					<li>7.其他未尽事宜，请咨询客服</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+{itemplate 'public/footer'}

@@ -1,0 +1,119 @@
+{itemplate 'public/header'}
+
+{if $op == 'index'}
+<form action="./index.php?" class="form-horizontal form-filter" id="form1">
+	{php echo tpl_form_filter_hidden('spread/getcash/index');}
+	<input type="hidden" name="days" value="{$days}"/>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">提现状态</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('status:0');}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">全部</a>
+				<a href="{php echo ifilter_url('status:2');}" class="btn {if $status == 2}btn-primary{else}btn-default{/if}">申请中</a>
+				<a href="{php echo ifilter_url('status:1');}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">提现成功</a>
+				<a href="{php echo ifilter_url('status:3');}" class="btn {if $status == 3}btn-primary{else}btn-default{/if}">已撤销</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">申请时间</label>
+		<div class="col-sm-9 col-xs-12 js-daterange" data-form="#form1">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('days:-2');}" class="btn {if $days == -2}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo ifilter_url('days:7');}" class="btn {if $days == 7}btn-primary{else}btn-default{/if}">近一周</a>
+				<a href="{php echo ifilter_url('days:30');}" class="btn {if $days == 30}btn-primary{else}btn-default{/if}">近一月</a>
+				<a href="{php echo ifilter_url('days:90');}" class="btn {if $days == 90}btn-primary{else}btn-default{/if}">近三月</a>
+				<a href="javascript:;" class="btn js-btn-custom {if $days == -1}btn-primary{else}btn-default{/if}">自定义</a>
+			</div>
+			<span class="js-btn-daterange {if $days != -1}hide{/if}">
+				{php echo tpl_form_field_daterange('addtime', array('start' => date('Y-m-d', $starttime), 'end' => date('Y-m-d', $endtime)));}
+			</span>
+		</div>
+	</div>
+	<div class="form-group form-inline">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">其他</label>
+		<div class="col-sm-9 col-xs-12">
+			<input type="text" name="keywords" value="{$_GPC['keywords']}" class="form-control" placeholder="姓名/手机号"/>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-3 col-xs-12">
+			<button class="btn btn-primary">筛选</button>
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		{if empty($records)}
+			<div class="no-result">
+				<p>还没有相关数据</p>
+			</div>
+		{else}
+			<div class="panel-body table-responsive js-table">
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+						<tr>
+							<th>申请时间|订单号</th>
+							<th>会员</th>
+							<th>提现路径</th>
+							<th>提现金额</th>
+							<th>手续费</th>
+							<th>实际到账</th>
+							<th>交易状态</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $records $item}
+						<tr>
+							<td>
+								{php echo date('Y-m-d H:i:s', $item['addtime'])}
+								<br>
+								{$item['trade_no']}
+							</td>
+							<td>
+								<img src="{php echo tomedia($item['avatar'])}" alt="" width="50px" hegiht="50px" style="border-radius: 100%;">
+								{$item['realname']}
+							</td>
+							<td>
+								<span class="{php echo spread_getcash_type($item['channel'], css)}">{php echo spread_getcash_type($item['channel'], text)}</span>
+							</td>
+							<td>{$item['get_fee']}元</td>
+							<td>{$item['take_fee']}元</td>
+							<td>{$item['final_fee']}元</td>
+							<td>
+								{if $item['status'] == 2}
+									<span class="label label-danger">申请中</span>
+								{elseif $item['status'] == 1}
+									<span class="label label-success">提现成功</span>
+									<br>
+									<span class="label label-info label-br">处理完成时间: {php echo date('Y-m-d H:i', $item['endtime'])}</span>
+								{elseif $item['status'] == 3}
+									<span class="label label-warning">已撤销</span>
+									<br>
+									<span class="label label-info label-br">处理完成时间: {php echo date('Y-m-d H:i', $item['endtime'])}</span>
+								{/if}
+							</td>
+							<td align="right">
+								{if $item['status'] == 2}
+									{if $item['channel'] == 'wechat'}
+									<a href="{php echo iurl('spread/getcash/transfers', array('id' => $item['id']));}" data-confirm="确定微信打款吗?" class="btn btn-primary btn-sm js-post">微信打款</a>
+									{elseif $item['channel'] == 'credit'}
+									<a href="{php echo iurl('spread/getcash/balance', array('id' => $item['id']));}" data-confirm="确定转到余额吗?" class="btn btn-primary btn-sm js-post">转到余额</a>
+									{/if}
+									<a href="{php echo iurl('spread/getcash/status', array('id' => $item['id'] , 'status' => 1))}" data-confirm="确定变更提现状态吗?" class="btn btn-default btn-sm js-post">设为已处理</a>
+									<a href="{php echo iurl('spread/getcash/cancel', array('id' => $item['id']));}" class="btn btn-danger btn-sm js-modal">撤销</a>
+								{/if}
+							</td>
+						</tr>
+						{/loop}
+					</tbody>
+				</table>
+				{$pager}
+			</div>
+		{/if}
+	</div>
+</form>
+{/if}
+{itemplate 'public/footer'}

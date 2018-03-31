@@ -1,0 +1,89 @@
+{if !empty($diyitem['data'])}
+<div class="diy-waimai-store-box" style="background-color: {$diyitem['style']['background']}; padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;">
+	<div class="waimai-store-item-list">
+		{loop $diyitem['data'] $store}
+			<div class="waimai-store-item border-1px-b">
+				<div class="mian-content-box">
+					<div class="content-left border-1px">
+						<a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id']));}">
+							<img src="{php echo tomedia($store['logo']);}">
+						</a>
+						{if $store['label'] > 0}
+							<span class="label" style="background-color: {$store['label_color']}">{$store['label_cn']}</span>
+						{/if}
+					</div>
+					<div class="content-right">
+						<a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id']));}">
+							<div class="item-name-wrap">
+								<div class="item-name" style="color: {$diyitem['style']['titlecolor']}">{$store['title']}</div>
+							</div>
+							<div class="item-score-sale">
+								<div class="item-star-box">
+									<div class="stars">
+										<i class='icon icon-favor_light'></i><i class='icon icon-favor_light'></i><i class='icon icon-favor_light'></i><i class='icon icon-favor_light'></i><i class='icon icon-favor_light'></i>
+									</div>
+									<div class="stars-bg" style="color: {$diyitem['style']['scorecolor']}; width: {$store['score_cn']}%">
+										<i class='icon icon-favor_fill_light'></i><i class='icon icon-favor_fill_light'></i><i class='icon icon-favor_fill_light'></i><i class='icon icon-favor_fill_light'></i><i class='icon icon-favor_fill_light'></i>
+									</div>
+								</div>
+								<div class="item-sale">已售{$store['sailed']}份</div>
+								<div class="time-distance">
+									<div class="avg_delivery_time">{$store['delivery_time']}分钟</div>
+<!--
+									<span class='line'>|</span>
+									<div class="item-distance">914m</div>
+-->
+								</div>
+							</div>
+							<div class="item-min-delivery">
+								<span>起送价￥{$store['send_price']}</span>
+								<span class='line'>|</span>
+								<span>配送费￥{$store['delivery_price']}</span>
+								<div style="background-color: {$diyitem['style']['deliverytitlebgcolor']}; color: {$diyitem['style']['deliverytitlecolor']}">{$_config_mall['delivery_title']}</div>
+							</div>
+						</a>
+
+						{if $diyitem['params']['showdiscount'] == 1 && !empty($store['activity'])}
+							{php  $i = 0;}
+							<div class="discount-box">
+								{if $store['activity']['num'] > 2}
+									<i class="icon icon-unfold toggle-activity"></i>
+								{/if}
+								{loop $store['activity']['items'] $activity}
+									{php $i++;}
+									<div class="single-line {if $i > 2}hide single-line-row{/if}">
+										<img class="discount-icon" src="{WE7_WMALL_TPL_URL}static/img/icon-{$activity['type']}.png" alt="">
+										<span>{$activity['title']}</span>
+									</div>
+								{/loop}
+							</div>
+						{/if}
+						{if $diyitem['params']['showhotgoods'] == 1 && !empty($store['hot_goods'])}
+							<div class="hot-box">
+								{loop $store['hot_goods'] $goods}
+									<a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id'], 'goods_id' => $goods['id']));}">
+										<div class="hot-box-item">
+											<div class="hot-t border-1px">
+												<img src="{php echo tomedia($goods['thumb']);}">
+												<div>{$goods['discount']}折</div>
+											</div>
+											<div class="hot-b">
+												<div class="shop-name">{$goods['title']}</div>
+												<div class="shop-price">
+													<span class="price">¥{$goods['price']}</span>
+													<span class="old-price">¥{$goods['old_price']}</span>
+												</div>
+											</div>
+										</div>
+									</a>
+								{/loop}
+							</div>
+						{/if}
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		{/loop}
+	</div>
+</div>
+{/if}

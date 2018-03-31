@@ -1,0 +1,321 @@
+{itemplate 'public/header'}
+<script type='text/javascript' src='{WE7_WMALL_URL}static/js/components/light7/iscroll-probe.js' charset='utf-8'></script>
+<style>
+	.store .parent-category{overflow:hidden; padding: 0; position:relative; z-index: 10200; width: 20%; top: 125px;}
+	.store .category-container{height: auto; padding-left: 20%}
+	.store .category-container .children-category-wrapper{height:100%; border: none; background:#fff;}
+	.store .category-container .children-category-wrapper .goods-list-empty{padding: 2rem 0.5rem; text-align: center;}
+	.store .category-container .children-category-wrapper:last-child{border-bottom: 1px solid #ddd}
+	.store .category-container .heading{background:#F9F9F9; padding:0 10px; height:27px; line-height:27px;}
+	.store .category-container .heading span{padding-left: 0.3rem; border-left: 2px solid #ff2d4b; font-size: 0.6rem;}
+	.store .category-container .heading small{font-size: .5rem; color: #ef1e15}
+	.store .category-container ul{list-style:none; margin:0; background:#fff; padding:0;}
+	.store .category-container li{padding:0 8px; position:relative;}
+	.store .category-container li.active{background-color: #f8f8f8}
+	.store .category-container .item-content{padding:0; border-bottom:1px solid #eee; align-items: stretch; -webki-align-items: stretch}
+	.store .category-container li:last-child .item-content{border:0;}
+	.store .category-container .item-inner{border:0; padding-right:0; background:transparent; margin-top: -.2rem;}
+	.store .category-container .item-text{height:auto;}
+	.store .category-container .item-media{position: relative; align-items: stretch; -webki-align-items: stretch}
+	.store .category-container .item-media .sale-badge{display: inline-block; width: 1.6rem; text-align: center; color:#fff; font-size:.6rem; position:absolute; left:0; top: .45rem}
+	.store .category-container .item-media img{width: 2.6rem; height: 2.6rem}
+	.store .category-container .item-title{white-space: normal; color: #3d4145; font-size: 0.7rem;}
+	.store .category-container .goods-info{font-size: .5rem; color: #808080; height: 2rem; overflow: hidden;}
+	.store .category-container .sell-info{color:#808080; margin-bottom:.1rem; font-size:.5rem;}
+	.store .category-container .price{color:#ef1e15;}
+	.store .category-container .price .fee{font-size:0.9rem; line-height:0.9rem; font-weight: bold;}
+	.store .category-container .price .fee span{font-size: 0.6rem;}
+	.store .category-container .price .original-fee{font-size: .5rem; color: #808080; text-decoration: line-through}
+	.store .category-container .select-spec{display: inline-block; height: 1.4rem; line-height: 1.4rem!important; font-size: .6rem; color: #fff; background-color: #ff2d4b; border-radius: 1.4rem; padding: 0 .4rem;}
+	.store .category-container .operate-goods{position:absolute; right:8px; bottom:9px;}
+	.store .category-container .operate-goods .badge{padding: 0 0.3rem; text-align: center; line-height: 1rem; background-color: rgba(0,0,0, 0.5); color: #fff; position: absolute; top: -0.6rem; left: 2.1rem;}
+</style>
+<div class="page store shopcategory" id="page-app-goods">
+	<nav class="bar bar-tab no-gutter shop-cart-bar">
+		<div class="" id="cartEmpty">
+			<div class="left empty">
+				<span class="cart">
+					<span class="icon icon-cart"></span>
+				</span>
+				购物车是空的
+			</div>
+			<div class="right text-center bg-grey">{$store['send_price']}元起送</div>
+		</div>
+		<div class="hide" id="cartNotEmpty">
+			<div class="left">
+				<span class="cart">
+					<span class="icon icon-cart"></span>
+					<span class="badge bg-danger" id="cartNum">0</span>
+				</span>
+				共<span class="sum">￥<span id="totalPrice">0</span>元</span>
+			</div>
+			<div class="right text-center bg-grey" id="categoryCondition">还差￥0元起送</div>
+			<div class="right text-center bg-grey">还差￥<span id="sendCondition">{$store['send_price']}</span>元起送</div>
+			{if !$store['is_in_business_hours']}
+				<div class="right text-center bg-grey hide" id="btnSubmit">休息中</div>
+			{else}
+				<div class="right text-center bg-danger hide" id="btnSubmit">选好了</div>
+			{/if}
+		</div>
+	</nav>
+	{if !empty($activity['items']['discount'])}
+		<div class="store-discount-notice">
+			<div class="inner">{$activity['items']['discount']['title']}</div>
+		</div>
+	{elseif !empty($activity['items']['grant'])}
+		<div class="store-discount-notice">
+			<div class="inner">{$activity['items']['grant']['title']}</div>
+		</div>
+	{/if}
+	<header class="bar bar-nav common-bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title open-popup" data-popup=".popup-privilege">{$store['title']}</h1>
+		<a class="pull-right" href="javascript:;" style="margin-left: 5px"><i class="icon icon-search"></i></a>
+		<a class="pull-right" href="javascript:;" id="btn-favorite" data-id="{$store['id']}" data-uid="{$_W['member']['uid']}"><i class="fa {if !empty($is_favorite)}icon icon-favorfill{else}icon icon-favor{/if}"></i></a>
+	</header>
+	<div class="store-notice open-popup" data-popup=".popup-privilege">
+		<span class="js-scroll-notice">
+			<span class="icon icon-voice"></span>
+			{if !empty($store['notice'])}
+				{$store['notice']}
+			{else}
+				营业时间: {$store['business_hours_cn']}
+			{/if}
+		</span>
+	</div>
+	<div class="buttons-tab">
+		<a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id']));}" class="button active">商品</a>
+		<a href="{php echo imurl('wmall/store/comment', array('sid' => $store['id']));}" class="button">评价</a>
+		<a href="{php echo imurl('wmall/store/index', array('sid' => $store['id']));}" class="button">商家</a>
+		{if !empty($store['sns']['qq'])}
+			<a href="http://wpa.qq.com/msgrd?v=3&uin={$store['sns']['qq']}&site=qq&menu=yes" class="button">客服</a>
+		{/if}
+	</div>
+	<div class="parent-category" id="cateMenu"></div>
+	<div class="content lazyload-container">
+		<div class="category-container row no-gutter" id="category-container">
+			{if !empty($tokens)}
+				<div class="coupon-show-container">
+					<div class="coupon-show">
+						<div class="coupon-sum">
+							<span>￥</span>{$token_price}
+						</div>
+						<div class="division">
+							<img src="{WE7_WMALL_TPL_URL}static/img/division.png" alt="" />
+						</div>
+						<div class="coupon-info">
+							<div class="coupon-title">商家代金券</div>
+							{if $token_nums > 1}
+								<div class="condition">内含{$token_nums}张券</div>
+							{else}
+								<div class="condition">满{$token['condition']}元可用</div>
+							{/if}
+						</div>
+						<div class="get">
+							<span class="btn-get" id="get-coupon">领券</span>
+						</div>
+					</div>
+				</div>
+			{/if}
+			<form action="{php echo imurl('wmall/order/create/goods', array('sid' => $sid));}" method="post" id="goods-form">
+				<div class="heading"><span id="title"></span> <small id="min_fee"></small></div>
+				<div class="children-category-wrapper">
+					<div class="goods-list-empty" style="display: none;">还没有任何没有商品</div>
+					<ul class="list-block media-list"></ul>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script id="tpl-parent-category" type="text/html">
+	<ul class="category-list">
+		<(each data as category index)>
+			<li class="border-1px-b <(if selected == index)>active<(/if)>" data-index="<(index)>">
+				<a href="javascript:;">
+					<!--<(if category.bargain_id > 0)>
+						<svg class="svg" aria-hidden="true">
+							<use xlink:href="#svg-tag"></use>
+						</svg>
+					<(/if)>-->
+					<(category.title)>
+				</a>
+			</li>
+		<(/each)>
+	</ul>
+</script>
+
+<script id="tpl-category-goods" type="text/html">
+	<(each data[selected].goods as good)>
+		<li id="goods-<(good.id)>">
+			<a class="item-content goods-popup" data-id="<(good.id)>" href="javascript:;">
+				<div class="item-media">
+					<(if good.label)>
+						<span class="sale-badge bg-danger"><(good.label)></span>
+					<(/if)>
+					<img src="<(tomedia good.thumb)>" class="lazyload" data-original="<(tomedia good.thumb)>" alt=""/>
+				</div>
+				<div class="item-inner">
+					<div class="item-title-row">
+						<div class="item-title"><(good.title)></div>
+					</div>
+					<div class="item-text">
+						<(if good.content)>
+							<div class="goods-info"><(good.content)></div>
+						<(/if)>
+						<div class="sell-info">已售<(good.sailed)><(good.unitname)>&nbsp;&nbsp; 好评<(good.comment_good)></div>
+						<div class="price">
+							<span class="fee"><span>￥</span><(good.discount_price)></span>
+							<(if good.bargain_id)>
+								<span class="original-fee">￥<(good.price)></span>
+							<(/if)>
+						</div>
+						<(if good.discount)>
+							<span class="tag tag-danger"><(if good.poi_user_type == 'new')>新用户专享<(/if)> <(good.discount)>折 每单仅限<(good.max_buy_limit)>份</span>
+						<(/if)>
+					</div>
+				</div>
+			</a>
+			<(if store.is_in_business_hours)>
+				<(if good.is_options == 0 && good.is_attrs == 0)>
+					<(if good.discount_available_total == 0 && good[total] == 0)>
+						<div class="goods-tips">已售完</div>
+					<(else)>
+						<div class="operate-num operate-goods">
+							<span class="hide minus">
+								<span class="icon icon-minus" data-goods-id="<(good.id)>" data-option-id="0"></span>
+								<span class="num">0</span>
+							</span>
+							<span class="icon icon-plus" data-goods-id="<(good.id)>" data-option-id="0"></span>
+						</div>
+					<(/if)>
+				<(else if good.is_options == 1 || good.is_attrs == 1)>
+					<div class="operate-goods">
+						<span class="select-spec goods-option" data-id="<(good.id)>">可选规格</span>
+						<span class="badge hide">0</span>
+					</div>
+				<(/if)>
+			<(else)>
+				<div class="goods-tips">店铺休息中</div>
+			<(/if)>
+		</li>
+	<(/each)>
+</script>
+
+<script id="goods-detail" type="text/html">
+	<div class="popup popup-goods-detail">
+		<div class="content-block">
+			<div class="goods-img">
+				<(if !detail.slides.length)>
+					<img src="<(detail.thumb_)>" width= alt=""/>
+				<(else)>
+					<div class="swiper-container" data-space-between='0' data-pagination='.swiper-pagination'>
+						<div class="swiper-wrapper">
+							<(each detail.slides as slide)>
+								<div class="swiper-slide"><img src="<(slide)>" alt=""></div>
+							<(/each)>
+						</div>
+						<div class="swiper-pagination"></div>
+					</div>
+				<(/if)>
+				<a href="#" class="close-popup" data-popup=".popup-goods-detail"><span class="icon icon-close"></span></a>
+			</div>
+			<div class="goods-name">
+				<(detail.title)>
+			</div>
+			<div class="sell-info">已售<(detail.sailed)>&nbsp;&nbsp;好评<(detail.comment_goods)></div>
+			<(if detail.is_options == 0 && detail.is_attrs == 0)>
+				<div class="row no-gutter goods-num">
+					<div class="col-50 price">￥<span class="fee"><(detail.price)></span></div>
+					<div class="col-50 text-right operate-num <(if !store.is_in_business_hours)>hide<(/if)>">
+							<span class="minus <(if detail.num <= 0)>hide<(/if)>">
+								<span class="icon icon-minus goods-detail-minus" data-goods-id="<(detail.id)>" data-option-id="0"></span>
+								<span class="num"><(detail.hasNum)></span>
+							</span>
+						<span class="icon icon-plus goods-detail-plus" data-goods-id="<(detail.id)>" data-option-id="0"></span>
+					</div>
+				</div>
+			<(else)>
+				<div class="row no-gutter goods-num">
+					<div class="col-50 price">￥<span class="fee"><(detail.price)></span></div>
+					<div class="col-50 text-right operate-num <(if !store.is_in_business_hours)>hide<(/if)>">
+						<div class="operate-goods">
+							<span class="select-spec goods-option" data-id="<(detail.id)>">可选规格</span>
+						</div>
+					</div>
+				</div>
+			<(/if)>
+			<div class="goods-evaluate">商品评价</div>
+			<div class="praise text-center">好评率 <span class="rate"><(detail.comment_good_percent)></span><span class="num">(共<(comment_total)>人评价)</span></div>
+			<div class="progress">
+				<div class="progress-bar">
+					<div class="progress-active" style="width:<(detail.comment_good_percent)>;"></div>
+				</div>
+			</div>
+			<div class="goods-desc">商品描述</div>
+			<div class="goods-desc-con">
+				<(detail.description)><br>
+				温馨提示: 图片仅供参考,请以实物为准;<br>
+				高峰时段及恶劣天气,请提前下单
+			</div>
+		</div>
+	</div>
+</script>
+
+<!--<script id="goods-cart" type="text/html">
+	<div class="popup popup-shop-cart">
+		<div class="shop-cart-list">
+			<div class="row no-gutter popup-shop-cart-header border-1px-b">
+				<div class="col-50"><span><(store.title)></span></div>
+				<div class="col-50 text-right shop-cart-truncate"><img src="{WE7_WMALL_TPL_URL}static/img/icon-trash.png" alt="" /><span class="color-gray">清空购物车</span></div>
+			</div>
+			<(each cart.list as item)>
+				<{# for(var j in d[i]['options']){ }>
+					<{# if(d[i]['options'][j]['num'] > 0){ }>
+						<div class="row no-gutter list-item border-1px-b <{# if(d[i].goods_id == 0){ }>box-price-item<{# } }>" id="shop-cart-list-item-<{d[i].goods_id}>-<{d[i]['options'][j]['option_id']}>">
+							<div class="col-42">
+								<{# var isActive = d[i]['options'][j]['name'] || (d[i]['options'][j]['discount_num'] > 0 && d[i]['options'][j]['price_num'] > 0);}>
+								<div class="goods-title <{# if(isActive){ }>active<{# } }>"><{d[i].title}></div>
+								<{# if(isActive){ }>
+									<span class="discount-info">
+										<{# if(d[i]['options'][j]['name']){ }>
+											<{d[i]['options'][j]['name']}>
+										<{# } }>
+										<{# if(d[i]['options'][j]['discount_num'] > 0 && d[i]['options'][j]['price_num'] > 0){ }>
+											&nbsp;含<{d[i]['options'][j]['price_num']}>份原价商品
+										<{# } }>
+									</span>
+								<{# } }>
+							</div>
+							<div class="col-25 color-orange text-right goods-price <{# if(d[i].goods_id == 0){ }>box-price<{# } }>">￥<{d[i]['options'][j]['price_total']}></div>
+							<div class="col-33 text-right">
+								<{# if(d[i].goods_id != 0){ }>
+									<div class="operate-num">
+										<span class="minus">
+											<span class="icon icon-minus from-goods-cart" data-option-id="<{d[i]['options'][j]['option_id']}>" data-goods-id="<{d[i].goods_id}>"></span>
+											<span class="num"><{d[i]['options'][j]['num']}></span>
+										</span>
+										<span class="icon icon-plus from-goods-cart" data-option-id="<{d[i]['options'][j]['option_id']}>" data-goods-id="<{d[i].goods_id}>"></span>
+									</div>
+								<{# } }>
+							</div>
+						</div>
+					<{# } }>
+				<{# } }>
+			<(/each)>
+		</div>
+	</div>
+</script>-->
+
+<script language="javascript">
+	var path = "{php echo WE7_WMALL_URL}/static/js/app/src/goods.js";
+	require([path, 'tmodtpl'], function(goods, tmodtpl) {
+		goods.init({
+			tmodtpl: tmodtpl,
+			attachurl: "{$_W['attachurl']}",
+			store: {php echo json_encode($store)},
+			categorys: {php echo json_encode($categorys)},
+		});
+	});
+
+</script>
+{itemplate 'public/footer'}

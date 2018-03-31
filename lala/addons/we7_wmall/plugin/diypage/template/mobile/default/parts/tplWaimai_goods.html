@@ -1,0 +1,73 @@
+{if !empty($diyitem['data'])}
+{if $diyitem['style']['liststyle'] == 1}
+	<div class="diy-waimai-food-list-onerow-box" style="background-color: {$diyitem['style']['background']}; padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;">
+		<div class="item-list">
+			{loop $diyitem['data'] $goods}
+			<div class="goods-item border-1px-t">
+				<div class="row item-wrapper">
+					<div class="col-40 goods-img">
+						<img src="{php echo tomedia($goods['thumb']);}">
+						{if $diyitem['params']['showicon'] == 1 && $goods['discount'] < 10}
+							<span class='discount'>{$goods['discount']}折</span>
+						{/if}
+					</div>
+					<div class="col-60">
+						<div class="goods-name" style="color: {$diyitem['style']['titlecolor']}">{$goods['title']}</div>
+						<div class="sale-num">已售:{$goods['sailed']} 好评率:{$goods['comment_good_percent']}</div>
+						<div class="store-num">
+							<i class="icon icon-shop"></i>
+							<span>{$goods['store_title']}</span>
+						</div>
+						<div class="price-buybtn">
+							<div class="price-wrap">
+								<span class="price" style="color: {$diyitem['style']['pricecolor']}">¥{$goods['price']}</span>
+								{if $diyitem['params']['showoldprice'] == 1}
+									<span class="old-price" style="color: {$diyitem['style']['oldpricecolor']}">¥{$goods['old_price']}</span>
+								{/if}
+							</div>
+							<a href="{php echo imurl('wmall/store/goods', array('sid' => $goods['sid'], 'goods_id' => $goods['goods_id']));}" class="buy-btn" style="background-color: {$diyitem['style']['buybtncolor']}">{$diyitem['params']['buybtntext']}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			{/loop}
+		</div>
+	</div>
+{elseif $diyitem['style']['liststyle'] == 2}
+	<div class="diy-waimai-goods-list-box" style="background-color: {$diyitem['style']['background']}; padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;">
+		<div class="box-list">
+			{loop $diyitem['data'] $goods}
+				<div class="box-item">
+					<div class="main-content-box">
+						{if $diyitem['params']['showicon'] == 1}
+							<span class='discount'>{$goods['discount']}折</span>
+						{/if}
+						<div class="goods-image">
+							<img src="{php echo tomedia($goods['thumb']);}">
+						</div>
+						<div class="goods-name" style="color: {$diyitem['style']['titlecolor']}">{$goods['title']}</div>
+						<div class="discount-soldnum">
+							<span class='sold-num'>已售{$goods['sailed']}份</span>
+							<span class='praise'>好评率{$goods['comment_good_percent']}</span>
+						</div>
+						<div class="store-name">
+							<i class="icon icon-shop"></i>
+							{$goods['store_title']}
+						</div>
+						<div class="price-buybtn">
+							<div class="price" style="color: {$diyitem['style']['pricecolor']}">
+								￥{$goods['price']}
+								{if $diyitem['params']['showoldprice'] == 1}
+									<div class="old-price" style="color: {$diyitem['style']['oldpricecolor']}">￥{$goods['old_price']}</div>
+								{/if}
+							</div>
+							<a href="{php echo imurl('wmall/store/goods', array('sid' => $goods['sid'], 'goods_id' => $goods['goods_id']));}" class='buy-btn' style="background-color: {$diyitem['style']['buybtncolor']}">{$diyitem['params']['buybtntext']}</a>
+						</div>
+					</div>
+				</div>
+			{/loop}
+		</div>
+		<div class="clear"></div>
+	</div>
+{/if}
+{/if}

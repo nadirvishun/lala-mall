@@ -1,0 +1,43 @@
+<div class="second-sidebar-title">
+	概况
+</div>
+<div class="nav slimscroll">
+	{ifp 'dashboard.index'}
+		<div class="menu-header">运营</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'index'}class="active"{/if}>
+				<a href="{php echo iurl('dashboard/index');}">运营概况</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'dashboard.ad' || 'dashboard.slide' || 'dashboard.nav' || 'dashboard.notice' || 'dashboard.cube'}
+		<div class="menu-header">首页</div>
+		<ul class="menu-item">
+			{ifp 'dashboard.ad'}
+				<li {if $_W['_action'] == 'ad'}class="active"{/if}>
+					<a href="{php echo iurl('dashboard/ad');}">全屏引导页</a>
+				</li>
+			{/if}
+			{ifp 'dashboard.slide'}
+				<li {if $_W['_action'] == 'slide'}class="active"{/if}>
+					<a href="{php echo iurl('dashboard/slide');}">幻灯片</a>
+				</li>
+			{/if}
+			{ifp 'dashboard.nav'}
+				<li {if $_W['_action'] == 'nav'}class="active"{/if}>
+					<a href="{php echo iurl('dashboard/nav');}">导航图标</a>
+				</li>
+			{/if}
+			{ifp 'dashboard.notice'}
+				<li {if $_W['_action'] == 'notice'}class="active"{/if}>
+					<a href="{php echo iurl('dashboard/notice');}">公告</a>
+				</li>
+			{/if}
+			{ifp 'dashboard.cube'}
+				<li {if $_W['_action'] == 'cube'}class="active"{/if}>
+					<a href="{php echo iurl('dashboard/cube');}">图片魔方</a>
+				</li>
+			{/if}
+		</ul>
+	{/if}
+</div>

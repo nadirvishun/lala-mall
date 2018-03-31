@@ -1,0 +1,49 @@
+{itemplate 'public/header'}
+<link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+<link rel="stylesheet" href="../addons/we7_wmall/plugin/poster/static/css/web.css"/>
+{if $op == 'post'}
+<div class="margin-b-10">
+	<a href="{php echo iurl('poster/store/clear')}" data-confirm="确定清除商户海报信息么" class="btn btn-danger btn-sm js-post">清除商户海报缓存</a>
+</div>
+<div class="clearfix">
+	<div class="app-preview">
+		<div class="app-header"></div>
+		<div class="app-body">
+			<div class="title" id="page">推广海报设置</div>
+			<div class="main postera" id="app-preview">
+			</div>
+		</div>
+		<div class="app-footer"></div>
+	</div>
+	<div class="app-editor form-horizontal" id="app-editor">
+		<div class="editor-arrow"></div>
+		<div class="inner">
+		</div>
+	</div>
+</div>
+<div class="app-action">
+	<div class="parts" id="parts"></div>
+	<div class="action">
+		<nav class="btn btn-default btn-sm pull-left" id="gotop">返回顶部</nav>
+		<nav class="btn btn-primary btn-sm btn-save">保存并设置</nav>
+	</div>
+</div>
+{itemplate 'posterTplShow'}
+{itemplate 'posterTplEditor'}
+<script type="text/javascript" src="../addons/we7_wmall/plugin/poster/static/js/designer.js"></script>
+<script>
+</script>
+<script language="javascript">
+	var path = '../../plugin/poster/static/js/postera';
+	irequire([path, 'tmodtpl'],function(diy, tmodtpl){
+		diy.init({
+			tmodtpl: tmodtpl,
+			attachurl: "{$_W['attachurl']}",
+			id: '{php echo intval($_GPC["id"])}',
+			type: 0,
+			data: {if !empty($data)}{php echo json_encode($data)}{else}null{/if},
+		});
+	});
+</script>
+{/if}
+{itemplate 'public/footer'}

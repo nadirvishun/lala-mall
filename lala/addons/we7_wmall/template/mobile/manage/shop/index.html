@@ -1,0 +1,98 @@
+{itemplate 'public/header'}
+<div class="page" id="page-manage-home">
+	<header class="bar bar-nav common-bar-nav" style="border-bottom: 0">
+		<h1 class="title">{$_W['we7_wmall']['store']['title']}</h1>
+	</header>
+	{itemplate 'public/nav'}
+	<div class="content">
+		<ul class="store-data">
+			<li>
+				<a href="javascript:;">
+					<div class="store-data-sum">{$stat['total_order']}</div>
+					<div class="store-data-info">今日有效订单</div>
+				</a>
+			</li>
+			<li>
+				<a href="javascript:;">
+					<div class="store-data-sum">{$stat['total_fee']}</div>
+					<div class="store-data-info">今日总营业额</div>
+				</a>
+			</li>
+			<li>
+				<a href="javascript:;">
+					<div class="store-data-sum">{$stat['final_fee']}</div>
+					<div class="store-data-info">今日总收入</div>
+				</a>
+			</li>
+		</ul>
+		<ul class="store-cate">
+			<li>
+				<a href="{php echo imurl('manage/shop/setting');}" class="icon icon-shop">
+					<p>店铺管理</p>
+				</a>
+			</li>
+			<li>
+				<a href="{php echo imurl('manage/order/takeout');}" class="icon icon-order">
+					<p>订单管理</p>
+				</a>
+			</li>
+			<li>
+				<a href="{php echo imurl('manage/order/takeout1');}" class="icon icon-order">
+					<p>订单管理（新版测试）</p>
+				</a>
+			</li>
+			<li>
+				<a href="{php echo imurl('manage/goods/index');}" class="icon icon-goods">
+					<p>商品管理</p>
+				</a>
+			</li>
+			<li>
+				<a href="{php echo imurl('manage/service/comment');}" class="icon icon-survey">
+					<p>评论管理</p>
+				</a>
+			</li>
+			<li>
+				<a href="{php echo imurl('manage/finance/index');}" class="icon icon-recharge">
+					<p>资产</p>
+				</a>
+			</li>
+			<!-- <li>
+				<a href="javascript:;" class="icon icon-scan" id="scanqrcode">
+					<p>扫一扫</p>
+				</a>
+			</li> -->
+			<li>
+				<a href="{php echo imurl('manage/activity/index');}" class="icon icon-activity">
+					<p>店铺活动</p>
+				</a>
+			</li>
+			<li>
+				<a href="{php echo imurl('manage/news/notice')}" class="icon icon-newshot">
+					<p>公告</p>
+					{if !empty($notice)}
+						<span class="wui-badge">{$notice}</span>
+					{/if}
+				</a>
+			</li>
+			<li>
+				<a href="{php echo imurl('manage/paycenter/paybill/index', array('pay_type' => 'all'))}" class="icon icon-signboard">
+					<p>买单</p>
+				</a>
+			</li>
+		</ul>
+		
+		{if !empty($ads)}
+			<div class="swiper-container slide" data-space-between='0' data-pagination='.swiper-slide-pagination' data-autoplay="5000">
+				<div class="swiper-wrapper">
+					{loop $ads $slide}
+						<div class="swiper-slide" data-link="{$slide['link']}">
+							<img src="{php echo tomedia($slide['thumb']);}" alt="">
+						</div>
+					{/loop}
+				</div>
+				<div class="swiper-pagination swiper-slide-pagination"></div>
+			</div>
+		{/if}
+	</div>
+</div>
+{itemplate 'public/footer'}

@@ -1,0 +1,114 @@
+{itemplate 'public/header'}
+<div class="page advertise-confirm">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">会员中心幻灯片推广</h1>
+	</header>
+	<nav class="bar bar-footer-secondary">
+		<button class="button button-block button-fill" id="formsubmit">立即购买</button>
+	</nav>
+	<div class="content">
+		<form method="post" id="order-form" action="{php echo imurl('manage/advertise/member/submit'), array()}">
+			<div class="content-block-title">广告幻灯片位置</div>
+			<div class="list-block media-list pay-method">
+				<ul class="border-1px-tb">
+					<li>
+						<label class="label-checkbox item-content border-1px-b">
+							<div class="item-inner">
+								<div class="item-title">会员中心页面</div>
+							</div>
+						</label>
+					</li>
+				</ul>
+			</div>
+
+			<div class="list-block media-list prices-container">
+				<ul class="border-1px-tb">
+					<li>
+						<div class="label-radio item-content border-1px-b">
+							<div class="item-inner">
+								<div class="item-title">广告位详情：广告位总数{$slideMember['total']},剩余{$slideMember['leave']}个位置,价目:</div>
+							</div>
+						</div>
+					</li>
+					{if !empty($slideMember['leave'])}
+						{loop $slideMember['prices'] $row}
+						<li>
+							<label class="label-checkbox item-content border-1px-b">
+								<div class="item-inner">
+									<div class="item-title">购买广告{$row['day']}天{$row['fee']}元</div>
+								</div>
+								<input type="radio" name="day" class="prices" value="{$row['day']}" checked>
+								<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+							</label>
+						</li>
+						{/loop}
+					{/if}
+				</ul>
+			</div>
+			<div class="content-block-title">选择支付方式</div>
+			<div class="list-block media-list pay-method">
+				<ul class="border-1px-tb">
+					<li>
+						<label class="label-checkbox item-content border-1px-b">
+							<div class="item-inner">
+								<div class="item-title">微信支付</div>
+							</div>
+							<input type="radio" name="pay_type" class="pay_type" value="wechat" checked>
+							<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+						</label>
+					</li>
+					<li>
+						<label class="label-checkbox item-content border-1px-b">
+							<div class="item-inner">
+								<div class="item-title">支付宝支付</div>
+							</div>
+							<input type="radio" name="pay_type" class="pay_type" value="alipay">
+							<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+						</label>
+					</li>
+					<li>
+						<label class="label-checkbox item-content border-1px-b">
+							<div class="item-inner">
+								<div class="item-title">余额支付 账户余额:<span class="amount">{$amount}元</span></div>
+							</div>
+							<input type="radio" name="pay_type" class="pay_type" value="credit">
+							<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+						</label>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+	$(function(){
+		$(document).on('click', '#formsubmit', function(){
+			var day = $(':radio[name="day"]:checked').val();
+			if(!day) {
+				$.toast('请选择购买天数');
+				return false;
+			}
+			var pay_type = $(':radio[name="pay_type"]:checked').val();
+			if(!pay_type) {
+				$.toast('请选择支付方式');
+				return false;
+			}
+			var params = {
+				day: day,
+				pay_type: pay_type,
+			};
+			$.post("{php echo imurl('manage/advertise/member/submit');}", params, function(data) {
+				var result = $.parseJSON(data);
+				if(result.message.errno == -1) {
+					$.toast(result.message.message);
+				} else {
+					$.toast('下单成功');
+					location.href = "{php echo imurl('manage/pay/pay', array('order_type' => 'advertise'));}&id=" + result.message.message.id + "&sid="+ result.message.message.sid;
+				}
+			});
+		});
+	});
+</script>
+{itemplate 'public/footer'}

@@ -1,0 +1,70 @@
+{itemplate 'public/header'}
+<div class="page page-advertise page-advertise-list">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">店铺推广</h1>
+	</header>
+	<div class="buttons-tab advertise_status">
+		<a href="{php echo ifilter_url('status:0');}" class="button {if $status == 0} active {/if}">未开启</a>
+		<a href="{php echo ifilter_url('status:1');}" class="button {if $status == 1} active {/if}">推广中</a>
+		<a href="{php echo ifilter_url('status:2');}" class="button {if $status == 2} active {/if}">已结束</a>
+	</div>
+	{itemplate 'public/nav'}
+	<div class="content">
+		{if !empty($advertises)}
+			{loop $advertises $item}
+				<div class="card">
+					<div class="card-header border-1px-b">
+						<div class="advertise-title">
+							{$type_cn[$item['type']]}
+						</div>
+						<span class="pull-right">
+							{if $item['until'] >= 0}
+								进行中 剩余<i>{$item['until']}天</i>
+							{elseif $item['status'] == 0}
+								未开启
+							{else}
+								已结束
+							{/if}
+						</span>
+					</div>
+					<div class="card-content">
+						<div class="card-content-inner">
+							<div class="discription">
+								{if $item['type'] == 'stick'}
+									<div class="one-list clearfix">
+										<div class="left">置顶排序:</div>
+										<div class="right">No.{$item['displayorder']}</div>
+									</div>
+								{/if}
+								<div class="one-list clearfix">
+									<div class="left">广告持续:</div>
+									<div class="right">{$item['days']}天</div>
+								</div>
+								<div class="one-list clearfix">
+									<div class="left">开始时间:</div>
+									<div class="right">{php echo date('Y-m-d H:i', $item['starttime'])}</div>
+								</div>
+								<div class="one-list clearfix">
+									<div class="left">结束时间:</div>
+									<div class="right">{php echo date('Y-m-d H:i', $item['endtime'])}</div>
+								</div>
+								<div class="one-list clearfix">
+									<div class="left">创建日期:</div>
+									<div class="right">{php echo date('Y-m-d H:i', $item['addtime'])}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{/loop}
+		{/if}
+		{if empty($advertise)}
+		<div class="no-data">
+			<div class="bg"></div>
+			<p>还没有为店铺推广哦~</p>
+		</div>
+		{/if}
+	</div>
+</div>
+{itemplate 'public/footer'}

@@ -1,0 +1,62 @@
+.app-preview{float: left; width: 345px; border: 1px solid #ddd; border-radius: 10px; background: #fff; padding: 10px; overflow: hidden; margin-bottom: 100px;}
+.app-preview .app-header{height: 44px; background: #fff; position: relative;}
+.app-preview .app-header:before{content: ""; position: absolute; top: 15px; left: 112px; height: 8px; width: 8px; background: #ddd; border-radius: 8px;}
+.app-preview .app-header:after{content: ""; position: absolute; top: 15px; left: 128px; height: 8px; width: 50px; background: #ddd; border-radius: 8px;}
+.app-preview .title{height: 61px; background: url(../img/titlebar.png) 0 0 no-repeat; background-size: 100% auto; padding: 0 50px; font-size: 15px; color: #fff; text-align: center; line-height: 78px; cursor: default; overflow: hidden; display: block; white-space: nowrap; text-overflow: ellipsis;}
+.app-preview .main{position: relative; overflow: hidden; min-height: 540px; border: 1px solid #ddd; border-top: 0;}
+.app-preview .app-footer{height: 24px; width: 60px; margin: 15px auto 5px; border: 1px solid #ddd; border-radius: 5px;}
+
+
+.app-editor{float: left; width: 600px; background: #fdfdfd; padding: 15px 10px; margin-left: 18px; border: 1px solid #ddd; border-radius: 5px; margin-top: 55px; margin-bottom: 100px;}
+.app-editor .editor-arrow{height: 0; position: relative;}
+.app-editor .editor-arrow:before{position: absolute; font-family: simsun; content: "◆"; top: 8px; left: -21px; display: block; width: 9px; height: 18px; font-size: 24px; color: #fdfdfd; z-index: 111;}
+.app-editor .editor-arrow:after{position: absolute; font-family: simsun; content: "◆"; top: 8px; left: -22px; color: #ddd; z-index: 11; display: block; width: 9px; height: 18px; font-size: 24px;}
+.app-editor .line{height: 10px; width: 100%; position: relative;}
+.app-editor .line:before{height: 0; content: ''; position: absolute; bottom: 5px; left: 14px; right: 14px; border: 1px dashed #eee;}
+.app-editor .form-group{border: 0; margin: 10px 0; padding: 0;}
+.app-editor .form-group .margin-t-5{margin-top: 5px;}
+.app-editor .control-label{padding: 5px 0; text-align: right}
+.app-editor .form-group .slider.ui-slider {top: 4px;}
+
+.app-action{width: 946px; background: #fdfdfd; left: 245px; border: 1px solid #ddd; border-radius: 3px; position: fixed; bottom: 0;  box-shadow: 0 0 8px rgba(0,0,0,0.1); z-index: 99999;}
+.app-action .parts{padding: 10px 10px 5px; border-bottom: 1px dotted #ddd;}
+.app-action .parts nav{width: 92px; padding: 5px 0; margin: 0 5px 5px 0; text-align: center; color: inherit;}
+.app-action .parts nav.active{background: #f4f4f4;}
+.app-action .parts nav:hover{text-decoration: none; background: #fff; border: 1px solid #ddd; transition: all 0.4s; color: #1ab394;}
+.app-action .parts nav .icon{font-weight: bold;}
+.app-action .action{padding: 10px; text-align: right; position: relative; font-size: 12px; }
+
+.postera{position: relative;}
+.postera .bg{position: absolute; width: 100%; z-index: 0}
+.postera .drag {position: absolute; width:80px; height:80px; border:1px solid #000; }
+.postera .drag img {position:absolute; z-index:0; width:100%; height:100%; }
+.postera .drag.drag-background{width: 100%; height: 100%; border: none}
+.postera .rRightDown,.rLeftDown,.rLeftUp,.rRightUp,.rRight,.rLeft,.rUp,.rDown{
+	position:absolute;
+	width:7px;
+	height:7px;
+	z-index:1;
+	font-size:0;
+}
+
+
+.postera .rRightDown,.rLeftDown,.rLeftUp,.rRightUp,.rRight,.rLeft,.rUp,.rDown{
+	background:#C00;
+}
+.rLeftDown,.rRightUp{cursor:ne-resize;}
+.rRightDown,.rLeftUp{cursor:nw-resize;}
+.rRight,.rLeft{cursor:e-resize;}
+.rUp,.rDown{cursor:n-resize;}
+.rLeftDown{left:-4px;bottom:-4px;}
+.rRightUp{right:-4px;top:-4px;}
+.rRightDown{right:-4px;bottom:-4px;}
+
+.rRightDown{background-color:#00F;}
+
+.rLeftUp{left:-4px;top:-4px;}
+.rRight{right:-4px;top:50%;margin-top:-4px;}
+.rLeft{left:-4px;top:50%;margin-top:-4px;}
+.rUp{top:-4px;left:50%;margin-left:-4px;}
+.rDown{bottom:-4px;left:50%;margin-left:-4px;}
+.context-menu-layer { z-index:9999;}
+.context-menu-list { z-index:9999;}

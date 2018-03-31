@@ -1,0 +1,21 @@
+{itemplate 'public/header'}
+<div class="page clearfix">
+	<h2>微信模板消息</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">外卖订单通知</label>
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="text" class="form-control" name="wechat[public_tpl]" value="{$wechat['public_tpl']}" required>
+				<div class="help-block">*模板编号AT0009,关键词(订单号码,订单类型,订单状态,联系人姓名,联系人手机号,支付时间,支付金额,订单编号)
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="wechat[token" value="{$_W['token']}">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{itemplate 'public/footer'}

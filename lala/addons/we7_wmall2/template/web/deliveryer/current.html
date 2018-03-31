@@ -1,0 +1,114 @@
+{itemplate 'public/header'}
+{if $op == 'list'}
+<form action="./index.php?" class="form-horizontal form-filter" id="form1">
+	{php echo tpl_form_filter_hidden('deliveryer/current/list');}
+	<input type="hidden" name="days" value="{$days}"/>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">类型</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('trade_type:0');}" class="btn {if $trade_type == 0}btn-primary{else}btn-default{/if}">全部</a>
+				<a href="{php echo ifilter_url('trade_type:1');}" class="btn {if $trade_type == 1}btn-primary{else}btn-default{/if}">订单入账</a>
+				<a href="{php echo ifilter_url('trade_type:2');}" class="btn {if $trade_type == 2}btn-primary{else}btn-default{/if}">申请提现</a>
+				<a href="{php echo ifilter_url('trade_type:3');}" class="btn {if $trade_type == 3}btn-primary{else}btn-default{/if}">其他变动</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">申请时间</label>
+		<div class="col-sm-9 col-xs-12 js-daterange" data-form="#form1">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('days:-2');}" class="btn {if $days == -2}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo ifilter_url('days:7');}" class="btn {if $days == 7}btn-primary{else}btn-default{/if}">近一周</a>
+				<a href="{php echo ifilter_url('days:30');}" class="btn {if $days == 30}btn-primary{else}btn-default{/if}">近一月</a>
+				<a href="{php echo ifilter_url('days:90');}" class="btn {if $days == 90}btn-primary{else}btn-default{/if}">近三月</a>
+				<a href="javascript:;" class="btn js-btn-custom {if $days == -1}btn-primary{else}btn-default{/if}">自定义</a>
+			</div>
+			<span class="js-btn-daterange {if $days != -1}hide{/if}">
+				{php echo tpl_form_field_daterange('addtime', array('start' => date('Y-m-d', $starttime), 'end' => date('Y-m-d', $endtime)));}
+			</span>
+		</div>
+	</div>
+	<div class="form-group form-inline">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">其他</label>
+		<div class="col-sm-9 col-xs-12">
+			{if $_W['is_agent']}
+				<select name="agentid" class="select2 js-select2 form-control width-130">
+					<option value="0">选择代理区域</option>
+					{loop $_W['agents'] $agent}
+						<option value="{$agent['id']}" {if $agentid == $agent['id']}selected{/if}>{$agent['area']}</option>
+					{/loop}
+				</select>
+			{/if}
+			<select name="deliveryer_id" class="form-control select2" >
+				<option value="0" {if !$sid}selected{/if}>==选择配送员==</option>
+				{loop $deliveryers $deliveryer}
+					<option value="{$deliveryer['id']}" {if $deliveryer_id == $deliveryer['id']}selected{/if}>{$deliveryer['title']}</option>
+				{/loop}
+			</select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-9 col-xs-12">
+			<button class="btn btn-primary">筛选</button>
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			<table class="table table-hover">
+				<thead class="navbar-inner">
+					<tr>
+						<th>时间</th>
+						{if $_W['is_agent']}
+							<th>所属城市</th>
+						{/if}
+						<th>配送员</th>
+						<th>微信昵称</th>
+						<th>类型</th>
+						<th>收入|支出(元)</th>
+						<th>账户余额</th>
+					</tr>
+				</thead>
+				<tbody>
+				{loop $records $record}
+					<tr>
+						<td>{php echo date('Y-m-d H:i', $record['addtime']);}</td>
+						{if $_W['is_agent']}
+							<td>{php echo toagent($record['agentid'])}</td>
+						{/if}
+						<td>
+							<img src="{$deliveryers[$record['deliveryer_id']]['avatar']}" alt="" width="50" height="50" style="border-radius: 100%"/>
+							{$deliveryers[$record['deliveryer_id']]['title']}
+						</td>
+						<td>{$deliveryers[$record['deliveryer_id']]['nickname']}</td>
+						<td>
+							<span class="{$order_trade_type[$record['trade_type']]['css']}">{$order_trade_type[$record['trade_type']]['text']}</span>
+						</td>
+						<td>
+							<span {if !empty($record['remark'])}data-toggle="popover" title="交易备注" data-content="{$record['remark']}"{/if}>
+							{if $record['fee'] > 0}
+								<strong class="text-success">+{$record['fee']}元</strong>
+							{else}
+								<strong class="text-danger">{$record['fee']}元</strong>
+							{/if}
+							{if !empty($record['remark'])}
+								<i class="fa fa-question-circle"></i>
+							{/if}
+							</span>
+						</td>
+						<td>
+							<strong>{$record['amount']}元</strong>
+						</td>
+					</tr>
+				{/loop}
+				</tbody>
+			</table>
+			{$pager}
+		</div>
+	</div>
+</form>
+{/if}
+{itemplate 'public/footer'}

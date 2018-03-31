@@ -1,0 +1,190 @@
+{itemplate 'public/header'}
+<div class="page clearfix page-config-store-delivery">
+	<h2>服务费率</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require">* </span>配送模式</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" name="delivery_mode" value="1" id="delivery-mode-1" required="true" {if $delivery['delivery_mode'] == 1}checked{/if}>
+					<label for="delivery-mode-1">店内配送员</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="delivery_mode" value="2" id="delivery-mode-2" required="true" {if $delivery['delivery_mode'] == 2}checked{/if}>
+					<label for="delivery-mode-2">平台配送员</label>
+				</div>
+				<div class="help-block">
+					门店只能选择一个配送方式, 不能同时使用"平台配送员"和"店内配送员". <br>
+					如需单独设置某个门店的配送模式,配送费,配送时间段等信息, 请到"<a href="{php echo iurl('merchant/account/index');}" target="_blank">财务中心-门店账户</a>"进行设置.
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">平台配送费模式</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" name="delivery_fee_mode" value="1" id="delivery-fee-mode-1" required="true" {if $delivery['delivery_fee_mode'] == 1 || !$delivery['delivery_fee_mode']}checked{/if} onclick="$('.delivery-fee-mode').hide();$('.delivery-fee-mode-1').show();">
+					<label for="delivery-fee-mode-1">固定金额</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="delivery_fee_mode" value="2" id="delivery-fee-mode-2" required="true" {if $delivery['delivery_fee_mode'] == 2}checked{/if} onclick="$('.delivery-fee-mode').hide();$('.delivery-fee-mode-2').show();">
+					<label for="delivery-fee-mode-2">按距离收取</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group delivery-fee-mode delivery-fee-mode-1" {if $delivery['delivery_fee_mode'] == 1 || !$delivery['delivery_fee_mode']}style="display: block"{/if}>
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<div class="input-group-addon">每单</div>
+					<input type="text" name="delivery_fee" value="{$delivery['delivery_fee']}" required="true" class="form-control"/>
+					<div class="input-group-addon">元</div>
+				</div>
+				<div class="help-block">
+					如需单独设置某个门店的配送模式,配送费,配送时间段等信息, 请到"<a href="{php echo iurl('merchant/account/index');}" target="_blank">财务中心-门店账户</a>"进行设置.
+					<br/>
+					此项设置: 商家使用平台配送模式后, 下单人需要支付的配送费.使用平台配送模式后, 商家将不能自己变更配送费, 只能由平台管理员设置配送费.
+				</div>
+			</div>
+		</div>
+		<div class="form-group delivery-fee-mode delivery-fee-mode-2" {if $delivery['delivery_fee_mode'] == 2}style="display: block"{/if}>
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon">起步价</span>
+					<input type="text" class="form-control" name="start_fee" required="true" value="{$delivery['delivery_fee']['start_fee']}">
+					<span class="input-group-addon">元包含</span>
+					<input type="text" class="form-control" name="start_km" required="true" value="{$delivery['delivery_fee']['start_km']}">
+					<span class="input-group-addon">公里</span>
+				</div>
+				<br>
+				<div class="input-group">
+					<span class="input-group-addon">每增加1公里加</span>
+					<input type="text" class="form-control" name="pre_km_fee" required="true" value="{$delivery['delivery_fee']['pre_km_fee']}">
+					<span class="input-group-addon">元</span>
+				</div>
+				<div class="help-block">
+					如需单独设置某个门店的配送模式,配送费,配送时间段等信息, 请到"<a href="{php echo iurl('merchant/account/index');}" target="_blank">财务中心-门店账户</a>"进行设置.
+					<br/>
+					特别注意: 设置按照"按距离收取"配送费后,系统会自动变更使用"平台配送"模式商家的某些配置。包括:收货地址被设置为自动获取, 超过配送范围是仍可下单
+					<br/>
+					此项设置: 商家使用平台配送模式后, 下单人需要支付的配送费.使用平台配送模式后, 商家将不能自己变更配送费, 只能由平台管理员设置配送费.
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">配送时间段</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon">间隔</span>
+					<input type="text" class="form-control" name="pre_delivery_time_minute" required="true" digits="true" value="{$delivery['pre_delivery_time_minute']}">
+					<span class="input-group-addon">分钟</span>
+					<div class="input-group-btn btn-build-delivery-time">
+						<a href="javascript:;" class="btn btn-primary">生成配送时间段</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="delivery-times" class="delivery-times">
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+				<div class="col-sm-9 col-xs-12 containter">
+					{loop $delivery_times $time}
+						<div class="col-sm-6">
+							<div class="input-group">
+								<span class="input-group-addon">{$time['start']} ~ {$time['end']}</span>
+								<span class="input-group-addon">附加费</span>
+								<input type="text" class="form-control" name="times[fee][]" value="{$time['fee']}" placeholder="增加附加费">
+								<input type="hidden" name="times[start][]" value="{$time['start']}"/>
+								<input type="hidden" name="times[end][]" value="{$time['end']}"/>
+								<input type="hidden" name="times[status][]" value="{$time['status']}">
+								<span class="input-group-addon">元</span>
+								<div class="input-group-btn">
+									<a href="javascript:;" class="btn btn-delivery-time-item {if $time['status'] == 1}btn-success{else}btn-default{/if}">{if $time['status'] == 1}使用中{else}已弃用{/if}</a>
+								</div>
+							</div>
+						</div>
+					{/loop}
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">将配送模式和配送费同步到所有商户</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<div class="checkbox checkbox-inline">
+						<input type="checkbox" name="delivery_sync" id="delivery-sync" value="1"/>
+						<label for="delivery-sync">将配送模式和配送费,配送时间段同步到所有商户</label>
+					</div>
+				</div>
+				<div class="help-block">同步后,所有商户的配送员模式都会被设置为这个规则</div>
+			</div>
+		</div>
+		<div class="form-group col-sm-12">
+			<input type="submit" value="提交" class="btn btn-primary">
+		</div>
+	</form>
+</div>
+<script id="tpl-delivery-time" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<div class="col-sm-6">
+			<div class="input-group">
+				<span class="input-group-addon"><{d[i].start}> ~ <{d[i].end}></span>
+				<span class="input-group-addon">附加费</span>
+				<input type="text" class="form-control" name="times[fee][]" value="<{d[i].fee}>" placeholder="增加附加费">
+				<input type="hidden" name="times[start][]" value="<{d[i].start}>"/>
+				<input type="hidden" name="times[end][]" value="<{d[i].end}>"/>
+				<input type="hidden" name="times[status][]" value="1">
+				<span class="input-group-addon">元</span>
+				<div class="input-group-btn">
+					<a href="javascript:;" class="btn btn-success btn-delivery-time-item">使用中</a>
+				</div>
+			</div>
+		</div>
+	<{# } }>
+</script>
+<script>
+$(function(){
+	$('#form1').submit(function(){
+		var delivery_times_length = $('#delivery-times .containter .input-group').size();
+		if(!delivery_times_length) {
+			Notify.error('请先生成配送时间段');
+			return false;
+		}
+	});
+
+	$(document).on('click', '.btn-build-delivery-time', function(){
+		var pre_minute = parseInt($.trim($(':text[name="pre_delivery_time_minute"]').val()));
+		if(!pre_minute) {
+			Notify.error('时间间隔必须大于0');
+			return false;
+		}
+		$.post("{php echo iurl('common/utility/build_time');}", {pre_minute: pre_minute}, function(data) {
+			var result = $.parseJSON(data);
+			if(result.message.errno == -1) {
+				Notify.error(result.message.message);
+				return false;
+			}
+			var gettpl = $('#tpl-delivery-time').html();
+			irequire(['laytpl'], function(laytpl){
+				laytpl(gettpl).render(result.message.message, function(html){
+					$('#delivery-times .containter').html(html);
+				});
+			});
+		});
+	});
+
+	$(document).on('click', '.btn-delivery-time-item', function(){
+		if($(this).hasClass('btn-success')) {
+			$(this).parent().prev().prev().val(0);
+			$(this).removeClass('btn-success').addClass('btn-default');
+			$(this).html('已弃用');
+		} else {
+			$(this).parent().prev().prev().val(1);
+			$(this).removeClass('btn-default').addClass('btn-success');
+			$(this).html('使用中');
+		}
+	});
+});
+</script>
+{itemplate 'public/footer'}

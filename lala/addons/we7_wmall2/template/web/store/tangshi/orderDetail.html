@@ -1,0 +1,176 @@
+{itemplate 'public/header'}
+<div class="clearfix order-detail">
+	<div class="col-md-4 padding-0">
+		<div class="panel panel-display">
+			<div class="panel-heading"><h3>订单信息</h3></div>
+			<div class="panel-body">
+				<table class="table">
+					<tr>
+						<td width="130">购买人UID：</td>
+						<td>{$order['uid']}</td>
+					</tr>
+					<tr>
+						<td width="130">订单编号：</td>
+						<td>{$order['ordersn']}</td>
+					</tr>
+					<tr>
+						<td>下单时间：</td>
+						<td>{php echo date('Y-m-d H:i', $order['addtime']);}</td>
+					</tr>
+					<tr>
+						<td>订单状态：</td>
+						<td><span class="{$order_status[$order['status']]['css']}">{$order_status[$order['status']]['text']}</span></td>
+					</tr>
+					{if $order['order_type'] == 3}
+						<tr>
+							<td>桌号：</td>
+							<td>{$order['table']['title']}桌 {$order['person_num']}人就餐</td>
+						</tr>
+					{else}
+						<tr>
+							<td>预订时间：</td>
+							<td>{$order['reserve_time']}</td>
+						</tr>
+						<tr>
+							<td>桌台：</td>
+							<td>{$order['table_category']['title']}</td>
+						</tr>
+						<tr>
+							<td>预定类型：</td>
+							<td>{$order['reserve_type_cn']}</td>
+						</tr>
+					{/if}
+					<tr>
+						<td>付款方式：</td>
+						<td>
+							{if !$order['is_pay']}
+								<span class="label label-danger">未支付</span>
+							{else}
+								<span class="{$pay_types[$order['pay_type']]['css']}">{$pay_types[$order['pay_type']]['text']}</span>
+							{/if}
+						</td>
+					</tr>
+					<tr>
+						<td>下单人信息：</td>
+						<td>{$order['username']} {$order['mobile']}</td>
+					</tr>
+					<tr>
+						<td>备注：</td>
+						<td>{if !empty($order['note'])}{$order['note']}{else}无{/if}</td>
+					</tr>
+					<tr>
+						<td>发票：</td>
+						<td>{if !empty($order['invoice'])}{$order['invoice']}{else}无{/if}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="panel panel-display">
+			<div class="panel-heading"><h3>订单日志</h3></div>
+			<div class="panel-body">
+				<table class="table">
+					{loop $logs $log}
+					<tr>
+						<td>
+							<p><i class="fa fa-info-circle"></i> <strong>{php echo date('Y-m-d H:i', $log['addtime']);} {$log['title']}</strong></p>
+							<p style="padding-left:15px; ">{$log['note']}</p>
+						</td>
+					</tr>
+					{/loop}
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8 padding-r-0">
+		<div class="panel panel-display">
+			<div class="panel-heading"><h3>订单费用</h3></div>
+			<div class="panel-body">
+				<table class="table">
+					<tr>
+						<td width="130">商品价格：</td>
+						<td>+￥ {$order['price']}</td>
+					</tr>
+					<tr>
+						<td width="130">餐盒费：</td>
+						<td>+￥ {$order['box_price']}</td>
+					</tr>
+					<tr>
+						<td width="130">包装费：</td>
+						<td>+￥ {$order['pack_fee']}</td>
+					</tr>
+					<tr>
+						<td width="130">配送费：</td>
+						<td>+￥ {$order['delivery_fee']}</td>
+					</tr>
+					<tr>
+						<td width="130">平台抽取佣金：</td>
+						<td>
+							-￥ {$order['plateform_serve_fee']} =
+							{if !empty($order['plateform_serve'])}
+								{$order['plateform_serve']['note']}
+							{else}
+								(商品小计￥{$order['price']} + 餐盒费￥{$order['box_price']} + 包装费￥{$order['pack_fee']}{if $order['delivery_type'] == 1} + 配送费￥{$order['delivery_fee']}{/if} - 商户优惠活动补贴￥{$order['store_discount_fee']})X{$order['plateform_serve_rate']}%
+							{/if}
+						</td>
+					</tr>
+					<tr>
+						<td width="130">平台配送费：</td>
+						<td>
+							-￥ {$order['plateform_delivery_fee']}
+						</td>
+					</tr>
+					{if $order['discount_fee'] > 0}
+						{loop $discount $row}
+							<tr>
+								<td width="130">{$row['name']}：</td>
+								<td>
+									- ￥ {$row['fee']} (注：商户承担：￥{$row['store_discount_fee']}， 平台承担￥{$row['plateform_discount_fee']})
+								</td>
+							</tr>
+						{/loop}
+					{/if}
+					<tr>
+						<td width="130">本单平台共补贴：</td>
+						<td>
+							+￥ {$order['plateform_discount_fee']}
+						</td>
+					</tr>
+					<tr>
+						<td width="130">商户实际收入：</td>
+						<td>
+							￥ {$order['store_final_fee']} (本单顾客实际支付:￥ {$order['final_fee']})
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="panel panel-display">
+			<div class="panel-heading"><h3>商品信息</h3></div>
+			<div class="panel-body">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>商品</th>
+							<th>份数</th>
+							<th>小计(元)</th>
+							<th></th>
+						</tr>
+					</thead>
+					{if !empty($order['goods'])}
+						{loop $order['goods'] $or}
+							<tr>
+								<td>{$or['goods_title']}</td>
+								<td>{$or['goods_num']} 份</td>
+								<td>{$or['goods_price']} 元</td>
+								<td class="text-right">
+									<a class="btn btn-primary btn-sm" target="_blank" href="{php echo iurl('store/goods/index/post', array('id' => $or['goods_id']));}">商品信息</a>
+								</td>
+							</tr>
+						{/loop}
+					{/if}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{itemplate 'public/footer'}

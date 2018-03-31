@@ -1,0 +1,49 @@
+{itemplate 'public/header'}
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			{if empty($redpackets)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+					<tr>
+						<th>红包名称</th>
+						<th>红包活动id</th>
+						<th>红包金额</th>
+						<th>使用条件</th>
+						<th>发放后几天生效</th>
+						<th>有效期</th>
+						<th>使用时间段限制</th>
+						<th>使用分类限制</th>
+						<th>剩余数量</th>
+					</tr>
+					</thead>
+					<tbody>
+						{loop $redpackets $redpacket}
+							<tr>
+								<td>{$redpacket['title']}</td>
+								<td>{$redpacket['activity_id']}</td>
+								<td>{php echo floatval($redpacket['discount'])}元</td>
+								<td>满{php echo floatval($redpacket['condition'])}元</td>
+								<td>{$redpacket['grant_days_effect']}天</td>
+								<td>{$redpacket['use_days_limit']}天</td>
+								<td>{php echo totime($redpacket['times_limit'])}</td>
+								<td>{php echo tocategory($redpacket['category_limit'])}</td>
+								<td>{$redpacket['nums']}</td>
+							</tr>
+						{/loop}
+					</tbody>
+				</table>
+				<div class="btn-region clearfix">
+					<div class="pull-right">
+						{$pager}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{itemplate 'public/footer'}

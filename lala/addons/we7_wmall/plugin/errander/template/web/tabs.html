@@ -1,0 +1,54 @@
+<div class="second-sidebar-title">{$_W['_plugin']['title']}</div>
+<div class="nav slimscroll">
+	{ifp 'errander.order'}
+		<div class="menu-header">订单</div>
+		<ul class="menu-item">
+			<li {if $_GPC['filter_type'] == 'process'}class="active"{/if}>
+				<a href="{php echo iurl('errander/order/list', array('filter_type' => 'process'));}">未完成</a>
+			</li>
+			<li {if $_GPC['filter_type'] == 'refund_status'}class="active"{/if}>
+				<a href="{php echo iurl('errander/order/list', array('refund_status' => 1, 'filter_type' => 'refund_status'));}">退款单</a>
+			</li>
+			<li {if $_GPC['filter_type'] == 'all'}class="active"{/if}>
+				<a href="{php echo iurl('errander/order/list', array('filter_type' => 'all'));}">所有订单</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'errander.statcenter'}
+		<div class="menu-header">数据</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'statcenter'}class="active"{/if}>
+				<a href="{php echo iurl('errander/statcenter')}">跑腿统计</a>
+			</li>
+			<li {if $_W['_action'] == 'statDelivery' && $_GPC['op'] == 'index'}class="active"{/if}>
+				<a href="{php echo iurl('errander/statDelivery/index')}">配送统计</a>
+			</li>
+			<li {if $_W['_action'] == 'statDelivery' && $_GPC['op'] == 'day'}class="active"{/if}>
+				<a href="{php echo iurl('errander/statDelivery/day')}">配送详情</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'errander.category'}
+		<div class="menu-header">跑腿分类</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'category'}class="active"{/if}>
+				<a href="{php echo iurl('errander/category/list');}">分类列表</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'errander.config' || 'errander.cover'}
+		<div class="menu-header">设置</div>
+		<ul class="menu-item">
+			{ifp 'errander.config'}
+				<li {if $_W['_action'] == 'config'}class="active"{/if}>
+					<a href="{php echo iurl('errander/config/index');}">跑腿设置</a>
+				</li>
+			{/if}
+			{ifp 'errander.cover'}
+				<li {if $_W['_action'] == 'cover'}class="active"{/if}>
+					<a href="{php echo iurl('errander/cover/index');}">入口设置</a>
+				</li>
+			{/if}
+		</ul>
+	{/if}
+</div>

@@ -1,0 +1,146 @@
+{itemplate 'public/header'}
+<div class="page advertise-confirm advertise-stick-confirm ">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">商家置顶推广</h1>
+	</header>
+	<nav class="bar bar-footer-secondary">
+		{if !empty($advertise_stick['leave'])}
+		<button class="button button-block button-fill" id="formsubmit">立即购买</button>
+		{else}
+		<button class="button button-block button-fill" disabled>此广告位已售罄，去看看其他广告位</button>
+		{/if}
+	</nav>
+	<div class="content">
+		<form method="post" id="order-form" action="{php echo imurl('manage/advertise/stick/submit'), array()}">
+			<div class="content-block-title">可选广告位置</div>
+			<div class="list-block media-list pay-method">
+				<ul class="border-1px-tb">
+					{loop $displayorder_fees $row}
+					<li>
+						<label class="label-checkbox item-content border-1px-b">
+							<div class="item-inner">
+								<div class="item-title">置顶 <span style="color: red">No.{$row['displayorder']}</div>
+							</div>
+							<input type="radio" name="displayorder" class="stick" value="{$row['displayorder']}" data-sailed="{$row['sailed']}" {if $row['sailed'] == 0}checked{/if}>
+							<div class="item-media"><span></span><i class="icon icon-form-checkbox"></i></div>
+						</label>
+					</li>
+					{/loop}
+				</ul>
+			</div>
+				{loop $displayorder_fees $row}
+				<div class="list-block media-list prices-container prices-container-{$row['displayorder']}">
+					<ul class="border-1px-tb">
+						<li>
+							<div class="label-radio item-content border-1px-b">
+								<div class="item-inner">
+									<div class="item-title">置顶 <span style="color: red">No.{$row['displayorder']}</span> 可选价目{if $row['sailed'] == 1}（已售）{/if}:</div>
+								</div>
+							</div>
+						</li>
+						{loop $row['fees'] $fees}
+						<li>
+							<label class="label-checkbox item-content border-1px-b">
+								<div class="item-inner">
+									<div class="item-title">购买广告{$fees['day']}天{$fees['fee']}元</div>
+								</div>
+								<input type="radio" name="day" class="prices" value="{$fees['day']}" {if $row['sailed'] == 1} disabled {else} checked {/if}>
+								<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+							</label>
+						</li>
+						{/loop}
+					</ul>
+				</div>
+				{/loop}
+			<div class="content-block-title">选择支付方式</div>
+			<div class="list-block media-list pay-method">
+				<ul class="border-1px-tb">
+					<li>
+						<label class="label-checkbox item-content border-1px-b">
+							<div class="item-inner">
+								<div class="item-title">微信支付</div>
+							</div>
+							<input type="radio" name="pay_type" class="pay_type" value="wechat" checked>
+							<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+						</label>
+					</li>
+					<li>
+						<label class="label-checkbox item-content border-1px-b">
+							<div class="item-inner">
+								<div class="item-title">支付宝支付</div>
+							</div>
+							<input type="radio" name="pay_type" class="pay_type" value="alipay">
+							<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+						</label>
+					</li>
+					<li>
+						<label class="label-checkbox item-content border-1px-b">
+							<div class="item-inner">
+								<div class="item-title">余额支付 账户余额:<span class="amount">{$amount}元</span></div>
+							</div>
+							<input type="radio" name="pay_type" class="pay_type" value="credit">
+							<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+						</label>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	$('.stick').bind('click', function(){
+		$('.prices-container').hide();
+		$('.'+'prices-container-'+$(':radio[name="displayorder"]:checked').val()).show();
+		var status = $(this).data('sailed');
+		if(status == 1) {
+			var html = '<button class="button button-block button-fill" disabled>此广告位已售罄，去看看其他广告位</button>';
+			$('.bar-footer-secondary').children().remove();
+			$('.bar-footer-secondary').html(html);
+		} else {
+			var html = '<button class="button button-block button-fill" id="formsubmit">立即购买</button>';
+			$('.bar-footer-secondary').children().remove();
+			$('.bar-footer-secondary').html(html);
+		}
+	});
+
+	$('.stick:checked').trigger('click');
+
+	$(':radio[name="day"]:disabled').next().children().remove();
+
+	$(document).on('click', '#formsubmit', function(){
+		var displayorder = $(':radio[name="displayorder"]:checked').val();
+		if(!displayorder) {
+			$.toast('请选择广告位置');
+			return false;
+		}
+		var day = $(':radio[name="day"]:checked').val();
+		if(!day) {
+			$.toast('请选择购买天数');
+			return false;
+		}
+		var pay_type = $(':radio[name="pay_type"]:checked').val();
+		if(!pay_type) {
+			$.toast('请选择支付方式');
+			return false;
+		}
+		var params = {
+			displayorder: displayorder,
+			day: day,
+			pay_type: pay_type,
+		};
+		$.post("{php echo imurl('manage/advertise/stick');}", params, function(data) {
+			var result = $.parseJSON(data);
+			if(result.message.errno == -1) {
+				$.toast(result.message.message);
+			} else {
+				$.toast('下单成功');
+				location.href = "{php echo imurl('manage/pay/pay', array('order_type' => 'advertise'));}&id=" + result.message.message.id + "&sid="+ result.message.message.sid;
+			}
+		});
+	});
+});
+</script>
+{itemplate 'public/footer'}

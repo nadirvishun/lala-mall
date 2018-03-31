@@ -1,0 +1,76 @@
+{itemplate 'public/header'}
+<form action="./wmerchant.php" class="form-horizontal form-log">
+	{php echo tpl_form_filter_hidden('store/finance/account/log');}
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">交易类型</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('trade_type:0');}" class="btn {if $trade_type == 0}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo ifilter_url('trade_type:1');}" class="btn {if $trade_type == 1}btn-primary{else}btn-default{/if}">外卖店内订单入账</a>
+				<a href="{php echo ifilter_url('trade_type:4');}" class="btn {if $trade_type == 4}btn-primary{else}btn-default{/if}">买单订单入账</a>
+				<a href="{php echo ifilter_url('trade_type:2');}" class="btn {if $trade_type == 2}btn-primary{else}btn-default{/if}">申请提现</a>
+				<a href="{php echo ifilter_url('trade_type:3');}" class="btn {if $trade_type == 3}btn-primary{else}btn-default{/if}">其他变动</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">变动时间</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="js-daterange" data-form=".form-log">
+				{php echo tpl_form_field_daterange('addtime', array('start' => date('Y-m-d', $starttime), 'end' => date('Y-m-d', $endtime)));}
+			</div>
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			<table class="table table-hover">
+				<thead class="navbar-inner">
+					<tr>
+						<th>时间</th>
+						<th>类型</th>
+						<th>收入|支出(元)</th>
+						<th>账户余额</th>
+						<th style="width:150px; text-align:right;">操作</th>
+					</tr>
+					</thead>
+					<tbody>
+					{loop $records $record}
+					<tr>
+						<td>{php echo date('Y-m-d H:i', $record['addtime']);}</td>
+						<td>
+							<span class="{$order_trade_type[$record['trade_type']]['css']}">{$order_trade_type[$record['trade_type']]['text']}</span>
+						</td>
+						<td>
+							<span {if !empty($record['remark'])}data-toggle="popover" title="交易备注" data-content="{$record['remark']}"{/if}>
+							{if $record['fee'] > 0}
+							<strong class="text-success">+{$record['fee']}元</strong>
+							{else}
+							<strong class="text-danger">{$record['fee']}元</strong>
+							{/if}
+							{if !empty($record['remark'])}
+							<i class="fa fa-question-circle"></i>
+							{/if}
+							</span>
+						</td>
+						<td>
+							<strong>{$record['amount']}元</strong>
+						</td>
+						<td style="text-align:right;">
+							{if $record['trade_type'] == 1}
+							<a href="{php echo iurl('store/order/takeout/detail', array('id' => $record['extra']))}" class="btn btn-default btn-sm" target="_blank">查看</a>
+							{elseif $record['trade_type'] == 2}
+							<a href="{php echo iurl('store/finance/getcash/log')}" class="btn btn-default btn-sm" target="_blank">详情</a>
+							{/if}
+						</td>
+					</tr>
+					{/loop}
+					</tbody>
+				</table>
+				{$pager}
+			</div>
+		</div>
+	</div>
+</form>
+{itemplate 'public/footer'}

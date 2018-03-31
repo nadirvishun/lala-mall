@@ -1,0 +1,35 @@
+<div class="second-sidebar-title">
+	设置
+</div>
+<div class="nav slimscroll">
+	<div class="menu-header">平台</div>
+	<ul class="menu-item">
+		<li {if $_W['_router'] == 'config/mall/basic'}class="active"{/if}>
+			<a href="{php echo iurl('config/mall/basic');}">基础设置</a>
+		</li>
+	</ul>
+	<div class="menu-header">商户</div>
+	<ul class="menu-item">
+		<li {if $_W['_router'] == 'config/store/serve_fee'}class="active"{/if}>
+			<a href="{php echo iurl('config/store/serve_fee');}">服务费率</a>
+		</li>
+		<li {if $_W['_router'] == 'config/store/delivery'}class="active"{/if}>
+		<a href="{php echo iurl('config/store/delivery');}">配送模式</a>
+		</li>
+		<li {if $_W['_router'] == 'config/store/extra'}class="active"{/if}>
+		<a href="{php echo iurl('config/store/extra');}">其他批量操作</a>
+		</li>
+	</ul>
+	<div class="menu-header">外卖</div>
+	<ul class="menu-item">
+		<li {if $_W['_router'] == 'config/takeout/range'}class="active"{/if}>
+			<a href="{php echo iurl('config/takeout/range');}">服务范围</a>
+		</li>
+		<li {if $_W['_router'] == 'config/takeout/order'}class="active"{/if}>
+			<a href="{php echo iurl('config/takeout/order');}">订单相关</a>
+		</li>
+		<li {if $_W['_router'] == 'config/takeout/deliveryer'}class="active"{/if}>
+			<a href="{php echo iurl('config/takeout/deliveryer');}">配送员提成</a>
+		</li>
+	</ul>
+</div>

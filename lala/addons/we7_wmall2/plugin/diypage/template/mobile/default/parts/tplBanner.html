@@ -1,0 +1,9 @@
+{if !empty($diyitem['data'])}
+	{loop $diyitem['data'] $banner}
+		<div class="diy-banner" style="padding-top: {$diyitem['style']['paddingtop']}px; padding-bottom: {$diyitem['style']['paddingtop']}px; padding-left: {$diyitem['style']['paddingleft']}px; padding-right: {$diyitem['style']['paddingleft']}px; background: {$diyitem['style']['background']};">
+			<a href="{$banner['linkurl']}">
+				<img src="{php echo tomedia($banner['imgurl']);}">
+			</a>
+		</div>
+	{/loop}
+{/if}

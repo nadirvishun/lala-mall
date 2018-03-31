@@ -1,0 +1,21 @@
+{itemplate 'public/header'}
+<div class="page">
+	<div class="content">
+		<div class="infinite-scroll-preloader">
+			<div class="preloader"></div>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	var myDate=new Date()
+	console.log(myDate);
+	var time = "{php echo time();}"
+
+	console.log(time);
+	console.log('ooooooooo');
+	console.log(myDate.getTime() / 1000);
+});
+</script>
+{itemplate 'public/footer'}
+

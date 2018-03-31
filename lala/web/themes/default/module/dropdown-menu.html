@@ -1,0 +1,40 @@
+<span class="top-view">
+{if !empty($selected_account)}
+	{if in_array($_W['account']['type'], array(ACCOUNT_TYPE_OFFCIAL_NORMAL, ACCOUNT_TYPE_OFFCIAL_AUTH))}
+		<a href="{if $_W['role'] == ACCOUNT_MANAGE_NAME_CLERK}javascript:;{else}{php echo url('account/display/switch', array('uniacid' => $_W['uniacid']))}{/if}" title="{php echo $_W['account']['name']}" target="_blank">
+			<i class="wi wi-wechat"></i>{$_W['account']['name']}
+		</a>
+		{if !empty($selected_account['version_info'])}
+		<a href="{if $_W['role'] == ACCOUNT_MANAGE_NAME_CLERK}javascript:;{else}{php echo url('wxapp/display/switch', array('uniacid' => $selected_account['version_info']['uniacid'], 'version_id' => $selected_account['version_id']))}{/if}" title="{php echo $account['wxapp_name']}" target="_blank">
+			<i class="wi wi-wxapp"></i>{$account['wxapp_name']}
+		</a>
+		{/if}
+	{/if}
+	{if $_W['account']['type'] == ACCOUNT_TYPE_APP_NORMAL}
+		{if $selected_account['version_info']['uniacid'] != $selected_account['uniacid']}
+		<a href="{if $_W['role'] == ACCOUNT_MANAGE_NAME_CLERK}javascript:;{else}{php echo url('account/display/switch', array('uniacid' => $selected_account['uniacid']))}" title="{php echo $_W['account']['name']}{/if}" target="_blank">
+			<i class="wi wi-wechat"></i>{$_W['account']['name']}
+		</a>
+		{/if}
+		<a href="{if $_W['role'] == ACCOUNT_MANAGE_NAME_CLERK}javascript:;{else}{php echo url('wxapp/display/switch', array('uniacid' => $selected_account['version_info']['uniacid'], 'version_id' => $selected_account['version_id']))}{/if}" title="{php echo $selected_account['wxapp_name']}" target="_blank">
+			<i class="wi wi-wxapp"></i>{$selected_account['wxapp_name']}
+		</a>
+	{/if}
+{/if}
+</span>
+<span class="dropdown">
+	<a href="javascript:;" class="dropdown-icon" data-toggle="dropdown" aria-expanded="false"><i class="wi wi-angle-down"></i></a>
+	<ul class="dropdown-menu dropdown-menu-right" role="menu">
+		{loop $accounts_list $account}
+		<li>
+			<a href="{php echo $account['url']}">
+				{if !empty($account['app_name'])}<span><i class="wi wi-wechat"></i>{$account['app_name']}</span>{/if}
+				{if !empty($account['app_name']) && !empty($account['wxapp_name'])}
+				<span class="plus"><i class="wi wi-plus"></i></span>
+				{/if}
+				{if !empty($account['wxapp_name'])}<span><i class="wi wi-wxapp"></i>{$account['wxapp_name']}</span>{/if}
+			</a>
+		</li>
+		{/loop}
+	</ul>
+</span>

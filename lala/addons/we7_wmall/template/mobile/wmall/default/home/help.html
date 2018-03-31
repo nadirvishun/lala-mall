@@ -1,0 +1,30 @@
+{itemplate 'public/header'}
+<div class="page help" id="page-app-help">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">常见问题</h1>
+	</header>
+	<div class="content">
+		<div class="list-block">
+			<ul>
+				{loop $helps $help}
+					<li class="item-content item-help-title border-1px-b">
+						<div class="item-inner">
+							<div class="item-title">{$help['title']}</div>
+							<div class="item-after"><i class="icon icon-arrow-down"></i></div>
+						</div>
+					</li>
+					<li class="item-help-content border-1px-b hide">
+							{$help['content']}
+					</li>
+				{/loop}
+			</ul>
+		</div>
+	</div>
+</div>
+<script>
+require(['help'], function(help){
+	help.init();
+});
+</script>
+{itemplate 'public/footer'}

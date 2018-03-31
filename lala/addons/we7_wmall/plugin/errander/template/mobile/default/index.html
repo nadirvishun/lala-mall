@@ -1,0 +1,57 @@
+{itemplate 'public/header'}
+<div class="page errander-index">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">随意购</h1>
+		<a class="pull-right" href="{php echo imurl('errander/order/list');}">订单</a>
+	</header>
+	{php get_mall_menu()}
+	<div class="content">
+		<div class="border-1px-t">
+			<div class="comindex-main">
+				<div class="com-map" id="com-map"></div>
+				{if !empty($orders)}
+					<div class="com-status">
+						<div class="swiper-container" data-direction="vertical" data-space-between="100" data-autoplay="2000">
+							<div class="swiper-wrapper">
+								{loop $orders $order}
+									<div class="swiper-slide">
+										<a href="{php echo imurl('errander/category/index', array('id' => $order['order_cid']));}">
+											<img src="{php echo tomedia($order['thumb']);}">
+											{$order['anonymous_username']}购买了{$order['goods_name']}
+											<i class="icon icon-arrow-right"></i>
+										</a>
+									</div>
+								{/loop}
+							</div>
+						</div>
+					</div>
+				{/if}
+				<div class="com-cate">
+					<p class="com-cate-title">平台共有<span class="color-danger">{$delivery_num}</span>位骑士为您服务</p>
+					<ul class="com-cate-list">
+						{loop $categorys $category}
+							<li>
+								<a href="{php echo imurl('errander/category/index', array('id' => $category['id']));}">
+									<div class="com-pic"><img src="{php echo tomedia($category['thumb']);}" alt=""></div>
+									<p>{$category['title']}</p>
+								</a>
+							</li>
+						{/loop}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+require([we7_wmall.pluginStaticRoot + 'index.js'], function(index){
+	index.init({
+		map: {
+			location_y: "{$_config_plugin['map']['location_y']}",
+			location_x: "{$_config_plugin['map']['location_x']}"
+		}
+	});
+});
+</script>
+{itemplate 'public/footer'}

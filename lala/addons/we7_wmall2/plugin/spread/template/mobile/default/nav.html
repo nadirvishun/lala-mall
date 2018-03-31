@@ -1,0 +1,18 @@
+<nav class="bar bar-tab footer-bar">
+	<a class="tab-item {if $_W['_action'] == 'index'}active{/if}" href="{php echo imurl('spread/index');}">
+		<span class="icon icon-home"></span>
+		<span class="tab-label">分销中心</span>
+	</a>
+	<a class="tab-item {if $_W['_action'] == 'commission'}active{/if}" href="{php echo imurl('spread/commission/index');}">
+		<span class="icon icon-refund"></span>
+		<span class="tab-label">推广佣金</span>
+	</a>
+	<a class="tab-item {if $_W['_action'] == 'current' && $_W['_op'] == 'index'}active{/if}" href="{php echo imurl('spread/current/index');}">
+		<span class="icon icon-sort"></span>
+		<span class="tab-label">佣金明细</span>
+	</a>
+	<a class="tab-item {if $_W['_action'] == 'down'}active{/if}" href="{php echo imurl('spread/down/index');}">
+		<span class="icon icon-friend"></span>
+		<span class="tab-label">我的团队</span>
+	</a>
+</nav>

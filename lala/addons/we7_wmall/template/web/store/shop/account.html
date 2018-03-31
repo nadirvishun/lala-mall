@@ -1,0 +1,46 @@
+{itemplate 'public/header'}
+<div class="page clearfix">
+	<h2>账户修改</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">微信昵称</label>
+			<div class="col-sm-9 col-xs-12">
+				{php echo tpl_form_field_fans('wechat', array('openid' => $clerk['openid'], 'nickname' => $clerk['nickname'], 'avatar' => $clerk['avatar']), true);}
+				<div class="help-block">如果待添加的店员未关注公众号, 需要先关注公众号</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">店员姓名</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="title" value="{$clerk['title']}" class="form-control" required="true">
+				<div class="help-block">请填写店员姓名。<strong class="text-danger">请填写真实姓名, 否则会造成微信提现失败</strong></div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">手机号</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="mobile" value="{$clerk['mobile']}" class="form-control" placeholder="用于账号登陆" required="true">
+				<div class="help-block">手机号用于店员账号登陆, 请认真填写</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">登陆密码</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="password" name="password" value="" class="form-control" placeholder="" {if !$id}required="true"{/if}>
+				<div class="help-block">请填写密码，最小长度为 6 个字符.{if $id > 0}如果不更改密码此处请留空{/if}</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">确认登陆密码</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="password" name="repassword" value="" class="form-control" placeholder="" {if !$id}required="true"{/if}>
+				<div class="help-block">重复输入密码，确认正确输入.{if $id > 0}如果不更改密码此处请留空{/if}</div>
+			</div>
+		</div>
+		<div class="form-group col-sm-12">
+			<input type="submit" value="提交" class="btn btn-primary">
+			<input type="hidden" name="token" value="{$_W['token']}" />
+		</div>
+	</form>
+</div>
+{itemplate 'public/footer'}

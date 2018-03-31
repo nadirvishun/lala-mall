@@ -1,0 +1,296 @@
+{itemplate 'public/header'}
+<div class="page clearfix">
+	<h2>服务费率</h2>
+	<div class="alert alert-warning">
+		如需要给不同的代理设置不同的佣金计算方式, 请到<a href="{php echo iurl('agent/agent');}" target="_blank">"区域代理-代理列表-账户设置"</a>里进行设置
+	</div>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">外卖单佣金计算方式</label>
+			<div class="col-sm-9 col-xs-12 toggle-tabs" data-content=".fee-takeout-type">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="fee_takeout[type]" id="fee-takeout-type-1" {if $serve_fee['fee_takeout']['type'] == 1 || empty($serve_fee['fee_takeout']['type'])}checked{/if}>
+					<label for="fee-takeout-type-1" class="toggle-role" data-target="fee-takeout-1">订单百分比抽成</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="2" name="fee_takeout[type]" id="fee-takeout-type-2" {if $serve_fee['fee_takeout']['type'] == 2}checked{/if}>
+					<label for="fee-takeout-type-2" class="toggle-role" data-target="fee-takeout-2">固定抽成</label>
+				</div>
+			</div>
+		</div>
+		<div class="toggle-content fee-takeout-type">
+			<div class="toggle-pane {if $serve_fee['fee_takeout']['type'] == 1 || empty($serve_fee['fee_takeout']['type'])}active{/if}" id="fee-takeout-1">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">抽成项目：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="price" name="fee_takeout[items_yes][]" id="fee-takeout-items-price" {if in_array('price', $serve_fee['fee_takeout']['items_yes'])}checked{/if}>
+								<label for="fee-takeout-items-price">商品费用</label>
+							</div>
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="box_price" name="fee_takeout[items_yes][]" id="fee-takeout-items-box-price" {if in_array('box_price', $serve_fee['fee_takeout']['items_yes'])}checked{/if}>
+								<label for="fee-takeout-items-box-price">餐盒费</label>
+							</div>
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="pack_fee" name="fee_takeout[items_yes][]" id="fee-takeout-items-pack-fee" {if in_array('pack_fee', $serve_fee['fee_takeout']['items_yes'])}checked{/if}>
+								<label for="fee-takeout-items-pack-fee">包装费</label>
+							</div>
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="delivery_fee" name="fee_takeout[items_yes][]" id="fee-takeout-items-delivery-fee" {if in_array('delivery_fee', $serve_fee['fee_takeout']['items_yes'])}checked{/if}>
+								<label for="fee-takeout-items-delivery-fee">配送费(仅限店内配送模式)</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">不抽成项目：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="store_discount_fee" name="fee_takeout[items_no][]" id="fee-takeout-items-discount" {if in_array('store_discount_fee', $serve_fee['fee_takeout']['items_no'])}checked{/if}>
+								<label for="fee-takeout-items-discount">商户活动补贴</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">抽成比例：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="input-group">
+								<input type="text" name="fee_takeout[fee_rate]" value="{$serve_fee['fee_takeout']['fee_rate']}" class="form-control"/>
+								<span class="input-group-addon">%</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="toggle-pane {if $serve_fee['fee_takeout']['type'] == 2}active{/if}" id="fee-takeout-2">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">抽成金额：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="input-group">
+								<input type="text" name="fee_takeout[fee]" value="{$serve_fee['fee_takeout']['fee']}" class="form-control"/>
+								<span class="input-group-addon">元</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">自提单佣金计算方式</label>
+			<div class="col-sm-9 col-xs-12 toggle-tabs" data-content=".fee-selfDelivery-type">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="fee_selfDelivery[type]" id="fee-selfDelivery-type-1" {if $serve_fee['fee_selfDelivery']['type'] == 1 || empty($serve_fee['fee_selfDelivery']['type'])}checked{/if}>
+					<label for="fee-selfDelivery-type-1" class="toggle-role" data-target="fee-selfDelivery-1">订单百分比抽成</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="2" name="fee_selfDelivery[type]" id="fee-selfDelivery-type-2" {if $serve_fee['fee_selfDelivery']['type'] == 2}checked{/if}>
+					<label for="fee-selfDelivery-type-2" class="toggle-role" data-target="fee-selfDelivery-2">固定抽成</label>
+				</div>
+			</div>
+		</div>
+		<div class="toggle-content fee-selfDelivery-type">
+			<div class="toggle-pane {if $serve_fee['fee_selfDelivery']['type'] == 1 || empty($serve_fee['fee_selfDelivery']['type'])}active{/if}" id="fee-selfDelivery-1">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">抽成项目：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="price" name="fee_selfDelivery[items_yes][]" id="fee-selfDelivery-items-price" {if in_array('price', $serve_fee['fee_selfDelivery']['items_yes'])}checked{/if}>
+								<label for="fee-selfDelivery-items-price">商品费用</label>
+							</div>
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="box_price" name="fee_selfDelivery[items_yes][]" id="fee-selfDelivery-items-box-price" {if in_array('box_price', $serve_fee['fee_selfDelivery']['items_yes'])}checked{/if}>
+								<label for="fee-selfDelivery-items-box-price">餐盒费</label>
+							</div>
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="pack_fee" name="fee_selfDelivery[items_yes][]" id="fee-selfDelivery-items-pack-fee" {if in_array('pack_fee', $serve_fee['fee_selfDelivery']['items_yes'])}checked{/if}>
+								<label for="fee-selfDelivery-items-pack-fee">包装费</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">不抽成项目：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="store_discount_fee" name="fee_selfDelivery[items_no][]" id="fee-selfDelivery-items-discount" {if in_array('store_discount_fee', $serve_fee['fee_selfDelivery']['items_no'])}checked{/if}>
+								<label for="fee-selfDelivery-items-discount">商户活动补贴</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">抽成比例：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="input-group">
+								<input type="text" name="fee_selfDelivery[fee_rate]" value="{$serve_fee['fee_selfDelivery']['fee_rate']}" class="form-control"/>
+								<span class="input-group-addon">%</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="toggle-pane {if $serve_fee['fee_selfDelivery']['type'] == 2}active{/if}" id="fee-selfDelivery-2">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">抽成金额：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="input-group">
+								<input type="text" name="fee_selfDelivery[fee]" value="{$serve_fee['fee_selfDelivery']['fee']}" class="form-control"/>
+								<span class="input-group-addon">元</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">店内单佣金计算方式</label>
+			<div class="col-sm-9 col-xs-12 toggle-tabs" data-content=".fee-instore-type">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="fee_instore[type]" id="fee-instore-type-1" {if $serve_fee['fee_instore']['type'] == 1 || empty($serve_fee['fee_instore']['type'])}checked{/if}>
+					<label for="fee-instore-type-1" class="toggle-role" data-target="fee-instore-1">订单百分比抽成</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="2" name="fee_instore[type]" id="fee-instore-type-2" {if $serve_fee['fee_instore']['type'] == 2}checked{/if}>
+					<label for="fee-instore-type-2" class="toggle-role" data-target="fee-instore-2">固定抽成</label>
+				</div>
+			</div>
+		</div>
+		<div class="toggle-content fee-instore-type">
+			<div class="toggle-pane {if $serve_fee['fee_instore']['type'] == 1 || empty($serve_fee['fee_instore']['type'])}active{/if}" id="fee-instore-1">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">抽成项目：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="price" name="fee_instore[items_yes][]" id="fee-instore-items-price" {if in_array('price', $serve_fee['fee_instore']['items_yes'])}checked{/if}>
+								<label for="fee-instore-items-price">商品费用</label>
+							</div>
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="serve_fee" name="fee_instore[items_yes][]" id="fee-instore-items-serve-fee" {if in_array('serve_fee', $serve_fee['fee_instore']['items_yes'])}checked{/if}>
+								<label for="fee-instore-items-serve-fee">店内单服务费</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">不抽成项目：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" value="store_discount_fee" name="fee_instore[items_no][]" id="fee-instore-items-discount" {if in_array('store_discount_fee', $serve_fee['fee_instore']['items_no'])}checked{/if}>
+								<label for="fee-instore-items-discount">商户活动补贴</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">抽成比例：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="input-group">
+								<input type="text" name="fee_instore[fee_rate]" value="{$serve_fee['fee_instore']['fee_rate']}" class="form-control"/>
+								<span class="input-group-addon">%</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="toggle-pane {if $serve_fee['fee_instore']['type'] == 2}active{/if}" id="fee-instore-2">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">抽成金额：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="input-group">
+								<input type="text" name="fee_instore[fee]" value="{$serve_fee['fee_instore']['fee']}" class="form-control"/>
+								<span class="input-group-addon">元</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">买单佣金计算方式</label>
+			<div class="col-sm-9 col-xs-12 toggle-tabs" data-content=".fee-paybill-type">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="fee_paybill[type]" id="fee_paybill-type-1" {if $serve_fee['fee_paybill']['type'] == 1 || empty($serve_fee['fee_paybill']['type'])}checked{/if}>
+					<label for="fee_paybill-type-1" class="toggle-role" data-target="fee_paybill-1">订单百分比抽成</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="2" name="fee_paybill[type]" id="fee_paybill-type-2" {if $serve_fee['fee_paybill']['type'] == 2}checked{/if}>
+					<label for="fee_paybill-type-2" class="toggle-role" data-target="fee_paybill-2">固定抽成</label>
+				</div>
+			</div>
+		</div>
+		<div class="toggle-content fee-paybill-type">
+			<div class="toggle-pane {if $serve_fee['fee_paybill']['type'] == 1 || empty($serve_fee['fee_paybill']['type'])}active{/if}" id="fee_paybill-1">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">抽成比例：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="input-group">
+								<input type="text" name="fee_paybill[fee_rate]" value="{$serve_fee['fee_paybill']['fee_rate']}" class="form-control"/>
+								<span class="input-group-addon">%</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="toggle-pane {if $serve_fee['fee_paybill']['type'] == 2}active{/if}" id="fee_paybill-2">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">抽成金额：</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="input-group">
+								<input type="text" name="fee_paybill[fee]" value="{$serve_fee['fee_paybill']['fee']}" class="form-control"/>
+								<span class="input-group-addon">元</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">将服务费率设置同步到所有代理</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<label class="checkbox-inline">
+						<input type="checkbox" name="sync" value="1"/> 将服务费率设置同步到所有代理
+					</label>
+				</div>
+				<div class="help-block">同步后,所有代理的服务费率规则都会被设置为这个规则</div>
+			</div>
+		</div>
+		<div class="form-group col-sm-12">
+			<input type="submit" value="提交" class="btn btn-primary col-lg-1">
+		</div>
+	</form>
+</div>
+{itemplate 'public/footer'}

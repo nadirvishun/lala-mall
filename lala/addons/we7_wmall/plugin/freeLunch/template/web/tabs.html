@@ -1,0 +1,28 @@
+<div class="second-sidebar-title">{$_W['_plugin']['title']}</div>
+<div class="nav slimscroll">
+	{ifp 'freeLunch.activity'}
+		<div class="menu-header">霸王餐</div>
+		<ul class="menu-item">
+			<li {if $_GPC['ac'] == 'activity' && $_GPC['op'] == 'config'}class="active"{/if}>
+				<a href="{php echo iurl('freeLunch/activity/config')}">活动设置</a>
+			</li>
+			<li {if $_GPC['ac'] == 'activity' && $_GPC['op'] == 'period'}class="active"{/if}>
+				<a href="{php echo iurl('freeLunch/activity/period')}">活动期数</a>
+			</li>
+			<li {if $_GPC['ac'] == 'activity' && $_GPC['op'] == 'partaker'}class="active"{/if}>
+				<a href="{php echo iurl('freeLunch/activity/partaker')}">参与记录</a>
+			</li>
+			<li {if $_GPC['ac'] == 'activity' && $_GPC['op'] == 'record'}class="active"{/if}>
+				<a href="{php echo iurl('freeLunch/activity/record')}">获奖记录</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'freeLunch.cover'}
+		<div class="menu-header">入口</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'cover'}class="active"{/if}>
+				<a href="{php echo iurl('freeLunch/cover/index');}">入口设置</a>
+			</li>
+		</ul>
+	{/if}
+</div>

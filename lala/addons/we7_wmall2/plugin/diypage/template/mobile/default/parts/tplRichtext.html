@@ -1,0 +1,7 @@
+{if !empty($diyitem['params']['content'])}
+	<div class="diy-richtext" style="background: {$diyitem['style']['background']}; padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;">
+		<div class="text-container">
+			{php echo base64_decode($diyitem['params']['content'])}
+		</div>
+	</div>
+{/if}

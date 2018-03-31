@@ -1,0 +1,75 @@
+{itemplate 'public/header'}
+<form action="./index.php?" class="form-horizontal form-filter" id="form1">
+	{php echo tpl_form_filter_hidden('store/activity/member/list');}
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">筛选</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo iurl('store/activity/member/list')}" class="btn {if $key == ''}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo iurl('store/activity/member/list', array('key' => 'success_30'))}" class="btn {if $key == 'success_30'}btn-primary{else}btn-default{/if}">近30天成交的客户</a>
+				<a href="{php echo iurl('store/activity/member/list', array('key' => 'noorder_30'))}" class="btn {if $key == 'noorder_30'}btn-primary{else}btn-default{/if}">近30天未下单的老客户</a>
+				<a href="{php echo iurl('store/activity/member/list', array('key' => 'cancel_30'))}" class="btn {if $key == 'cancel_30'}btn-primary{else}btn-default{/if}">近30天取消订单的访客</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo iurl('store/activity/member/list', array('page' => $pindex, 'keyword' => $keyword))}" class="btn {if $sort == ''}btn-primary{else}btn-default{/if}">默认</a>
+				<a href="{php echo iurl('store/activity/member/list', array('page' => $pindex, 'keyword' => $keyword , 'sort' => 'success_last_time','sort_val' => ($sort_val ? 0 : 1)))}" class="btn {if $sort == 'success_last_time'}btn-primary{else}btn-default{/if}">最近成交时间 <i class="fa {if $sort_val == 1}fa-sort-numeric-desc{else}fa-sort-numeric-asc{/if}"></i></a>
+				<a href="{php echo iurl('store/activity/member/list', array('page' => $pindex, 'keyword' => $keyword , 'sort' => 'success_first_time','sort_val' => ($sort_val ? 0 : 1)))}" class="btn {if $sort == 'success_first_time'}btn-primary{else}btn-default{/if}">首次成交时间 <i class="fa {if $sort_val == 1}fa-sort-numeric-desc{else}fa-sort-numeric-asc{/if}"></i></a>
+				<a href="{php echo iurl('store/activity/member/list', array('page' => $pindex, 'keyword' => $keyword , 'sort' => 'success_num','sort_val' => ($sort_val ? 0 : 1)))}" class="btn {if $sort == 'success_num'}btn-primary{else}btn-default{/if}">成交总数 <i class="fa {if $sort_val == 1}fa-sort-numeric-desc{else}fa-sort-numeric-asc{/if}"></i></a>
+				<a href="{php echo iurl('store/activity/member/list', array('page' => $pindex, 'keyword' => $keyword , 'sort' => 'success_price','sort_val' => ($sort_val ? 0 : 1)))}" class="btn {if $sort == 'success_price'}btn-primary{else}btn-default{/if}">成交总金额 <i class="fa {if $sort_val == 1}fa-sort-numeric-desc{else}fa-sort-numeric-asc{/if}"></i></a>
+			</div>
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			<table class="table table-hover">
+				<thead class="navbar-inner">
+				<tr>
+					<th>顾客（人）</th>
+					<th>成交次数</th>
+					<th>成交金额</th>
+					<th>平均单价</th>
+					<th>最近成交时间</th>
+					<th>取消次数</th>
+					<th>取消金额</th>
+					<th>最近取消订单时间</th>
+					<th style="text-align:right;">操作</th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $data $dca}
+				<tr>
+					<td>{$dca['nickname']}</td>
+					<td>{$dca['success_num']}</td>
+					<td>{$dca['success_price']}</td>
+					<td>{$dca['aveage']}</td>
+					<td>
+						{if !empty($dca['success_last_time'])}
+							{php echo date('Y-m-d H:i', $dca['success_last_time'])}
+						{/if}
+					</td>
+					<td>{$dca['cancel_num']}</td>
+					<td>{$dca['cancel_price']}</td>
+					<td>
+						{if !empty($dca['cancel_last_time'])}
+							{php echo date('Y-m-d H:i', $dca['cancel_last_time']);}
+						{/if}
+					</td>
+					<td class="text-right">
+						<a href="javascript:;" class="btn btn-default" onclick="alert('正在开发中,稍后上线')">赠送代金券</a>
+					</td>
+				</tr>
+				{/loop}
+				</tbody>
+			</table>
+			{$pager}
+		</div>
+	</div>
+</form>
+{itemplate 'public/footer'}

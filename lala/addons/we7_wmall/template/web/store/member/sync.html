@@ -1,0 +1,58 @@
+{itemplate 'public/header'}
+<div class="panel panel-trend" ng-controller="sync-member-order">
+	<div class="panel-heading">
+		<h3>同步顾客下单数据</h3>
+	</div>
+	<div class="panel-body">
+		<div class="progress">
+			<div class="progress-bar progress-bar-danger" ng-style="style">
+				{{pragress}}
+			</div>
+		</div>
+		<span class="help-block">正在同步中，请勿关闭浏览器</span>
+
+	</div>
+</div>
+<script>
+require(['angular'], function(angular){
+	//同步顾客下单数据
+	var running = false;
+	window.onbeforeunload = function(e) {
+		if(running) {
+			return (e || window.event).returnValue = '正在进行顾客下单数据同步，确定离开页面吗.';
+		}
+	}
+	angular.module('app', []).controller('sync-member-order', function($scope, $http){
+		$('.download').show();
+		$scope.uids = {php echo json_encode($uids);};
+		$scope.sync_member_order = function(){
+			running = true;
+			$scope.disable = 1;
+
+			var i = 0;
+			var total = $scope.uids.length;
+			var proc = function() {
+				var uid = $scope.uids.shift();
+				if(!uid) {
+					running = false;
+					setTimeout(function(){
+						location.href = "{php echo iurl('store/member/list');}";
+					}, 2000);
+					return false;
+				}
+				i++;
+				$scope.pragress = (i/total).toFixed(2)*100 + "%";
+				$scope.style = {'width':(i/total).toFixed(2)*100+"%"};
+
+				$http.post("{php echo iurl('store/member/sync');}", {uid: uid}).success(function(dat){
+					proc();
+				});
+			}
+			proc();
+		};
+		$scope.sync_member_order();
+	});
+	angular.bootstrap(document, ['app']);
+});
+</script>
+{itemplate 'public/footer'}

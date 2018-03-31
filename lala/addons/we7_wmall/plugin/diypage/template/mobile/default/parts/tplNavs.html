@@ -1,0 +1,47 @@
+{if !empty($diyitem['data'])}
+	{if empty($diyitem['params']['showtype']) || count($diyitem['data'])<=intval($diyitem['params']['pagenum'])}
+		<div class="diy-navs" style="background: {$diyitem['style']['background']}; padding-top: {$diyitem['style']['paddingtop']}px; padding-bottom: {$diyitem['style']['paddingtop']}px; padding-left: {$diyitem['style']['paddingleft']}px; padding-right: {$diyitem['style']['paddingleft']}px">
+			<div class="diy-navs-container col-{$diyitem['params']['rownum']} {$diyitem['style']['navstyle']}">
+				{loop $diyitem['data'] $navs}
+					<div class="diy-nav-col">
+						<a href="{$navs['linkurl']}">
+							<div class="nav-icon">
+								<img src="{php echo tomedia($navs['imgurl']);}" alt="">
+							</div>
+							<div class="nav-text" style="color: {$navs['color']}">{$navs['text']}</div>
+						</a>
+					</div>
+				{/loop}
+			</div>	
+		</div>
+	{else}
+		{php $diyitem['data_temp'] = array_chunk($diyitem['data'], $diyitem['params']['pagenum']);}
+		<style>
+			.swiper-{$diyitemid} .swiper-pagination{bottom: 15px;}
+			.swiper-{$diyitemid} .swiper-pagination-bullet-active {background: {$diyitem['style']['dotbackground']};}
+		</style>
+		<div class="swiper swiper-{$diyitemid}" data-element=".swiper-{$diyitemid}" style="background: {$diyitem['style']['background']}; padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;">
+			<div class="swiper-container diy-navs-container col-{$diyitem['params']['rownum']} {$diyitem['style']['navstyle']}" data-pagination=".swiper-pagination-{$diyitemid}" data-autoplay="2000" style="padding: 0;">
+				<div class="swiper-wrapper">
+					{loop $diyitem['data_temp'] $data_temp}
+						<div class="swiper-slide">
+							{loop $data_temp $navsitem}
+								<div class="diy-nav-col">
+									<a href="{$navsitem['linkurl']}">
+										<div class="nav-icon">
+											<img src="{php echo tomedia($navsitem['imgurl']);}" alt="">
+										</div>
+										<div class="nav-text" style="color: {$navsitem['color']}">{$navsitem['text']}</div>
+									</a>
+								</div>
+							{/loop}
+						</div>
+					{/loop}
+				</div>
+				{if $diyitem['params']['showdot'] == 1}
+					<div class="swiper-pagination swiper-pagination-{$diyitemid}"></div>
+				{/if}
+			</div>
+		</div>
+	{/if}
+{/if}

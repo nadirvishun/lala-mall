@@ -1,0 +1,81 @@
+<div class="second-sidebar-title">
+	商户
+</div>
+<div class="nav slimscroll">
+	{ifp 'merchant.store' || 'merchant.account'}
+		<div class="menu-header">管理</div>
+		<ul class="menu-item">
+			{ifp 'merchant.store'}
+				<li {if $_W['_action'] == 'store'}class="active"{/if}>
+					<a href="{php echo iurl('merchant/store/list');}">商户列表</a>
+				</li>
+			{/if}
+			{ifp 'merchant.account'}
+				<li {if $_W['_action'] == 'account'}class="active"{/if}>
+					<a href="{php echo iurl('merchant/account/index');}">商户账户</a>
+				</li>
+			{/if}
+		</ul>
+	{/if}
+	{ifp 'merchant.getcash' || 'merchant.current'}
+		<div class="menu-header">财务</div>
+		<ul class="menu-item">
+			{ifp 'merchant.getcash'}
+				<li {if $_W['_action'] == 'getcash'}class="active"{/if}>
+					<a href="{php echo iurl('merchant/getcash/list');}">提现申请</a>
+				</li>
+			{/if}
+			{ifp 'merchant.current'}
+				<li {if $_W['_action'] == 'current'}class="active"{/if}>
+					<a href="{php echo iurl('merchant/current/list');}">账户明细</a>
+				</li>
+			{/if}
+		</ul>
+	{/if}
+	{ifp 'merchant.settle'}
+		<div class="menu-header">入驻</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'settle'}class="active"{/if}>
+				<a href="{php echo iurl('merchant/settle/list');}">入驻列表</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'merchant.newsCategory' || 'merchant.news'}
+		<div class="menu-header">商户资讯</div>
+		<ul class="menu-item">
+			{ifp 'merchant.newsCategory'}
+				<li {if $_W['_action'] == 'newsCategory'}class="active"{/if}>
+					<a href="{php echo iurl('merchant/newsCategory/list');}">资讯分类</a>
+				</li>
+			{/if}
+			{ifp 'merchant.news'}
+				<li {if $_W['_action'] == 'news'}class="active"{/if}>
+					<a href="{php echo iurl('merchant/news/list');}">资讯列表</a>
+				</li>
+			{/if}
+		</ul>
+	{/if}
+	{ifp 'merchant.ad'}
+		<div class="menu-header">广告</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'ad'}class="active"{/if}>
+				<a href="{php echo iurl('merchant/ad/list');}">广告列表</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'merchant.notice' || 'merchant.report'}
+		<div class="menu-header">其他</div>
+		<ul class="menu-item">
+			{ifp 'merchant.notice'}
+				<li {if $_W['_action'] == 'notice'}class="active"{/if}>
+					<a href="{php echo iurl('merchant/notice/list');}">公告列表</a>
+				</li>
+			{/if}
+			{ifp 'merchant.report'}
+				<li {if $_W['_action'] == 'report'}class="active"{/if}>
+					<a href="{php echo iurl('merchant/report/list');}">投诉列表</a>
+				</li>
+			{/if}
+		</ul>
+	{/if}
+</div>

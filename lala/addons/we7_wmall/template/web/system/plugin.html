@@ -1,0 +1,83 @@
+{itemplate 'public/header'}
+<form action="./index.php?" class="form-horizontal form-filter" id="form1">
+	{php echo tpl_form_filter_hidden('system/plugin/index');}
+	<input type="hidden" name="type" value="{$type}"/>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">类型</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('type:');}" class="btn {if $type == ''}btn-primary{else}btn-default{/if}">不限</a>
+				{loop $types $row}
+					<a href="{php echo ifilter_url('type:' . $row['name']);}" class="btn {if $type == $row['name']}btn-primary{else}btn-default{/if}">{$row['title']}</a>
+				{/loop}
+			</div>
+		</div>
+	</div>
+	<div class="form-group form-inline">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">关键字</label>
+		<div class="col-sm-9 col-xs-12">
+			<input class="form-control" name="keyword" placeholder="插件名称/插件标识" type="text" value="{$_GPC['keyword']}">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-9 col-xs-12">
+			<button class="btn btn-primary">筛选</button>
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form form-validate" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			{if empty($plugins)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>图标</th>
+					<th>标识</th>
+					<th>开关</th>
+					<th>排序</th>
+					<th>插件名称</th>
+					<th>插件简介</th>
+				</tr>
+				</thead>
+				{loop $plugins $plugin}
+				<tr>
+					<input type="hidden" name="ids[]" value="{$plugin['id']}">
+					<td>
+						<img src="{$plugin['thumb']}" alt="" width="50"/>
+					</td>
+					<td>{$plugin['name']}</td>
+					<td>
+						<div class="checkbox checkbox-inline">
+							<input type="checkbox" name="statuss[]" value="{$plugin['id']}" {if $plugin['status'] == 1}checked{/if}>
+							<label></label>
+						</div>
+					</td>
+					<td>
+						<input type="text" name="displayorders[]" value="{$plugin['displayorder']}" class="form-control width-100"/>
+					</td>
+					<td>
+						<input type="text" name="titles[]" value="{$plugin['title']}" class="form-control width-100"/>
+					</td>
+					<td>
+						<input type="text" name="abilitys[]" value="{$plugin['ability']}" class="form-control"/>
+					</td>
+				</tr>
+				{/loop}
+			</table>
+			<div class="btn-region clearfix">
+				<div class="pull-left">
+					<input name="token" type="hidden" value="{$_W['token']}" />
+					<input type="submit" class="btn btn-primary btn-sm" name="submit" value="提交修改" />
+				</div>
+			</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{itemplate 'public/footer'}

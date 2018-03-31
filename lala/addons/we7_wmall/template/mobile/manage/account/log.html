@@ -1,0 +1,111 @@
+{itemplate 'public/header'}
+<div class="page page-current-log">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="icon pull-left fa fa-arrow-left back" href=""></a>
+		<h1 class="title">账户明细</h1>
+	</header>
+	{itemplate 'public/nav'}
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('manage/account/log', array('trade_type' => $trade_type))}" data-distance="50" data-min="{$min}" data-container=".record-container" data-tpl="tpl-inout">
+		<div class="buttons-tab">
+			<a href="{php echo imurl('manage/account/log', array('trade_type' => '0'))}" class="button {if $trade_type == 0}active{/if}">全部</a>
+			<a href="{php echo imurl('manage/account/log', array('trade_type' => '1'))}" class="button {if $trade_type == 1}active{/if}">订单入账</a>
+			<a href="{php echo imurl('manage/account/log', array('trade_type' => '2'))}" class="button {if $trade_type == 2}active{/if}">申请提现</a>
+			<a href="{php echo imurl('manage/account/log', array('trade_type' => '3'))}" class="button {if $trade_type == 3}active{/if}">其他变动</a>
+		</div>
+		{if empty($records)}
+		<div class="no-data">
+			<div class="bg"></div>
+			<p>没有任何记录哦～</p>
+		</div>
+		{else}
+		<div class="record-list">
+			<ul class="record-container">
+				{loop $records $record}
+				<li class="border-1px-b">
+					{if $record['trade_type'] == 1}
+					<a href="{php echo imurl('manage/order/takeout/detail', array('id' => $record['extra']))}">
+						<div class="record-name">
+							<span>订单入账</span>
+							<span class="right color-success">+{$record['fee']}</span>
+						</div>
+						<div class="record-time">
+							{php echo date('Y-m-d H:i', $record['addtime'])}
+							<span class="right">¥{$record['amount']}</span>
+						</div>
+					</a>
+					{elseif $record['trade_type'] == 2}
+					<a href="{php echo imurl('manage/account/log/detail', array('id' => $record['extra']))}">
+						<div class="record-name">
+							<span>申请提现</span>
+							<span class="right color-danger">{$record['fee']}</span>
+						</div>
+						<div class="record-time">
+							{php echo date('Y-m-d H:i', $record['addtime'])}
+							<span class="right">¥{$record['amount']}</span>
+						</div>
+					</a>
+					{else}
+					<a href="{php echo imurl('manage/order/takeout/detail', array('id' => $record['extra']))}">
+						<div class="record-name">
+							<span>其他变动</span>
+							<span class="right color-danger">{$record['fee']}</span>
+						</div>
+						<div class="record-time">
+							{php echo date('Y-m-d H:i', $record['addtime'])}
+							<span class="right">¥{$record['amount']}</span>
+						</div>
+					</a>
+					{/if}
+				</li>
+				{/loop}
+			</ul>
+		</div>
+		<div class="infinite-scroll-preloader hide">
+			<div class="preloader"></div>
+		</div>
+		{/if}
+	</div>
+</div>
+<script id="tpl-inout" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<li class="border-1px-b">
+		<{# if(d[i].trade_type == 1){ }>
+		<a href="{php echo imurl('manage/order/takeout/detail')}&id=<{d[i].extra}>">
+			<div class="record-name">
+				<span>订单入账</span>
+				<span class="right color-success">+<{d[i].fee}></span>
+			</div>
+			<div class="record-time">
+				<{d[i].addtime_cn}>
+				<span class="right">¥<{d[i].amount}></span>
+			</div>
+		</a>
+		<{# } }>
+		<{# if(d[i].trade_type == 2){ }>
+		<a href="{php echo imurl('manage/account/log/detail')}&id=<{d[i].extra}>">
+			<div class="record-name">
+				<span>申请提现</span>
+				<span class="right color-danger"><{d[i].fee}></span>
+			</div>
+			<div class="record-time">
+				<{d[i].addtime_cn}>
+				<span class="right">¥<{d[i].amount}></span>
+			</div>
+		</a>
+		<{# } }>
+		<{# if(d[i].trade_type == 3){ }>
+		<a href="{php echo imurl('manage/order/takeout/detail')}&id=<{d[i].extra}>">
+			<div class="record-name">
+				<span>其他变动</span>
+				<span class="right color-danger"><{d[i].fee}></span>
+			</div>
+			<div class="record-time">
+				<{d[i].addtime_cn}>
+				<span class="right">¥<{d[i].amount}></span>
+			</div>
+		</a>
+		<{# } }>
+	</li>
+	<{# } }>
+</script>
+{itemplate 'public/footer'}

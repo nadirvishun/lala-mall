@@ -1,0 +1,39 @@
+<div class="second-sidebar-title">{$_W['_plugin']['title']}</div>
+<div class="nav slimscroll">
+	<div class="menu-header">推广员</div>
+	<ul class="menu-item">
+		<li class="{if $_W['_action'] == 'members'}active{/if}">
+		<a href="{php echo iurl('spread/members/index');}">推广员</a>
+		</li>
+		<li class="{if $_W['_action'] == 'user'} active {/if}">
+			<a href="{php echo iurl('spread/user');}">推广关系</a>
+		</li>
+		<li class="{if $_W['_action'] == 'groups'} active {/if}">
+			<a href="{php echo iurl('spread/groups/index');}">推广员等级</a>
+		</li>
+	</ul>
+	<div class="menu-header">财务</div>
+	<ul class="menu-item">
+		<li class="{if $_W['_action'] == 'getcash'}active{/if}">
+		<a href="{php echo iurl('spread/getcash/index')}">提现记录</a>
+		</li>
+		<li class="{if $_W['_action'] == 'current'}active{/if}">
+		<a href="{php echo iurl('spread/current/index')}">账户明细</a>
+		</li>
+	</ul>
+	<div class="menu-header">设置</div>
+	<ul class="menu-item">
+		<li class="{if $_GPC['op'] == 'basic'}active{/if}">
+			<a href="{php echo iurl('spread/config/basic');}">基本设置</a>
+		</li>
+		<li class="{if $_W['_action'] == 'postera'}active{/if}">
+			<a href="{php echo iurl('spread/postera');}">推广海报</a>
+		</li>
+		<li class="{if $_W['_action'] == 'rank'}active{/if}">
+		<a href="{php echo iurl('spread/rank');}">排行榜设置</a>
+		</li>
+		<li class="{if $_GPC['op'] == 'cover'}active{/if}">
+			<a href="{php echo iurl('spread/cover');}">入口设置</a>
+		</li>
+	</ul>
+</div>

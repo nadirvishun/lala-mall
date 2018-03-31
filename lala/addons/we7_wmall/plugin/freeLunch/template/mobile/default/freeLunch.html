@@ -1,0 +1,379 @@
+{itemplate 'public/header'}
+{if $op == 'index'}
+<div class="page freelunch">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">{$_W['page']['title']}</h1>
+	</header>
+	<div class="nav-tab">
+		<ul>
+			<li {if $type == 'common'}class="active"{/if}><a href="{php echo imurl('freeLunch/freeLunch/index', array('type' => 'common'))}">{$freelunch['title']}</a></li>
+			{if $freelunch['plus_status'] == 1}
+				<li {if $type == 'plus'}class="active"{/if}>
+					<a href="{php echo imurl('freeLunch/freeLunch/index', array('type' => 'plus'))}">{$freelunch['title']}Plus</a>
+					<span class="badge">{$freelunch['pre_plus_reward_fee']}元红包</span>
+				</li>
+			{/if}
+			<li class="pull-right">
+				<a href="{php echo imurl('freeLunch/mealCoupon')}">
+					<img class="dash-line" src="{WE7_WMALL_TPL_URL}static/img/freeLunch_dash_line.png" alt="">
+					<img class="coupon-icon" src="{WE7_WMALL_TPL_URL}static/img/freeLunch_coupon.png" alt="">
+					<span>我的餐券</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<nav class="bar bar-tab">
+		{if $partake_status['errno'] == 0}
+			<a href="{php echo imurl('freeLunch/freeLunch/partake', array('record_id' => $record['id']))}">立即参与</a>
+		{else}
+			<a href="javascript:;" class="no-partake-times">{$partake_status['message']}</a>
+		{/if}
+	</nav>
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('freeLunch/freeLunch/index', array('type' => $type))}" data-distance="50" data-min="{$partakers['min']}" data-container=".participant-list" data-tpl="tpl-current">
+		<div class="prize">
+			{if $type == 'common'}
+				<img src="{php echo tomedia($freelunch['thumb'])}" alt="">
+			{else}
+				<img src="{php echo tomedia($freelunch['plus_thumb'])}" alt="">
+			{/if}
+			<div class="batch">第{$record['serial_sn']}期</div>
+			<a href="#" class="open-popup open-about rule" data-popup=".popup-about">活动规则 </a>
+			<div class="prize-info">
+				<div class="pirze-inner">
+					<div class="draw-condition">每满{$record['partaker_total']}人次，即抽取1人获得 <span>{$record['reward_fee']}元无门槛红包</span></div>
+					<div class="progress">
+						<div class="progress-bar" style="width: {$record['percent']}%"></div>
+					</div>
+					<div class="prize-data">
+						总需人次: {$record['partaker_total']} <span class="vertical-line">|</span> 剩余人次: {$record['partaker_dosage']}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="no-participate">
+			{if empty($member_partaker['data'])}
+				您没有参与本期活动，立即参与领红包吧！
+			{else}
+				<div class="participate-num">我参与了: <span>{$member_partaker['nums']}</span> <strong>次</strong></div>
+				{loop $member_partaker['data'] $partaker}
+					<div class="participate-code">参与号码: <strong>{$partaker['number']}</strong></div>
+				{/loop}
+			{/if}
+		</div>
+		{if !empty($luckiers)}
+			<div class="lucky-history">
+				<a href="{php echo imurl('freeLunch/freeLunch/luckier', array('type' => $type))}" class="lucky-inner clearfix">
+					<div class="lucky-tab border-1px-r pull-left">
+						<img src="{WE7_WMALL_TPL_URL}static/img/freeLunch_luckier.png" alt="">
+						<div class="subtitle">中奖直播</div>
+					</div>
+					<div class="luckier-list pull-left swiper-container" data-direction="vertical" data-pagination="" data-space-between="8" data-autoplay="2000">
+						<div class="swiper-wrapper">
+							{loop $luckiers $luckier}
+							<div class="swiper-slide luckier-item row">
+								<div class="luckier-logo col-20">
+									<img src="{$luckier['avatar']}" alt="">
+								</div>
+								<div class="luckier-info col-75">
+									<span>{$luckier['nickname']} <span class="prize-time">{$luckier['time']}</span></span>
+									<span>中奖<span class="prize-money">{$luckier['reward_fee']}</span>元</span>
+								</div>
+							</div>
+							{/loop}
+						</div>
+					</div>
+					<span class="icon icon-right"></span>
+				</a>
+			</div>
+		{/if}
+		<div class="current-participant">
+			<div class="participant-title border-1px-b">
+				<span>本期参与人</span>
+				<span class="start-time pull-right">{php echo date('Y-m-d H:i:s', $record['startime'])} 开始</span>
+			</div>
+			<div class="participant-list">
+				{loop $partakers['message'] $partaker}
+					<div class="participant-item row">
+						<div class="col-20">
+							<img src="{$partaker['avatar']}" alt="">
+						</div>
+						<div class="col-80 border-1px-b">
+							<span class="participant-name">{$partaker['nickname']}</span>
+							<span class="participant-time">{$partaker['addtime']}</span>
+						</div>
+					</div>
+				{/loop}
+			</div>
+			<div class="infinite-scroll-preloader hide">
+				<div class="preloader"></div>
+			</div>
+		</div>
+		<div class="no-more">- 没有更多了 -</div>
+	</div>
+</div>
+<script id="tpl-current" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<div class="participant-item row">
+		<div class="col-20">
+			<img src="<{d[i].avatar}>" alt="">
+		</div>
+		<div class="col-80 border-1px-b">
+			<span class="participant-name"><{d[i].nickname}></span>
+			<span class="participant-time"><{d[i].addtime}></span>
+		</div>
+	</div>
+	<{# } }>
+</script>
+{/if}
+
+{if $op == 'partake_success'}
+<div class="page freelunch-partake-success">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">参与成功</h1>
+	</header>
+	<div class="content">
+		<div class="partake-info">
+			<h3>参与成功</h3>
+			<div class="partake-serial">您是本期第{$num}位参与者,奖券号<span>{$partaker['number']}</span></div>
+			<div class="pre-reward-time">预计1小时内开奖,若与当期开奖号码相同即为中奖</div>
+			<div class="scan"><a href="{php echo imurl('freeLunch/freeLunch/detail', array('record_id' => $partaker['record_id']))}" class="scan-btn">查看本期开奖进度</a></div>
+		</div>
+		<div class="repartake">
+			{if $freelunch['partake_grant_type'] == 1}
+				<div class="remission">返还的{php echo floatval($partaker['final_fee'])}元红包已经放入您的账户,每次参与都会立返哦</div>
+			{else if $freelunch['partake_grant_type'] == 2}
+				<div class="remission">返还的{php echo floatval($partaker['final_fee'])}元现金已经放入您的账户,每次参与都会立返哦</div>
+			{/if}
+			<div class="repartake-invite">
+				<a href="{php echo imurl('freeLunch/freeLunch/index')}" class="repartake-btn button button-danger button-fill button-big">再次参与,中奖率加倍</a>
+			</div>
+			{if $freelunch['plus_status'] == 1}
+				<a href="{php echo imurl('freeLunch/freeLunch/index', array('type' => 'plus'))}" class="partake-plus">参加霸王餐Plus,赢元红包 <span class="icon icon-right"></span></a>
+			{/if}
+		</div>
+	</div>
+</div>
+{/if}
+
+{if $op == 'detail'}
+<div class="page freelunch-detail">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">参与详情</h1>
+	</header>
+	<nav class="bar bar-tab row">
+		{if $record['status'] == 2}
+			<span class="col-50">新的一期正在火热进行中…</span>
+			<a href="{php echo imurl('freeLunch/freeLunch/index')}">立即参与</a>
+		{else}
+			<div class="col-60">
+				{if $partake_status['errno'] == 0}
+					<a href="{php echo imurl('freeLunch/freeLunch/index')}">再次参与,中奖率翻倍</a>
+				{else}
+					<a href="javascript:;" class="no-partake-times">{$partake_status['message']}</a>
+				{/if}
+			</div>
+			<div class="col-40">
+				<a href="" class="refresh" >刷新进度</a>
+			</div>
+		{/if}
+	</nav>
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('freeLunch/freeLunch/detail', array('record_id' => $id))}" data-distance="50" data-min="{$partakers['min']}" data-container=".participant-list" data-tpl="tpl-current-detail">
+		<div class="prize-status">
+			<div class="batch">
+				<span>第{$record['serial_sn']}期</span>
+			</div>
+			{if $record['status'] == 2}
+				{if $record['reward_uid'] != $_W['member']['uid']}
+					<h2>很遗憾未中奖</h2>
+					<div class="no-prize">
+						<span>{$record['reward_fee']}元红包与你擦肩而过</span>
+					</div>
+				{else}
+					<h2>恭喜您 中奖了</h2>
+					<div class="no-prize">
+						<span>获得{$record['reward_fee']}元红包</span>
+					</div>
+				{/if}
+				<div class="winning-detail">
+					<div class="winning-inner">
+						<div class="winning-code">中奖号码</div>
+						<div class="lucky-number">
+							{loop $record['reward_number'] $number}
+								<span class="digit">{$number}</span>
+							{/loop}
+						</div>
+						<div class="details">
+							<img src="{php echo tomedia($member['avatar'])}">
+							<div class="participate-info pull-left">
+								<span class="participate-name">{$member['nickname']} 本期参与 {$winner_partaker['nums']} 次</span>
+								{loop $winner_partaker['data'] $winner}
+									<div class="participate-time">参与时间: {php echo date('Y-m-d H:i:s', $winner['addtime'])}</div>
+								{/loop}
+							</div>
+						</div>
+					</div>
+				</div>
+			{else}
+				<h2>活动进行中</h2>
+				<div class="prize-info">
+					<div class="pirze-inner">
+						<div class="draw-condition"><span>{$record['reward_fee']}元无门槛红包</span></div>
+						<div class="progress">
+							<div class="progress-bar" style="width: {$record['percent']}%"></div>
+						</div>
+						<div class="prize-data">
+							总需人次: {$record['partaker_total']} <span class="vertical-line">|</span> 剩余人次: {$record['partaker_dosage']}
+						</div>
+					</div>
+				</div>
+			{/if}
+			<a href="#" class="open-popup open-about rule" data-popup=".popup-about">计算说明 </a>
+		</div>
+		<div class="participate">
+			{if $mine_partaker['nums'] > 0}
+				<div class="participate-num">我参与了: <span>{$mine_partaker['nums']}</span> <strong>次</strong></div>
+				{loop $mine_partaker['data'] $mine}
+					<div class="participate-code">参与号码: <strong>{$mine['number']}</strong></div>
+				{/loop}
+			{else}
+				您没有参与本期活动，立即参与领红包吧！
+			{/if}
+		</div>
+		<div class="current-participant">
+			<div class="participant-title border-1px-b">
+				<span>本期参与人</span>
+				<span class="start-time pull-right">{php echo date('Y-m-d H:i:s', $record['startime'])} 开始</span>
+			</div>
+			<div class="participant-list">
+				{loop $partakers['message'] $partaker}
+					<div class="participant-item row">
+						<div class="col-20">
+							<img src="{$partaker['avatar']}" alt="">
+						</div>
+						<div class="col-80 border-1px-b">
+							<span class="participant-name">{$partaker['nickname']}</span>
+							<span class="participant-time">{$partaker['addtime']}</span>
+						</div>
+					</div>
+				{/loop}
+			</div>
+			<div class="infinite-scroll-preloader hide">
+				<div class="preloader"></div>
+			</div>
+		</div>
+		<div class="no-more">- 没有更多了 -</div>
+	</div>
+</div>
+<script id="tpl-current-detail" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<div class="participant-item row">
+		<div class="col-20">
+			<img src="<{d[i].avatar}>" alt="">
+		</div>
+		<div class="col-80 border-1px-b">
+			<span class="participant-name"><{d[i].nickname}></span>
+			<span class="participant-time"><{d[i].addtime}></span>
+		</div>
+	</div>
+	<{# } }>
+</script>
+{/if}
+
+{if $op == 'luckier'}
+<div class="page freelunch-luckier">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">往期幸运星</h1>
+	</header>
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('freeLunch/freeLunch/luckier', array('type' => $type))}" data-distance="50" data-min="{$min}" data-container=".luckier-list" data-tpl="tpl-luckier">
+		<div class="luckier-list">
+			{loop $luckiers $luckier}
+			<a href="{php echo imurl('freeLunch/freeLunch/detail', array('record_id' => $luckier['id']))}" class="luckier-item">
+				<div class="participant-title border-1px-b">
+					<span>第{$luckier['serial_sn']}期</span>
+					<span class="prize-time pull-right">开奖时间：{$luckier['endtime']}</span>
+				</div>
+				<div class="luckier-info row">
+					<div class="col-20">
+						<img src="{$luckier['avatar']}">
+					</div>
+					<div class="col-80">
+						<div>
+							<span class="luckier-key">幸运星：</span>
+							<span class="luckier-value">{$luckier['nickname']}</span>
+						</div>
+						<div>
+							<span class="luckier-key">手机号：</span>
+							<span class="luckier-value">{$luckier['mobile']}</span>
+						</div>
+						<div>
+							<span class="luckier-key">本期参与：</span>
+							<span class="luckier-value"><span>{$luckier['total']}</span> 次</span>
+						</div>
+						<div>
+							<span class="luckier-key">幸运号码：</span>
+							<span class="luckier-value">{$luckier['reward_number']}</span>
+						</div>
+					</div>
+					<span class="icon icon-right"></span>
+				</div>
+			</a>
+			{/loop}
+		</div>
+		<div class="infinite-scroll-preloader hide">
+			<div class="preloader"></div>
+		</div>
+	</div>
+</div>
+<script id="tpl-luckier" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<a href="{php echo imurl('freeLunch/freeLunch/detail')}&record_id=<{d[i].id}>" class="luckier-item">
+		<div class="participant-title border-1px-b">
+			<span>第<{d[i].serial_sn}>期</span>
+			<span class="prize-time pull-right">开奖时间：<{d[i].endtime}></span>
+		</div>
+		<div class="luckier-info row">
+			<div class="col-20">
+				<img src="<{d[i].avatar}>">
+			</div>
+			<div class="col-80">
+				<div>
+					<span class="luckier-key">幸运星：</span>
+					<span class="luckier-value"> <{d[i].nickname}></span>
+				</div>
+				<div>
+					<span class="luckier-key">手机号：</span>
+					<span class="luckier-value"> <{d[i].mobile}></span>
+				</div>
+				<div>
+					<span class="luckier-key">本期参与：</span>
+					<span class="luckier-value"><span><{d[i].total}></span> 次</span>
+				</div>
+				<div>
+					<span class="luckier-key">幸运号码：</span>
+					<span class="luckier-value"><{d[i].reward_number}></span>
+				</div>
+			</div>
+			<span class="icon icon-right"></span>
+		</div>
+	</a>
+	<{# } }>
+</script>
+{/if}
+
+<div class="popup popup-about freelunch-rule">
+	<div class="content">
+		<div class="banner">
+			<img src="{WE7_WMALL_TPL_URL}static/img/freeLunch_rule.png" alt="">
+			<a href="#" class="close-popup">关闭</a>
+		</div>
+		<div class="rules">
+			{$freelunch['agreement']}
+		</div>
+	</div>
+</div>
+
+{itemplate 'public/footer'}

@@ -1,0 +1,69 @@
+{itemplate 'public/header'}
+<form action="./index.php" class="form-horizontal form-filter">
+	{php echo tpl_form_filter_hidden('superRedpacket/share/records');}
+	<input name="activity_id" value="{$activity_id}" type="hidden"/>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">搜索</label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="text" name="keyword" value="{$keyword}" class="form-control" placeholder="搜索用户的手机号、昵称、uid">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">选择时间段</label>
+		<div class="col-sm-4 col-xs-4">
+			{php echo tpl_form_field_daterange('addtime', array('start' => date('Y-m-d', $starttime), 'end' => date('Y-m-d', $endtime)));}
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="submit" value="筛选" class="btn btn-primary">
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			{if empty($records)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+					<tr>
+						<th>分享人</th>
+						<th>uid</th>
+						<th>订单id</th>
+						<th>分享活动id</th>
+						<th>总分享次数</th>
+						<th>剩余分享次数</th>
+						<th>分享时间</th>
+					</tr>
+					</thead>
+					<tbody>
+						{loop $records $record}
+							<tr>
+								<td>
+									<img width="50" height="50" src="{php echo tomedia($record['avatar'])}" alt=""/>&nbsp;&nbsp;&nbsp;{$record['nickname']}
+								</td>
+								<td>{$record['uid']}</td>
+								<td>{$record['order_id']}</td>
+								<td>{$record['activity_id']}</td>
+								<td>{$record['packet_total']}</td>
+								<td>{$record['packet_dosage']}</td>
+								<td>{php echo date('Y-m-d H:i', $record['addtime'])}</td>
+							</tr>
+						{/loop}
+					</tbody>
+				</table>
+				<div class="btn-region clearfix">
+					<div class="pull-right">
+						{$pager}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{itemplate 'public/footer'}

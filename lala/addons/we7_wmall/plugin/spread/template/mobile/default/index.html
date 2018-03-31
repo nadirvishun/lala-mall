@@ -1,0 +1,131 @@
+{itemplate 'public/header'}
+<link rel="stylesheet" href="../addons/we7_wmall/plugin/spread/static/css/index.css">
+<div class="page page-spread-index">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">推广员</h1>
+	</header>
+	{itemplate 'nav'}
+	<div class="content">
+		<div class="headerinfo">
+			<div class="userinfo">
+				<div class="fui-list">
+					<div class="fui-img">
+						<img src="{php echo tomedia($_W['member']['avatar'])}" alt="">
+					</div>
+					<div class="fui-info">
+						<ul>
+							<li>{$_W['member']['mobile']}</li>
+							<li class="fui-color">
+								<{$member['groupname']}>
+								<span class="open-popup" data-popup=".popup-spread">升级攻略</span>
+							</li>
+							<li>邀请码:{$_W['member']['uid']}</li>
+						</ul>
+					</div>
+					<a class="bg-img"></a>
+				</div>
+			</div>
+			<div class="userblock">
+				<div class="block-top">
+					<div class="top-title">
+						成功提现佣金
+					</div>
+					<div class="top-num">
+						{$spread['commission_getcash_success']}
+					</div>
+				</div>
+				<div class="block-bottom">
+					<a href="{php echo imurl('spread/getCash/application')}" class="bottom-right">
+						佣金提现
+					</a>
+					<div class="bottom-title">
+						可提现佣金
+					</div>
+					<div class="bottom-num">
+						{$member['spreadcredit2']}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content-sudoku">
+			<div class="wui-grids">
+				<a href="{php echo imurl('spread/commission')}" class="wui-grid">
+				 	<div class="sudoku-img icon icon-refund"></div>
+				 	<div class="sudoku-info">
+				 		推广佣金
+				 	</div>
+				 	<div class="sudoku-num">
+						<span>{$spread['commission_grandtotal']}</span>元
+				 	</div>
+				</a>
+				<a href="{php echo imurl('spread/current/index')}" class="wui-grid">
+					<div class="sudoku-img icon icon-list"></div>
+					<div class="sudoku-info">
+						佣金明细
+					</div>
+					<div class="sudoku-num">
+						<span>{$current}</span>笔
+					</div>
+				</a>
+				<a href="{php echo imurl('spread/getCash/index')}" class="wui-grid">
+					<div class="sudoku-img icon icon-sort"></div>
+					<div class="sudoku-info">
+						提现明细
+					</div>
+					<div class="sudoku-num">
+						<span>{$commission}</span>笔
+					</div>
+				</a>
+				<a href="{php echo imurl('spread/order')}" class="wui-grid">
+				 	<div class="sudoku-img icon icon-order"></div>
+				 	<div class="sudoku-info">
+				 		推广订单
+				 	</div>
+				 	<div class="sudoku-num">
+						<span>{$order}</span>笔
+				 	</div>
+				</a>
+				<a href="{php echo imurl('spread/down')}" class="wui-grid">
+				 	<div class="sudoku-img icon icon-friend"></div>
+				 	<div class="sudoku-info">
+				 		我的团队
+				 	</div>
+				 	<div class="sudoku-num">
+						<span>{$down}</span>人
+				 	</div>
+				</a>
+				<a href="{php echo imurl('spread/poster/poster')}" class="wui-grid">
+				 	<div class="sudoku-img icon icon-fukuanma"></div>
+				 	<div class="sudoku-info">
+				 		推广二维码
+				 	</div>	
+				 	<div class="sudoku-num">
+						<span></span>
+				 	</div>
+				</a>
+				{if $rank['status'] == 1}
+					<a href="{php echo imurl('spread/rank')}" class="wui-grid">
+						<div class="sudoku-img icon icon-hot1"></div>
+						<div class="sudoku-info">
+							佣金排名
+						</div>
+						<div class="sudoku-num"></div>
+					</a>
+				{/if}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="popup popup-spread">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="icon icon icon-arrow-left pull-left close-popup" href="javascript:;"></a>
+		<h1 class="title">推广员升级说明</h1>
+	</header>
+	<div class="content" style="background: #fff;">
+		<div class="content-padded">
+			{$upgrade_explain}
+		</div>
+	</div>
+</div>
+{itemplate 'public/footer'}

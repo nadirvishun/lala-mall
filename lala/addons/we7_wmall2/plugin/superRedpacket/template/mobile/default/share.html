@@ -1,0 +1,144 @@
+{itemplate 'public/header'}
+<link rel="stylesheet" href="../addons/we7_wmall/plugin/superRedpacket/static/css/mobile.css" />
+<style>
+	.share-redpacket .content{padding-bottom: 1rem; background: {$activity['data']['activity']['backgroundColor']};}
+	.share-redpacket .button.button-danger{background: {$activity['data']['activity']['button']['backgroundColor']}; color: {$activity['data']['activity']['button']['color']};}
+	.share-redpacket .redpacket-item .redpacket-info .redpacket-title{color: {$activity['data']['activity']['color']};}
+	.share-redpacket .redpacket-item .price{color: {$activity['data']['activity']['color']};}
+	.share-redpacket .redpacket-item .redpacket-bottom a{color: {$activity['data']['activity']['color']};}
+	.share-redpacket .list-block.media-list .item-bottom .item-after{color: {$activity['data']['activity']['color']};}
+</style>
+<div class="page share-redpacket">
+	<div class="content">
+		<div class="banner">
+			<img src="{php echo tomedia($activity['data']['activity']['image'])}" alt="">
+		</div>
+		{if $op == 'index'}
+		<div class="receive">
+			<input type="text" name="mobile" placeholder="请输入您的手机号" class="mobile-input">
+			<a href="javascript:;" data-id="{$order_id}" class="button button-danger button-fill button-big btn-get-superredpacket">立即领取</a>
+		</div>
+		{/if}
+		{if $op == 'grant'}
+		<div class="redpacket">
+			{if $activity['status'] != 1}
+			<div class="redpacket-item activity-empty">
+				活动已经过期啦
+			</div>
+			{elseif empty($redpackets)}
+			<div class="redpacket-item activity-empty">
+				红包抢光啦
+			</div>
+			{else}
+			{loop $redpackets $redpacket}
+			<div class="redpacket-item">
+				<div class="clearfix">
+					<div class="pull-left image">
+						<img src="{WE7_WMALL_TPL_URL}static/img/superredpacket.png" alt="">
+					</div>
+					<div class="pull-left redpacket-info">
+						<span class="redpacket-title">{$redpacket['title']}</span>
+						<span class="use-condition text-left">满{php echo floatval($redpacket['condition'])}可用</span>
+					</div>
+					<div class="price pull-right"><span>￥</span>{php echo floatval($redpacket['discount'])}</div>
+				</div>
+				<div class="clearfix redpacket-bottom">
+					<div class="pull-left use-days-limit">{$redpacket['condition_cn']} {if !empty($redpacket['category_cn'])}{$redpacket['category_cn']}{/if} {if !empty($redpacket['times_cn'])}{$redpacket['times_cn']}{/if}</div>
+					<a href="{php echo imurl('wmall/home/index');}" class="pull-right">去使用</a>
+				</div>
+			</div>
+			{/loop}
+			<div class="get-success">
+				<span>红包已放入账号:</span>
+				<span>{$_W['member']['nickname']} {$_W['member']['mobile']}</span>
+			</div>
+			<a href="{php echo imurl('wmall/home/index');}" class="button button-danger button-fill button-big immediate-use">立即使用</a>
+			<a href="{php echo imurl('wmall/member/redPacket');}" class="button button-danger button-fill button-big give-redpacket">查看我的红包</a>
+			{/if}
+		</div>
+		{/if}
+		<div class="records-agreement">
+			{if $op == 'grant'}
+			<div class="records-title title-line">看看大家手气</div>
+			<div class="records-container list-block media-list">
+				<ul>
+					{php $i = 0}
+					{loop $rankings $ranking}
+					<li>
+						<div class="item-content">
+							<div class="item-media">
+								{if !empty($members[$ranking['uid']]['avatar'])}
+								<img src="{php echo tomedia($members[$ranking['uid']]['avatar'])}" alt=""/>
+								{else}
+								<img src="{WE7_WMALL_TPL_URL}static/img/head.png">
+								{/if}
+							</div>
+							<div class="item-inner">
+								<div class="item-title-row item-top">
+									<div class="item-title">{$members[$ranking['uid']]['nickname']}</div>
+									<div class="item-after">{php echo floatval($ranking['total_discount'])}元</div>
+								</div>
+								<div class="item-title-row item-bottom">
+									<div class="item-subtitle">{php echo date('Y-m-d H:i:s', $ranking['granttime'])}</div>
+									{if $i == 0}
+									<div class="item-after">手气最佳</div>
+									{/if}
+								</div>
+							</div>
+						</div>
+					</li>
+					{php $i++}
+					{/loop}
+				</ul>
+			</div>
+			{/if}
+			<div class="agreement-title title-line">活动规则</div>
+			<div class="agreement-inner">
+				{php echo nl2br($activity['data']['activity']['agreement']);}
+			</div>
+		</div>
+	</div>
+</div>
+{if $op == 'index'}
+<script>
+	$(function() {
+		$(document).on('click', '.btn-get-superredpacket', function() {
+			var mobile = $.trim($('input[name="mobile"]').val());
+			if(!mobile) {
+				$.toast('请输入手机号');
+				return false;
+			}
+			var reg = /^[01][3456789][0-9]{9}/;
+			if(!reg.test(mobile)) {
+				$.toast('手机号格式错误');
+				return false;
+			}
+			var fansInfo = {php echo json_encode($fansInfo)};
+			var order_id = $(this).data('id');
+			$.post("{php echo imurl('superRedpacket/share/index')}", {mobile: mobile, fans: fansInfo}, function(data) {
+				var result = $.parseJSON(data);
+				if(!result.message.errno) {
+					location.href = "{php echo imurl('superRedpacket/share/grant')}&order_id=" + order_id;
+				} else {
+					$.toast(result.message.message);
+				}
+			});
+		});
+	});
+</script>
+{/if}
+{if $op == 'grant'}
+<script>
+	$(function() {
+		var is_get = {$is_get};
+		if(is_get == 1) {
+			$.toast('您已领取过这个红包了');
+		}
+		var get_status = {$get_status};
+		if(get_status == 1) {
+			$.toast('领取红包成功');
+		}
+	})
+</script>
+{/if}
+{itemplate 'public/footer'}

@@ -1,0 +1,77 @@
+{itemplate 'public/header'}
+<form action="./index.php?" class="form-horizontal form-filter" id="form1">
+	{php echo tpl_form_filter_hidden('member/credit');}
+	<input type="hidden" name="credit" value="{$credit}">
+	<div class="form-group form-inline">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">选择变化类型</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo iurl('member/credit')}" class="btn {if $type == ''}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo iurl('member/credit', array('type' => 'add', 'credit' => $credit))}" class="btn {if $type == 'add'}btn-primary{else}btn-default{/if}">收入</a>
+				<a href="{php echo iurl('member/credit', array('type' => 'minus', 'credit' => $credit))}" class="btn {if $type == 'minus'}btn-primary{else}btn-default{/if}">支出</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">搜索</label>
+		<div class="col-sm-9 col-xs-12">
+			{php echo itpl_form_field_daterange('createtime', array('placeholder' => '操作时间'));} <input class="form-control" style="display: inline-block" name="keyword" placeholder="输入会员名或手机号" type="text" value="{$_GPC['keyword']}">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-9 col-xs-12">
+			<button class="btn btn-primary">筛选</button>
+		</div>
+	</div>
+</form>
+<form action="" class="form-table">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			{if empty($records)}
+			<div class="no-result">
+				<p>还没有相关数据</p>
+			</div>
+			{else}
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>会员</th>
+					<th>会员信息</th>
+					<th>
+						{if $credit == 'credit1'}
+						积分变化
+						{else}
+						余额变化
+						{/if}
+					</th>
+					<th>备注</th>
+					<th>操作时间</th>
+				</tr>
+				</thead>
+				{loop $records $record}
+				<tr>
+					<td><img width="48" height="48" src="{php echo tomedia($record['avatar'])}" alt=""/>&nbsp;&nbsp;&nbsp;&nbsp;{$record['nickname']}</td>
+					<td>
+						{$record['realname']}
+						<br/>
+						{$record['mobile']}
+					</td>
+					<td>
+						<span {if $record['num'] > 0}class="text-success"{else}class="text-danger"{/if}>{$record['num']}</span>
+					</td>
+					<td>{$record['remark']}</td>
+					<td>{php echo date('Y-m-d H:i:s', $record['createtime'])}</td>
+				</tr>
+				{/loop}
+			</table>
+			<div class="btn-region clearfix">
+				<div class="pull-right">
+					{$pager}
+				</div>
+			</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{itemplate 'public/footer'}

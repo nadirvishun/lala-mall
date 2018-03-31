@@ -1,0 +1,27 @@
+{if !empty($diyitem['data'])}
+	<div class="diy-notice" style="background: {$diyitem['style']['background']}; padding-top: {$diyitem['style']['paddingtop']}px; padding-bottom: {$diyitem['style']['paddingtop']}px; padding-left: {$diyitem['style']['paddingleft']}px; padding-right: {$diyitem['style']['paddingleft']};">
+		<div class="swiper-container swiper-container-vertical diy-notice-container {if $diyitem['style']['paddingleft'] != 0} border-1px-l border-1px-r {/if}{if $diyitem['style']['paddingtop'] != 0} border-1px-t border-1px-b {/if}" data-direction="vertical" data-space-between="8" data-autoplay="{$diyitem['params']['speed']}000" data-pagination="">
+			<div class="image border-1px-r">
+				<img src="{php echo tomedia($diyitem['params']['imgurl'])}" alt="">
+			</div>
+			<div class="icon">
+				<i class='icon icon-notification'></i>
+			</div>
+			<div class="notice-text swiper-wrapper" style="color: {$diyitem['style']['textcolor']}">
+				{if $diyitem['params']['noticedata'] == 0}
+					{loop $diyitem['data'] $notice}
+						<div class="swiper-slide">
+							<a href="{$notice['linkurl']}" style="color: {$diyitem['style']['textcolor']}">{$notice['title']}</a>
+						</div>
+					{/loop}
+				{else}
+					{loop $diyitem['data'] $notice}
+						<div class="swiper-slide">
+							<a href="{$notice['linkurl']}" style="color: {$diyitem['style']['textcolor']}">{$notice['title']}</a>
+						</div>
+					{/loop}
+				{/if}
+			</div>
+		</div>
+	</div>
+{/if}

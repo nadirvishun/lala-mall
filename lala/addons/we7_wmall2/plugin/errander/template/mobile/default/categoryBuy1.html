@@ -1,0 +1,186 @@
+{itemplate 'public/header'}
+<style>
+	.errander-submit .list-block .item-link .item-inner .item-after{font-size: 0.7rem;}
+	.errander-submit textarea{border: 0; width: 100%; padding: .5rem .75rem; -webkit-appearance: none;}
+</style>
+<div class="page errander-submit">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">{$title}</h1>
+		<a class="pull-right open-popup" data-popup=".popup-errander-rule" href="javascript:;">规则</a>
+	</header>
+	<nav class="bar bar-tab footer-bar border-1px-t nav-button">
+		<div class="fee-block">
+			<div>配送费 <span class="tip hide"> + 小费</span><span class="color-danger">¥ <span id="total-fee">0</span></span></div>
+			<div class="color-gray">商品费用与骑士结算</div>
+		</div>
+		<a href="javascript:;" id="order-submit">提交订单</a>
+	</nav>
+	<div class="content">
+		<div class="list-block">
+			<ul class="border-1px-tb">
+				<li class="item-content">
+					<div class="item-media"><i class="icon icon-buy-cart"></i></div>
+					<div class="item-inner border-1px-b">
+						<div class="item-input">
+							<input type="text" name="goods_name" value="{$errander_order['goods_name']}" id="goods-title" placeholder="请输入商品名称">
+						</div>
+					</div>
+				</li>
+				{if !empty($category['label'])}
+					<li class="goods-label border-1px-b">
+						{loop $category['label'] $label}
+						<span>{$label}</span>
+						{/loop}
+					</li>
+				{/if}
+			</ul>
+		</div>
+		<div class="content-block-title">需求详细说明</div>
+		<textarea name="note" class="note border-1px-tb" value="" placeholder="输入详细要求,可选填"></textarea>
+		{if $category['goods_thumbs_status'] == 1}
+			<div class="content-block-title" style="margin-top: .3rem">上传相关照片(有图最好，无图也行)</div>
+			{php echo tpl_mutil_image('thumbs', array(), 4);}
+		{/if}
+		<div class="list-block">
+			<ul class="border-1px-tb">
+				<li class="item-content">
+					<div class="item-inner">
+						<div class="item-title label">预期商品价格</div>
+						<div class="item-input">
+							<input type="text" name="goods_price" value="{$errander_order['goods_price']}" class="text-right" placeholder="收货时支付以小票为准">
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="list-block">
+			<ul class="border-1px-tb">
+				<li class="item-content item-link border-1px-b">
+					<div class="item-media"><i class="icon icon-gou"></i></div>
+					<div class="item-inner open-popup" data-popup=".popup-select-buy-address" id="start-address">
+						{if !empty($start_address)}
+							<div class="item-title">{$start_address['address']}</div>
+						{else}
+							<div class="item-title color-gray">请输入购买地址(选填)</div>
+						{/if}
+						<div class="item-after">常用地址</div>
+					</div>
+				</li>
+				<li class="item-content item-link">
+					<div class="item-media"><i class="icon icon-shou"></i></div>
+					<div class="item-inner add-address" data-href="{php echo imurl('errander/category1/addaddress', array('id' => $id))}">
+						{if !empty($end_address)}
+							<div class="item-title">
+								<div>{$end_address['address']}</div>
+								<div class="fontsm"><span>{$end_address['realname']}</span> {$end_address['sex']}<span>{$end_address['mobile']}</span></div>
+							</div>
+						{else}
+							<div class="item-title color-gray">请输入收货地址(必填)</div>
+						{/if}
+						<div class="item-after">添加收货地址</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="content-block-title">选择支付方式</div>
+		<div class="list-block media-list pay-method">
+			<ul>
+				{loop $payment $row}
+					{php $i++}
+					<li>
+						<label class="label-checkbox item-content {if $i == 1}border-1px-tb{else}border-1px-b{/if}">
+							<div class="item-inner">
+								<div class="item-title">{$pay_types[$row]['text']}</div>
+							</div>
+							<input type="radio" name="pay_type" class="pay_type" value="{$row}" {if $row == 'wechat'}checked{/if}>
+							<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+						</label>
+					</li>
+				{/loop}
+			</ul>
+		</div>
+		<div class="list-block">
+			<ul>
+				<li class="item-content">
+					<div class="item-inner border-1px-tb">
+						<div class="item-title">送达时间</div>
+						<div class="item-after">立即配送</div>
+					</div>
+				</li>
+				<li class="item-content no-bottom">
+					<div class="item-inner">
+						<div class="item-title delivery-fee-modal js-open-modal" data-modal=".modal-delivery-fee">配送费 <i class="icon icon-question-circle"></i></div>
+						<div class="item-after"><span id="delivery-fee">0</span>元</div>
+					</div>
+				</li>
+				<li class="distance border-1px-b">
+					<div class="text-right gray hide">购买距离<span id="distance">0</span>千米</div>
+				</li>
+				{if $groupid > 0}
+				<li class="item-content no-bottom border-1px-b" id="discount-box">
+					<div class="item-inner">
+						<div class="item-title" >{$member_group['title']}优惠</div>
+						<div class="item-after"><span id="discount-fee">0</span>元</div>
+					</div>
+				</li>
+				{/if}
+				<li class="item-content no-bottom">
+					<div class="item-inner">
+						<div class="item-title">小费 <small class=" color-danger"> &nbsp;&nbsp;加小费抢单更快哦</small></div>
+						<div class="item-after"><span id="tip">{if !empty($errander_order['delivery_tips'])}{$errander_order['delivery_tips']}{else}{$category['tip_min']}{/if}</span> 元</div>
+					</div>
+				</li>
+				<li class="tip-range border-1px-b">
+					<input type="hidden" class="single-slider" id="tip_fee" value="{if !empty($errander_order['delivery_tips'])}{$errander_order['delivery_tips']}{else}{$category['tip_min']}{/if}" />
+				</li>
+				<li class="item-content anonymous border-1px-b">
+					<div class="item-inner">
+						<div class="item-title">匿名购买</div>
+						<div class="item-after">
+							<label class="label-switch invoice-status">
+								<input type="checkbox" name="is_anonymous" value="1" {if $errander_order['is_anonymous'] == 1}checked{/if}>
+								<div class="checkbox"></div>
+							</label>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="agreement">
+			<label class="label-checkbox item-content">
+				<input type="checkbox" name="agree-rule" checked="checked">
+				<div class="item-media"><i class="icon icon-form-checkbox"></i> 同意并接受<a href="javascript:;" class="open-popup" data-popup=".popup-errander-agreement">《随意购用户协议》</a></div>
+			</label>
+		</div>
+	</div>
+</div>
+<script>
+require([we7_wmall.pluginStaticRoot + 'order.js'], function(order){
+	order.init({
+		config: {
+			map: {
+				location_y: "{$_config_plugin['map']['location_y']}",
+				location_x: "{$_config_plugin['map']['location_x']}"
+			},
+			serve_radius: "{$_config_plugin['serve_radius']}"
+		},
+		category: {
+			tip_min: "{$category['tip_min']}",
+			tip_max: "{$category['tip_max']}"
+		},
+		errander_id: {$id},
+		rule: {php echo json_encode($rule);},
+		end_address: {php echo json_encode($end_address)},
+		start_address: {php echo json_encode($start_address)},
+	});
+	$(document).on('click', '.add-address', function() {
+		var href = $(this).data('href');
+		if(href) {
+			location.href = href;
+		}
+	});
+});
+</script>
+{itemplate 'categoryCommon'}
+{itemplate 'public/footer'}

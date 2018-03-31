@@ -1,0 +1,186 @@
+{itemplate 'public/header'}
+<div class="page footmark">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">我的足迹</h1>
+		{if !empty($footmarks)}
+			<span class="pull-right footmark-edit">编辑</span>
+		{/if}
+	</header>
+	<nav class="bar hide">
+		<label class="label-checkbox item-content pull-left select-alle checkbox-all" data-bind=".store-list">
+			<input type="checkbox" name="my-radio">
+			<div class="item-media">
+				<i class="icon icon-form-checkbox"></i><span>全选</span>
+			</div>
+		</label>
+		<div class="btn-del pull-right">删除</div>
+	</nav>
+	<div class="content">
+		<div class="store-list store-empty lazyload-container list-block media-list" id="store-list">
+			{if empty($footmarks)}
+				<div class="common-no-con">
+					<img src= "{WE7_WMALL_TPL_URL}static/img/store_no_con.png" alt="" />
+					<p>您还没有浏览记录</p>
+				</div>
+			{else}
+				{loop $footmarks $footmark}
+					<div class="content-block-title">
+						<label class="label-checkbox item-content checkbox-item-all all-store-{$footmark['stat_day']}" data-bind=".store-{$footmark['stat_day']}" data-bind-parent=".checkbox-all">
+							<input type="checkbox" name="my-radio">
+							<div class="item-media">
+								<i class="icon icon-form-checkbox"></i>
+							</div>
+							<div class="item-inner"><span>{$footmark['date']}</span></div>
+						</label>
+					</div>
+					<div class="store-container store-{$footmark['stat_day']}">
+						{loop $footmark['marks'] $mark}
+							<label class="label-checkbox item-content checkbox-item js-url" data-bind-parent=".all-store-{$footmark['stat_day']}" data-link="{$stores[$mark['sid']]['url']}">
+								<input type="checkbox" name="my-radio" value="{$mark['id']}">
+								<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+								<div class="no-dist item-inner list-item border-1px-b" data-lat="{$stores[$mark['sid']]['location_x']}" data-lng="{$stores[$mark['sid']]['location_y']}">
+									{if $stores[$mark['sid']]['label_cn']}
+										<span class="store-label" style="background-color: {$stores[$mark['sid']]['label_color']}">{$stores[$mark['sid']]['label_cn']}</span>
+									{/if}
+									<a href="javascript:;" class="external item-title-row">
+										<div class="store-info row no-gutter">
+											<div class="store-img col-25">
+												<img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="lazyload lazyload-store" data-original="{$stores[$mark['sid']]['logo']}">
+												{if $stores[$mark['sid']]['is_rest'] == 1}
+													<div class="order-status">
+														<span>店铺休息中</span>
+													</div>
+												{/if}
+											</div>
+											<div class="col-75">
+												<div class="row no-gutter">
+													<div class="col-60 text-ellipsis">{$stores[$mark['sid']]['title']}</div>
+													<div class="money-info text-right">
+														{if $stores[$mark['sid']]['token_status'] == 1}
+															<span>券</span>
+														{/if}
+														{if $stores[$mark['sid']]['invoice_status'] == 1}
+															<span>票</span>
+														{/if}
+														<span>付</span>
+													</div>
+												</div>
+												<div class="rel-info">
+													<div class="row no-gutter">
+														<div class="col-60">
+															<div class="star-rank">
+																<span class="star-rank-outline">
+																	<span class="star-rank-active" style="width: {$stores[$mark['sid']]['score_cn']}%"></span>
+																	<span class="star-rank-value">{$stores[$mark['sid']]['score']}</span>
+																</span>
+																<span class="sailed">
+																	已售 {$stores[$mark['sid']]['sailed']} 份
+																</span>
+															</div>
+														</div>
+														{if $stores[$mark['sid']]['delivery_mode'] == 2}
+															<div class="plateform-delivery"><span>{$_config_mall['delivery_title']}</span></div>
+														{/if}
+													</div>
+													<div class="delivery-conditions">
+														起送<span class="color-danger">￥{$stores[$mark['sid']]['send_price']}</span><span class="pipe">|</span>配送<span class="color-danger">￥{$stores[$mark['sid']]['delivery_price']}</span><span class="pipe">|</span>约<span class="color-danger">{$stores[$mark['sid']]['delivery_time']}分钟</span>
+														<div class="distance {if empty($stores[$mark['sid']]['distance'])} hide {/if}" data-in-business-hours="{$stores[$mark['sid']]['is_in_business_hours']}"><i class="icon icon-lbs"></i>{$stores[$mark['sid']]['distance']}km</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</a>
+									<div class="activity-containter">
+										{php $num = 0}
+										{if $stores[$mark['sid']]['activity']['num'] > 0}
+											<div class="dashed-line"></div>
+											{if $stores[$mark['sid']]['activity']['num'] > 2}
+												<div class="activity-num">{$stores[$mark['sid']]['activity']['num']}个活动 <i class="icon icon-arrow-down"></i></div>
+											{/if}
+											{loop $stores[$mark['sid']]['activity']['items'] $item}
+												{php $num++}
+												<div class="{$item['type']} {if $num > 2}activity-row hide{/if}">{$item['title']}</div>
+											{/loop}
+										{/if}
+										{if $stores[$mark['sid']]['delivery_free_price'] > 0}
+											{php $num++}
+											<div class="activity-row free {if $num > 2}hide{/if}">
+												满{$stores[$mark['sid']]['delivery_free_price']}元免配送费
+											</div>
+										{/if}
+										{if !empty($stores[$mark['sid']]['hot_goods'])}
+											<div class="dashed-line"></div>
+											<div class="hot">
+												热销:
+												{loop $stores[$mark['sid']]['hot_goods'] $hot}
+												{$hot['title']}
+												{/loop}
+											</div>
+										{/if}
+									</div>
+								</div>
+							</label>
+						{/loop}
+					</div>
+				{/loop}
+			{/if}
+		</div>
+	</div>
+</div>
+<script>
+$(function() {
+	$(document).on('click', '.activity-containter', function(){
+		if($(this).hasClass('active')) {
+			$(this).find('.activity-row').addClass('hide');
+			$(this).find('.activity-num i').addClass('fa-arrow-down').removeClass('fa-arrow-up');
+		} else {
+			$(this).find('.activity-row').removeClass('hide');
+			$(this).find('.activity-num i').addClass('fa-arrow-up').removeClass('fa-arrow-down');
+		}
+		$(this).toggleClass('active');
+	});
+
+	$(document).on('click', '.footmark-edit', function() {
+		if($(this).hasClass('active')) {
+			$(this).removeClass('active').html('编辑');
+			$('#store-list').find('.item-media ').hide();
+			$('nav.bar').removeClass('bar-tab').addClass('hide');
+			$('.checkbox-item').addClass('js-url');
+		} else {
+			$(this).addClass('active').html('完成');
+			$('#store-list').find('.item-media').show();
+			$('nav.bar').removeClass('hide').addClass('bar-tab');
+			$('.checkbox-item').removeClass('js-url');
+		}
+	});
+
+	$(document).on('click', '.btn-del', function() {
+		var length = 0;
+		var ids = [];
+		$('.content :checkbox').each(function () {
+			var value = $(this).val();
+			if($(this).prop('checked')) {
+				length++;
+				ids.push(value);
+			}
+		});
+		if(length < 1) {
+			$.toast('请选择要删除的记录');
+		} else {
+			$.confirm('确定删除足迹吗?', function(){
+				$.post("{php echo imurl('wmall/home/footmark/del')}", {ids : ids}, function(data) {
+					var result = $.parseJSON(data);
+					if(result.message.errno != 0) {
+						$.toast(result.message.message);
+						return false;
+					} else {
+						$.toast(result.message.message, location.href);
+					}
+				});
+			});
+		}
+	});
+});
+</script>
+{itemplate 'public/footer'}

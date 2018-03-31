@@ -1,0 +1,28 @@
+{itemplate 'public/header'}
+<div class="panel panel-default panel-message">
+	<div class="panel-body">
+		<div class="message-icon pull-left">
+			<i class="fa fa-5x fa-{if $label=='success'}check-circle{/if}{if $label=='danger'}times-circle{/if}{if $label=='info'}info-circle{/if}{if $label=='warning'}exclamation-triangle{/if}"></i>
+		</div>
+		<div class="pull-left">
+			{if is_array($msg)}
+				<h2>MYSQL 错误：</h2>
+				<p>{php echo cutstr($msg['sql'], 300, 1);}</p>
+				<p><b>{$msg['error'][0]} {$msg['error'][1]}：</b>{$msg['error'][2]}</p>
+			{else}
+				<p class="message-text">{$msg}</p>
+			{/if}
+			{if $redirect}
+				<p><a href="{$redirect}">如果你的浏览器没有自动跳转，请点击此链接</a></p>
+				<script type="text/javascript">
+					setTimeout(function () {
+						location.href = "{$redirect}";
+					}, 2000);
+				</script>
+			{else}
+				<p>[<a href="javascript:history.go(-1);">点击这里返回上一页</a>] &nbsp; [<a href="./?refresh">首页</a>]</p>
+			{/if}
+		</div>
+	</div>
+</div>
+{itemplate 'public/footer'}

@@ -1,0 +1,248 @@
+{itemplate 'public/header'}
+<style>
+	.grant-detail-container .cashier-info {
+	    font-size: 14px;
+	    color: #000;
+	    position: relative;
+	    min-height: 577px;
+	}
+	.grant-detail-container .global-clearfix {
+	    zoom: 1;
+	}
+	.grant-detail-container .user-info{
+		padding:10px 0 20px;
+	}
+	.grant-detail-container .product-type-title{
+		float:left;
+		padding-top:2px;
+	    font-size: 13px;
+    	margin-left: 11px;
+	}
+	.grant-detail-container span.ca-form-option {
+	    padding-left: 20px;
+	    font-size: 14px;
+	}
+	.grant-detail-container .wallet-dialog .content {
+	    z-index: 1;
+	}
+	.grant-detail-container .wallet-dialog .product-info {
+	    position: relative;
+	    z-index: 9;
+	}
+	.grant-detail-container .info-vip {
+	    position: relative;
+	    margin-bottom: 30px;
+	}
+	.grant-detail-container .info-vip .info-box-time .info-product-vip, .info-vip .info-box-time .price-tips {
+	    position: relative;
+	    margin-left: 80px;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item {
+	    border: solid 1px #fff;
+	    position: relative;
+	    float: left;
+	    margin-right: 19px;
+	    margin-bottom: 10px;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item-link-active {
+	    border: 1px #4C9AF2 solid;
+	    border-radius: 4px;
+	    height: 41px;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item-link-active .item-link {
+	    border: 0 none;
+	    border: 1px #4C9AF2 solid;
+	    border-radius: 3px;
+	    height: 39px;
+	    overflow: hidden;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item .item-link {
+	    display: block;
+	    border: 1px #D6D6D6 solid;
+	    border-radius: 4px;
+	    width: 160px;
+	    background-color: #fff;
+	    height: 39px;
+	    overflow: hidden;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item label {
+	    background-color: #ededed;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item .item-link label {
+	    float: left;
+	    width: 80px;
+	    height: 39px;
+	    line-height: 39px;
+	    color: #707070;
+	    text-align: center;
+	    cursor: pointer;
+	    border-radius: 2px 0 0 2px;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item .item-link label span {
+	    vertical-align: inherit;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item .item-link .detail {
+	    overflow: hidden;
+	    zoom: 1;
+	    display: block;
+	    width: 45%;
+	    margin: 0 auto;
+	    text-align: center;
+	    height: 39px;
+	    line-height: 39px;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item .item-link .detail .detail-row {
+	    margin-right: 5px;
+	    text-align: center;
+	    font-size: 20px;
+	    color: #F5622E;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item .item-link .detail .detail-row span {
+	    font-size: 14px;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item .active-icon {
+	    display: none;
+	    position: absolute;
+	    width: 18px;
+	    height: 18px;
+	    bottom: 0px;
+	    right: 0px;
+	    background: url({WE7_WMALL_URL}/static/img/coupon_icon.png) -59px -20px no-repeat transparent;
+	}
+	.grant-detail-container .info-vip .info-product-vip .product-list .item-link-active .active-icon {
+	    display: block;
+	}
+	.grant-detail-container .ca-tabs-panel ul.ca-form-option, .ca-tabs-panel .bank-tab-content, .easypay-options .add-card {
+	    margin-left: 80px;
+	}
+	.grant-detail-container .choose-list-bank li, .choose-list-icon li.option-selected {
+	    width: auto;
+	}
+	.grant-detail-container .choose-list-icon li, .choose-list-bank li, .choose-list-txt li {
+	    float: left;
+	    margin: 1px 10px 10px 0;
+	    cursor: pointer;
+	    border: 1px solid #d1d6de;
+	}
+	.grant-detail-container .choose-list-bank li.selected, .choose-list-icon li.selected, .choose-list-txt li.selected {
+	    border-color: #fff;
+	}
+	.grant-detail-container .choose-list-bank li, .choose-list-icon li {
+	    width: 123px;
+	    height: 35px;
+	    line-height: 35px;
+	    text-align: center;
+	    position: relative;
+	}
+	.grant-detail-container .choose-list-icon .option-icon.active {
+	    border: 2px solid #4C9AF2;
+	}
+	.grant-detail-container .choose-list-icon .option-icon {
+	    display: block;
+	    background: #fff;
+	    position: relative;
+	    width: 120px;
+	    text-align: center;
+	    margin-right: 10px;
+	    cursor: pointer;
+	    height: 40px;
+	    border: 1px solid #D6D6D6;
+	    -webkit-border-radius: 3px;
+	    -moz-border-radius: 3px;
+	    border-radius: 3px;
+	    float: left;
+	}
+	.grant-detail-container ..choose-list-icon .option-icon img {
+	    margin: 8px 0px;
+	    height: 24px;
+	}
+	.grant-detail-container .ca-tabs-panel {
+	    margin-top: 10px;
+	}
+	.grant-detail-container .ca-spec-num {
+	    display: inline-block;
+	    font-family: "Century Gothic",arial,tahoma;
+	    font-weight: 700;
+	    color: #f60;
+	    font-size: 20px;
+	    line-height: 25px;
+	    margin: 0 1px;
+	}
+	.grant-detail-container .choose-list-icon .option-icon.active em {
+	    position: absolute;
+	    width: 18px;
+	    height: 18px;
+	    bottom: 0px;
+	    right: 0px;
+	    background: url({WE7_WMALL_URL}/static/img/coupon_icon.png) -59px -20px no-repeat transparent;
+	}
+</style>
+<div class="grant-detail-container">
+	<div class="cashier-info">
+		<div class="user-info global-clearfix">
+			<span class="product-type-title">应用名称：</span>
+			<span class="ca-form-option">小程序</span>
+		</div>
+		<div class="wallet-dialog">
+			<div class="content global-clearfix">
+				<div class="wallet-content">
+					<div class="product-info">
+						<div class="info-vip">
+							<span class="product-type-title" style="padding-top: 12px;">开通时长：</span>
+							<div class="info-box-time">
+								<div class="info-product info-product-vip">
+									<ul class="product-list global-clearfix vip-ul no-view clearfix">
+										<li class="item item-first item-link-active">
+											<a href="javascript:;" class="item-link global-clearfix">
+												<label>
+													<span>12个月</span>
+												</label>
+												<span class="detail">
+													<span class="detail-row">
+														<span>¥</span>3888
+													</span>
+												</span>
+												<em class="active-icon"></em>
+											</a>
+										</li>
+									</ul>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="ca-tabs-panel">
+					<div class="ca-form-group clearfix">
+						<span class="product-type-title" style="padding-top: 10px;">支付方式:</span>
+						<div class="ca-form-group clearfix">
+							<ul class="ca-form-option choose-list-icon channel-list">
+								<li class="selected option-selected">
+									<label class="option-icon active">
+										<img src="{WE7_WMALL_URL}/static/img/alipay.png">
+										<em class="active-icon"></em>
+									</label>
+									<label class="option-icon">
+										<img src="{WE7_WMALL_URL}/static/img/weixin.png">
+										<em class="active-icon"></em>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>		
+					<div class="ca-form-group clearfix" style="padding:10px 0;">
+						<span class="product-type-title" style="padding-top: 5px;">应付金额:</span>
+						<span class="ca-form-option">
+							<span class="ca-spec-num ca-pay-amount">3888</span>
+							<span class="ca-unit">元</span>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+{itemplate 'public/footer'}

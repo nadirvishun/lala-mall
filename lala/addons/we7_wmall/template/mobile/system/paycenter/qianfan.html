@@ -1,0 +1,33 @@
+{itemplate 'public/header'}
+<script type="text/javascript">
+	var payinfo = {php echo json_encode($payinfo);};
+	payinfo.item = '{php echo json_encode($payinfo["item"]);}';
+	payinfo.address = '{php echo json_encode($payinfo["address"]);}';
+
+	var QFdata = {
+		'type' : payinfo.type,
+		'item' : payinfo.item,
+		'send_type' : payinfo.send_type,
+		'address' : payinfo.address,
+		'allow_pay_type' : payinfo.allow_pay_type
+	};
+	function QFH5ready() {
+		QFH5.createOrder(QFdata['type'], QFdata['item'], QFdata['send_type'], QFdata['address'], QFdata['allow_pay_type'], function(state, data){
+			if(state == 1){
+				var order_id = data.order_id;
+				$.post("{php echo imurl('system/paycenter/sync/qianfan');}", {tid: payinfo.tid, order_id: order_id}, function(){
+					QFH5.jumpPayOrder(order_id, function(state, data){
+						if(state == 1){
+							$.toast('订单支付成功', payinfo.url_detail);
+						} else {
+							$.toast(data.error, payinfo.url_pay);
+						}
+					});
+				});
+			} else {
+				$.toast('创建交易订单失败:' + data.error, payinfo.url_pay);
+			}
+		});
+	}
+</script>
+{itemplate 'public/footer'}

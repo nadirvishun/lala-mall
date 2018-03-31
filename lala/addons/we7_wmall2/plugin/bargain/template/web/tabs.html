@@ -1,0 +1,26 @@
+<div class="second-sidebar-title">{$_W['_plugin']['title']}</div>
+<div class="nav slimscroll">
+	{ifp 'bargain.index' || 'bargain.cover'}
+		<div class="menu-header">设置</div>
+		<ul class="menu-item">
+			{ifp 'bargain.index'}
+				<li {if $_W['_action'] == 'index'}class="active"{/if}>
+					<a href="{php echo iurl('bargain/index/index');}">活动设置</a>
+				</li>
+			{/if}
+			{ifp 'bargain.cover'}
+				<li {if $_W['_action'] == 'cover'}class="active"{/if}>
+					<a href="{php echo iurl('bargain/cover/index');}">入口设置</a>
+				</li>
+			{/if}
+		</ul>
+	{/if}
+	{ifp 'bargain.goods'}
+		<div class="menu-header">商品</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'goods'}class="active"{/if}>
+				<a href="{php echo iurl('bargain/goods/index');}">活动商品</a>
+			</li>
+		</ul>
+	{/if}
+</div>

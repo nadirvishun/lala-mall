@@ -1,0 +1,23 @@
+{if !empty($diyitem['data'])}
+	{php $diyitem['data'] = array_values($diyitem['data']);}
+	<div class="diy-graphic" style="background: {$diyitem['style']['background']}; padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;">
+		<div class="diy-graphic-container clearfix">
+			<?php 
+			    $diyitem['data_temp'] = array_chunk($diyitem['data'], 4);
+			    $numtemp = count($diyitem['data_temp']);  
+			    $num = ($numtemp - 1) *4; 
+			    $i = 0;
+			?>
+		 	{loop $diyitem['data'] $item}
+		 		{php $i++;}
+				<a href="{php echo tomedia($item['linkurl'])}" class="diy-graphic-list" style="background: {$diyitem['style']['cardbackground']}; {if $i > $num} margin-bottom: 0;{/if}">
+					<div class="main-title" style="color:{$diyitem['style']['titlecolor']};">{$item['title']}</div>
+					<div class="subhead" style="color:{$diyitem['style']['subheadcolor']};">{$item['subhead']}</div>
+					<div class="img">
+						<img src="{php echo tomedia($item['imgurl'])}" alt="">
+					</div>
+				</a>
+			{/loop}
+		</div>
+	</div>
+{/if}

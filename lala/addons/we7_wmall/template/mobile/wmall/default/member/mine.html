@@ -1,0 +1,145 @@
+{itemplate 'public/header'}
+<div class="page my-page" id="page-app-mine">
+	{php get_mall_menu();}
+	<div class="content">
+		<div class="banner">
+			<div class="avatar">
+				{if !empty($user['avatar'])}
+					<img src="{php echo tomedia($user['avatar']);}" alt="">
+				{else}
+					<img src="{WE7_WMALL_TPL_URL}static/img/head.png" alt="">
+				{/if}
+				{if $_W['member']['groupid'] > 0}
+					<span>{$_W['member']['groupname']}</span>
+				{/if}
+			</div>
+			<a href="{php echo imurl('wmall/member/profile/info')}"><span class="icon icon-settings"></span></a>
+			<div class="name">
+				<a href="{if !empty($deliveryCard_status)}{php echo imurl('deliveryCard/index');}{else}javascript:;{/if}">
+					{$user['nickname']}
+					{if !empty($deliveryCard_status)}
+						{if $user['setmeal_id'] > 0 && $user['setmeal_endtime'] > TIMESTAMP}
+							<img src="{WE7_WMALL_TPL_URL}static/img/vip_effective.png" alt="">
+						{else}
+							<img src="{WE7_WMALL_TPL_URL}static/img/vip_deprecated.png" alt="">
+						{/if}
+					{/if}
+				</a>
+			</div>
+			<div class="table activity-nav">
+				<div class="table-cell">
+					<a href="{php echo imurl('wmall/member/coupon');}">
+						<div class="count">{$coupon_nums}</div>
+						<div class="">代金券</div>
+					</a>
+				</div>
+				{if !empty($redpacket_status)}
+					<div class="table-cell">
+						<a href="{php echo imurl('wmall/member/redPacket');}">
+							<div class="count">{$redpacket_nums}</div>
+							<div class="">红包</div>
+						</a>
+					</div>
+				{else}
+					<div class="table-cell">
+						<a href="{php echo imurl('wmall/member/favorite');}">
+							<div class="count">{$favorite}</div>
+							<div class="">我的收藏</div>
+						</a>
+					</div>
+				{/if}
+				<div class="table-cell" style="display: none">
+					<a href="{php echo imurl('wmall/member/favorite');}">
+						<div class="count">{$favorite}</div>
+						<div class="">收藏店铺</div>
+					</a>
+				</div>
+				<div class="table-cell">
+					<a href="{php echo imurl('wmall/member/recharge');}">
+						<div class="count">{php echo floatval($user['credit2'])}</div>
+						<div class="">余额</div>
+					</a>
+				</div>
+				<div class="table-cell">
+					<a href="javascript:;">
+						<div class="count">{php echo floatval($user['credit1'])}</div>
+						<div class="">积分</div>
+					</a>
+				</div>
+			</div>
+		</div>
+		{if empty($_W['member']['mobile_audit'])}
+			<div class="list-block">
+				<ul>
+					<li class="item-content item-link">
+						<div class="item-media"><i class="icon icon-phone"></i></div>
+						<a href="{php echo imurl('wmall/member/profile/bind')}" class="item-inner">
+							<div class="item-title bind-mobile">绑定手机号</div>
+						</a>
+					</li>
+					<div class="notice">
+						如果您用手机号注册过会员或您想通过微信外购物请绑定您的手机号码
+					</div>
+				</ul>
+			</div>
+		{/if}
+		{if !is_h5app()}
+			<div class="grid-nav grid-money border-1px-tb">
+				<div class="grid-money-title border-1px-b">
+					商家管理
+					{if $config_mall['version'] == 1 && $config_settle['status'] == 1}
+						<a href="{php echo imurl('wmall/store/settle');}">商家入驻,轻松提现</a> <i class="icon icon-arrow-right"></i>
+					{/if}
+				</div>
+				<div class="row no-gutter">
+					<div class="col-33">
+						<a href="{php echo imurl('manage/home/index');}" class="external">
+							<img src="{WE7_WMALL_TPL_URL}static/img/mypage_messages.png" alt="" />
+							<span>店员入口</span>
+						</a>
+					</div>
+					<div class="col-33">
+						<a href="{php echo imurl('delivery/home/index');}">
+							<img src="{WE7_WMALL_TPL_URL}static/img/mypage_messages.png" alt="" />
+							<span>配送员入口</span>
+						</a>
+					</div>
+					{if $config_mall['version'] == 1 && $config_settle['status'] == 1}
+					<div class="col-33">
+							<a href="{php echo imurl('wmall/store/settle');}">
+								<img src="{WE7_WMALL_TPL_URL}static/img/mypage_settle.png" alt="" />
+								<span>商户入驻</span>
+							</a>
+						</div>
+					{/if}
+				</div>
+			</div>
+		{/if}
+		<div class="grid-nav">
+			{loop $urls $chunk}
+				{php $i++;}
+				<div class="row no-gutter border-1px-b">
+					{loop $chunk $item}
+						{php $j++;}
+						<div class="col-25 {if $i == 1}border-1px-t{/if}">
+							<a href="{$item['url']}" class="{if $j % 4 != 0}border-1px-r{/if} {$item['css']}">
+								<img src="{WE7_WMALL_TPL_URL}static/img/{$item['icon']}" alt="" />
+								<span>{$item['title']}</span>
+							</a>
+						</div>
+					{/loop}
+				</div>
+			{/loop}
+		</div>
+		<div class="service-tel">
+			<a href="tel:{$config_mall['mobile']}" class="color-danger border-1px-tb">客服热线: {$config_mall['mobile']}</a>
+		</div>
+		{itemplate 'public/copyright'}
+	</div>
+</div>
+<script>
+{if !is_error($spread)}
+	$.toptip("{$spread['nickname']}向您推荐了{$config_mall['title']},快去下单吧!", 10000, 'success')
+{/if}
+</script>
+{itemplate 'public/footer'}

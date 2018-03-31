@@ -1,0 +1,275 @@
+{if is_weixin() && !$_GPC['__ignore_follow_tips'] && empty($_W['fans']['follow']) && $_W['we7_wmall']['config']['follow']['guide_status'] == 1 && ($_followbar = 1 || in_array($_W['_router'], array('wmall/home/index', 'wmall/member/mine', 'freeLunch/freeLunch/index', 'shareRedpacket/share/invite', 'shareRedpacket/share/success', 'system/paycenter/peerpay')))}
+{if in_array($_W['_router'], array('wmall/member/mine', 'system/paycenter/peerpay'))}
+<style>.follow-tips{top: 0}</style>
+{/if}
+<div class="follow-tips">
+	<div class="info">
+		<div class="logo"><img src="{php echo tomedia($_W['we7_wmall']['config']['mall']['logo']);}" alt=""></div>
+		<div class="txt"><p>欢迎进入{$_W['we7_wmall']['config']['mall']['title']}<br>关注公众号，享专属服务</p></div>
+	</div>
+	{if !empty($_W['we7_wmall']['config']['follow']['qrcode'])}
+	<div class="text-btn"><a href="javascript:;" class="button button-big js-open-modal" data-modal="#concern">立即关注</a></div>
+	<div class="close-modal">&times;</div>
+	{else}
+	<div class="text-btn"><a href="{$_W['we7_wmall']['config']['follow']['link']}">立即关注</a></div>
+	{/if}
+</div>
+<div class="modal modal-no-buttons" id="concern">
+	<div class="code-warpper">
+		<img src="{php echo tomedia($_W['we7_wmall']['config']['follow']['qrcode'])}" alt="">
+	</div>
+	<div class="notice">长按识别二维码关注</div>
+	<a href="javascript:;" class="js-close-modal" data-modal="#concern">&times;</a>
+</div>
+{/if}
+
+{if in_array($_GPC['ac'], array('home', 'order'))}
+{php $_order = order_mall_remind();}
+{if !empty($_order)}
+<div class="order-status-warpper" >
+	<img src="{php echo tomedia($_config_mall['logo']);}" alt="">
+	<div class="text">
+		<div class="order-status">{$_order['log']['title']}</div>
+		<div class="time">请耐心等待</div>
+	</div>
+	<span class="order-status-close">&times;</span>
+</div>
+{/if}
+{/if}
+<script>
+$(function(){
+	$(document).on('click', '.order-status-warpper', function() {
+		$(this).toggleClass('active');
+	});
+
+	window.sharedata = {
+		title: "{$_share['title']}",
+		desc: "{$_share['desc']}",
+		link: "{$_share['link']}",
+		imgUrl: "{$_share['imgUrl']}"
+	};
+
+	wx.ready(function() {
+		wx.onMenuShareAppMessage(sharedata);
+		wx.onMenuShareTimeline(sharedata);
+	});
+
+	$(document).off('click', '.photoBrowser-image-item');
+	$(document).on('click', '.photoBrowser-image-item', function(){
+		var $parents = $(this).parent();
+		var thumbs = [];
+		$($parents).find('img').each(function(){
+			var thumb = $(this).attr('src');
+			if(thumb) {
+				thumbs.push(thumb);
+			}
+		});
+		var myPhotoBrowserPopup = $.photoBrowser({
+			photos: thumbs
+		});
+		myPhotoBrowserPopup.open();
+	});
+
+	if($(".follow-tips").size() > 0) {
+		require(['tiny'], function(tiny){
+			$('.follow-tips .close-modal').click(function(){
+				$('.follow-tips').remove();
+				$('#concern').remove();
+				tiny.cookie.set('__ignore_follow_tips', 1, 3600);
+			});
+		});
+	}
+	if($("img.lazyload").size() > 0) {
+		require(['jquery.lazyload'], function(){
+			$("img.lazyload").lazyload({
+				container: $('.lazyload-container'),
+				effect : 'fadeIn',
+				threshold : 350
+			});
+		});
+	}
+
+	if ($(".js-notice").length > 0) {
+		$(".js-notice").each(function() {
+			var _this = $(this);
+			var speed = _this.data('speed') * 1000;
+			setInterval(function() {
+				var length = _this.find("li").length;
+				if (length > 1) {
+					_this.find("ul").animate({marginTop: "-1rem"}, 500, function() {
+						$(this).css({marginTop: "0px"}).find("li:first").appendTo(this)
+					})
+				}
+			}, speed)
+		})
+	}
+
+	if($('.btn-captcha').length > 0) {
+		$(document).on('click', '.btn-captcha', function() {
+			var href = $(this).data('href');
+			href = href + Math.random();
+			$(this).attr('src', href);
+		});
+	}
+
+	$(document).on("click", '.open-zhezhao', function(e) {
+		e.preventDefault();
+		$('.zhezhao').show();
+	});
+
+	$(document).on("click", '.close-zhezhao', function(e) {
+		e.preventDefault();
+		$('.zhezhao').hide();
+	});
+
+	$(document).on("click", '.js-open-modal', function(e) {
+		e.preventDefault();
+		var modal = $(this).data('modal');
+		if(!modal || !$(modal).size()) {
+			return false;
+		}
+		$.iopenModal(modal, function(){});
+	});
+
+	$(document).on('click', '.js-close-modal', function(e) {
+		e.preventDefault();
+		var modal = $(this).data('modal');
+		if(!modal || !$(modal).size()) {
+			return false;
+		}
+		$.icloseModal(modal, true);
+	});
+
+	if($(".checkbox-all").size() > 0) {
+		$(document).off('click', '.checkbox-all');
+		$(document).on('click', '.checkbox-all', function(){
+			var $this = $(this);
+			var $container = $($(this).data('bind'));
+			if(!$container) {
+				return false;
+			}
+			var checked = $this.find(':checkbox').prop("checked") ? true : false;
+			$('.checkbox-item :checkbox, .checkbox-item-all :checkbox', $container).prop("checked", checked);
+			return true;
+		});
+
+		$(document).off('click', '.checkbox-item-all');
+		$(document).on('click', '.checkbox-item-all', function(){
+			var $this = $(this);
+			var $container = $($this.data('bind'));
+			var $parent = $($this.data('bind-parent'));
+			var $parent_container = $($parent.data('bind'));
+			if(!$container) {
+				return false;
+			}
+			var checked = $this.find(':checkbox').prop("checked") ? true : false;
+			$('.checkbox-item :checkbox', $container).prop("checked", checked);
+			if(!checked) {
+				$parent.find(':checkbox').prop("checked", false);
+			} else {
+				var checked = $('.checkbox-item :checkbox, .checkbox-item-all :checkbox', $parent_container).length == $('.checkbox-item :checkbox:checked, .checkbox-item-all :checkbox:checked', $parent_container).length;
+				$parent.find(':checkbox').prop("checked", checked);
+			}
+			return true;
+		});
+
+		$(document).off('click', '.checkbox-item');
+		$(document).on('click', '.checkbox-item', function(){
+			var $this = $(this);
+			var $parent = $($this.data('bind-parent'));
+			var $parent_container = $($parent.data('bind'));
+			var $grand = $($parent.data('bind-parent'));
+			var $grand_container = $($grand.data('bind'));
+
+			var checked = $this.find(':checkbox').prop("checked") ? true : false;
+			if(!checked) {
+				$parent.find(':checkbox').prop("checked", false);
+				$grand.find(':checkbox').prop("checked", false);
+			} else {
+				var checked = $('.checkbox-item :checkbox, .checkbox-item-all :checkbox', $parent_container).length == $('.checkbox-item :checkbox:checked, .checkbox-item-all :checkbox:checked', $parent_container).length;
+				$parent.find(':checkbox').prop("checked", checked);
+				if(checked) {
+					var checked = $('.checkbox-item :checkbox, .checkbox-item-all :checkbox', $grand_container).length == $('.checkbox-item :checkbox:checked, .checkbox-item-all :checkbox:checked', $grand_container).length;
+					$grand.find(':checkbox').prop("checked", checked);
+				}
+			}
+			return true;
+		});
+	}
+
+	$(document).on("click", '.js-post', function(e) {
+		e.preventDefault();
+		var obj = $(this), confirm = obj.data("confirm"), url = obj.data("href") || obj.attr("href"), data = obj.data("set") || {}, html = obj.html();
+		handler = function() {
+			e.preventDefault();
+			if(obj.attr("submitting") == "1") {
+				return;
+			}
+			obj.attr("submitting", 1);
+			$.showIndicator();
+			$.post(url, {data: data}, function(ret) {
+				$.hideIndicator();
+				var result = $.parseJSON(ret);
+				var errno = result.message.errno,
+						url = result.message.url ? result.message.url : '',
+						message = result.message.message;
+				if(!errno) {
+					$.toast(message, url);
+				} else {
+					$.toast(message, url);
+					obj.removeAttr("submitting").html(html);
+				}
+			}).fail(function() {
+				obj.removeAttr("submitting");
+				$.toast('网络异常');
+			});
+		};
+		if(confirm) {
+			$.confirm(confirm, handler);
+		} else {
+			handler();
+		}
+	});
+
+	$(document).on("infinite", '.js-infinite', function() {
+		var $this = $(this);
+		var id = $this.data('min'), href = $this.data('href'), tpl = $this.data('tpl'), container = $this.data('container');
+		if(!id || !href || !tpl || $this.data('loading') == 1) return false;
+		$this.data('loading', 1);
+		$this.find('.infinite-scroll-preloader').removeClass('hide');
+		$.post(href, {min: id, time: timeStamp}, function(data){
+			var result = $.parseJSON(data);
+			if(result.message.errno != 0) {
+				$.toast(result.message.message);
+				return;
+			}
+			$this.attr('data-min', result.message.min) || $this.data('min', result.message.min);
+			if(!result.message.min) {
+				$.detachInfiniteScroll($('.infinite-scroll'));
+				$('.infinite-scroll-preloader').remove();
+				return;
+			}
+			$this.find('.infinite-scroll-preloader').removeClass('hide');
+			$this.data('loading', 0);
+			var tpl = $('#' + $this.data('tpl')).html();
+			require(['laytpl'], function(laytpl){
+				laytpl(tpl).render(result.message.message, function(html){
+					$this.find(container).append(html);
+				});
+			});
+		});
+	});
+
+	$(document).on('click', '.js-url', function(){
+		var url = $(this).data('link');
+		if(url) {
+			location.href = url;
+		}
+	});
+
+			$.post("{php echo imurl('system/common/cron')}", function(){});
+			$.init();
+		});
+</script>
+</body>
+</html>

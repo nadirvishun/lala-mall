@@ -1,0 +1,179 @@
+{itemplate 'public/header'}
+<div class="clearfix order-detail">
+	<div class="col-md-4 padding-0">
+		<div class="panel panel-display">
+			<div class="panel-heading"><h3>订单信息</h3></div>
+			<div class="panel-body">
+				<table class="table">
+					<tr>
+						<td width="130">订单编号：</td>
+						<td>{$order['ordersn']}</td>
+					</tr>
+					<tr>
+						<td width="130">本平台支付单号：</td>
+						<td>{$order['out_trade_no']}</td>
+					</tr>
+					<tr>
+						<td width="130">第三方支付单号：</td>
+						<td>{$order['transaction_id']}</td>
+					</tr>
+					<tr>
+						<td>下单时间：</td>
+						<td>{php echo date('Y-m-d H:i', $order['addtime']);}</td>
+					</tr>
+					<tr>
+						<td>订单状态：</td>
+						<td><span class="{$order_status[$order['status']]['css']}">{$order_status[$order['status']]['text']}</span></td>
+					</tr>
+					<tr>
+						<td>配送时间：</td>
+						<td>{$order['delivery_time']}</td>
+					</tr>
+					<tr>
+						<td>付款方式：</td>
+						<td>
+							{if !$order['is_pay']}
+								<span class="label label-danger">未支付</span>
+							{else}
+								<span class="{$pay_types[$order['pay_type']]['css']}">{$pay_types[$order['pay_type']]['text']}</span>
+							{/if}
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="panel panel-display">
+			<div class="panel-heading"><h3>订单日志</h3></div>
+			<div class="panel-body">
+				<table class="table">
+					{loop $logs $log}
+					<tr>
+						<td>
+							<p><i class="icon icon-info-circle"></i> <strong>{php echo date('Y-m-d H:i', $log['addtime']);} {$log['title']}</strong></p>
+							<p style="padding-left:15px; ">{$log['note']}</p>
+						</td>
+					</tr>
+					{/loop}
+				</table>
+			</div>
+		</div>
+		{if !empty($refund_logs)}
+		<div class="panel panel-display">
+			<div class="panel-heading"><h3>退款日志</h3></div>
+			<div class="panel-body">
+				<table class="table">
+					{loop $refund_logs $log}
+					<tr>
+						<td>
+							<p><i class="icon icon-info-circle"></i> <strong>{php echo date('Y-m-d H:i', $log['addtime']);} {$log['title']}</strong></p>
+							<p style="padding-left:15px; ">{$log['note']}</p>
+						</td>
+					</tr>
+					{/loop}
+				</table>
+			</div>
+		</div>
+		{/if}
+	</div>
+	<div class="col-md-8 padding-r-0">
+		<div class="panel panel-display">
+			<div class="panel-heading"><h3>订单费用</h3></div>
+			<div class="panel-body">
+				<table class="table">
+					<tr>
+						<td width="130">配送距离：</td>
+						<td>{if !empty($order['distance'])}{$order['distance']}公里{else}未知{/if}</td>
+					</tr>
+					<tr>
+						<td width="130">配送费：</td>
+						<td>+￥ {$order['delivery_fee']}</td>
+					</tr>
+					<tr>
+						<td width="130">总计算：</td>
+						<td>
+							￥ {$order['final_fee']}
+						</td>
+					</tr>
+					<tr>
+						<td width="130">代理商收入：</td>
+						<td>
+							+￥ {$order['plateform_serve_fee']} = {$order['plateform_serve']['note']}
+
+						</td>
+					</tr>
+					<tr>
+						<td width="130">平台服务佣金(平台收取代理商)：</td>
+						<td>
+							-￥ {$order['agent_serve_fee']} = {$order['agent_serve']['note']}
+						</td>
+					</tr>
+					<tr>
+						<td width="130">代理商实际收入：</td>
+						<td>
+							￥ {$order['agent_final_fee']} = {$order['agent_serve']['final']}
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="panel panel-display">
+			<div class="panel-heading"><h3>商品信息</h3></div>
+			<div class="panel-body">
+				<table class="table">
+					{if $order['order_type'] == 'buy'}
+						<tr>
+							<td width="130">购买商品：</td>
+							<td>{$order['goods_name']}</td>
+						</tr>
+						<tr>
+							<td width="130">备注：</td>
+							<td>{if !empty($order['note'])}{$order['note']}{else}无{/if}</td>
+						</tr>
+						<tr>
+							<td width="130">商品预期价格：</td>
+							<td>{$order['goods_price']}</td>
+						</tr>
+						<tr>
+							<td width="130">购买地址：</td>
+							<td>{if !empty($order['buy_address'])}{$order['buy_address']}{else}用户未指定,您可以自由选择{/if}</td>
+						</tr>
+						<tr>
+							<td width="130">收货人：</td>
+							<td>{$order['accept_username']}({$order['accept_sex']}), {$order['accept_mobile']}, {$order['accept_address']}</td>
+						</tr>
+					{else}
+						<tr>
+							<td width="130">商品信息：</td>
+							<td>{$order['goods_name']}</td>
+						</tr>
+						<tr>
+							<td width="130">商品价值：</td>
+							<td>￥ {$order['goods_price']}, {$order['goods_weight']} kg</td>
+						</tr>
+						<tr>
+							<td width="130">取货联系人：</td>
+							<td>{$order['buy_username']}({$order['buy_sex']}), {$order['buy_mobile']}, {$order['buy_address']}</td>
+						</tr>
+						<tr>
+							<td width="130">收货联系人：</td>
+							<td>{$order['accept_username']}({$order['accept_sex']}), {$order['accept_mobile']}, {$order['accept_address']}</td>
+						</tr>
+					{/if}
+					{if !empty($order['thumbs'])}
+						<tr>
+							<td>顾客上传图片</td>
+							<td>
+								{loop $order['thumbs'] $thumb}
+								<a href="{php echo tomedia($thumb)}">
+									<img width="50" height="50" src="{php echo tomedia($thumb)}" alt=""/>
+								</a>
+								{/loop}
+							</td>
+						</tr>
+					{/if}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{itemplate 'public/footer'}

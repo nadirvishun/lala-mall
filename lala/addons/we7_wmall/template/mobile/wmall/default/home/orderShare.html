@@ -1,0 +1,407 @@
+{itemplate 'public/header'}
+{if $ta == 'list'}
+<style>
+	.order-share-list .order-share-item{background-color: #fff; padding: 0.5rem; font-size: 0.8rem; margin-bottom: 0.5rem}
+	.order-share-list .order-share-item .order-time{font-size: 0.6rem; color : #999; margin-top: 0.2rem;}
+	.star-rank-outline{margin-bottom: -0.05rem;}
+	.order-share-list .order-share-item .delivery-time{font-size: 0.6rem; color: #999; margin-left: 0.5rem;}
+	.order-share-list .order-share-item .comment{font-size: 0.6rem;}
+	.order-share-list .order-share-item .list-block{margin-top: 0.2rem; margin-bottom: 0.4rem;}
+	.order-share-list .order-share-item .list-block .item-content{padding-left: 0.5rem; background-color: rgba(211,211,211,0.2);}
+	.order-share-list .order-share-item .list-block .item-content .item-media img{width: 2.5rem; height: 2.5rem;}
+	.order-share-list .order-share-item .list-block .item-content .item-title{font-size: 0.8rem; font-weight: normal;}
+	.order-share-list .order-share-item .list-block .item-content .item-text{height: auto; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 0.6rem;}
+	.order-share-list .order-share-item .order{background-color: rgba(211,211,211,0.2); padding-bottom: 0.2rem;}
+	.order-share-list .order-share-item .order>span{margin-left: 0.5rem; font-size: 0.6rem;}
+	.order-share-list .order-share-item .order .order-goods{margin-left: 0; line-height: 1;}
+	.order-share-list .order-share-item .order .order-goods .goods-item{margin-top: 0.2rem; position: relative;}
+	.order-share-list .order-share-item .order .order-goods .goods-item img{width: 100%; height: 3rem;}
+	.order-share-list .order-share-item .order .order-goods .goods-item .goods-num{position: absolute; top: 0; right: 0; height: 0.8rem; display: inline-block; text-align: center; line-height: 1rem; background: #ff2d4b; font-size: 0.5rem; color: #fff; padding: 0 0.1rem;}
+	.order-share-list .order-share-item .order .order-goods .goods-item .goods-title{position: absolute; bottom: 0.1rem; font-size: 0.5rem; background-color: rgba(0,0,0,0.6); width: 100%; color: #fff; height: 0.8rem; line-height: 1rem; text-align: center}
+	.order-share-list .order-share-item .order .other{padding: 0 0.5rem; margin-top: 0.5rem; font-size: 0.6rem;}
+	.order-share-list .order-share-item .order .other .price{color: #ff2d4b;}
+	.order-share-list .order-share-item .order .other .price span{font-size: 0.8rem;}
+	.order-share-list .order-share-item .order .other .reorder{border: 1px solid #ff2d4b; color: #ff2d4b; padding: 0.1rem 0.4rem; font-size: 0.6rem; border-radius: 0.2rem; margin-top: -0.1rem;}
+</style>
+<div class="page order-share-list">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title"></h1>
+	</header>
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('wmall/home/orderShare')}" data-distance="50" data-min="{$min}" data-container=".order-share-list" data-tpl="tpl-order-share">
+		{if empty($comments)}
+			<div class="common-no-con">
+				<img src="{WE7_WMALL_TPL_URL}static/img/comment_no_con.png" alt="">
+				<p>还没有分享记录</p>
+			</div>
+		{else}
+			<div class="order-share-list">
+				{loop $comments $comment}
+					<div class="order-share-item row">
+						<div class="col-15">
+							<img src="{$comment['avatar']}" alt="">
+						</div>
+						<div class="col-85">
+							<div class="user">
+								<div class="username">
+									{$comment['username']}
+									<span class="order-time pull-right">{$comment['addtime']}</span>
+								</div>
+								<div class="stars">
+									<span class="star-rank-outline">
+										<span class="star-rank-active" style="width:{$comment['score']}%"></span>
+									</span>
+									<span class="delivery-time">{$comment['store']['delivery_time']}分钟送达</span>
+								</div>
+							</div>
+							{if !empty($comment['note'])}
+								<div class="comment">{$comment['note']}</div>
+							{/if}
+							<div class="list-block media-list">
+								<ul>
+									<li>
+										<a href="{php echo imurl('wmall/store/goods', array('sid' => $comment['sid']))}" class="item-link item-content">
+											<div class="item-media">
+												<img src="{$comment['logo']}">
+											</div>
+											<div class="item-inner">
+												<div class="item-title">{$comment['store']['title']}</div>
+												{if $comment['activity']['num'] > 0}
+													{php $num = 0}
+													{loop $comment['activity']['items'] $item}
+														{php $num++}
+														<div class="tags tags-{$item['type']} item-text" {if $num > 1}style="display: none"{/if}>{$item['title']}</div>
+													{/loop}
+												{/if}
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<div class="order">
+								<span>TA的订单:</span>
+								<div class="order-goods row">
+									{loop $comment['goods'] $good}
+									<div class="goods-item col-25">
+										<img src="{php echo tomedia($good['thumb'])}" alt="">
+										<div class="goods-num">{$good['goods_num']}份</div>
+										<div class="goods-title">{$good['goods_title']}</div>
+									</div>
+									{/loop}
+								</div>
+								<div class="other">
+									实付：
+									<span class="price">￥<span>{$comment['final_fee']}</span></span>
+									<a href="{php echo imurl('wmall/store/goods', array('sid' => $comment['sid']))}" class="reorder pull-right">再来一单</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				{/loop}
+			</div>
+			<div class="infinite-scroll-preloader hide">
+				<div class="preloader"></div>
+			</div>
+		{/if}
+	</div>
+</div>
+<script id="tpl-order-share" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<div class="order-share-item row">
+			<div class="col-15">
+				<img src="<{d[i].avatar}>" alt="">
+			</div>
+			<div class="col-85">
+				<div class="user">
+					<div class="username">
+						<{d[i].username}>
+						<span class="order-time pull-right"><{d[i].addtime}></span>
+					</div>
+					<div class="stars">
+						<span class="star-rank-outline">
+							<span class="star-rank-active" style="width:<{d[i].score}>%"></span>
+						</span>
+						<span class="delivery-time"><{d[i].store.delivery_time}>分钟送达</span>
+					</div>
+				</div>
+				<{# if(d[i].note != ''){ }>
+					<div class="comment"><{d[i].note}></div>
+				<{# } }>
+				<div class="list-block media-list">
+					<ul>
+						<li>
+							<a href="{php echo imurl('wmall/store/goods')}&sid=<{d[i].sid}>" class="item-link item-content">
+								<div class="item-media">
+									<img src="<{d[i].logo}>">
+								</div>
+								<div class="item-inner">
+									<div class="item-title"><{d[i].store.title}></div>
+									<{# if(d[i].activity.num > 0){ }>
+										<{# var num = 0; }>
+										<{# for(var j in d[i].activity['items']){ }>
+											<{# num++ }>
+											<{# var item = d[i].activity['items'][j]; }>
+											<div class="item-text <{item.type}>" style="<{# if(num > 1){ }>display: none;<{# } }>"><{item.title}></div>
+										<{# } }>
+									<{# } }>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="order">
+					<span>TA的订单:</span>
+					<div class="order-goods row">
+						<{# for(var k in d[i].goods){ }>
+							<{# var good = d[i].goods[k]; }>
+							<div class="goods-item col-25">
+								<img src="<{good.thumb}>" alt="">
+								<div class="goods-num"><{good.goods_num}>份</div>
+								<div class="goods-title"><{good.goods_title}></div>
+							</div>
+						<{# } }>
+					</div>
+					<div class="other">
+						实付：
+						<span class="price">￥<span><{d[i].final_fee}></span></span>
+						<a href="{php echo imurl('wmall/store/goods')}&sid=<{d[i].sid}>" class="reorder pull-right">再来一单</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	<{# } }>
+</script>
+{/if}
+
+{if $ta == 'detail'}
+<style>
+	.order-share .bar-tab{border-top: none;}
+	.order-share .bar-tab>a{display: block; background: #ff2d4b; color: #fff; text-align: center; height: 2.5rem; line-height: 2.5rem;}
+	.order-share .content{background: url(../addons/we7_wmall/template/mobile/wmall/default/static/img/ordershare-bg.jpg) no-repeat; background-size: 100% 100%; background-attachment: fixed;}
+	.order-share .container{box-sizing: border-box; margin: 3.125rem 1rem 1rem;}
+	.order-share .container .store-wrapper{background: #fff; border-radius: 0.2rem 0.2rem 0 0;}
+	.order-share .container .store-logo-wrapper{position: relative; height: 2.75rem;}
+	.order-share .container .store-logo-wrapper .store-logo{position: absolute; left: 50%; top: -2.75rem; width: 5.5rem; height: 5.5rem; margin-left: -2.75rem; padding-top: 0.5rem; border-radius: 50%; box-sizing: border-box; background: #fff;}
+	.order-share .container .store-logo-wrapper .store-logo img{display: block; width: 4.5rem; height: 4.5rem; border-radius: 50%; margin: 0 auto; border: 1px solid #f4f4f4; object-fit: contain;}
+	.order-share .container .store-wrapper .store-comment-info .store-title{height: 1.25rem; margin: 0 0.5rem; font-size: 0.9rem; text-align: center; color: #333; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; word-wrap: break-word; word-break: break-all; padding: 0; font-weight: normal;}
+	.order-share .container .store-wrapper .store-comment-info .store-comment{margin-top: 0.25rem; text-align: center;}
+	.order-share .container .store-wrapper .store-comment-info .store-comment .customer-score{display: inline-block; color: #656565; font-size: 0.8rem; line-height: 0.8rem; vertical-align: middle;}
+	.order-share .container .store-wrapper .store-comment-info .delivery-info{margin-top: 0.25rem; text-align: center; font-size: 0.6rem; color: #a9a9a9;}
+	.order-share .container .store-wrapper .activity-container{position: relative; width: 90%; padding: 0.75rem 0 0.25rem; margin: 0.75rem auto 0; border-top: 1px dotted #e5e5e5; font-size: 0.55rem;}
+	.order-share .dotted-area{position: relative; height: 20px; background: #fff; margin: 0 10px;}
+	.order-share .dotted-area .circle{position: absolute; width: 10px; height: 20px; background: url(../addons/we7_wmall/template/mobile/wmall/default/static/img/half-circle.png) no-repeat; background-size: 10px auto;}
+	.order-share .dotted-area .circle-left{left: -10px}
+	.order-share .dotted-area .circle-right{right: -10px; transform: rotateY(180deg);}
+	.order-share .dotted-area .dotted-line{display: block; width: 90%; height: 10px; margin: 0 auto; border-bottom: 1px dotted #e5e5e5;}
+	.order-share .comments{background-color: #fff;}
+	.order-share .comments .comment-detail{width: 90%; margin: 0 auto; padding: 0.75rem 0; border-top: 1px dotted #e5e5e5;}
+	.order-share .comment-detail h3{font-size: 0.8rem; font-weight: normal; text-align: center; margin: 0}
+	.order-share .comment-detail .comment-stars{margin-top: 0.25rem; text-align: center;}
+	.order-share .comment-detail .my-comment{font-size: 0.75rem; color: #000; margin: 0.2rem 0;}
+	.order-share .comment-detail .favourable-goods{margin: 0.2rem 0;}
+	.order-share .comment-detail .favourable-goods .icon.favor{display: inline-block; width: 0.6rem; height: 0.6rem; margin-right: 0.2rem; background: url(../addons/we7_wmall/template/mobile/wmall/default/static/img/comment_favor_icon.png) no-repeat; background-size: cover;}
+	.order-share .comment-detail .favourable-goods .goods-label{margin: 0 .15rem; height: .9rem; line-height: .9rem; display: inline-block; background: #eceff2; color: #919cae; border-radius: .9rem; padding: 0 .3rem; font-size: .6rem;}
+	.order-share .goods{background: #fff; border-radius: 0 0 0.2rem 0.2rem;}
+	.order-share .goods .best-seller{width: 90%; margin: 0 auto; padding: 0.75rem 0; border-top: 1px dotted #e5e5e5;}
+	.order-share .goods .best-seller .best-seller-title{font-size: 0.8rem; font-weight: normal; text-align: center; margin: 0}
+	.order-share .goods .best-seller .best-seller-list{margin-top: 0.75rem; margin-bottom: -0.75rem;}
+	.order-share .goods .best-seller .best-seller-list li{margin-bottom: 0.75rem;}
+	.order-share .goods .best-seller .best-seller-list .best-seller-img{margin-bottom: 0.25rem; height: 4rem;}
+	.order-share .goods .best-seller .best-seller-list .best-seller-img img{width: 100%; height: 4rem;}
+	.order-share .goods .best-seller .seller-item-name{display: block; line-height: 1rem; font-size: 0.7rem; color: #2C3038; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+	.order-share .goods .best-seller .seller-item-sale{display: block; line-height: 0.9rem; font-size: 0.55rem; color: #656565;}
+	.order-share .goods .best-seller .seller-item-price{height: 1rem; line-height: 1rem; font-size: 0.55rem; color: #F01800;}
+	.order-share .goods .best-seller .seller-item-price .price{font-size: 0.8rem;}
+	.order-share .order{background-color: #fff;}
+	.order-share .order-detail{width: 90%; margin: 0 auto; padding: 0.75rem 0;}
+	.order-share .order-detail h3{font-size: 0.8rem; font-weight: normal; text-align: center; margin: 0}
+	.order-share .order-detail .order-details-con{margin-top: 0.75rem;}
+	.order-share .order-detail .order-details-con .col-55{width: 55%;}
+	.order-share .order-detail .order-details-con .col-10{width: 10%;}
+	.order-share .order-detail .order-details-con .col-35{width: 35%;}
+	.order-share .order-detail .order-details-con .goods-title{font-size: 0.7rem; color: #3d4145;}
+	.order-share .order-detail .order-details-con .inner-con{font-size: 0.7rem; color: #3d4145; padding: .5rem 0 .05rem 0;}
+	.order-share .order-detail .order-details-con .inner-con .col-50{line-height: 1rem;}
+	.order-share .order-detail .order-details-con .inner-con .col-25{line-height: 1rem;}
+	.order-share .order-detail .order-details-con .inner-con .count{margin-top: -0.1rem}
+	.order-share .order-detail .order-details-con .final-fee{font-size: 1rem;}
+</style>
+<div class="page order-share">
+	<nav class="bar bar-tab"><a href="{php echo imurl('wmall/home/newGoods', array('sid' => $order['sid']))}">进店购买</a></nav>
+	<div class="content">
+		<div class="container">
+			<div class="store-wrapper">
+				<div class="store-logo-wrapper">
+					<div class="store-logo">
+						<img src="{php echo tomedia($store['logo'])}" alt="">
+					</div>
+				</div>
+				<div class="store-comment-info">
+					<h3 class="store-title">{$store['title']}</h3>
+					<div class="store-comment">
+						<span class="star-rank-outline">
+							<span class="star-rank-active" style="width: {$store['score_cn']}%"></span>
+						</span>
+						<span class="customer-score">&nbsp;{$store['score']}</span>
+					</div>
+					<div class="delivery-info">
+						起送价￥{$store['send_price']}
+						&nbsp;&nbsp;|&nbsp;&nbsp;配送费￥{$store['delivery_price']}
+						&nbsp;&nbsp;|&nbsp;&nbsp;{$store['delivery_time']}分钟
+					</div>
+				</div>
+				<div class="activity-container">
+					{if $activity['num'] > 0}
+						{if $activity['num'] > 1}
+							{php $num = 0}
+							<div class="activity-num pull-right"> <i class="icon icon-arrow-down"></i></div>
+						{/if}
+						{loop $activity['items'] $item}
+							{php $num++}
+							<div class="tags tags-{$item['type']} {if $num > 1}activity-row hide{/if}">{$item['title']}</div>
+						{/loop}
+					{/if}
+					{if $store['delivery_free_price'] > 0}
+						<div class="activity-row free {if $num > 1}hide{/if}">
+							满{$store['delivery_free_price']}元免配送费
+						</div>
+					{/if}
+					{if !empty($store['hot_goods'])}
+						<div class="dashed-line"></div>
+						<div class="hot">
+							热销:
+							{loop $store['hot_goods'] $hot}
+								{$hot['goods']}
+							{/loop}
+						</div>
+					{/if}
+				</div>
+			</div>
+			<div class="dotted-area">
+				<span class="circle circle-left"></span>
+				<span class="circle circle-right"></span>
+				<span class="dotted-line"></span>
+			</div>
+			<div class="order">
+				<div class="order-detail">
+					<h3>订单明细</h3>
+					<div class="order-details-con">
+						<div class="inner-con border-1px-b">
+							{loop $goods $good}
+								<div class="row no-gutter">
+									<div class="col-55 goods-title">
+										{$good['goods_title']}
+									</div>
+									<div class="col-10 text-right color-muted">×{$good['goods_num']}</div>
+									<div class="col-35 text-right color-black">
+										￥{$good['goods_price']}
+									</div>
+								</div>
+							{/loop}
+						</div>
+
+						<div class="inner-con border-1px-b">
+							{if $order['box_price'] > 0}
+								<div class="row no-gutter">
+									<div class="col-80">餐盒费</div>
+									<div class="col-20 text-right color-black">￥{$order['box_price']}</div>
+								</div>
+							{/if}
+							<div class="row no-gutter">
+								<div class="col-80">包装费</div>
+								<div class="col-20 text-right color-black">￥{$order['pack_fee']}</div>
+							</div>
+							<div class="row no-gutter">
+								<div class="col-80">配送费</div>
+								<div class="col-20 text-right color-black">￥{$order['delivery_fee']}</div>
+							</div>
+							{if $order['order_type'] == 3}
+								<div class="row no-gutter">
+									<div class="col-80">服务费</div>
+									<div class="col-20 text-right color-black">￥{$order['serve_fee']}</div>
+								</div>
+							{/if}
+						</div>
+						{if !empty($discounts)}
+							<div class="inner-con border-1px-b">
+								{loop $discounts $discount}
+									<div class="row no-gutter">
+										<div class="col-80 icon-before">
+											<span class="{$discount['type']} tags">{$discount['name']}</span>
+										</div>
+										<div class="col-20 text-right color-black">{$discount['note']}</div>
+									</div>
+								{/loop}
+							</div>
+						{/if}
+						<div class="inner-con">
+							<div class="row no-gutter">
+								<div class="col-50 color-muted">订单 <span class="color-black">￥{$order['total_fee']}</span> - 优惠<span class="color-black">￥{$order['discount_fee']}</span></div>
+								<div class="col-25 text-right color-muted">总计</div>
+								<div class="col-25 text-right color-danger count">￥<span class="final-fee">{$order['final_fee']}</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="comments">
+				<div class="comment-detail">
+					<div class="comment-title">
+						<h3>我的评价</h3>
+					</div>
+					<div class="comment-stars">
+						<span class="star-rank-outline">
+							<span class="star-rank-active" style="width: {$comment['score']}%"></span>
+						</span>
+					</div>
+					<div class="my-comment">{$comment['note']}</div>
+						{if !empty($comment['data']['good'])}
+							<div class="favourable-goods">
+								<i class="icon favor"></i>
+								{loop $comment['data']['good'] $good}
+									<span class="goods-label">猪肉炖粉条</span>
+								{/loop}
+							</div>
+						{/if}
+				</div>
+			</div>
+			{if !empty($hot_goods)}
+				<div class="goods">
+					<div class="best-seller">
+						<h3 class="best-seller-title">热销商品</h3>
+						<ul class="best-seller-list row">
+							{loop $hot_goods $hot}
+								<li class="col-33">
+									<a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id'], 'goods_id' => $hot['id']))}">
+										<div class="best-seller-img">
+											<img src="{php echo tomedia($hot['thumb'])}" alt="">
+										</div>
+										<span class="seller-item-name">{$hot['title']}</span>
+										<span class="seller-item-sale">已售{$hot['sailed']}</span>
+										<div class="seller-item-price">¥<span class="price">{$hot['price']}</span></div>
+									</a>
+								</li>
+							{/loop}
+						</ul>
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</div>
+<script>
+$(function() {
+	$(document).on('click', '.activity-container', function(){
+		if($(this).hasClass('active')) {
+			$(this).find('.activity-row').addClass('hide');
+			$(this).find('.activity-num i').addClass('fa-arrow-down').removeClass('fa-arrow-up');
+		} else {
+			$(this).find('.activity-row').removeClass('hide');
+			$(this).find('.activity-num i').addClass('fa-arrow-up').removeClass('fa-arrow-down');
+		}
+		$(this).toggleClass('active');
+	});
+});
+</script>
+{/if}
+{itemplate 'public/footer'}

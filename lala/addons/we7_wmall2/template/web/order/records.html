@@ -1,0 +1,201 @@
+{itemplate 'public/header'}
+{if $op == 'stat'}
+<form action="./index.php" class="form-horizontal form-filter">
+	{php echo tpl_form_filter_hidden('order/records/stat');}
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">下单时间</label>
+		<div class="col-sm-4 col-xs-4">
+			{php echo tpl_form_field_daterange('addtime', array('start' => date('Y-m-d', $starttime), 'end' => date('Y-m-d', $endtime)));}
+		</div>
+	</div>
+	<div class="form-group form-inline">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">其他</label>
+		<div class="col-sm-4 col-xs-4">
+			{if $_W['is_agent']}
+				<select name="agentid" class="select2 js-select2 form-control width-130">
+					<option value="0">选择代理区域</option>
+					{loop $_W['agents'] $agent}
+						<option value="{$agent['id']}" {if $agentid == $agent['id']}selected{/if}>{$agent['area']}</option>
+					{/loop}
+				</select>
+			{/if}
+			<select name="deliveryer_id" id="deliveryer_id" class="select2 js-select2 form-control width-130">
+				<option value="">选择配送员</option>
+				{loop $deliveryer_alls $alls}
+					<option value="{$alls['id']}" {if $alls['id'] == $deliveryer_id}selected{/if}>{$alls['title']}</option>
+				{/loop}
+			</select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="submit" value="筛选" class="btn btn-primary">
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form order-deliveryer-records" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			{if empty($deliveryers)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>配送员</th>
+							{if $_W['is_agent']}
+								<th>所属城市</th>
+							{/if}
+							<th>待取货</th>
+							<th>配送中</th>
+							<th>已完成 / 超时</th>
+							<th style="width: 200px; text-align: right;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $deliveryers $deliveryer}
+							<tr>
+								<td><img width="50" height="50" src="{php echo tomedia($deliveryer['avatar'])}" alt=""/>&nbsp;&nbsp;&nbsp;&nbsp;{$deliveryer['title']}</td>
+								{if $_W['is_agent']}
+									<td>{php echo toagent($deliveryer['agentid'])}</td>
+								{/if}
+								<td>{php echo intval($wait_pickup[$deliveryer['id']]['total'])}</td>
+								<td>{php echo intval($deliverying[$deliveryer['id']]['total'])}</td>
+								<td>{php echo intval($finish[$deliveryer['id']]['total'])} / <span class="color-danger">{php echo intval($timeout[$deliveryer['id']]['total'])}</span></td>
+								<td align="right"><a href="{php echo iurl('order/records/list', array('deliveryer_id' => $deliveryer['id']))}" class="btn btn-default btn-sm">查看</a></td>
+							</tr>
+						{/loop}
+					</tbody>
+				</table>
+				<div class="btn-region clearfix">
+					<div class="pull-right">
+						{$pager}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{/if}
+
+{if $op == 'list'}
+<form action="./index.php" class="form-horizontal form-filter">
+	{php echo tpl_form_filter_hidden('order/records/list');}
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">下单时间</label>
+		<div class="col-sm-4 col-xs-4">
+			{php echo tpl_form_field_daterange('addtime', array('start' => date('Y-m-d', $starttime), 'end' => date('Y-m-d', $endtime)));}
+		</div>
+	</div>
+	<div class="form-group form-inline">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">其他</label>
+		<div class="col-sm-4 col-xs-4">
+			{if $_W['is_agent']}
+				<select name="agentid" class="select2 js-select2 form-control width-130">
+					<option value="0">选择代理区域</option>
+					{loop $_W['agents'] $agent}
+						<option value="{$agent['id']}" {if $agentid == $agent['id']}selected{/if}>{$agent['area']}</option>
+					{/loop}
+				</select>
+			{/if}
+			<select name="deliveryer_id" id="deliveryer_id" class="select2 js-select2 form-control width-130">
+				<option value="">选择配送员</option>
+				{loop $deliveryer_alls $alls}
+					<option value="{$alls['id']}" {if $alls['id'] == $deliveryer_id}selected{/if}>{$alls['title']}</option>
+				{/loop}
+			</select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="submit" value="筛选" class="btn btn-primary">
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form order-deliveryer-records" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			{if empty($orders)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>流水号</th>
+							<th>配送员</th>
+							{if $_W['is_agent']}
+								<th>所属城市</th>
+							{/if}
+							<th>订单状态</th>
+							<th>下单时间</th>
+							<th>支付时间</th>
+							<th>商家接单时间</th>
+							<th>配送员接单时间</th>
+							<th>配送员到店时间</th>
+							<th>完成时间</th>
+							<th>商家接单耗时</th>
+							<th>配送员配送耗时</th>
+							<th>订单耗时</th>
+							<th>超时状态</th>
+							<th style="text-align: right">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $orders $order}
+							<tr>
+								<td>#{$order['serial_sn']}</td>
+								<td>
+									<img width="50" height="50" src="{php echo tomedia($deliveryer_alls[$order['deliveryer_id']]['avatar'])}" alt=""/>&nbsp;&nbsp;&nbsp;&nbsp;{$deliveryer_alls[$order['deliveryer_id']]['title']}
+								</td>
+								{if $_W['is_agent']}
+									<td>{php echo toagent($order['agentid'])}</td>
+								{/if}
+								<td>
+									<span class="{$order_delivery_status[$order['delivery_status']]['css']}">{$order_delivery_status[$order['delivery_status']]['text']}</span>
+								</td>
+								<td>{php echo date('H:i:s', $order['addtime'])}<br>{php echo date('Y-m-d', $order['addtime'])}</td>
+								<td>{php echo date('H:i:s', $order['paytime'])}<br>{php echo date('Y-m-d', $order['paytime'])}</td>
+								<td>{php echo date('H:i:s', $order['handletime'])}<br>{php echo date('Y-m-d', $order['handletime'])}</td>
+								<td>
+									{if !empty($order['delivery_assign_time'])}
+										{php echo date('H:i:s', $order['delivery_assign_time'])}<br>{php echo date('Y-m-d', $order['delivery_assign_time'])}
+									{/if}
+								</td>
+								<td>
+									{if !empty($order['delivery_instore_time'])}
+										{php echo date('H:i:s', $order['delivery_instore_time'])}<br>{php echo date('Y-m-d', $order['delivery_instore_time'])}
+									{/if}
+								</td>
+								<td>
+									{if !empty($order['endtime'])}
+										{php echo date('H:i:s', $order['endtime'])}<br>{php echo date('Y-m-d', $order['endtime'])}
+									{/if}
+								</td>
+								<td>{$order['time_interval']['store_consum_time']}</td>
+								<td>{$order['time_interval']['deliveryer_consum_time']}</td>
+								<td>{$order['time_interval']['order_consum_time']}</td>
+								<td><span class="{$order['time_interval']['timeout_css']}">{$order['time_interval']['timeout_text']}</span></td>
+								<td align="right">
+									<a href="{php echo iurl('order/takeout/detail', array('id' => $order['id']))}" class="btn btn-default btn-sm">查看</a>
+								</td>
+							</tr>
+						{/loop}
+					</tbody>
+				</table>
+				<div class="btn-region clearfix">
+					<div class="pull-right">
+						{$pager}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{/if}
+{itemplate 'public/footer'}

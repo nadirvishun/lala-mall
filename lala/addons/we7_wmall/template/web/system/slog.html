@@ -1,0 +1,89 @@
+{itemplate 'public/header'}
+<form action="./index.php?" class="form-horizontal form-filter" id="form1">
+	{php echo tpl_form_filter_hidden('system/slog/list');}
+	<input name="days" value="{$days}" type="hidden"/>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">错误类型</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('type:');}" class="btn {if $type == ''}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo ifilter_url('type:wxtplNotice');}" class="btn {if $type == 'wxtplNotice'}btn-primary{else}btn-default{/if}">微信模板消息</a>
+				<a href="{php echo ifilter_url('type:managerappJpush');}" class="btn {if $type == 'managerappJpush'}btn-primary{else}btn-default{/if}">商家App极光推送</a>
+				<a href="{php echo ifilter_url('type:deliveryerappJpush');}" class="btn {if $type == 'deliveryerappJpush'}btn-primary{else}btn-default{/if}">配送员App极光推送</a>
+				<a href="{php echo ifilter_url('type:alidayuSms');}" class="btn {if $type == 'alidayuSms'}btn-primary{else}btn-default{/if}">阿里大鱼短信消息</a>
+				<a href="{php echo ifilter_url('type:alidayuCall');}" class="btn {if $type == 'alidayuCall'}btn-primary{else}btn-default{/if}">阿里大鱼语音通知</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">创建时间</label>
+		<div class="col-sm-9 col-xs-12 js-daterange" data-form="#form1">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('days:-2');}" class="btn {if $days == -2}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo ifilter_url('days:0');}" class="btn {if !$days}btn-primary{else}btn-default{/if}">今天</a>
+				<a href="{php echo ifilter_url('days:7');}" class="btn {if $days == 7}btn-primary{else}btn-default{/if}">最近7天</a>
+				<a href="{php echo ifilter_url('days:30');}" class="btn {if $days == 30}btn-primary{else}btn-default{/if}">最近30天</a>
+				<a href="javascript:;" class="btn js-btn-custom {if $days == -1}btn-primary{else}btn-default{/if}">自定义</a>
+			</div>
+			<span class="btn-daterange js-btn-daterange {if $days != -1}hide{/if}">
+				{php echo tpl_form_field_daterange('addtime', array('start' => date('Y-m-d', $starttime), 'end' => date('Y-m-d', $endtime)));}
+			</span>
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form form-validate system-log" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			{if empty($logs)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<table class="table table-hover">
+					<thead>
+					<tr>
+						<th width="40">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" name="ids[]"/>
+								<label></label>
+							</div>
+						</th>
+						<th>id</th>
+						<th>错误类型</th>
+						<th>错误简述</th>
+						<th>错误信息</th>
+						<th>创建时间</th>
+						<th style="text-align: right">操作</th>
+					</tr>
+					</thead>
+					{loop $logs $log}
+						<tr>
+							<td>
+								<div class="checkbox checkbox-inline">
+									<input type="checkbox" name="ids[]" value="{$log['id']}"/>
+									<label></label>
+								</div>
+							</td>
+							<td>{$log['id']}</td>
+							<td>{$log['type']}</td>
+							<td style="cursor: pointer;">{$log['title']}</td>
+							<td>{$log['message']}</td>
+							<td>{php echo date('Y-m-d H:i', $log['addtime'])}</td>
+							<td align="right"><a href="{php echo iurl('system/slog/del', array('id' => $log['id']))}" class="btn btn-default btn-sm js-remove" data-confirm="删除后不可恢复，确定要删除吗？">删除</a></td>
+						</tr>
+					{/loop}
+				</table>
+				<div class="btn-region clearfix">
+					<div class="pull-left">
+						<a href="{php echo iurl('system/slog/del')}" class="btn btn-primary btn-danger js-batch" data-batch="remove" data-confirm="删除后将不可恢复，确定删除吗">删除</a>
+						<a href="{php echo iurl('system/slog/delAll')}" class="btn btn-warning js-post" data-confirm="删除后不可恢复,确定删除所有的记录吗?">删除所有记录</a>
+					</div>
+					<div class="pull-right">
+						{$pager}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{itemplate 'public/footer'}

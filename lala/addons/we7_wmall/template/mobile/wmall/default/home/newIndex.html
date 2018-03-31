@@ -1,0 +1,532 @@
+{itemplate 'public/header'}
+<style>
+	.homes .header-bar{padding: 0.2rem 0.8rem; background-color: #0096ff; color: #fff; border: 0; line-height: 1.7;}
+	.homes .header-bar-rough{padding: 0.2rem 0.8rem; background-color: #0096ff; color: #fff}
+	.homes .header-info{justify-content: space-between; align-items: center; display: flex;}
+	.homes .header-info .location{align-items: center; width: 70%; display: flex; -webkit-box-align: center; color: #fff;}
+	.homes .header-info .location .fa.fa-lbs{font-size: 1rem;}
+	.homes .header-info .location .icon.icon-caret{font-size: 0.2rem; margin-left: 0.2rem;}
+	.homes .header-info .location .detail-location{margin: 0 0.1rem; font-size: 0.9rem; max-width: 80%; white-space: nowrap; overflow: hidden;}
+	.homes .header-info .weather{align-items: center;display: flex; -webkit-box-align: center;}
+	.homes .header-info .weather h2{font-size: 0.6rem; margin: 0}
+	.homes .header-info .weather p{font-size: 0.6rem; margin: 0}
+	.homes .header-info .weather img{margin-left: 0.1rem; width: 2rem; height: 2rem;}
+	.homes .search{display: block; margin: 0.2rem 0; width: 100%; height: 1.7rem; text-align: center; border-radius: 0.96rem; box-shadow: 0 0.026667rem 0.066667rem 0 rgba(0, 0, 0, .2); color: #333; font-size: 0.6rem; outline: none; border: none;}
+	.homes .tab{align-items: center; white-space: nowrap; overflow-x: auto; display: flex; -webkit-box-align: center; padding: 0.2rem 0}
+	.homes .tab a{color: #fff; margin-right: 0.6rem; font-size: 0.6rem;}
+	.homes .tab a:last-child{margin-right: 0}
+	.homes .content{margin-top: 5.9rem;}
+	.homes .content .swiper-container{font-size: 0.6rem; min-height: 4.72rem; background-color: #fff; padding-bottom: 0.5rem;}
+	.homes .content .swiper-container.category{margin-bottom: 0.5rem}
+	.homes .content .swiper-container.category .swiper-slide img{width: 3rem; height: 3rem; margin: 0 auto}
+	.homes .content .swiper-container.category .swiper-slide .col-25{padding: 0.5rem}
+	.homes .content .swiper-container.category .category-title{color: #333; margin-top: 0;}
+	.homes .content .swiper-container.category .swiper-pagination.swiper-category-pagination{bottom: 0;}
+	.homes .content .swiper-container .swiper-pagination .swiper-pagination-bullet-active {background: #666;}
+	.homes .content .recommend{margin-top: 0.5rem; background-color: #fff}
+	.homes .content .recommend .recommend-title{margin: 0; padding: 0.4rem 0.8rem; font-size: 0.65rem; font-weight: normal; color: #666}
+	.homes .content .recommend .store-list{position: relative; margin: 0; padding: 0; font-size: .75rem; min-height: 10rem; background-color: #efeff4;}
+	.homes .content .recommend .store-list .common-no-con{position: absolute; top: 50%; margin-top: -3rem; width: 100%; height: 10rem; text-align: center; color: #768491; font-size: .8rem;}
+	.homes .content .recommend .store-list .store-item{margin-bottom: 0.5rem}
+	.homes .content .recommend .store-list .store-item .store-container{margin-left: 0; position: relative; display: block; background-color: #fff}
+	.homes .content .recommend .store-list .store-item .shop-label{color: #fff; position: absolute; top: 0; left: 0; z-index: 50; width: 1.8rem; height: 1.8rem; background-image: linear-gradient(135deg,#26ce61,#26ce61 50%,transparent 0); font-size: .5rem;}
+	.homes .content .recommend .store-list .store-item .shop-label-success{background-image: linear-gradient(135deg,#26ce61,#26ce61 50%,transparent 0);}
+	.homes .content .recommend .store-list .store-item .shop-label span{position: absolute; top: .13rem; left: .03rem; display: block; color: #fff; font-weight: 700; transform: rotate(-45deg); font-size: 0.6rem;}
+	.homes .content .recommend .store-list .col-22{width: 22%}
+	.homes .content .recommend .store-list .col-78{width: 78%}
+	.homes .content .recommend .store-list .store-logo{padding: .8rem 0 0 0.5rem; margin-left: 0; border-radius: 0.2rem; position: relative}
+	.homes .content .recommend .store-list .store-logo img{width:3rem; height: 3rem; border-radius: 0.2rem}
+	.homes .content .recommend .store-list .store-info{margin-left: 0; padding: 0.8rem 0.5rem 0 0;}
+	.homes .content .recommend .store-list .store-logo .rest{display: inline-block; font-size: 0.5rem; background-color: rgb(187,187,187); color: #fff; position: absolute; bottom: 0.29rem; left: 0.5rem; width: 3rem; height: 0.7rem; line-height: 0.8rem; text-align: center; border-bottom-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem}
+	.homes .content .recommend .store-list .store-info .store-title{position: relative}
+	.homes .content .recommend .store-list .store-info .store-title h3{overflow: hidden; margin: 0; padding: 0; max-width: 10rem; color: #333; text-overflow: ellipsis; white-space: nowrap; line-height: 1rem;  font-size: 0.8rem;}
+	.homes .content .recommend .store-list .store-info .store-title .store-label{position: absolute; right: 0; top: -0.2rem;}
+	.homes .content .recommend .store-list .store-info .store-title .store-label span{display: inline-block; width: 0.8rem; height: 0.8rem; text-align: center; line-height: 0.8rem; border: 1px solid #eee; border-radius: 4px; color: #979797; font-size: 0.5rem;}
+	.homes .content .recommend .store-list .store-info .month-sale .star-rank-outline{position: relative; top: 0.1rem;}
+	.homes .content .recommend .store-list .store-info .month-sale .stars-rank-value{color: #f60; font-size: 0.5rem;}
+	.homes .content .recommend .store-list .store-info .month-sale .sales{font-size: 0.5rem; color: #666;}
+	.homes .content .recommend .store-list .store-info .month-sale .store-tab{display: block; margin-top: -0.1rem}
+	.homes .content .recommend .store-list .activity-container{background-color: #fff; padding: 0 0.5rem 0.8rem 22%; font-size: 0.5rem;}
+	.homes .content .recommend .store-list .activity-container .hot{color: #808080; font-size: .5rem;}
+	.homes .content .recommend .store-list .activity-container .hot:before{background-image: url(../addons/we7_wmall/template/mobile/wmall/default/static/img/hot-sell.png); content: ""; width: .6rem; height: .6rem; position: relative; top: .1rem; display: inline-block; background-repeat: no-repeat; background-position: center center; background-size: contain;}
+	.homes .tab-blue{padding: 0 .1rem; border: 1px solid #44a5ff; border-radius: .05rem; background-color: #fff; color: #2395ff; font-size: 0.5rem;}
+	.homes .tab-bluefill{padding: 0.1rem .1rem 0; border: 1px solid #44a5ff; background-color: #2395ff; color: #fff; font-size: 0.5rem; border-radius: 0.1rem}
+	.homes .delivery-conditions{color: #666; font-size: 0.5rem;}
+	.homes .activity-container{position: relative}
+	.homes .activity-container .activity-num{position: absolute; top: 0; right: 0.5rem; font-size: 0.5rem; color: #999}
+	.homes .color-blue{color: #2395ff}
+	.homes .dash-line{height: 1px; border-top: 1px dashed #eee; margin: .2rem 0;}
+	.homes .ad{height: 5.2rem; padding: 0.5rem; background-color: #fff;}
+	.homes .ad .swiper-container.slide img{width: 100%; height: 4.2rem}
+	.homes .ad .swiper-container.slide .swiper-pagination{margin-bottom: 0.2rem}
+	.homes .activity-category span{display: inline-block}
+	.homes .activity-category{background-color: #fff; margin-top: 0.5rem; padding: 0 0.5rem; margin-left: 0}
+	.homes .activity-category .activity-category-item{padding: 0.5rem 0; line-height: 0.8rem; margin-left: 0; width: 50%; color: #333}
+	.homes .activity-category .activity-category-item:nth-child(2n){padding-left: 0.5rem;}
+	.homes .activity-category .activity-category-item img{width: 2.6rem; height: 2.6rem; border-radius: 100%}
+	.homes .activity-category .activity-title{font-weight: 700; font-size: 0.7rem; margin-top: 0.6rem; width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+	.homes .activity-description{color: #666; font-size: 0.5rem; width: 100%;}
+	.homes .promotion-activity{background-color: #fff; margin-top: 0.5rem; padding: 0 0.5rem; margin-left: 0}
+	.homes .promotion-activity span{display: inline-block}
+	.homes .promotion-activity .promotion-activity-item{padding: 0.5rem 0; line-height: 0.8rem; margin-left: 0; width: 50%}
+	.homes .promotion-activity-item:last-child{padding-left: 0.5rem;}
+	.homes .promotion-activity-item .activity-title{font-weight: 700; font-size: 0.7rem; margin-top: 0.6rem; width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+	.homes .promotion-activity .promotion-activity-item img{width: 2.6rem; height: 2.6rem; border-radius: 100%}
+	.homes .remaining-activity{background-color: #fff; padding: 0.5rem 0.5rem; font-size: .7rem; margin: 0.5rem 0; position: relative}
+	.homes .remaining-activity .activity-title{font-weight: bold; margin-right: 0.5rem; display: inline-block;}
+	.homes .remaining-activity .activity-time{font-size: 0.6rem; display: inline-block; color: #999}
+	.homes .remaining-activity .activity-time span{background-color: #333; color: #fff; padding: 0 0.2rem; margin: 0 0.2rem;}
+	.homes .remaining-activity .more{color: #999; font-size: 0.6rem; position: absolute; right: 0.5rem;}
+	.homes .remaining-activity .goods-list{margin-top: 0.5rem}
+	.homes .remaining-activity .goods-list .goods-item img{width: 100%; height: 4rem;}
+	.homes .remaining-activity .goods-list .goods-item .goods-title{font-size: 0.6rem; color: #333; height: 0.8rem; line-height: 0.8rem; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+	.homes .remaining-activity .goods-list .goods-item .price{color: #f6383a; font-size: 0.5rem}
+	.homes .remaining-activity .goods-list .goods-item .price i{font-style: normal}
+	.homes .remaining-activity .goods-list .goods-item .price .now-price{font-size: 0.7rem;}
+	.homes .remaining-activity .goods-list .goods-item .price .original-price{color: #999; text-decoration: line-through}
+	.homes .bargain-activity{background-color: #fff; padding: 0.5rem 0.5rem; font-size: .7rem; margin: 0.5rem 0}
+	.homes .bargain-activity .activity-header{font-weight: bold; position: relative}
+	.homes .bargain-activity .activity-header .more{position: absolute; right: 0; color: #999; font-size: 0.6rem; font-weight: normal; vertical-align: middle}
+	.homes .bargain-activity .goods-list{margin-top: 0.5rem}
+	.homes .bargain-activity .goods-list .goods-item .goods-image{position: relative}
+	.homes .bargain-activity .goods-list .goods-item .label{position: absolute; left: 7px; z-index: 1; width: 1.6rem; height: 1.2rem; color: #fff; font-size: .5rem; line-height: 1rem; font-weight: 600; text-align: center; background-repeat: no-repeat; background-size: cover; background-position: center; background-image: url(../addons/we7_wmall/template/mobile/wmall/default/static/img/robot.png);}
+	.homes .bargain-activity .goods-list .goods-item img{width: 100%; height: 4rem;}
+	.homes .bargain-activity .goods-list .goods-item .goods-title{font-size: 0.6rem; color: #333; height: 0.8rem; line-height: 0.8rem; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+	.homes .bargain-activity .goods-list .goods-item .price{color: #f6383a; font-size: 0.5rem;}
+	.homes .bargain-activity .goods-list .goods-item .price i{font-style: normal}
+	.homes .bargain-activity .goods-list .goods-item .price .now-price{font-size: 0.7rem;}
+	.homes .bargain-activity .goods-list .goods-item .price .original-price{color: #999; text-decoration: line-through; font-weight: bold;}
+	.homes .selective{margin-bottom: 0.5rem;color: #333;font-size: .7rem;background: #fff;padding: 0.2rem;}
+	.homes .selective .selective-tab{text-align: center;padding-top: 0.4rem;font-weight: bold;overflow: hidden}
+	.homes .selective .selective-tab .more{position: absolute;right: 0.5rem; color: #999; font-size: 0.6rem; font-weight: normal}
+	.homes .selective .selective-info{margin-left: 0}
+	.homes .selective .selective-info .col-33{width: 33%; margin-left: 0}
+	.homes .selective .selective-info .selective-item{text-align: center;margin-top: 0.5rem;}
+	.homes .selective .selective-info .selective-item .selective-title{color: #333;width: 100%;padding: 0 0.2rem; font-size: 0.6rem;margin: 0 auto;font-weight: bold;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+	.homes .selective .selective-info .selective-item img{border: 1px solid #efefef;width: 5rem;height: 4rem}
+	.homes .selective .selective-tab .more .fa{margin-left: 0.2rem;}
+	.homes .new-order{display: none; height: 1.6rem; max-width: 14rem; border-radius: 0.8rem; position: fixed; top: 3rem; left: 1rem; z-index: 999; padding: 0.15rem; -webkit-box-align: center; -webkit-align-items: center; -ms-flex-align: center; align-items: center; font-size: 0.65rem; color: #fff; overflow: hidden; background-color: rgba(255,86,4,0.8);}
+	.homes .new-order img{border-radius: 100%; height: 1.4rem; width: 1.4rem; font-size: 0.5rem;}
+	.homes .new-order .text{white-space:nowrap; overflow: hidden; text-overflow:ellipsis; flex: 1;}
+	.homes .new-order span{margin: 0 0.1rem}
+</style>
+<div class="page homes">
+	<header class="header-bar">
+		<span id="js-lat" class="hide">{$_GPC['lat']}</span>
+		<span id="js-lng" class="hide">{$_GPC['lng']}</span>
+		<div class="header-info">
+			<a class="location" href="{php echo imurl('wmall/home/location');}">
+				<span class="icon icon-lbs"></span>
+				<span class="detail-location" id="position">{if !empty($_GPC['address'])}{$_GPC['address']}{else}获取地址中...{/if}</span>
+				<span class="icon icon-caret"></span>
+			</a>
+			<div class="weather">
+				<div>
+					<h2>11°</h2>
+					<p>晴天</p>
+				</div>
+				<img alt="天气图标" class="index-wRPUE" src="//fuss10.elemecdn.com/9/b9/c8e482821be2080edcffbb3a8d376png.png?imageMogr/format/webp/thumbnail/!69x69r/gravity/Center/crop/69x69/">
+			</div>
+		</div>
+		<form action=""><input type="text" placeholder="搜索商家、商品" class="search"></form>
+		{if !empty($hots)}
+			<div class="tab">
+				{loop $hots $hot}
+					<a href="{php echo imurl('wmall/store/goods', array('sid' => $hot['id']))}">{$hot['title']}</a>
+				{/loop}
+			</div>
+		{/if}
+	</header>
+	<header class="header-bar-rough hide">
+		<form action=""><input type="text" placeholder="搜索商家、商品" class="search"></form>
+	</header>
+	<div class="new-order">
+		<img class="thumb" src="http://wx.qlogo.cn/mmopen/wicibRjD7u2tIDGoy2pmIWWyiaXfib7IDYVfRPgI7oOnPxJaXF3Pqr62RXllGxJlPqiafSEbmNgpoNExia5Pr53ND5e3Jw8ZG0j3ON/132" alt="">
+		<span class="text"></span>
+		<span class="time"></span>
+	</div>
+	{php get_mall_menu();}
+	<div class="content">
+		{if !empty($categorys_chunk)}
+			<div class="swiper-container category" data-space-between='0' data-pagination='.swiper-category-pagination' data-autoplay="0">
+				<div class="swiper-wrapper">
+					{loop $categorys_chunk $row}
+					<div class="swiper-slide">
+						<div class="row no-gutter nav">
+							{loop $row $category}
+							<div class="col-25">
+								<a href="{$category['link']}">
+									<img src="{php echo tomedia($category['thumb'])}" alt="" />
+									<div class="text-center category-title">{$category['title']}</div>
+								</a>
+							</div>
+							{/loop}
+						</div>
+					</div>
+					{/loop}
+				</div>
+				{if count($categorys_chunk) > 1}
+					<div class="swiper-pagination swiper-category-pagination"></div>
+				{/if}
+			</div>
+		{/if}
+
+		{if !empty($slides)}
+			<div class="ad">
+				<div class="swiper-container slide" data-space-between='0' data-pagination='.swiper-slide-pagination' data-autoplay="1000">
+					<div class="swiper-wrapper">
+						{loop $slides $slide}
+						<div class="swiper-slide" data-link="{$slide['link']}">
+							<img src="{php echo tomedia($slide['thumb']);}"alt="">
+						</div>
+						{/loop}
+					</div>
+					<div class="swiper-pagination swiper-slide-pagination"></div>
+				</div>
+			</div>
+		{/if}
+
+		{if !empty($cubes)}
+			<div class="activity-category border-1px-t row">
+				{loop $cubes $i $nav}
+					<a href="{$nav['link']}" class="activity-category-item col-50 border-1px-b row">
+						<div class="col-60">
+							<span class="activity-title">{$nav['title']}</span>
+							<span class="activity-description">{$nav['tips']}</span>
+						</div>
+						<div class="col-40 {if $i % 2 == 0}border-1px-r{/if}">
+							<img src="{php echo tomedia($nav['thumb'])}" alt="">
+						</div>
+					</a>
+					{php $i++}
+				{/loop}
+			</div>
+		{/if}
+
+		<div class="promotion-activity hide row">
+			<div class="col-50 promotion-activity-item border-1px-r row">
+				<div class="col-60">
+					<span class="activity-title">推荐有奖</span>
+					<span class="activity-description">5元现金拿不停</span>
+				</div>
+				<div class="col-40">
+					<img src="//fuss10.elemecdn.com/5/5b/f67cc9c994d2b8ddbd4b580e013aepng.png?imageMogr/format/webp/" alt="">
+				</div>
+			</div>
+			<div class="col-50 promotion-activity-item row">
+				<div class="col-60">
+					<span class="activity-title">领券中心</span>
+					<span class="activity-description">代金券免费领</span>
+				</div>
+				<div class="col-40">
+					<img src="//fuss10.elemecdn.com/5/5b/f67cc9c994d2b8ddbd4b580e013aepng.png?imageMogr/format/webp/" alt="">
+				</div>
+			</div>
+		</div>
+
+		{if 0 && !empty($tasks)}
+			<div class="remaining-activity">
+				<div class="activity-header clearfix">
+					<div class="activity-title">限时活动</div>
+					<div class="activity-time">
+						距离结束
+						<span>00</span>:<span>00</span>:<span>00</span>
+					</div>
+					<a href="{php echo imurl('seckill/index')}" class="more">更多 <i class="icon icon-arrow-right"></i></a>
+				</div>
+				<div class="goods-list row">
+					{loop $tasks $task}
+						<div class="goods-item col-25">
+							<a href="{php echo imurl('wmall/store/goods', array('sid' => $task['sid'], 'goods_id' => $task['goods_id']))}">
+								<img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" alt="" class="lazyload" data-original="{php echo tomedia($task['thumb'])}">
+								<div class="goods-title">{$task['title']}</div>
+								<div class="price">
+									<i>￥</i><span class="now-price">{$task['discount_price']}</span>&nbsp;<span class="original-price">￥{$task['price']}</span>
+								</div>
+							</a>
+						</div>
+					{/loop}
+				</div>
+			</div>
+		{/if}
+
+		{if !empty($bargains)}
+			<div class="bargain-activity">
+				<div class="activity-header text-center">
+					天天特价
+					<a class="more" href="{php echo imurl('bargain/index')}">更多 <i class="icon icon-arrow-right"></i></a>
+				</div>
+				<div class="goods-list row">
+					{loop $bargains $bargain}
+						<div class="goods-item col-25">
+							<a href="{php echo imurl('wmall/home/newGoods', array('sid' => $bargain['sid'], 'goods_id' => $bargain['goods_id']))}">
+								<div class="goods-image">
+									<div class="label">{$bargain['discount']}折</div>
+									<img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" alt="" class="lazyload" data-original="{php echo tomedia($bargain['thumb'])}">
+								</div>
+								<div class="goods-title">{$bargain['title']}</div>
+								<div class="price">
+									<i>￥</i><span class="now-price">{$bargain['discount_price']}</span>&nbsp;<span class="original-price">￥{$bargain['price']}</span>
+								</div>
+							</a>
+						</div>
+					{/loop}
+				</div>
+			</div>
+		{/if}
+
+		{if !empty($recommends)}
+			<div class="selective">
+				<div class="selective-tab">
+					为您优选
+					<a class="more" href="{php echo imurl('wmall/channel/brand')}">更多<i class="icon icon-arrow-right"></i></a>
+				</div>
+				<div class="selective-info row">
+					{loop $recommends $recommend}
+						<a href="{php echo imurl('wmall/home/newGoods', array('sid' => $recommend['id']))}" class="col-33 selective-item">
+							<img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" data-original="{php echo tomedia($recommend['logo']);}" class="lazyload lazyload-store" alt="">
+							<p class="selective-title">{$recommend['title']}</p>
+						</a>
+					{/loop}
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		{/if}
+
+		<div class="recommend">
+			<h3 class="recommend-title border-1px-b">推荐商家</h3>
+			<div class="store-list store-empty lazyload-container" id="store-list">
+				<div class="common-no-con">
+					<img src= "{WE7_WMALL_TPL_URL}static/img/store_no_con.png" alt="" />
+					<p>努力加载中...</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script id="tpl-store-list" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<div class="store-item border-1px-b">
+			<a href="<{d[i].url}>" class="store-container row">
+				<div class="col-22 store-logo">
+					<img class="lazyload lazyload-store" src="" data-original="<{d[i].logo}>">
+					<{# if(d[i].is_in_business_hours == 0){ }>
+						<span class="rest">店铺休息中</span>
+					<{# } }>
+				</div>
+				<div class="col-78 store-info">
+					<div class="store-title">
+						<h3><{d[i].title}></h3>
+						<div class="store-label">
+							<{# if(d[i].token_status == '1'){ }>
+								<span>券</span>
+							<{# } }>
+							<{# if(d[i].invoice_status == '1'){ }>
+								<span>票</span>
+							<{# } }>
+							<span>付</span>
+						</div>
+					</div>
+					<div class="month-sale">
+						<span class="star-rank-outline">
+							<span class="star-rank-active" style="width:<{d[i].score_cn}>%"></span>
+						</span>
+						<span class="stars-rank-value"><{d[i].score}></span>
+						<span class="sales">已售 <{d[i].sailed}> 份</span>
+						<{# if(d[i].delivery_mode == 2){ }>
+							<div class="store-tab pull-right">
+								<span class="tab-bluefill">{$_config_mall['delivery_title']}</span>
+							</div>
+						<{# } }>
+					</div>
+					<div class="delivery-conditions">起送
+						<span>￥<{d[i].send_price}></span>
+						<span class="pipe">/</span>配送
+						<span>￥<{d[i].delivery_price}></span>
+						<div class="distance pull-right"  data-in-business-hours="<{# if(d[i].is_in_business_hours){ }>1<{# } else { }>100000000<{# } }>"><span class=" <{#if(!d[i].distance) {}>hide<{# } }>"><i class="icon icon-lbs"></i><{d[i].distance}>km<span class="pipe">/</span></span><span class="color-blue"><{d[i].delivery_time}>分钟</span></div>
+					</div>
+					<{# if(d[i].activity.num > 0){ }>
+						<div class="dash-line"></div>
+					<{# } }>
+				</div>
+				<{# if(d[i].label_cn){ }>
+					<div class="shop-label" style="background-image: linear-gradient(135deg,<{d[i].label_color}>,<{d[i].label_color}> 50%,transparent 0);"><span><{d[i].label_cn}></span></div>
+				<{# } }>
+			</a>
+			<div class="activity-container">
+				<{# var num = 0; }>
+				<{# if(d[i].activity.num > 0){ }>
+					<div class="dashed-line"></div>
+					<{# if(d[i].activity.num > 2){ }>
+						<div class="activity-num"><{d[i].activity.num}>个活动 <i class="icon icon-arrow-down"></i></div>
+					<{# } }>
+					<{# for(var j in d[i].activity['items']){ }>
+						<{# num++ }>
+						<{# var item = d[i].activity['items'][j]; }>
+						<div class="tags tags-<{item.type}> <{# if(num > 2){ }>activity-row hide<{# } }>"><{item.title}></div>
+					<{# } }>
+				<{# } }>
+				<{# if(d[i].delivery_free_price > 0){ }>
+					<{# num++ }>
+					<div class="activity-row free <{# if(num > 2){ }>hide<{# } }>">
+						满<{d[i].delivery_free_price}>元免配送费
+					</div>
+				<{# } }>
+				<{# if(d[i].hot_goods && d[i].hot_goods.length != 0){ }>
+					<div class="dashed-line"></div>
+					<div class="hot">
+						热销:
+						<{# for(var j in d[i].hot_goods){ }>
+							<{d[i].hot_goods[j].title}>
+						<{# } }>
+					</div>
+				<{# } }>
+			</div>
+		</div>
+	<{# } }>
+</script>
+<script type="text/javascript" src="//webapi.amap.com/maps?v=1.3&key=550a3bf0cb6d96c3b43d330fb7d86950"></script>
+<script>
+	$(function(){
+		$(document).on('click', '.slide .swiper-slide', function(){
+			var url = $(this).data('link');
+			location.href = url;
+			return;
+		});
+
+		function getLocation() {
+			var map, geolocation;
+			map = new AMap.Map('allmap');
+			map.plugin('AMap.Geolocation', function() {
+				geolocation = new AMap.Geolocation({
+					enableHighAccuracy: true //是否使用高精度定位，默认:true
+				});
+				geolocation.getCurrentPosition();
+				AMap.event.addListener(geolocation, 'complete', getPositionInfo);//返回定位信息
+				AMap.event.addListener(geolocation, 'error', function(){
+					require(['tiny'], function(tiny){
+						if(!tiny.cookie.get('__getPosition')) {
+							location.reload();
+							tiny.cookie.set('__getPosition', 1, 300);
+						} else {
+							getPositionInfo();
+						}
+					});
+				});
+			});
+		}
+
+		function getPositionInfo(data) {
+			if(typeof data != 'undefined') {
+				require(['tiny'], function(tiny){
+					tiny.cookie.set('__getPosition', 0, -1000);
+				});
+				var point = data.position;
+				$('#js-lat').html(point.lat);
+				$('#js-lng').html(point.lng);
+				var lnglatXY = [point.lng, point.lat]; //已知点坐标
+				var map = new AMap.Map('allmap');
+				map.plugin('AMap.Geocoder', function() {
+					var geocoder = new AMap.Geocoder();
+					geocoder.getAddress(lnglatXY, function(status, result) {
+						if (status === 'complete' && result.info === 'OK') {
+							var obj = result.regeocode.addressComponent;
+							var position = result.regeocode.formattedAddress;
+							position = position.replace(obj.province, '');
+							position = position.replace(obj.district, '');
+							position = position.replace(obj.city, '');
+							$('#position').html(position);
+						}
+					});
+				});
+			}
+			getStoreList();
+			return ;
+		}
+
+		function getStoreList() {
+			var params = {
+				lat: $('#js-lat').html(),
+				lng: $('#js-lng').html()
+			}
+			$.post("{php echo imurl('wmall/home/newIndex/list')}", params, function(data){
+				var result = $.parseJSON(data);
+				if(result.message.error != 0) {
+					$.toast(result.message.message);
+					return false;
+				}
+				if(result.message.message.length == 0) {
+					$('#store-list').addClass('store-empty');
+					$('#store-list .common-no-con').find('p').html('附近没有符合条件的商户');
+					$('#store-list .common-no-con').removeClass('hide');
+				} else {
+					var gettpl = $('#tpl-store-list').html();
+					require(['laytpl', 'jquery.lazyload'], function(laytpl){
+						laytpl(gettpl).render(result.message.message, function(html){
+							$('#store-list').removeClass('store-empty');
+							$('#store-list .common-no-con').addClass('hide');
+							$('#store-list').append(html);
+							$('#store-list').find("img.lazyload").lazyload({
+								container: $('.lazyload-container'),
+								effect : 'fadeIn',
+								threshold : 200
+							});
+							return;
+						});
+					});
+				}
+			});
+		}
+		{if !$_GPC['d']}
+			getLocation();
+		{else}
+			getStoreList();
+		{/if}
+
+		$(".content").on('scroll',function(){
+			$(".content").scrollTop()>120 ? $('.header-bar').hide():$('.header-bar').show();
+			$(".content").scrollTop()>120 ? $(".content").css('margin-top', '2.5rem'):$(".content").css('margin-top', '5.9rem');
+			$(".content").scrollTop()>120 ? $('.header-bar-rough').show():$('.header-bar-rough').hide();
+		});
+
+		$(document).on('focus', '.search', function() {
+			location.href = "{php echo imurl('wmall/home/hunt')}";
+		});
+
+		$(document).on('click', '.activity-container', function(){
+			if($(this).hasClass('active')) {
+				$(this).find('.activity-row').addClass('hide');
+				$(this).find('.activity-num i').addClass('fa-arrow-down').removeClass('fa-arrow-up');
+			} else {
+				$(this).find('.activity-row').removeClass('hide');
+				$(this).find('.activity-num i').addClass('fa-arrow-up').removeClass('fa-arrow-down');
+			}
+			$(this).toggleClass('active');
+		});
+
+	});
+</script>
+<script>
+	$(function () {
+		var dm_json = JSON.parse('[{"nickname":"leon","imgurl":"http:\/\/wx.qlogo.cn\/mmopen\/xE4nKLUkiax2mBKW5AOSVX1icTdRAh4yV6WgENM619GzzIo0sJPyR6lnJLXicGjUu7aBialB0gb0Amk8iaGibTDvicM7TOw9ssciarLv\/132","time":"54\u79d2\u524d"},{"nickname":"Lucky-dog","imgurl":"http:\/\/wx.qlogo.cn\/mmopen\/fYTibDGJMwv4faOVhlaMbGibicOUjXaCuicibl0JG0ibYB3LCu2nr6rMoQRC4Vwu4Sh8icZDMzM8KswaGCoJI6eZZ0GSLgGLbJibPibd7\/0","time":"30\u79d2\u524d"},{"nickname":"Johnson","imgurl":"http:\/\/wx.qlogo.cn\/mmopen\/vi_32\/Q0j4TwGTfTJfml0RWC8wu5e5hib8YHaIQGsnyPIOMOaZmFSn9MzJTaqohdP9PmN2pzEcYOuXpmJFcnic6ZARY3sQ\/0","time":"1\u5206\u949f\u524d"},{"nickname":"AAA\ue00e \u5fae\u5546\u795e\u5668\ue003 \u62db\u4ee3\u7406\ue00e \ue003 \ue00e\ue003","imgurl":"http:\/\/wx.qlogo.cn\/mmopen\/fYTibDGJMwv49pNTSMsaCJyzficIxEgh9FVoZQucopWLWgziaBDgHAkIxICA0AZHsiaFTBiafRwyG7bE6k8nYuib4LULM4qiayEK3D6\/132","time":"43\u79d2\u524d"},{"nickname":"\u70df\u706b","imgurl":"http:\/\/wx.qlogo.cn\/mmopen\/xE4nKLUkiax0eCal1PdNHNSD0BVNF2FDdAq5EaA6Ok8GTjzYaqHgtOOvq1sg5TNjNibVndeTTYbiaSdhZxibSQV2cxhk2MjbIyoT\/132","time":"8\u79d2\u524d"},{"nickname":"\u4e00\u7247\u7c3f\u5fc3","imgurl":"http:\/\/wx.qlogo.cn\/mmopen\/xE4nKLUkiax1hPR7jWuG6geITKO6PSVic05iburHjhh6o7wz7Wrk29pzGEKSliazQbAscBrbh13tVFf2ia9lYl1eRweEQ6MzuuAVk\/132","time":"41\u79d2\u524d"},{"nickname":"\u3010TST\u00b7\u5168\u56fd\u603b\u6388\u6743\u3011-Sophie.","imgurl":"http:\/\/wx.qlogo.cn\/mmopen\/xE4nKLUkiax1KwpmLuJ0EXDGs5nFia7kR9jicfEZFzn5kFU3SyYaMqBmMHSVYdHh21REQmAgMAiakTsTOzYUM7tw4bocuJN6bxk1\/132","time":"31\u79d2\u524d"},{"nickname":"A\u4e00\u8d77\u53bbkorea\u6574\u5f62\u2606\u660e\u5a9a","imgurl":"http:\/\/wx.qlogo.cn\/mmopen\/iautZNyCezQ8OGbGsic1m6STo4xjIxMnQ4LiaYvwI7Pe7Gk95UFzFyiaaM37Be97dFmjasbvqib9W1wesk4zyHEnQ5dveJzJ8MuR5\/132","time":"29\u79d2\u524d"},{"nickname":"\u5f20\u94ed\u6052","imgurl":"http:\/\/wx.qlogo.cn\/mmopen\/xE4nKLUkiax1wRkLI1tazv06l8fCvOavyoFTjRnVvxZsD1SXMPe8YHDk53w1rfAPUDQ5vNHqibnQZib73rJkuZeeibjIOJhZicTsw\/0","time":"11\u79d2\u524d"},{"nickname":"\u5e7a\u5e7a\u4ee4","imgurl":"http:\/\/wx.qlogo.cn\/mmopen\/fYTibDGJMwv49pNTSMsaCJzf2verjicLWkF4xjibP6vgaxiaELG8iaeQCuRrovALlpH0IJLRuAEnqiaBmGy5omiaaxMHUNkaBUc9oTq\/132","time":"44\u79d2\u524d"}]');
+		var dm_index = 0;
+		setInterval(function () {
+			var data = dm_json[dm_index];
+			$(".new-order").find('.thumb').attr('src', data.imgurl);
+			$(".new-order").find('.text').text('新订单来自 ' + data.nickname);
+			$(".new-order").find('.time').text(data.time);
+			$(".new-order").css('display', 'flex');
+			$(".new-order").addClass('show').fadeIn();
+			if(dm_index == dm_json.length-1) {
+				dm_index = 0;
+			} else {
+				dm_index++;
+			}
+			setTimeout(function (){
+				$(".new-order").fadeOut();
+			}, 2000);
+		}, 5000);
+	});
+</script>
+{itemplate 'public/footer'}

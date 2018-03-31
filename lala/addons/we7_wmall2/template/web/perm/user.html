@@ -1,0 +1,218 @@
+{itemplate 'public/header'}
+{if $op == 'list'}
+<form action="./index.php" class="form-horizontal form-filter">
+	{php echo tpl_form_filter_hidden('perm/user/list');}
+	<input name="status" type="hidden" value="{$status}">
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+		<div class="col-sm-4 col-xs-4">
+			<div class="btn-group">
+				<a href="{php echo iurl('perm/user/list', array('status' => -1))}" class="btn {if $status == -1}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo iurl('perm/user/list', array('status' => 1))}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">启用</a>
+				<a href="{php echo iurl('perm/user/list', array('status' => 0))}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">禁用</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">搜索</label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="text" name="keyword" value="{$keyword}" class="form-control" placeholder="请输入操作员名称">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="submit" value="筛选" class="btn btn-primary">
+		</div>
+	</div>
+</form>
+
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		<div class="panel-heading">
+			<a href="{php echo iurl('perm/user/post');}" class="btn btn-primary btn-sm">添加新的操作员</a>
+		</div>
+		<div class="panel-body table-responsive js-table">
+			{if empty($users)}
+				<div class="no-result">还没有相关数据</div>
+			{else}
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+					<tr>
+						<th width="40">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" name="ids[]" />
+								<label></label>
+							</div>
+						</th>
+						<th>登陆ID</th>
+						<th>角色</th>
+						<th>姓名</th>
+						<th>手机号</th>
+						<th>状态</th>
+						<th style="width:150px; text-align:right;">操作</th>
+					</tr>
+					</thead>
+					<tbody>
+						{loop $users $user}
+							<tr>
+								<td>
+									<div class="checkbox checkbox-inline">
+										<input type="checkbox" name="uids[]" value="{$user['uid']}"/>
+										<label></label>
+									</div>
+								</td>
+								<td>{$user['username']}</td>
+								<td>{$roles[$user['roleid']]['rolename']}</td>
+								<td>{$user['realname']}</td>
+								<td>{$user['mobile']}</td>
+								<td>
+									<input type="checkbox" class="js-checkbox" data-href="{php echo iurl('perm/user/status', array('id' => $user['id']));}" data-name="status" value="1" {if $user['status'] == 1}checked{/if}>
+								</td>
+								<td style="text-align:right;">
+									<a href="{php echo iurl('perm/user/post', array('id' => $user['id']))}" class="btn btn-default btn-sm">编辑</a>
+									<a href="{php echo iurl('perm/user/del', array('uid' => $user['uid']))}" class="btn btn-default btn-sm js-remove" data-confirm="删除后将不可恢复，确定删除吗">删除</a>
+								</td>
+							</tr>
+						{/loop}
+					</tbody>
+				</table>
+				<div class="btn-region clearfix">
+					<div class="pull-left">
+						<a href="{php echo iurl('perm/user/del')}" class="btn btn-primary btn-danger js-batch" data-batch="remove" data-confirm="删除后将不可恢复，确定删除吗?">删除</a>
+					</div>
+					<div class="pull-right">
+						{$pager}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{/if}
+
+{if $op == 'post'}
+<div class="page clearfix system-perm">
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">操作员用户名</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="username" value="{$user['username']}" {if $id > 0}readonly{/if} class="form-control" required="true"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">操作员密码</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="password" name="password" value="" class="form-control" {if empty($_GPC['id'])}required="true"{/if}/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">所属角色</label>
+			<div class="col-sm-9 col-xs-12">
+				<select name="roleid" id="roleid" class="form-control">
+					<option value="0">选择角色</option>
+					{loop $roles $role}
+						<option value="{$role['id']}" {if $role['id'] == $user['roleid']}selected{/if}>{$role['rolename']}</option>
+					{/loop}
+				</select>
+				<div class="help-block">如果您选择了角色，则此用户本身就继承了此角色的所有权限</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">姓名</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" class="form-control" name="realname" value="{$user['realname']}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">电话</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" class="form-control" name="mobile" value="{$user['mobile']}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+					<div class="col-sm-9 col-xs-12">
+						<div class="radio radio-inline">
+							<input type="radio" value="1" name="status" id="status-1" {if $user['status'] == 1}checked{/if}>
+							<label for="status-1">启用</label>
+						</div>
+						<div class="radio radio-inline">
+							<input type="radio" value="0" name="status" id="status-0" {if $user['status'] == 0}checked{/if}>
+							<label for="status-0">禁用</label>
+						</div>
+						<div class="help-block">用户可以在此角色权限的基础上附加其他权限</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">权限</label>
+			<div class="col-sm-9 col-xs-12 perm-container">
+				{loop $all_perms $group $all}
+					<div class="category-perm">
+						<div class="heading">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" name="perms[]" value="{$group}" id="{$group}" class="perm-all-item" data-group="{$group}" {if in_array($group, $roles[$user['roleid']]['perms']) || in_array($group, $user['perms'])}checked{/if} {if in_array($group, $roles[$user['roleid']]['perms'])}disabled{/if}>
+								<label for="{$group}">{$all['title']}</label>
+							</div>
+						</div>
+						<div class="perm-list">
+							{loop $all['perms'] $key $perm}
+								<div class="checkbox checkbox-inline">
+									<input type="checkbox" name="perms[]" value="{$key}" id="{$key}" class="perm-item" data-group="{$group}" {if in_array($key, $roles[$user['roleid']]['perms']) || in_array($key, $user['perms'])}checked{/if} {if in_array($key, $roles[$user['roleid']]['perms'])}disabled{/if}>
+									<label for="{$key}">{$perm}</label>
+								</div>
+							{/loop}
+						</div>
+					</div>
+				{/loop}
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-12">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{/if}
+<script>
+	$(function() {
+		var roles = {php echo json_encode($roles)};
+		$('#roleid').change(function() {
+			var id = $(this).val();
+			var perm = '';
+			if(id > 0) {
+				perm = roles[id]['perms'];
+			}
+			$(':checkbox').removeAttr('disabled').removeAttr('checked').each(function() {
+				var key = $(this).val();
+				if(perm != '' && perm.indexOf(key) != -1) {
+					$(this).attr('disabled',true);
+					$(this).prop('checked', 'checked');
+				}
+			});
+		});
+
+		$(document).on('click', '.perm-all-item', function() {
+			var group = $(this).data('group');
+			if($(this).prop('checked')) {
+				$(".perm-item[data-group='" + group + "'],.perm-all-item[data-group='" + group + "']").prop('checked', 'checked');
+			} else {
+				$(".perm-item[data-group='" + group + "'],.perm-all-item[data-group='" + group + "']").removeProp('checked');
+			}
+		});
+
+		$(document).on('click', '.perm-item', function() {
+			var group = $(this).data('group');
+			var length = $(".perm-item[data-group='" + group + "']:checked").size();
+			if(length > 0) {
+				$(".perm-all-item[data-group='" + group + "']").prop('checked', 'checked');
+			} else {
+				$(".perm-all-item[data-group='" + group + "']").removeProp('checked');
+			}
+		});
+	})
+</script>
+
+{itemplate 'public/footer'}

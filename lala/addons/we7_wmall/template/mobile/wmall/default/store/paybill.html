@@ -1,0 +1,293 @@
+{itemplate 'public/header'}
+<div class="page paybill">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">{$store['title']}-买单</h1>
+	</header>
+	<div class="content">
+		<div class="list-block">
+			<ul>
+				<li>
+					<div class="item-content border">
+						<div class="item-inner">
+							<div class="item-title label">消费总额(元)</div>
+							<div class="item-input">
+								<input type="text" class="align-right" name="total_fee" placeholder="询问服务员后输入" id="total_fee">
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="check clearfix">
+						<span class="box"></span>
+						<span>输入不参与优惠金额(如酒水、套餐)</span>
+					</div>
+				</li>
+				<li class="discount">
+					<div class="item-content border">
+						<div class="item-inner">
+							<div class="item-title label">不参与优惠金额</div>
+							<div class="item-input">
+								<input type="text" class="align-right" placeholder="询问服务员后输入" name="no_discount_part" id="no_discount_part">
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="list-block">
+			<ul>
+				<li>
+					<div class="item-content border-1px-t">
+						<div class="item-inner border-1px-b">
+							<div class="item-title label">
+								优惠券
+								<span class="coupon"><span></span>张可用</span>
+							</div>
+							<div class="item-input align-right">
+								<a href="#" class="open-popup open-about" data-popup=".popup-about" id="coupon-select">
+									<span class="couponPrice"><span class="no-use">未使用</span><span class="coupon-text">元券</span></span>
+									<i class="icon icon-right"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item-content border-1px-b">
+						<div class="item-inner">
+							<div class="item-title label">实付金额</div>
+							<div class="item-input align-right">
+								<span class="price">
+									¥<span id="price">0.00</span> 
+								</span>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="list-block">
+			<ul class="border-1px-tb" style="background-color: #FFF">
+				{loop $payment $row}
+					{php $i++;}
+					<li class="mode">
+						<label class="label-checkbox item-content {if $i > 1}border-1px-t{/if}">
+							<div class="item-inner">
+								<div class="item-title">{$pay_types[$row]['text']}</div>
+							</div>
+							<input type="radio" name="pay_type" class="pay_type" value="{$row}" {if $row == 'wechat'}checked{/if}>
+							<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+						</label>
+					</li>
+				{/loop}
+			</ul>
+		</div>
+		<div class="list-block">
+			<ul>
+				<li>
+					<div class="confirm">
+						<a href="javascript:;">确认买单</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<script type="text/html" id="tpl-show-coupons">
+	<div class="popup popup-paybill popup-coupon">
+		<div class="content-block">
+			<header class="bar bar-nav common-bar-nav">
+				<a href="javascript:;" class="pull-left close-popup"><i class="icon icon-arrow-left"></i></a>
+				<h1 class="title">选择代金券</h1>
+			</header>
+			<div class="wui-loadmore-line wui-loadmore" style="margin-top: 1.4rem!important;">
+				<span class="wui-loadmore-tips">可用优惠券(<(message.length)>张)</span>
+			</div>
+			<div class="coupon-list" style="margin: 0!important;">
+				<(each message as item)>
+					<div class="coupon-item" data-id="<(item.id)>" data-price="<(item.discount)>" data-condition="<(item.condition)>">
+						<span class="circle border-1px-r circle-left"></span>
+						<span class="circle border-1px-l circle-right"></span>
+						<div class="selected-status"></div>
+						<div class="left">
+							<div class="store-logo">
+								<img src="<(item.logo)>" alt="">
+							</div>
+							<div class="coupon-detail">
+								<div class="coupon-title">
+									<(item.title)>
+								</div>
+								<div class="use-time">有效期至:<(item.endtime)></div>
+							</div>
+						</div>
+						<div class="right">
+							<div class="price">
+								<span>¥</span><(item.discount)>
+							</div>
+							<div class="condition">满<(item.condition)>元可用</div>
+						</div>
+					</div>
+				<(/each)>
+			</div>
+			<div class="block border-1px-t">
+				<a href="javascript:;" id="no-coupon">
+					不使用代金券
+				</a>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script>
+require(['tmodtpl'],function(tmodtpl){
+	var paybill = {
+		params: {
+			total_fee: 0, 
+			no_discount_part: 0,
+			sum: 0,
+			final_fee: 0,
+			couponId: 0,
+			couponPrice: 0,
+			couponNum: 0,
+			couponCondition: 0,
+			pay_type: '',
+			legal: 0,
+		}
+	};
+
+	paybill.init = function(){
+		$(document).on('click', '.check .box', function(){
+			$(this).addClass('change');
+			$('.discount').fadeIn(400);
+		});
+		$(document).on('click', '.check .change', function(){
+			$(this).removeClass('change');
+			$('.discount').fadeOut(400);
+		});
+		
+		$('#total_fee').on('input', function() {
+			paybill.calculate();
+		});
+
+		$('#no_discount_part').on('input', function(){
+			paybill.calculate();
+		});
+
+		$(document).on('click', '#coupon-select', function(){
+			if(paybill.params.couponNum > 0) {
+				$.post('{php echo imurl("wmall/store/paybill/coupon", array("sid" => $sid));}', paybill.params, function(data){
+					var couponResult = $.parseJSON(data);
+					var html = tmodtpl('tpl-show-coupons', couponResult.message);
+					$.popup(html);
+				});
+			}
+		});
+
+		$(document).on('click', '.coupon-item', function(){
+			var couponId = parseInt($(this).data('id'));
+			var couponPrice = $(this).data('price');
+			var couponCondition = $(this).data('condition');
+			paybill.params.couponId = couponId;
+			paybill.params.couponPrice = couponPrice;
+			paybill.params.couponCondition = parseFloat(couponCondition);
+			paybill.calculate(true);
+			$.closeModal();
+		});
+
+		$(document).on('click', '#no-coupon', function(){
+			paybill.params.couponId = 0;
+			paybill.params.couponPrice = 0;
+			paybill.calculate(true);
+			$.closeModal();
+		});
+	};
+
+	paybill.calculate = function(is_select){
+		$('.confirm a').removeClass('submit');
+		$('.couponPrice .no-use').html('未使用');
+		$('.couponPrice').removeClass('red');
+		$('.couponPrice .coupon-text').hide();
+		$('.coupon').hide();
+		$('.item-inner .price span').html("0.00");
+		paybill.params.couponNum = 0;
+		paybill.params.legal = 0;
+
+		if(!is_select) {
+			paybill.params.couponId = 0;
+			paybill.params.couponPrice = 0;
+		}
+		paybill.params.legal = 0;
+		var total_fee = parseFloat($('#total_fee').val());
+		if(isNaN(total_fee)) {
+			$.toast('请输入有效的金额');
+			return false;
+		}
+		paybill.params.total_fee = total_fee;
+		paybill.params.final_fee = total_fee;
+		var no_discount_part = parseFloat($('#no_discount_part').val());
+		if(isNaN(no_discount_part)) {
+			no_discount_part = 0;
+		}
+		if(no_discount_part > total_fee) {
+			$.toast('不参与优惠金额不能大于消费总额');
+			return false;
+		}
+		paybill.params.no_discount_part = no_discount_part;
+
+		var sum = (total_fee - no_discount_part).toFixed(2);
+		paybill.params.sum = sum;
+		if(total_fee) {
+			$('.item-inner .price span').html(total_fee);
+			if(paybill.params.couponId > 0 && paybill.params.couponCondition <= sum) {
+				$('.coupon').show();
+				$('.couponPrice .no-use').html(paybill.params.couponPrice);
+				$('.couponPrice').addClass('red');
+				$('.couponPrice .coupon-text').show();
+				var interim = (paybill.params.total_fee - paybill.params.couponPrice).toFixed(2);
+				$('.item-inner .price span').html(interim);
+				paybill.params.final_fee = interim;
+			}
+			$('.confirm a').addClass('submit');
+		}
+		paybill.params.legal = 1;
+
+		$.post('{php echo imurl("wmall/store/paybill/coupon", array("sid" => $sid));}', paybill.params, function(data){
+			var couponResult = $.parseJSON(data);
+			if(couponResult.message.num > 0) {
+				paybill.params.couponNum = couponResult.message.num;
+				$('.coupon>span').html(couponResult.message.num);
+				$('.coupon').show();
+			}
+		});
+	};
+
+	$(document).on('click', '.confirm .submit', function(){
+		if(paybill.params.legal == 1) {
+			paybill.params.pay_type = $('.pay_type:checked').val();
+			if(!paybill.params.pay_type) {
+				$.toast('请选择支付方式');
+				return false;
+			}
+
+			$.post('{php echo imurl("wmall/store/paybill/index", array("sid" => $sid));}', paybill.params, function(data){
+				var result = $.parseJSON(data);
+				if(result.message.errno !=0) {
+					$.toast(result.message.message);
+					return false;
+				}
+				$.toast("下单成功", result.message.url, 'ajax');
+			});
+		} else {
+			$.toast('请输入正确有效的金额');
+			return false;
+		}
+	});
+
+	paybill.init();
+});
+
+</script>
+
+{itemplate 'public/footer'}

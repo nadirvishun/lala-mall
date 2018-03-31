@@ -1,0 +1,65 @@
+{itemplate 'public/header'}
+<div class="page clearfix">
+	<h2>基础设置</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">管理员微信信息</label>
+			<div class="col-sm-9 col-xs-12">
+				{php echo tpl_form_field_fans('manager', array('openid' => $config['manager']['openid'], 'nickname' => $config['manager']['nickname'], 'avatar' => $config['manager']['avatar']), true);}
+				<div class="help-block">当有商户商户申请, 商户提现等申请时,系统会微信通知管理员</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">首页商家排序方式</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="displayorder" name="store_orderby_type" id="store-orderby-type-displayorder" {if $config['store_orderby_type'] == 'displayorder'}checked{/if}>
+					<label for="store-orderby-type-displayorder">按排序大小排序</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="click" name="store_orderby_type" id="store-orderby-type-click" {if $config['store_orderby_type'] == 'click'}checked{/if}>
+					<label for="store-orderby-type-click">按热度排序</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="distance" name="store_orderby_type" id="store-orderby-type-distance" {if $config['store_orderby_type'] == 'distance' || !$config['store_orderby_type']}checked{/if}>
+					<label for="store-orderby-type-distance">离我最近</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="sailed" name="store_orderby_type" id="store-orderby-type-sailed" {if $config['store_orderby_type'] == 'sailed'}checked{/if}>
+					<label for="store-orderby-type-sailed">销量最高</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="score" name="store_orderby_type" id="store-orderby-type-score" {if $config['store_orderby_type'] == 'score'}checked{/if}>
+					<label for="store-orderby-type-score">评分最高</label>
+				</div>
+				<div class="help-block">
+					<span class="text-danger">热度: 体现在粉丝在点击“搜索”菜单时，系统会按照热度有大到小列出5个商家。</span>
+					<br>
+					<span class="text-danger">推荐: 体现在粉丝搜索门店或菜品时，在搜索结果下面会列出平台推荐的商家。</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">超出商家配送范围是否显示</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="store_overradius_display" id="store-overradius-display-1" {if $config['store_overradius_display'] == '1' || !$config['store_overradius_display']}checked{/if}>
+					<label for="store-overradius-display-1">显示</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="2" name="store_overradius_display" id="store-overradius-display-2" {if $config['store_overradius_display'] == '2'}checked{/if}>
+					<label for="store-overradius-display-2">不显示</label>
+				</div>
+				<span class="help-block">注意:此项是根据商家的服务范围与顾客距离商家的距离进行计算的,与平台的服务范围没有关系</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{itemplate 'public/footer'}

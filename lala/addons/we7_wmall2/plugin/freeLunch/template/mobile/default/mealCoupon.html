@@ -1,0 +1,79 @@
+{itemplate 'public/header'}
+{if $op == 'index'}
+<div class="page mealcoupon">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">我的餐券</h1>
+	</header>
+	{php get_mall_menu()}
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('freeLunch/mealCoupon/index', array('status' => $status))}" data-distance="50" data-min="{$min}" data-container=".participant-list" data-tpl="tpl-participant">
+		<div class="myticket">
+			<div class="ticket-value"><span>{if !empty($rewards)}{$rewards}{else}?{/if}</span> 元</div>
+			<span>中奖总金额</span>
+		</div>
+		<ul class="nav-tab row">
+			<li class="{if $status == 0}active{/if} col-50"><a href="{php echo imurl('freeLunch/mealCoupon', array('status' => 0))}">我参与的</a></li>
+			<li class="{if $status == 1}active{/if} col-50"><a href="{php echo imurl('freeLunch/mealCoupon', array('status' => 1))}">中奖记录</a></li>
+		</ul>
+		<div class="not-login hide">
+			<img src="{WE7_WMALL_TPL_URL}static/img/freeLunch-no-log.png">
+			<h3>您还没有登录哦</h3>
+			<p>登录后即可参与霸王餐</p>
+			<div class="login">
+				<a class="button button-danger button-fill" href="">去登录</a>
+			</div>
+		</div>
+		{if empty($participants)}
+		<div class="no-result">
+			<img src="{WE7_WMALL_TPL_URL}static/img/freeLunch-no-luckymoney.png">
+			<h3>您还没有记录哦</h3>
+			<p>好运常在，买的多机会大</p>
+			<div class="go-darw-pirze">
+				<a href="{php echo imurl('freeLunch/freeLunch/index')}" class="button button-danger button-fill">
+					去试试手气
+				</a>
+			</div>
+		</div>
+		{else}
+		<div class="participant-list border-1px-t">
+			{loop $participants $participant}
+			<a href="{php echo imurl('freeLunch/freeLunch/detail', array('record_id' => $participant['record_id']))}" class="participant-item border-1px-b clearfix">
+				<div class="participant-icon pull-left">
+					<img src="{WE7_WMALL_TPL_URL}static/img/freeLunch_mealcoupon.png" alt="">
+				</div>
+				<div class="participant-info pull-left">
+					<div class="participant-title">{$participant['title']}</div>
+					<div class="has-participant">第{$participant['serial_sn']}期 | 我已参与 <span>{$participant['total']}</span> 次</div>
+				</div>
+				<div class="status pull-right">
+					<span>{$participant['text']}</span>
+					<span class="icon icon-right"></span>
+				</div>
+			</a>
+			{/loop}
+		</div>
+		<div class="infinite-scroll-preloader hide">
+			<div class="preloader"></div>
+		</div>
+		{/if}
+	</div>
+</div>
+<script id="tpl-participant" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<a href="{php echo imurl('freeLunch/freeLunch/detail')}&record_id=<{d[i].id}>" class="participant-item border-1px-b clearfix">
+		<div class="participant-icon pull-left">
+			<img src="{WE7_WMALL_TPL_URL}static/img/freeLunch_mealcoupon.png" alt="">
+		</div>
+		<div class="participant-info pull-left">
+			<div class="participant-title"><{d[i].title}></div>
+			<div class="has-participant">第<{d[i].serial_sn}>期 | 我已参与 <span><{d[i].total}></span> 次</div>
+		</div>
+		<div class="status pull-right">
+			<span><{d[i].text}></span>
+			<span class="icon icon-right"></span>
+		</div>
+	</a>
+	<{# } }>
+</script>
+{/if}
+{itemplate 'public/footer'}

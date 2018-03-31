@@ -1,0 +1,15 @@
+<div class="second-sidebar-title">会员</div>
+<div class="nav slimscroll">
+	<div class="menu-header">概况</div>
+	<ul class="menu-item">
+		<li {if $_W['_op'] == 'index'}class="active"{/if}>
+		<a href="{php echo iurl('store/member/index');}">会员概况</a>
+		</li>
+		<li {if $_W['_op'] == 'list'}class="active"{/if}>
+		<a href="{php echo iurl('store/member/list');}">会员列表</a>
+		</li>
+		<li {if $_W['_op'] == 'sync'}class="active"{/if}>
+		<a href="{php echo iurl('store/member/sync');}">同步会员数据</a>
+		</li>
+	</ul>
+</div>

@@ -1,0 +1,83 @@
+{itemplate 'public/header'}
+<link rel="stylesheet" href="../addons/we7_wmall/plugin/spread/static/css/index.css">
+<div class="page page-poster">
+	<div class="content">
+		<!-- 生成二维码 -->
+		<div class="create-img">
+			<img src="{WE7_WMALL_TPL_URL}static/img/timg.gif" alt="">
+			<div class="text">正在生成海报,请稍后...</div>
+		</div>
+		<div class="img">
+			<img src="" alt="" id="img">
+		</div>
+		<div class="text-title">
+			<i class="icon icon-smile"></i>
+			如何赚钱
+		</div>
+		<div class="list-block">
+			<ul>
+				<li class="item-content border-1px-b">
+					<div class="item-media">
+						第一步
+					</div>
+					<div class="item-inner">
+						<div class="item-title">
+							转发此二维码给微信好友；
+						</div>
+					</div>
+				</li>
+				<li class="item-content border-1px-b">
+					<div class="item-media">
+						第二步
+					</div>
+					<div class="item-inner">
+						<div class="item-title">
+							好友点击您分享的二维码,并且下单
+						</div>
+					</div>
+				</li>
+				<li class="item-content border-1px-b">
+					<div class="item-media">
+						第三步
+					</div>
+					<div class="item-inner">
+						<div class="item-title">
+							好友下单后,{if $settle['balance_condition'] == 1}确认收货{else}确认收货并评价{/if}之后,您就可以获得佣金
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="explain">
+			<div class="text">
+				说明: 分享后会带有独特的推荐码,您的好友访问之后,
+				{if $relate['become_child'] == 0}
+				系统会自动记录上下线关系。
+				{elseif $relate['become_child'] == 1}
+				首次成功下单，并且确认收货，他将成为您的下线。
+				{elseif $relate['become_child'] == 2}
+				首次成功下单，并且确认收货并进行评价，他将成为您的下线。
+				{/if}
+				如果您的好友已被其他人抢先发展成下线，他将不能成为您的下线。
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+$(function(){
+	var height = document.body.clientHeight;
+	$('.img').height(height);
+	$.post("{php echo imurl('spread/poster/index')}", function(data){
+		var result = $.parseJSON(data);
+		if(result.message.errno != 0) {
+			$.toast(result.message.message);
+			return false;
+		}
+		$('#img').attr('src', result.message.message);
+		$('.create-img').hide();
+		$('.img').show();
+	});
+})
+</script>
+{itemplate 'public/footer'}

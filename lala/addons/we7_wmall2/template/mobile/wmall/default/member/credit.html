@@ -1,0 +1,134 @@
+{itemplate 'public/header'}
+{if $ta == 'credit'}
+<div class="page page-credit">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">{$_W['page']['title']}</h1>
+	</header>
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('wmall/member/credit/credit', array('type' => $type, 'credit' => $credit))}" data-distance="50" data-min="{$min}" data-container=".list-block .list" data-tpl="tpl-credit2">
+		<div class="buttons-tab activity_status">
+			<a href="{php echo ifilter_url('type: 0');}" class="button {if $type == 0}active{/if}">全部</a>
+			<a href="{php echo ifilter_url('type: 1');}" class="button {if $type == 1}active{/if}">收入</a>
+			<a href="{php echo ifilter_url('type: 2');}" class="button {if $type == 2}active{/if}">支出</a>
+		</div>
+		<div class="credit-list">
+			{if empty($records)}
+			<div class="common-no-con">
+				<div class="bg"></div>
+				<p>暂时没有明细哦～</p>
+			</div>
+			{else}
+			<div class="list-block">
+				<ul class="list">
+					{loop $records $item}
+					<li class="item-content item-link">
+						<a href="{php echo imurl('wmall/member/credit/detail', array('id' => $item['id']))}">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">
+									<div class="item-title-top">
+										{if $item['num'] > 0}
+											收入
+										{else}
+											支出
+										{/if}
+									</div>
+									<div class="item-title-bottom">{$item['createtime']}</div>
+								</div>
+								<div class="item-after">
+									{if $item['num'] > 0}
+										<div class="item-after-top color-success">
+											+{$item['num']}
+										</div>
+									{else}
+										<div class="item-after-top color-danger">
+											{$item['num']}
+										</div>
+									{/if}
+								</div>
+							</div>
+						</a>
+					</li>
+					{/loop}
+				</ul>
+			</div>
+			{/if}
+		</div>
+	</div>
+</div>
+
+<script id="tpl-credit2" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<li class="item-content item-link">
+		<a href="{php echo imurl('wmall/member/credit/detail')}&id:<{d[i].id}>">
+			<div class="item-inner border-1px-b">
+				<div class="item-title">
+					<div class="item-title-top">
+						<{# if(d[i].num > 0) {}>
+						收入
+						<{# } else if(d[i].num < 0) {}>
+						支出
+						<{# } }>
+					</div>
+					<div class="item-title-bottom"><{d[i].createtime}></div>
+				</div>
+				<div class="item-after">
+					<{# if(d[i].num > 0) {}>
+					<div class="item-after-top color-success">
+						+<{d[i].num}>
+					</div>
+					<{# } else { }>
+					<div class="item-after-top color-danger">
+						<{d[i].num}>
+					</div>
+					<{# }}>
+				</div>
+			</div>
+		</a>
+	</li>
+	<{# } }>
+</script>
+{/if}
+
+{if $ta == 'detail'}
+	<div class="page page-credit-detial">
+		<header class="bar bar-nav common-bar-nav">
+			<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+			<h1 class="title">余额明细</h1>
+		</header>
+		<div class="content">
+			<div class="wui-form-preview">
+				<div class="wui-form-preview-hd">
+					<label class="wui-form-preview-label">金额</label>
+					<em class="wui-form-preview-value">
+						{if $detail['num'] > 0}
+							+{$detail['num']}
+						{else}
+							{$detail['num']}
+						{/if}
+					</em>
+				</div>
+				<div class="wui-form-preview-bd">
+					<div class="wui-form-preview-item">
+						<label class="wui-form-preview-label">类型</label>
+						<span class="wui-form-preview-value">
+							{if $detail['num'] > 0}
+							收入
+							{else}
+							支出
+							{/if}
+						</span>
+					</div>
+					<div class="wui-form-preview-item">
+						<label class="wui-form-preview-label">申请时间</label>
+						<span class="wui-form-preview-value">{php echo date('Y-m-d H:i', $detail['createtime'])}</span>
+					</div>
+					<div class="wui-form-preview-item">
+						<label class="wui-form-preview-label">详细信息</label>
+						<span class="wui-form-preview-value">{$detail['remark']}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{/if}
+{itemplate 'public/footer'}

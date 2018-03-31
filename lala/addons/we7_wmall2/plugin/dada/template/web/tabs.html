@@ -1,0 +1,11 @@
+<div class="second-sidebar-title">{$_W['_plugin']['title']}</div>
+<div class="nav slimscroll">
+	<div class="menu-header">设置</div>
+	<ul class="menu-item">
+		{ifp 'dada.config'}
+			<li {if $_W['_action'] == 'config'}class="active"{/if}>
+				<a href="{php echo iurl('dada/config');}">基本设置</a>
+			</li>
+		{/if}
+	</ul>
+</div>

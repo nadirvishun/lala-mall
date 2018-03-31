@@ -1,0 +1,114 @@
+<script id="tpl-store-list" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<div class="no-dist list-item border-1px-tb" data-lat="<{d[i].location_x}>" data-lng="<{d[i].location_y}>">
+		<{# if(d[i].label_cn){ }>
+			<span class="store-label" style="background-color: <{d[i].label_color}>"><{d[i].label_cn}></span>
+		<{# } }>
+		<a href="<{d[i].url}>">
+			<div class="store-info row no-gutter">
+				<div class="store-img col-25">
+					<img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="lazyload lazyload-store" data-original="<{d[i].logo}>">
+					<{# if(d[i].is_rest == 1){ }>
+						<div class="order-status">
+							<span>店铺休息中</span>
+						</div>
+					<{# } }>
+				</div>
+				<div class="col-75">
+					<div class="row no-gutter">
+						<div class="col-60 text-ellipsis"><{d[i].title}></div>
+						<div class="money-info text-right">
+							<{# if(d[i].token_status == '1'){ }>
+								<span>券</span>
+							<{# } }>
+							<{# if(d[i].invoice_status == '1'){ }>
+								<span>票</span>
+							<{# } }>
+							<span>付</span>
+						</div>
+					</div>
+					<div class="rel-info">
+						<div class="row no-gutter">
+							<div class="col-60">
+								<div class="star-rank">
+									<span class="star-rank-outline">
+										<span class="star-rank-active" style="width:<{d[i].score_cn}>%"></span>
+										<span class="star-rank-value"><{d[i].score}></span>
+									</span>
+									<span class="sailed">
+										已售 <{d[i].sailed}> 份
+									</span>
+								</div>
+							</div>
+							<{# if(d[i].delivery_mode == 2){ }>
+								<div class="plateform-delivery"><span>{$_config_mall['delivery_title']}</span></div>
+							<{# } }>
+						</div>
+						<div class="delivery-conditions">
+							起送<span class="color-danger">￥<{d[i].send_price}></span><span class="pipe">|</span>配送<span class="color-danger">￥<{d[i].delivery_price}></span><span class="pipe">|</span>约<span class="color-danger"><{d[i].delivery_time}>分钟</span>
+							<div class="distance <{#if(!d[i].distance) {}>hide<{# } }>" data-in-business-hours="<{# if(d[i].is_in_business_hours){ }>1<{# } else { }>100000000<{# } }>"><i class="icon icon-lbs"></i><{d[i].distance}>km</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</a>
+		<div class="activity-containter">
+			<{# var num = 0; }>
+			<{# if(d[i].activity.num > 0){ }>
+				<div class="dashed-line"></div>
+				<{# if(d[i].activity.num > 2){ }>
+					<div class="activity-num"><{d[i].activity.num}>个活动 <i class="icon icon-arrow-down"></i></div>
+				<{# } }>
+				<{# for(var j in d[i].activity['items']){ }>
+					<{# num++ }>
+					<{# var item = d[i].activity['items'][j]; }>
+					<div class="<{item.type}> <{# if(num > 2){ }>activity-row hide<{# } }>"> <{item.title}></div>
+				<{# } }>
+			<{# } }>
+			<{# if(d[i].delivery_free_price > 0){ }>
+				<{# num++ }>
+				<div class="activity-row free <{# if(num > 2){ }>hide<{# } }>">
+					满<{d[i].delivery_free_price}>元免配送费
+				</div>
+			<{# } }>
+			<{# if(d[i].hot_goods && d[i].hot_goods.length != 0){ }>
+				<div class="dashed-line"></div>
+				<div class="hot">
+					热销:
+					<{# for(var j in d[i].hot_goods){ }>
+						<{d[i].hot_goods[j].title}>
+					<{# } }>
+				</div>
+			<{# } }>
+		</div>
+	</div>
+	<{# } }>
+</script>
+
+<script>
+$(function(){
+	$(document).on('click', '.activity-containter', function(){
+		if($(this).hasClass('active')) {
+			$(this).find('.activity-row').addClass('hide');
+			$(this).find('.activity-num i').addClass('fa-arrow-down').removeClass('fa-arrow-up');
+		} else {
+			$(this).find('.activity-row').removeClass('hide');
+			$(this).find('.activity-num i').addClass('fa-arrow-up').removeClass('fa-arrow-down');
+		}
+		$(this).toggleClass('active');
+	});
+
+	$(document).on('click', '.home .select-tab a.button', function(){
+		var flag = false;
+		if($(this).hasClass('button-active')) {
+			flag = true;
+		}
+		$('.home .select-tab a.button').removeClass('button-active');
+		$('.home .drop-menu-list').hide();
+		if(!flag) {
+			$(this).addClass('button-active');
+			$(this).next('.drop-menu-list').show();
+		}
+	});
+});
+</script>

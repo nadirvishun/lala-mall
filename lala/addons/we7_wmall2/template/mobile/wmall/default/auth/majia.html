@@ -1,0 +1,10 @@
+{itemplate 'public/header'}
+<script src='//app.lxh.magcloud.cc/public/static/dest/js/libs/magjs-x.js'></script>
+<script type="text/javascript">
+	mag.ready(function(){
+		mag.toLogin(function(rs){
+			location.href = "{php echo imurl('wmall/auth/majia', array('forward' => $forward), true);}&token=" + rs.token;
+		});
+	});
+</script>
+{itemplate 'public/footer'}

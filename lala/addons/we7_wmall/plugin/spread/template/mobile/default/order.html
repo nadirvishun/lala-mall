@@ -1,0 +1,154 @@
+{itemplate 'public/header'}
+<link rel="stylesheet" href="../addons/we7_wmall/plugin/spread/static/css/index.css">
+{if $op == 'index'}
+<div class="page page-spread-order">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">推广订单</h1>
+	</header>
+	{itemplate 'nav'}
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('spread/order')}" data-distance="50" data-min="{$min}" data-container=".list-block .list" data-tpl="tpl-order">
+		<div class="buttons-tab activity_status">
+			<a href="{php echo ifilter_url('status:-1');}" class="button {if $status == -1}active{/if}">所有</a>
+			<a href="{php echo ifilter_url('status:0');}" class="button {if $status == 0}active{/if}">未完成</a>
+			<a href="{php echo ifilter_url('status:5');}" class="button {if $status == 5}active{/if}">已完成</a>
+			<a href="{php echo ifilter_url('status:6');}" class="button {if $status == 6}active{/if}">已取消</a>
+		</div>
+		{if empty($orders)}
+			<div class="no-data">
+				<div class="bg"></div>
+				<p>没有任何订单哦～</p>
+			</div>
+		{else}
+			<div class="list-block">
+				<ul class="list">
+					{loop $orders $order}
+						<li class="item-content item-link">
+							<a href="{php echo imurl('spread/order/detail', array('id' => $order['id']))}">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">
+										<div class="item-title-top">{$order['ordersn']}{if $order['spread1'] == $order['spreadid']}（一级）{elseif $order['spread2'] == $order['spreadid']}（二级）{/if}</div>
+										<div class="item-title-bottom">{$order['paytime']}</div>
+									</div>
+									<div class="item-after">
+										<div class="item-after-top">+{$order['commission']}</div>
+										<div class="item-after-bottom">
+											{if $order['status'] == 5}
+												已完成
+											{elseif $order['status'] < 5}
+												未完成
+											{elseif $order['status'] == 6}
+												已取消
+											{/if}
+										</div>
+									</div>
+								</div>
+							</a>
+							{if $order['spreadbalance'] == 1}
+							<span class="success">已结算</span>
+							{else}
+							<span class="danger">未结算</span>
+							{/if}
+						</li>
+					{/loop}
+				</ul>
+			</div>
+		{/if}
+	</div>
+</div>
+
+<script id="tpl-order" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<li class="item-content item-link">
+			<a href="{php echo imurl('spread/order/detail')}&id=<{d[i].id}>">
+				<div class="item-inner border-1px-b">
+					<div class="item-title">
+						<div class="item-title-top">
+							<{d[i].ordersn}><{# if(d[i].spread1 == d[i].spreadid){}>（一级）<{# } else {}>（二级）<{# } }>
+						</div>
+						<div class="item-title-bottom"><{d[i].paytime}></div>
+					</div>
+					<div class="item-after">
+						<div class="item-after-top">+<{d[i].commission}></div>
+						<div class="item-after-bottom">
+							<{# if(d[i].status == 5) {}>
+								已完成
+							<{# } else if(d[i].status < 5) { }>
+								未完成
+							<{# } else if(d[i].status == 6) { }>
+								已取消
+							<{# } }>
+						</div>
+					</div>
+				</div>
+			</a>
+			<{# if(d[i].spreadbalance == 1) {}>
+			<span class="success">已结算</span>
+			<{# } else {}>
+			<span class="danger">未结算</span>
+			<{# }}>
+		</li>
+	<{# } }>
+</script>
+{/if}
+
+{if $op == 'detail'}
+<div class="page order-detail">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">订单详情</h1>
+	</header>
+	{itemplate 'nav'}
+	<div class="content">
+		<div class="list-block">
+			<ul>
+				<li class="item-content">
+					<div class="item-inner">
+						<div class="item-title">订单号</div>
+						<div class="item-after">{$order['ordersn']}</div>
+					</div>
+				</li>
+				<li class="item-content">
+					<div class="item-inner">
+						<div class="item-title">下单人</div>
+						<div class="item-after">{$order['username']}</div>
+					</div>
+				</li>
+				<li class="item-content">
+					<div class="item-inner">
+						<div class="item-title">佣金</div>
+						<div class="item-after">¥ {$order['data']['spread']['commission']['spread1']}</div>
+					</div>
+				</li>
+				<li class="item-content">
+					<div class="item-inner">
+						<div class="item-title">结算状态</div>
+						<div class="item-after">
+							{if $order['spreadbalance'] == 1}
+							已结算
+							{else}
+							未结算
+							{/if}
+						</div>
+					</div>
+				</li>
+				<li class="item-content">
+					<div class="item-inner">
+						<div class="item-title">订单状态</div>
+						<div class="item-after">
+							{if $order['status'] == 6}
+								已取消
+							{elseif $order['status'] == 5}
+								已完成
+							{else}
+								未完成
+							{/if}
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+{/if}
+{itemplate 'public/footer'}

@@ -1,0 +1,260 @@
+{itemplate 'public/header'}
+{if $ta == 'paytype'}
+<div class="page peerpay-type-select">
+	<div class="content">
+		<a href="{php echo imurl('system/paycenter/peerpay/message', array('id' => $paylog['id'], 'type' => 0))}" class="type single-peerpay">
+			<div class="type-content">
+				<div class="icon-img"></div>
+				<p class="peerpay-title">一个朋友全额付款</p>
+			</div>
+		</a>
+		<a href="{php echo imurl('system/paycenter/peerpay/message', array('id' => $paylog['id'], 'type' => 1))}" class="type multi-peerpay">
+			<div class="type-content">
+				<div class="icon-img"></div>
+				<p class="peerpay-title">多个朋友帮你付款</p>
+			</div>
+		</a>
+		<p class="bottom-text">48小时内未完成，所有款项将原路退回至付款人账户</p>
+	</div>
+</div>
+{/if}
+
+{if $ta == 'message'}
+<div class="page peerpay-pay">
+	<div class="content">
+		<div class="head-block">
+			<div class="head-block-bg">
+				<div class="item-text"></div>
+				{if !empty($member['avatar'])}
+					<img class="avatar" src="{php echo tomedia($member['avatar'])}" alt=""/>
+				{else}
+					<img class="avatar" src="{WE7_WMALL_TPL_URL}static/img/head.png" alt=""/>
+				{/if}
+			</div>
+		</div>
+		<div class="order border-1px-tb">
+			<a class="shop-item" href="javascript:;">
+				<img class="item-thumbnail" src="{php echo tomedia($peerpay['data']['logo'])}" alt=""/>
+				<div class="item-desc">
+					<div class="item-title">
+						{$peerpay['data']['title']}
+					</div>
+					<div class="item-price">¥{$peerpay['data']['fee']}</div>
+				</div>
+			</a>
+		</div>
+		<div class="note-container border-1px-tb">
+			<div class="note-title">编辑留言</div>
+			<textarea name="note" placeholder="感情深不深,看你跟不跟~">感情深不深,看你跟不跟~</textarea>
+		</div>
+		<div class="bottom-btn-block">
+			<a class="btn btn-action-primary ask-help" href="javascript:;">喊朋友帮忙</a>
+		</div>
+		<div class="zhezhao close-zhezhao">
+			<img src="{WE7_WMALL_TPL_URL}static/img/share-layer.png" alt="">
+		</div>
+	</div>
+</div>
+<script>
+	$(function() {
+		$(document).on('click', '.ask-help', function() {
+			var message = $('textarea[name="note"]').val();
+			$.post("{php echo imurl('system/paycenter/peerpay/message', array('id' => $paylog['id']))}", {message: message}, function() {
+				location.href = "{php echo imurl('system/paycenter/peerpay/paylist', array('id' => $peerpay['id']))}";
+			});
+		});
+	})
+</script>
+{/if}
+
+{if $ta == 'paylist'}
+<div class="page peerpay-pay">
+	<div class="content">
+		<div class="head-block">
+			<div class="head-block-bg">
+				<div class="item-text">
+					{$peerpay['peerpay_message']}
+				</div>
+				{if $order['pay_endtime'] > 0  || 1}
+					<div class="remaining-time">
+						<div>支付剩余时间</div>
+						<div class="in-clock">
+							<span class="in-num" id="minute_0">-</span>
+							<span class="in-num" id="minute_1">-</span>
+							<span class="in-colon">:</span>
+							<span class="in-num" id="second_0">-</span>
+							<span class="in-num" id="second_1">-</span>
+						</div>
+					</div>
+				{/if}
+				{if !empty($member['avatar'])}
+					<img class="avatar" src="{php echo tomedia($member['avatar'])}" alt=""/>
+				{else}
+					<img class="avatar" src="{WE7_WMALL_TPL_URL}static/img/head.png" alt=""/>
+				{/if}
+			</div>
+		</div>
+		<div class="title-text">
+			<span class="icon"></span>
+			快来帮{if !empty($member['nickname'])}{$member['nickname']}{else}小伙伴{/if}搞定这个
+			<span class="icon"></span>
+		</div>
+		<div class="order border-1px-tb">
+			<a class="shop-item" href="javascript:;">
+				<img class="item-thumbnail" src="{php echo tomedia($peerpay['data']['logo'])}" alt=""/>
+				<div class="item-desc">
+					<div class="item-title">
+						{$peerpay['data']['title']}
+					</div>
+					<div class="item-price">¥{$peerpay['data']['fee']}</div>
+				</div>
+			</a>
+			<div class="progress-bar-block">
+				<div class="progress-block">
+					<div class="progress-text">
+						{if $peerpay['uid'] == $_W['member']['uid']}
+							{if empty($differ)}
+								还没有好友帮你代付呢，快去召集朋友吧~
+							{else}
+								{if empty($peerpay['peerpay_realprice'])}
+									<span class="color-warning">订单已完成支付</span>
+								{else}
+									<span>还差</span><span class="color-warning">¥{php echo floatval($peerpay['peerpay_realprice'])}</span><span>哦，TA需要你的帮助呢~</span>
+								{/if}
+							{/if}
+						{else}
+							快来帮好友达成心愿吧~
+							<span>还差</span><span class="color-warning">¥{php echo floatval($peerpay['peerpay_realprice'])}</span><span>哦，TA需要你的帮助呢~</span>
+						{/if}
+					</div>
+					<div class="peerpay-progress-bar">
+						<div class="bar">
+							<span class="bar finished-portion blue" style="width:{$percent}%;"></span>
+							<span class="bar-pivot c-white blue" style="left: {if $percent == 100}{php echo $percent - 7;}%{else}{$percent}%{/if}">{$percent}%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{if !empty($payinfos)}
+			<div class="pay-list border-1px-tb">
+				<div class="pay-list-block">
+					<div class="pay-list-img"></div>
+					{loop $payinfos $payinfo}
+						<div class="pay-item border-1px-t">
+							<img src="{php echo tomedia($payinfo['headimg'])}" alt=""/>
+							<div class="name"><span>{$payinfo['uname']}</span> <span class="support">支持</span> <span class="price">¥{php echo floatval($payinfo['final_fee'])}</span></div>
+							<div class="message">{$payinfo['usay']}</div>
+						</div>
+					{/loop}
+				</div>
+			</div>
+		{/if}
+		{if $peerpay['status'] != 1}
+			<div class="bottom-btn-block">
+				{if $peerpay['uid'] == $_W['member']['uid']}
+					<a href="{php echo imurl('system/paycenter/peerpay/payment', array('id' => $peerpay['id']))}" class="btn left-btn">我先付点</a>
+					<a href="javascript:;" class="btn right-btn open-zhezhao">喊朋友帮忙</a>
+					<div class="zhezhao close-zhezhao">
+						<img src="{WE7_WMALL_TPL_URL}static/img/share-layer.png" alt="">
+					</div>
+				{else}
+					<a href="{php echo imurl('wmall/home/index')}" class="btn left-btn">我也要玩</a>
+					<a href="{php echo imurl('system/paycenter/peerpay/payment', array('id' => $peerpay['id']))}" class="btn right-btn">帮TA付</a>
+				{/if}
+			</div>
+		{/if}
+	</div>
+</div>
+<script>
+require(['tiny'], function(){
+	{if $order['pay_endtime'] > 0}
+		tiny.countDown("{$order['pay_endtime_cn']}", '', "#hours", "#minute", "#second", 1);
+	{/if}
+});
+</script>
+{/if}
+
+{if $ta == 'payment'}
+<div class="page peerpay-payment">
+	<div class="content">
+		<div class="head-block">
+			<div class="head-block-bg">
+				{if !empty($member['avatar'])}
+					<img class="avatar" src="{php echo tomedia($member['avatar'])}" alt=""/>
+				{else}
+					<img class="avatar" src="{WE7_WMALL_TPL_URL}static/img/head.png" alt=""/>
+				{/if}
+				<div class="item-text">
+					{$peerpay['peerpay_message']}
+				</div>
+			</div>
+		</div>
+		<div class="pay-container border-1px-tb">
+			<div class="pay-title">代付金额</div>
+			<div class="input-container">
+				¥ <input type="text" id="inputpay" placeholder="请输入代付金额" value="{$peerpay['peerpay_selfpay']}">
+			</div>
+		</div>
+		<div class="note-container border-1px-tb">
+			<div class="note-title">给好友留言</div>
+			<textarea name="note" placeholder="请输入留言">{$note}</textarea>
+		</div>
+		<div class="bottom-btn-block wx-pay">
+			微信支付
+		</div>
+	</div>
+</div>
+<script>
+	$(function() {
+		var max = {php echo floatval($peerpay['peerpay_price'])};
+		var item_max = {php echo floatval($peerpay['peerpay_selfpay'])};
+		var type = {php echo intval($peerpay['peerpay_type'])};
+		$('#inputpay').bind('input propertchange', function() {
+			var val = $(this).val();
+			if(val > max) {
+				$.toast('代付不能超过订单的金额');
+			}
+			if(type == 1 && val > item_max) {
+				$.toast('代付不能超过订单的金额');
+			}
+		});
+
+		$(document).on('click', '.wx-pay', function() {
+			if($(this).hasClass('disabled')) {
+				return false;
+			}
+			var val = $('#inputpay').val();
+			if(val <= 0) {
+				$.toast('请输入大于0的金额');
+				return false;
+			}
+			if(val > max) {
+				$.toast('代付不能超过订单的金额');
+				return false;
+			}
+			if(type == 1 && val > item_max) {
+				$.toast('代付不能超过订单的金额');
+				return false;
+			}
+			var note = $('textarea[name="note"]').val();
+			$(this).addClass('disabled');
+			var params = {
+				val: val,
+				note: note
+			};
+			$.post("{php echo imurl('system/paycenter/peerpay/payment', array('id' => $peerpay['id']))}", params, function(data) {
+				$(this).removeClass('disabled');
+				var result = JSON.parse(data);
+				if(result.message.errno != 0) {
+					$.toast(result.message.message);
+				} else {
+					location.href = result.message.message;
+				}
+				return false;
+			})
+		})
+	})
+</script>
+{/if}
+{itemplate 'public/footer'}

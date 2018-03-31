@@ -1,0 +1,49 @@
+{itemplate 'public/header'}
+<div class="page">
+	<div class="content">
+		<div class="infinite-scroll-preloader">
+			<div class="preloader"></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=550a3bf0cb6d96c3b43d330fb7d86950"></script>
+<script>
+$(function(){
+	function getLocation() {
+		var map, geolocation;
+		map = new AMap.Map('allmap');
+		map.plugin('AMap.Geolocation', function() {
+			geolocation = new AMap.Geolocation({
+				enableHighAccuracy: true //是否使用高精度定位，默认:true
+			});
+			geolocation.getCurrentPosition();
+			AMap.event.addListener(geolocation, 'complete', function(data) {
+				if(typeof data != 'undefined') {
+					var point = data.position;
+					var params = {
+						lat: point.lat,
+						lng: point.lng
+					};
+				}
+				$.post("{php echo imurl('wmall/home/near')}", params, function(data) {
+					var result = $.parseJSON(data);
+					if(result.message.errno == 0) {
+						location.href = result.message.url;
+						return false;
+					} else {
+						$.toast(result.message.message);
+						return false;
+					}
+				});
+			});//返回定位信息
+			AMap.event.addListener(geolocation, 'error', function(){
+				$.toast('获取位置失败', location.href);
+				return false;
+			});
+		});
+	}
+	getLocation();
+});
+</script>
+{itemplate 'public/footer'}
+

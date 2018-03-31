@@ -1,0 +1,113 @@
+{itemplate 'public/header'}
+<div class="page card-apply">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">购买会员卡</h1>
+	</header>
+	<div class="cart">
+		<div>¥<b id="cart-money">0</b></div>
+		<span id="cart-submit">去支付</span>
+	</div>
+	<div class="content">
+		<form method="post" id="card-form" action="{php echo imurl('deliveryCard/apply/pay');}">
+			<div class="block-title border-1px-b">会员选择</div>
+			<div class="row setmeal-list">
+				{if !empty($cards)}
+					{loop $cards $card}
+						<div class="col-33 setmeal-item" data-price="{$card['price']}" data-day-free-limit="{$card['day_free_limit']}" data-id="{$card['id']}" data-endtime="{$card['endtime']}">
+							<span class="money">{$card['price']}元</span>
+							<span class="name">{$card['title']}</span>
+						</div>
+					{/loop}
+				{/if}
+			</div>
+			<div class="block-info">
+				<div class="border-1px-t">当前选择会员有效期为<span>{php echo date('Y-m-d', $endtime);}</span>至<span id="setmeal-endtime"></span></div>
+			</div>
+			<div class="list-block">
+				<ul class="list-privilege border-1px-tb">
+					<li class="item-content">
+						<div class="item-inner">
+							<div class="item-title">
+								仅支持平台配送商户使用
+							</div>
+						</div>
+					</li>
+					<li class="item-content">
+						<div class="item-inner">
+							<div class="item-title">
+								下单配送费直接扣除
+							</div>
+						</div>
+					</li>
+					<li class="item-content">
+						<div class="item-inner">
+							<div class="item-title">
+								每日仅限<span id="day-free-limit"></span>单享受特权
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="list-block">
+				<ul class="pay-type border-1px-tb">
+					{loop $payment $row}
+						<li>
+							<label class="label-checkbox item-content border-1px-b">
+								<div class="item-inner">
+									<div class="item-title-row">
+										<div class="item-title">{$pay_types[$row]['text']}</div>
+									</div>
+								</div>
+								<input type="radio" name="pay_type" value="{$row}" checked>
+								<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+							</label>
+						</li>
+					{/loop}
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	$(function(){
+		$(document).on('click', '.setmeal-item', function(){
+			$('.setmeal-item').removeClass('active');
+			$(this).addClass('active');
+			var endtime = $(this).data('endtime');
+			var price = $(this).data('price');
+			var day_free_limit = $(this).data('day-free-limit');
+
+			$('#day-free-limit').html(day_free_limit);
+			$('#setmeal-endtime').html(endtime);
+			$('#cart-money').html(price);
+		});
+		$('.setmeal-item:first').trigger('click');
+
+		$(document).on('click', '#cart-submit', function(){
+			var $this = $(this);
+			if($this.hasClass('disabled')) {
+				return false;
+			}
+			var setmeal_id = $('.setmeal-item.active').data('id');
+			if(!setmeal_id) {
+				$.toast('会员卡套餐错误');
+				return false;
+			}
+			var pay_type = $(':radio[name="pay_type"]:checked').val();
+			$this.addClass('disabled');
+			$.post("{php echo imurl('deliveryCard/apply/pay');}", {setmeal_id: setmeal_id, pay_type: pay_type}, function(data){
+				var result = $.parseJSON(data);
+				if(result.message.errno != 0) {
+					$this.removeClass('disabled');
+					$.toast(result.message.message);
+				} else {
+					$.toast('下单成功');
+					location.href = "{php echo imurl('system/paycenter/pay', array('order_type' => 'deliveryCard'));}&id=" + result.message.message;
+				}
+				return false;
+			});
+		});
+	});
+</script>
+{itemplate 'public/footer'}

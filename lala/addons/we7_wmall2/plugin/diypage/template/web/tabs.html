@@ -1,0 +1,43 @@
+<div class="second-sidebar-title">{$_W['_plugin']['title']}</div>
+<div class="nav slimscroll">
+	{ifp 'diypage.menu'}
+		<div class="menu-header">自定义菜单</div>
+		<ul class="menu-item">
+			<li {if $_GPC['ac'] == 'menu'}class="active"{/if}>
+			<a href="{php echo iurl('diypage/menu/list')}">菜单列表</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'diypage.mall'}
+		<div class="menu-header">商城设置</div>
+		<ul class="menu-item">
+			<li {if $_GPC['ac'] == 'mall' && $_GPC['op'] == 'menu'}class="active"{/if}>
+				<a href="{php echo iurl('diypage/mall/menu')}">菜单设置</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'diypage.danmu'}
+		<div class="menu-header">订单弹幕</div>
+		<ul class="menu-item">
+			<li {if $_GPC['ac'] == 'danmu'}class="active"{/if}>
+			<a href="{php echo iurl('diypage/danmu')}">弹幕设置</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'diypage.diy'}
+		<div class="menu-header">页面管理</div>
+		<ul class="menu-item">
+			<li {if $_GPC['ac'] == 'diy'}class="active"{/if}>
+			<a href="{php echo iurl('diypage/diy')}">页面列表</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'diypage.template'}
+		<div class="menu-header">模板管理</div>
+		<ul class="menu-item">
+			<li {if $_GPC['ac'] == 'template'}class="active"{/if}>
+			<a href="{php echo iurl('diypage/template')}">全部模板</a>
+			</li>
+		</ul>
+	{/if}
+</div>

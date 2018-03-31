@@ -1,0 +1,145 @@
+{itemplate 'public/header'}
+<div class="page clearfix page-config-store-delivery">
+	<h2>服务范围</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" style="max-width: 1600px" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">外卖服务中心点</label>
+			<div class="col-sm-9 col-xs-12">
+				{php echo tpl_form_field_tiny_coordinate('map', $range['map'], true);}
+				<div class="help-block">设置外卖服务中心点</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">外卖服务半径</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<input type="number" class="form-control" name="serve_radius" value="{$range['serve_radius']}">
+					<span class="input-group-addon">KM</span>
+				</div>
+				<div class="help-block">设置服务半径.0为不限制服务半径</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">外卖服务城市(省/市)</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" class="form-control" name="city" value="">
+				<div class="help-block">填写外卖服务所属的"市"或"省". 比如:你在县城里做外卖, 需要填写该县城所属的"市"或"省".</div>
+				<div class="help-block">该项的作用是:用户在搜索地址的时候, 只返回该"省"或"市"内的相关地址</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="//webapi.amap.com/maps?v=1.4.1&key=550a3bf0cb6d96c3b43d330fb7d86950&plugin=AMap.MouseTool,AMap.PolyEditor,AMap.CircleEditor,AMap.Geocoder,AMap.ToolBar,AMap.Scale,AMap.OverView"></script>
+<script>
+	irequire(['tmodtpl'],function(tmodtpl) {
+		var map = new AMap.Map('allmap', {
+			resizeEnable: true,
+			zoom: 14,
+			doubleClickZoom: false
+		});
+		var geo = new AMap.Geocoder();
+		var lng = $('input[name="map[lng]"]').val();
+		var lat = $('input[name="map[lat]"]').val();
+		if(!lng && !lat) {
+			lng = 116.397428;
+			lat = 39.90923;
+		}
+		var marker = new AMap.Marker({
+			position: [lng, lat],
+			draggable: true
+		});
+		map.panTo([lng, lat]);
+		map.on('complete', function() {
+			marker.setLabel({
+				offset: new AMap.Pixel(-80, -25),
+				content: "请您移动此标记，选择您的坐标！"
+			});
+			marker.setMap(map);
+
+			AMap.event.addListener(marker, "dragend", function(e){
+				var point = marker.getPosition();
+				geo.getAddress([point.lng, point.lat], function(status, result) {
+					if (status === 'complete' && result.info === 'OK') {
+						$('#position').val(result.regeocode.formattedAddress);
+					}
+				});
+			});
+		});
+		function searchAddress(address) {
+			geo.getLocation(address, function(status, result) {
+				if (status === 'complete' && result.info === 'OK') {
+					var geocode = result.geocodes[0];
+					if(geocode.location) {
+						map.panTo([geocode.location.lng, geocode.location.lat]);
+						marker.setPosition([geocode.location.lng, geocode.location.lat]);
+						marker.setAnimation('AMAP_ANIMATION_BOUNCE');
+						setTimeout(function(){marker.setAnimation(null)}, 3600);
+					}
+				}
+			});
+		}
+		$('#btn-search').click(function(){
+			var val = $('#position').val();
+			searchAddress(val);
+		});
+		var areas = {};
+	/*	if(areas != '') {
+			areas = $.parseJSON(areas);
+			$.each(areas, function(k, v){
+				var polygon = new AMap.Polygon({
+					path: v,//设置多边形边界路径
+					strokeColor: color.strokeColor, //线颜色
+					strokeOpacity: 0.9, //线透明度
+					strokeWeight: 3,    //线宽
+					fillColor: color.fillColor, //填充色
+					fillOpacity: 0.8//填充透明度
+				});
+				polygon.setMap(map);
+			});
+		} else {
+			areas = {};
+		}*/
+		$(document).on('click', '.add-area', function() {
+			var num = getlength(areas);
+			if(num >= 3) {
+				Notify.info("最多可添加3个！");
+				return;
+			}
+			var itemid = getId('M', 0);
+			var mouseTool = new AMap.MouseTool(map);
+			var polygon = mouseTool.polygon();
+			AMap.event.addListener(mouseTool, 'draw', function callback(e) {
+				mouseTool.close();
+				var eObject = e.obj;
+				var polygonEditor= new AMap.PolyEditor(map, eObject);
+				polygonEditor.open();
+				areas[itemid] = eObject.getPath();
+			});
+			console.log(areas);
+			$('input[name="areas"]').val(JSON.stringify(areas));
+		});
+	});
+
+	getlength = function(json) {
+		if(typeof(json) === 'undefined') {
+			return 0;
+		}
+		var len = 0;
+		for(var i in json) {
+			len++;
+		}
+		return len;
+	};
+
+	getId = function(S, N) {
+		var date = +new Date();
+		var id = S + (date + N);
+		return id;
+	};
+</script>
+{itemplate 'public/footer'}

@@ -1,0 +1,245 @@
+{itemplate 'public/header'}
+<style>
+	.new-comment .tab-bluefill{display: inline-block; padding: 0.05rem .1rem; height: 0.6rem; line-height: 0.6rem; border: 1px solid #44a5ff; background-color: #2395ff; color: #fff; font-size: 0.5rem; border-radius: 0.1rem}
+	.new-comment .header-bar{background-image: url("//fuss10.elemecdn.com/b/53/d67d6cae00b5f95d550b63db9cd91jpeg.jpeg?imageMogr/format/webp/thumbnail/!40p/blur/50x40/"); width: 100%; background-size: cover; background-repeat: no-repeat;}
+	.new-comment .header-bar .backwarpper{height: 2.2rem; width: 100%}
+	.new-comment .header-bar a.back{color: #fff; line-height: 2.2rem; font-size: .8rem; margin-left: 0.4rem;}
+	.new-comment .header-bar a i{font-size: 1rem;}
+	.new-comment .store-info{width: 100%; margin-left: 0; color: #fff; display: block}
+	.new-comment .store-info img{width: 3rem; height: 3rem; border-radius: 0.2rem; margin: 0 auto}
+	.new-comment .store-info .col-75{margin-left: 0; height: 3.4rem; position: relative}
+	.new-comment .store-info .store-title{font-weight: bold}
+	.new-comment .store-info .col-75 .icon.icon-right{position: absolute; right: 0; top :50%; margin-top: -0.3rem; font-size: 0.4rem;}
+	.new-comment .store-info .store-delivery{font-size: 0.5rem; margin-top: 0.2rem}
+	.new-comment .store-info .store-notice{font-size: 0.5rem; margin-top: 0.2rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+	.new-comment .activity-container{font-size: 0.5rem; padding: 0 4% 0.3rem; color: #fff; z-index: 15000; position: relative}
+	.new-comment .content .buttons-tab.select-tab{border: none}
+	.new-comment .content .buttons-tab.select-tab .button.active{border: none; font-weight: bold}
+	.new-comment .content .buttons-tab.select-tab .button.active span{color: #0894ec;}
+	.new-comment .buttons-tab.select-tab .button.active span:after{content: ""; position: absolute; bottom: 0.05rem; left: -.02rem; right: -.02rem; height: .1rem; background-color: #3190e8; border-radius: .04rem; margin: 0 auto}
+	.new-comment .overview-container{background-color: #fff; margin-bottom: .5rem; padding: .8rem; font-size: 0.6rem; color: #666;}
+	.new-comment .overview-container .col-40{text-align: center; font-size: 0.5rem}
+	.new-comment .overview-container .score{font-size: 1.5rem; font-weight: 400; color: #f60; display: block; line-height: 1; margin-top: 0.7rem;}
+	.new-comment .overview-container .overall-merit{margin: 0.2rem 0 0.3rem}
+	.new-comment .overview-container .col-60{font-size: 0.6rem}
+	.new-comment .overview-container .goods-comment{margin: 0.3rem 0}
+	.new-comment .overview-container .goods-comment .goods-score{color: #f60; margin-left: 0.5rem}
+	.new-comment .overview-container .deliveryer-time span:last-child{color: #999; margin-left: 0.5rem}
+	.new-comment .comment-container{background-color: #fff}
+	.new-comment .comment-container .list-item-top{font-size: 0.7rem; text-align: center;}
+	.new-comment .comment-container .list-item-top .col-25{padding: .5rem .5rem 0 .5rem;}
+	.new-comment .comment-container .list-item-top span{display: block; width: 100%; height: 1.45rem; line-height: 1.45rem; border-radius: 0.3rem;  background-color: #ebf5ff; font-size: .6rem;}
+	.new-comment .comment-container .list-item-top span a{color: #666;}
+	.new-comment .comment-container .list-item-top span.active{background-color: #3190e8}
+	.new-comment .comment-container .list-item-top span.active a{color: #fff}
+	.new-comment .comment-container .comment-item .comment-info .comment-num .icon{font-size: 0.5rem; vertical-align: middle}
+	.new-comment .comment-container .comment-item .customer-info{padding: 0.8rem; font-size: 0.55rem;}
+	.new-comment .comment-container .comment-item .customer-info .customer-logo{width: 1.5rem; height: 1.5rem}
+	.new-comment .comment-container .comment-item .customer-info .comment-time{color: #999;}
+	.new-comment .comment-container .comment-item .customer-info .customer-comment{font-size: 0.65rem; color: #000; margin: 0.2rem 0;}
+	.new-comment .comment-container .comment-item .customer-info .shop-reply{background-color: rgba(211,211,211,0.2); padding: 0.4rem; position: relative;}
+	.new-comment .comment-container .comment-item .customer-info .shop-reply .arrow{position:absolute; top: -16px; left: 1rem; width:0; height:0; font-size:0; border:solid 8px; border-color: rgba(211,211,211,0) rgba(211,211,211,0) rgba(211,211,211,0.2) rgba(211,211,211,0);}
+	.new-comment .comment-container .comment-item .customer-info .goods-image{margin-top: 0.4rem; padding-top: 0.4rem;}
+	.new-comment .comment-container .comment-item .customer-info .goods-image .col-33{margin-bottom: 0.2rem}
+	.new-comment .comment-container .comment-item .customer-info .goods-image img{width: 4rem; height: 4rem;}
+	.new-comment .comment-container .comment-item .customer-info .favourable-goods{margin: 0.2rem 0}
+	.new-comment .comment-container .comment-item .customer-info .favourable-goods .icon.favor{display: inline-block; width: 0.6rem; height: 0.6rem; margin-right: 0.2rem; background: url(../addons/we7_wmall/template/mobile/wmall/default/static/img/comment_favor_icon.png) no-repeat; background-size: cover;}
+	.new-comment .comment-container .comment-item .favourable-goods .goods-label{margin: 0 .15rem; height: .9rem; line-height: .9rem; display: inline-block; background: #eceff2; color: #919cae; border-radius: .9rem; padding: 0 .3rem; font-size: .6rem;}
+</style>
+<div class="page new-comment">
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('wmall/home/newComment', array('sid' => $sid, 'type' => $_GPC['type']));}" data-distance="50" data-min="{$min}" data-container=".comment-list" data-tpl="tpl-comment">
+		<div class="header-bar">
+			<div class="backwarpper">
+				<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+			</div>
+			<a href="{php echo imurl('wmall/home/newStore', array('sid' => $sid))}" class="store-info row">
+				<div class="col-25">
+					<img src="{php echo tomedia($store['logo'])}" alt="">
+				</div>
+				<div class="col-75">
+					<div class="store-title">{$store['title']}</div>
+					<div class="store-delivery">{if $store['delivery_mode'] == 2}<span class="tab-bluefill">{$_config_mall['delivery_title']}</span>{/if}  {$store['delivery_time']}分钟送达 {if $store['delivery_free_price'] > 0}| 满{$store['delivery_free_price']}免配送费{/if}</div>
+					<div class="store-notice"><span>公告:</span>{$store['notice']}</div>
+					<span class="icon icon-right"></span>
+				</div>
+			</a>
+			<div class="activity-container">
+				{if $activity['num'] > 0}
+					{if $activity['num'] > 1}
+						{php $num = 0}
+						<div class="activity-num pull-right">{$activity['num']}个活动 <i class="icon icon-arrow-down"></i></div>
+					{/if}
+					{loop $activity['items'] $item}
+						{php $num++}
+						<div class="tags tags-{$item['type']} {if $num > 1}activity-row hide{/if}">{$item['title']}</div>
+					{/loop}
+				{/if}
+				{if $store['delivery_free_price'] > 0}
+					<div class="activity-row free {if $num > 1}hide{/if}">
+						满{$store['delivery_free_price']}元免配送费
+					</div>
+				{/if}
+				{if !empty($store['hot_goods'])}
+					<div class="dashed-line"></div>
+					<div class="hot">
+						热销:
+						{loop $store['hot_goods'] $hot}
+							{$hot['goods']}
+						{/loop}
+					</div>
+				{/if}
+			</div>
+		</div>
+		{if empty($comments)}
+			<div class="common-no-con">
+				<img src="{WE7_WMALL_TPL_URL}static/img/comment_no_con.png" alt="" />
+				<p>这个店铺还没有评价！</p>
+			</div>
+		{else}
+			<div class="buttons-tab select-tab border-1px-b">
+				<a href="{php echo imurl('wmall/home/newGoods', array('sid' => $sid))}" class="button"><span>商品</span></a>
+				<a href="{php echo imurl('wmall/home/newComment', array('sid' => $sid))}" class="button active"><span>评价</span></a>
+			</div>
+			<div class="overview-container row">
+				<div class="col-40 border-1px-r">
+					<div class="score">{$stat['score']}</div>
+					<div class="overall-merit" >综合评价</div>
+				</div>
+				<div class="col-60">
+					<div class="goods-comment">
+						<span>商品质量</span>
+						<span class="goods-score">{$stat['goods_quality']}分</span>
+					</div>
+					<div class="goods-comment">
+						<span>配送服务</span>
+						<span class="goods-score">{$stat['delivery_service']}分</span>
+					</div>
+					<div class="deliveryer-time">
+						<span>送达时间</span>
+						<span>{$store['delivery_time']}分钟</span>
+					</div>
+				</div>
+			</div>
+			<div class="comment-container">
+				<div class="comment-list">
+					<div class="list-item-top">
+						<div class="row no-gutter">
+							<div class="col-25"><span {if !$type}class="active"{/if}><a href="{php echo imurl('wmall/home/newComment', array('type' => 0, 'sid' => $store['id']));}">全部({$stat['all']})</a></span></div>
+							<div class="col-25"><span {if $type == 1}class="active"{/if}><a href="{php echo imurl('wmall/home/newComment', array('type' => 1, 'sid' => $store['id']));}">好评({$stat['good']})</a></span></div>
+							<div class="col-25"><span {if $type == 2}class="active"{/if}><a href="{php echo imurl('wmall/home/newComment', array('type' => 2, 'sid' => $store['id']));}">中评({$stat['middle']})</a></span></div>
+							<div class="col-25"><span {if $type == 3}class="active"{/if}><a href="{php echo imurl('wmall/home/newComment', array('type' => 3, 'sid' => $store['id']));}">差评({$stat['bad']})</a></span></div>
+						</div>
+					</div>
+					{loop $comments $comment}
+						<div class="comment-item border-1px-b">
+							<div class="customer-info row">
+								<div class="customer-logo col-15">
+									<img src="{$comment['avatar']}" alt="">
+								</div>
+								<div class="col-85">
+									<div class="customer-title">
+										{$comment['mobile']}
+										<span class="comment-time pull-right">{$comment['addtime']}</span>
+									</div>
+									<span class="star-rank-outline">
+										<span class="star-rank-active" style="width:{$comment['score']}%"></span>
+									</span>
+									{if !empty($comment['note'])}
+										<div class="customer-comment">{$comment['note']}</div>
+									{/if}
+									{if !empty($comment['reply'])}
+										<div class="shop-reply">
+											商家回复:  {$comment['reply']}
+											<span class="arrow"></span>
+										</div>
+									{/if}
+									{if !empty($comment['thumbs'])}
+									<div class="goods-image border-1px-t row">
+										{loop $comment['thumbs'] $thumb}
+											<div class="col-33 photoBrowser-image-item">
+												<img src="{$thumb}" alt=""/>
+											</div>
+										{/loop}
+									</div>
+									{/if}
+									{if !empty($comment['data']['good'])}
+										<div class="favourable-goods">
+											<i class="icon favor"></i>
+											{loop $comment['data']['good'] $good}
+											<span class="goods-label">{$good}</span>
+											{/loop}
+										</div>
+									{/if}
+								</div>
+							</div>
+						</div>
+					{/loop}
+				</div>
+				<div class="infinite-scroll-preloader hide">
+					<div class="preloader"></div>
+				</div>
+			</div>
+		{/if}
+	</div>
+</div>
+<script id="tpl-comment" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<div class="comment-item border-1px-b">
+			<div class="customer-info row">
+				<div class="customer-logo col-15">
+					<img src="<{d[i].avatar}>" alt="">
+				</div>
+				<div class="col-85">
+					<div class="customer-title">
+						<{d[i].mobile}>
+						<span class="comment-time pull-right"><{d[i].addtime}></span>
+					</div>
+					<span class="star-rank-outline">
+						<span class="star-rank-active" style="width:<{d[i].score}>%"></span>
+					</span>
+					<{# if(d[i].note != ''){ }>
+						<div class="customer-comment"><{d[i].note}></div>
+					<{# } }>
+					<{# if(d[i].reply != ''){ }>
+						<div class="shop-reply">
+							商家回复:  <{d[i].reply}>
+							<span class="arrow"></span>
+						</div>
+					<{# } }>
+					<{# if(d[i].thumbs && d[i].thumbs.length > 0){ }>
+						<div class="goods-image border-1px-t row">
+							<{# for(var j = 0, lenj = d[i].thumbs.length; j < lenj; j++){ }>
+								<div class="col-33 photoBrowser-image-item">
+									<img src="<{d[i].thumbs[j]}>" alt=""/>
+								</div>
+							<{# } }>
+						</div>
+					<{# } }>
+					<{# if(d[i].data && d[i].data.good && d[i].data.good.length > 0){ }>
+						<div class="favourable-goods">
+							<i class="icon favor"></i>
+							<{# for(var j = 0, lenj = d[i].data.good.length; j < lenj; j++){ }>
+								<span class="goods-label">{$good}</span>
+							<{# } }>
+						</div>
+					<{# } }>
+				</div>
+			</div>
+		</div>
+	<{# } }>
+</script>
+<script>
+$(function() {
+	$(document).on('click', '.activity-container', function(){
+		if($(this).hasClass('active')) {
+			$(this).find('.activity-row').addClass('hide');
+			$(this).find('.activity-num i').addClass('fa-arrow-down').removeClass('fa-arrow-up');
+		} else {
+			$(this).find('.activity-row').removeClass('hide');
+			$(this).find('.activity-num i').addClass('fa-arrow-up').removeClass('fa-arrow-down');
+		}
+		$(this).toggleClass('active');
+	});
+});
+</script>
+{itemplate 'public/footer'}

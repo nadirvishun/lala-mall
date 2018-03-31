@@ -1,0 +1,37 @@
+<div class="second-sidebar-title">{$_W['_plugin']['title']}</div>
+<div class="nav slimscroll">
+	{ifp 'ordergrant.config' || 'ordergrant.record'}
+		<div class="menu-header">下单有礼</div>
+		<ul class="menu-item">
+			{ifp 'ordergrant.config'}
+				<li {if $_GPC['ac'] == 'config'}class="active"{/if}>
+					<a href="{php echo iurl('ordergrant/config')}">活动设置</a>
+				</li>
+			{/if}
+			{ifp 'ordergrant.record'}
+				<li {if $_GPC['ac'] == 'record'}class="active"{/if}>
+					<a href="{php echo iurl('ordergrant/record')}">奖励记录</a>
+				</li>
+			{/if}
+		</ul>
+	{/if}
+	{ifp 'ordergrant.share'}
+		<div class="menu-header">分享订单</div>
+		<ul class="menu-item">
+			<li {if $_GPC['ac'] == 'share'}class="active"{/if}>
+				<a href="{php echo iurl('ordergrant/share')}">设置</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'ordergrant.cover'}
+		<div class="menu-header">入口</div>
+		<ul class="menu-item">
+			<li {if $_GPC['ac'] == 'cover' && $_GPC['op'] == 'index'}class="active"{/if}>
+				<a href="{php echo iurl('ordergrant/cover/index')}">下单有礼入口</a>
+			</li>
+			<li {if $_GPC['ac'] == 'cover' && $_GPC['op'] == 'share'}class="active"{/if}>
+				<a href="{php echo iurl('ordergrant/cover/share')}">分享订单入口</a>
+			</li>
+		</ul>
+	{/if}
+</div>

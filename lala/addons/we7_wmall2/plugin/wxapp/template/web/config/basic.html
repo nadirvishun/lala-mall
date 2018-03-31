@@ -1,0 +1,63 @@
+{itemplate 'public/header'}
+<div class="page clearfix">
+	<h2>基础设置</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启小程序</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="status" id="status-1" {if $wxapp['status'] == 1}checked{/if} required>
+					<label for="status-1">开启</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="status" id="status-0" {if $wxapp['status'] == 0}checked{/if} required>
+					<label for="status-0">关闭</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">小程序状态</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="audit_status" id="version-0" {if $wxapp['audit_status'] == 0}checked{/if} required>
+					<label for="version-0">已上线</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="audit_status" id="version-1" {if $wxapp['audit_status'] == 1}checked{/if} required>
+					<label for="version-1">审核中</label>
+				</div>
+				<div class="help-block text-danger">注意:如果您的使用的是平台模式（不是单店模式）,如果是平台模式,微信官方在审核小程序版本时,要求您选择类目为"餐饮-外卖平台",但是,外卖平台需要上传电信增值许可证。您可以将此设置 配置为"审核中",系统将自动将平台设置为单店模式（不影响微信公众号端的平台显示）,从而规避微信的审核规则。注意：在审核通过后，如果您的系统是平台模式，请将此设置配置为"已上线"</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">小程序审核时默认门店</label>
+			<div class="col-sm-9 col-xs-12">
+				<select class="form-control" name="default_sid">
+					<option value="">==请选择默认门店==</option>
+					{loop $stores $store}
+						<option value="{$store['id']}" {if $wxapp['default_sid'] == $store['id']}selected{/if}>{$store['title']}</option>
+					{/loop}
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">小程序AppId</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="key" class="form-control" value="{$wxapp['key']}" placeholder="请输入key" required="true">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">小程序AppSecret</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="secret" class="form-control" value="{$wxapp['secret']}" placeholder="请输入Secret" required="true">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提 交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{itemplate 'public/footer'}

@@ -1,0 +1,266 @@
+{itemplate 'public/header'}
+<div class="page order-info" id="page-delivery-order">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="icon icon icon-arrow-left pull-left external" href="{php echo imurl('delivery/order/takeout')}"></a>
+		<h1 class="title">{$store['title']}</h1>
+		<a class="icon tel pull-right external" href="tel:{$store['telephone']}"></a>
+	</header>
+	{if $order['delivery_status'] == 4}
+		<nav class="bar bar-tab footer-bar">
+			<a class="tab-item order-print" href="tel:{$order['mobile']}">
+				<span class="tab-label">呼叫顾客</span>
+			</a>
+			<a class="tab-item js-post" href="{php echo imurl('delivery/order/takeout/notice', array('id' => $order['id']));}" data-confirm="确定通知下单人你已到达送餐地址吗?">
+				<span class="tab-label">微信通知</span>
+			</a>
+			{if $order['deliveryer_transfer_status'] == 1}
+				<a class="tab-item js-modal" href="{php echo imurl('delivery/order/takeout/op', array('type' => 'transfer', 'id' => $order['id']));}">
+					<span class="tab-label">申请转单</span>
+				</a>
+			{/if}
+			<a class="tab-item js-post" href="{php echo imurl('delivery/order/takeout/success', array('id' => $order['id']));}" data-confirm="{if $order['pay_type'] == 'delivery' && $order['delivery_type'] == 2}'本单属于货到付款单,请收取顾客{$order['final_fee']}元{else}确认已将该订单送达?{/if}">
+				<span class="tab-label">确认送达</span>
+			</a>
+		</nav>
+	{elseif $order['delivery_status'] == 7}
+		<nav class="bar bar-tab footer-bar">
+			<a class="tab-item order-print" href="tel:{$store['telephone']}">
+				<span class="tab-label">呼叫商户</span>
+			</a>
+			{if $order['deliveryer_transfer_status'] == 1}
+				<a class="tab-item js-modal" href="{php echo imurl('delivery/order/takeout/op', array('type' => 'transfer', 'id' => $order['id']));}">
+					<span class="tab-label">申请转单</span>
+				</a>
+			{/if}
+			<a class="tab-item js-post" href="{php echo imurl('delivery/order/takeout/instore', array('id' => $order['id']))}" data-confirm="确定已到店?">
+				<span class="tab-label">确认到店</span>
+			</a>
+		</nav>
+	{/if}
+	<div class="content">
+		<div id="order-detail" class="tab active">
+			<div class="order-state border-1px-tb">
+				<div class="order-state-con">
+					<div class="guide">
+						<img src="{WE7_WMALL_TPL_URL}static/img/order_status_service.png" alt="" />
+					</div>
+					<div class="order-state-detail">
+						<div class="clearfix">订单{$order_status[$order['status']]['text']}<span class="pull-right date">{php echo date('H:i', $order['addtime']);}</span></div>
+						<div class="tips clearfix">{$log['note']}</div>
+					</div>
+				</div>
+			</div>
+			{if $_GPC['r'] == 'consume'}
+				<div class="content-block">
+					<a href="{php echo imurl('delivery/order/takeout/success', array('id' => $order['id']));}" class="button button-big button-fill button-success js-post">点我确定送达</a>
+				</div>
+			{elseif $_GPC['r'] == 'collect'}
+				<div class="content-block">
+					<a href="{php echo imurl('delivery/order/takeout/collect', array('id' => $order['id']))}" class="button button-big button-fill button-danger js-post" data-confirm="{if $order['delivery_type'] == 1}该订单是店内单, 确定接单吗?{else}该订单是平台单, 配送完成后将获得{$order['plateform_deliveryer_fee']}元配送费, 确定接单吗{/if}">我要接单</a>
+				</div>
+			{/if}
+			<div class="content-block-title">门店信息</div>
+			<div class="list-block other-info  border-1px-b" style="margin: 0">
+				<ul class="border-1px-tb">
+					<li class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">门店</div>
+							<div class="item-after">{$store['title']}</div>
+						</div>
+					</li>
+					<li class="item-content">
+						<div class="item-inner">
+							<div class="item-title">地址</div>
+							<div class="item-after">{$store['address']}</div>
+						</div>
+					</li>
+				</ul>
+				<div class="table">
+					<a href="tel:{$store['telephone']}" class="table-cell external">呼叫商户</a>
+					<a href="http://m.amap.com/?q={$store['location_x']},{$store['location_y']}&name={$store['address']}" class="table-cell external border-1px-l">导航</a>
+				</div>
+			</div>
+			<div class="content-block-title">顾客信息</div>
+			<div class="list-block other-info border-1px-b" style="margin: 0">
+				<ul class="border-1px-tb">
+					<li class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">姓名</div>
+							<div class="item-after">{$order['username']}</div>
+						</div>
+					</li>
+					<li class="item-content">
+						<div class="item-inner">
+							<div class="item-title">地址</div>
+							<div class="item-after">{$order['address']}</div>
+						</div>
+					</li>
+				</ul>
+				<div class="table">
+					<a href="tel:{$order['mobile']}" class="table-cell external border-1px-r">呼叫顾客</a>
+					<a href="{php echo imurl('delivery/order/takeout/notice', array('id' => $order['id']));}" data-confirm="确定通知下单人你已到达送餐地址吗?" class="table-cell js-post  border-1px-r">微信通知</a>
+					<a href="http://m.amap.com/?q={$order['location_x']},{$order['location_y']}&name={$order['address']}" class="table-cell btn-user-location" data-location-x="{$order['location_x']}" data-location-y="{$order['location_y']}">导航</a>
+				</div>
+			</div>
+			<div class="content-block-title">订单明细</div>
+			<div class="order-details">
+				<div class="order-details-con border-1px-tb">
+					<div class="store-info border-1px-b">
+						<a href="{php echo imurl('wmall/store/goods', array('sid' => $order['sid']));}" class="external">
+							<img src="{php echo tomedia($store['logo']);}" alt="" />
+							<span class="store-title">{$store['title']}</span>
+							<span class="icon icon-arrow-right pull-right"></span>
+						</a>
+					</div>
+					<div class="inner-con border-1px-b">
+						{loop $goods $good}
+							<div class="row no-gutter">
+								<div class="col-55">{$good['goods_title']}</div>
+								<div class="col-10 text-right color-muted">×{$good['goods_num']}</div>
+								<div class="col-35 text-right color-black">
+									{if $good['bargain_id'] > 0}
+										<span class="color-muted text-line-through">¥{$good['goods_original_price']}</span>
+									{/if}
+									￥{$good['goods_price']}
+								</div>
+							</div>
+						{/loop}
+					</div>
+					<div class="inner-con border-1px-b">
+						{if $order['box_price'] > 0}
+							<div class="row no-gutter">
+								<div class="col-80">餐盒费</div>
+								<div class="col-20 text-right color-black">￥{$order['box_price']}</div>
+							</div>
+						{/if}
+						<div class="row no-gutter">
+							<div class="col-80">包装费</div>
+							<div class="col-20 text-right color-black">￥{$order['pack_fee']}</div>
+						</div>
+						<div class="row no-gutter">
+							<div class="col-80">配送费</div>
+							<div class="col-20 text-right color-black">￥{$order['delivery_fee']}</div>
+						</div>
+						{if $order['delivery_type'] == 2 && $order['pay_type'] == 'delivery'}
+						<div class="row no-gutter color-danger">
+							<div class="col-80">本单需收取顾客</div>
+							<div class="col-20 text-right color-black">￥{$order['final_fee']}</div>
+						</div>
+						{/if}
+					</div>
+					{if !empty($activityed)}
+						<div class="inner-con border-1px-b">
+							{loop $activityed $row}
+							<div class="row no-gutter">
+								<div class="col-80 icon-before">
+									<img src="{WE7_WMALL_TPL_URL}static/img/{$row['icon']}" alt=""/>
+									{$row['name']}
+								</div>
+								<div class="col-20 text-right color-black">{$row['note']}</div>
+							</div>
+							{/loop}
+						</div>
+					{/if}
+					<div class="inner-con">
+						<div class="row no-gutter">
+							<div class="col-60 color-muted">订单 <span class="color-black">￥{$order['total_fee']}</span> - 优惠<span class="color-black">￥{$order['discount_fee']}</span></div>
+							<div class="col-20 text-right color-muted">总计</div>
+							<div class="col-20 text-right color-black">￥{$order['final_fee']}</div>
+						</div>
+					</div>
+				</div>
+				<div class="order-pay-info {$order['pay_type_class']}"></div>
+			</div>
+			<div class="content-block-title">其他信息</div>
+			<div class="list-block other-info">
+				<ul class="border-1px-tb">
+					<li class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">配送方</div>
+							<div class="item-after">{$store['title']}</div>
+						</div>
+					</li>
+					{if $order['deliveryer_id'] > 0}
+					<li class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">配送员</div>
+							<div class="item-after">{$_deliveryer['title']}</div>
+						</div>
+					</li>
+					{/if}
+					<li class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">订单号</div>
+							<div class="item-after">{$order['ordersn']}</div>
+						</div>
+					</li>
+					<li class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">配送方式</div>
+							<div class="item-after">{$order_types[$order['order_type']]['text']}</div>
+						</div>
+					</li>
+					<li class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">配送/自提时间</div>
+							<div class="item-after">{$order['delivery_day']}~{$order['delivery_time']}</div>
+						</div>
+					</li>
+					{if $order['order_type'] == 1}
+						<li class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">收货人</div>
+								<div class="item-after">{$order['username']}{$order['sex']}</div>
+							</div>
+						</li>
+						<li class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">手机</div>
+								<a class="item-after" href="tel:{$order['mobile']}">{$order['mobile']}</a>
+							</div>
+						</li>
+						<li class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">配送地址</div>
+								<div class="item-after">{$order['address']}</div>
+							</div>
+						</li>
+					{/if}
+					<li class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">支付方式</div>
+							<div class="item-after">{$order['pay_type_cn']}</div>
+						</div>
+					</li>
+					<li class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">备注信息</div>
+							<div class="item-after">{if empty($order['note'])}无{else}{$order['note']}{/if}</div>
+						</div>
+					</li>
+					<li class="item-content">
+						<div class="item-inner">
+							<div class="item-title">发票信息</div>
+							<div class="item-after">{if empty($order['invoice'])}无{else}{$order['invoice']}{/if}</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	$(document).on('click', '.btn-user-location', function(e){
+		var location_x = $(this).data('location-x');
+		var location_y = $(this).data('location-y');
+		if(!location_x || !location_y) {
+			$.toast('获取顾客位置失败');
+			e.preventDefault();
+			return false;
+		}
+	});
+});
+</script>
+
+{itemplate 'public/footer'}

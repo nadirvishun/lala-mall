@@ -1,0 +1,434 @@
+{itemplate 'public/header'}
+<link href="../addons/we7_wmall/plugin/errander/static/css/mobile/index.css" rel="stylesheet" type="text/css"/>
+<div class="page errander-order-detail">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">订单详情</h1>
+		<a class="pull-right" href="tel:{$_config_plugin['mobile']}">客服</a>
+	</header>
+	{php get_mall_menu()}
+	<div class="content">
+		<div class="buttons-tab">
+			<a href="#order-detail" class="tab-link active button">订单详情</a>
+			<a href="#order-status" class="tab-link button">订单状态</a>
+			{if $order['refund_status']  > 0}
+				<a href="#order-refund" class="tab-link button">退款详情</a>
+			{/if}
+		</div>
+		<div class="tabs">
+			<div id="order-detail" class="tab active">
+				<div class="order-state">
+					<div class="order-state-con border-1px-t">
+						<div class="guide">
+							<img src="{WE7_WMALL_TPL_URL}static/img/order_status_service.png" alt="" />
+						</div>
+						<div class="order-state-detail">
+							<div class="clearfix">订单{$order_status[$order['status']]['text']}<span class="pull-right date">{php echo date('Y-m-d H:i', $order['addtime']);}</span></div>
+							<div class="tips clearfix">{$log['note']}</div>
+						</div>
+					</div>
+					{if $order['status'] != 4}
+						<div class="table border-1px-t">
+							{if !$order['is_pay'] && !in_array($order['status'], array(3, 4))}
+								<a href="{php echo imurl('system/paycenter/pay', array('id' => $order['id'], 'order_type' => 'errander', 'type' => 1));}" class="table-cell border-1px-r">立即支付</a>
+							{/if}
+							{if $order['status'] == 1}
+								<a href="{php echo imurl('errander/order/cancel', array('id' => $order['id']));}" class="table-cell js-post" data-confirm="确定取消该订单吗?">取消订单</a>
+							{elseif $order['status'] == 2}
+								{if $order['delivery_stauts'] == 1}
+									<a href="javascript:;" class="errander-order-cancel table-cell border-1px-r" data-id="{$order['id']}">取消订单</a>
+								{/if}
+								<a href="tel:{$deliveryer['mobile']}"  class="table-cell">联系骑士</a>
+							{elseif $order['status'] == 3}
+							{/if}
+							{if $order['is_refund'] == 1}
+								<a href="{php echo imurl('errander/order/detail', array('id' => $order['id']));}" class="table-cell border-1px-l">查看退款</a>
+							{/if}
+						</div>
+					{/if}
+				</div>
+				<div class="content-block-title">订单明细</div>
+				<div class="order-details border-1px-tb">
+					<div class="order-details-con">
+						<div class="store-info">
+							<a href="{php echo imurl('errander/category/index', array('id' => $order['order_cid']));}" class="external">
+								<img src="{php echo tomedia($order['category']['thumb']);}" alt="" />
+								<span class="store-title">{$order['category']['title']}</span>
+								<span class="icon icon-arrow-right pull-right"></span>
+							</a>
+						</div>
+						<div class="inner-con border-1px-b">
+							{if $order['order_type'] == 'buy'}
+								<div class="row no-gutter">
+									<div class="col-50">{$order['goods_name']}</div>
+									<div class="col-50 text-right color-black">与配送员结算</div>
+								</div>
+							{/if}
+							<div class="row no-gutter">
+								<div class="col-50">配送费</div>
+								<div class="col-50 text-right color-black">￥{$order['delivery_fee']}</div>
+							</div>
+							<div class="row no-gutter">
+								<div class="col-50">小费</div>
+								<div class="col-50 text-right color-black">￥{$order['delivery_tips']}</div>
+							</div>
+						</div>
+						<div class="inner-con">
+							<div class="row no-gutter">
+								<div class="col-80 text-right color-muted">总计</div>
+								<div class="col-20 text-right color-black">￥{$order['final_fee']}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{if $order['order_type'] == 'buy'}
+					<div class="content-block-title">商品信息</div>
+					<div class="list-block other-info">
+						<ul class="border-1px-tb">
+							<li class="item-content">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">订单类型</div>
+									<div class="item-after">{$order['order_type_cn']}</div>
+								</div>
+							</li>
+							<li class="item-content">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">购买商品</div>
+									<div class="item-after">{$order['goods_name']}</div>
+								</div>
+							</li>
+							<li class="item-content">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">购买地址</div>
+									<div class="item-after">{$order['buy_address']}</div>
+								</div>
+							</li>
+							{if !empty($order['thumbs'])}
+								<li class="item-content">
+									<div class="item-inner customer-thumb border-1px-t">
+										<div class="item-title">顾客上传的图片</div>
+										<div class="row">
+											{loop $order['thumbs'] $thumb}
+												<div class="col-25 photoBrowser-image-item">
+													<img src="{php echo tomedia($thumb)}">
+												</div>
+											{/loop}
+										</div>
+									</div>
+								</li>
+							{/if}
+						</ul>
+					</div>
+				{else}
+					<div class="content-block-title">物品信息</div>
+					<div class="list-block other-info">
+						<ul class="border-1px-tb">
+							<li class="item-content">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">订单类型</div>
+									<div class="item-after">{$order['order_type_cn']}</div>
+								</div>
+							</li>
+							<li class="item-content">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">物品信息</div>
+									<div class="item-after">{$order['goods_name']}</div>
+								</div>
+							</li>
+							<li class="item-content">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">物品价值</div>
+									<div class="item-after">{$order['goods_price']}元</div>
+								</div>
+							</li>
+							<li class="item-content">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">物品重量</div>
+									<div class="item-after">{$order['goods_weight']}kg</div>
+								</div>
+							</li>
+							<li class="item-content">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">取货地址</div>
+									<div class="item-after">{$order['buy_address']}</div>
+								</div>
+							</li>
+							<li class="item-content">
+								<div class="item-inner">
+									<div class="item-title">联系人</div>
+									<div class="item-after">{$order['buy_username']}</div>
+								</div>
+							</li>
+							{if !empty($order['thumbs'])}
+								<li class="item-content">
+									<div class="item-inner customer-thumb border-1px-t">
+										<div class="item-title">顾客上传的图片</div>
+										<div class="row">
+											{loop $order['thumbs'] $thumb}
+												<div class="col-25 photoBrowser-image-item">
+													<img src="{php echo tomedia($thumb)}">
+												</div>
+											{/loop}
+										</div>
+									</div>
+								</li>
+							{/if}
+						</ul>
+					</div>
+				{/if}
+				<div class="content-block-title">收货地址</div>
+				<div class="list-block other-info">
+					<ul class="border-1px-tb">
+						<li class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">收货地址</div>
+								<div class="item-after">{$order['accept_address']}</div>
+							</div>
+						</li>
+						<li class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">联系人</div>
+								<div class="item-after">{$order['accept_username']}</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="content-block-title">其他信息</div>
+				<div class="list-block other-info">
+					<ul class="border-1px-tb">
+						{if !empty($order['deliveryer_id'])}
+							<li class="item-content">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">配送员</div>
+									<div class="item-after">{$deliveryer['title']}</div>
+								</div>
+							</li>
+						{/if}
+						<li class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">配送时间</div>
+								<div class="item-after">{$order['delivery_time']}</div>
+							</div>
+						</li>
+						<li class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">订单号</div>
+								<div class="item-after">{$order['order_sn']}</div>
+							</div>
+						</li>
+						<li class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">收货码</div>
+								<div class="item-after">{$order['code']}</div>
+							</div>
+						</li>
+						<li class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">支付方式</div>
+								<div class="item-after">{$order['pay_type_cn']}</div>
+							</div>
+						</li>
+						<li class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">备注</div>
+								<a class="item-after">{if !empty($order['note'])}{$order['note']}{else}无{/if}</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div id="order-status" class="tab">
+				{loop $logs $key $log}
+					<div class="order-status-item">
+						<div class="guide">
+							{if $maxid != $key}
+								<img src="{WE7_WMALL_TPL_URL}static/img/order_status_service_grey.png" alt="" />
+							{else}
+								<img src="{WE7_WMALL_TPL_URL}static/img/order_status_service.png" alt="" />
+							{/if}
+						</div>
+						<div class="order-status-info">
+							<div class="arrow-left"></div>
+							<div class="clearfix">{$log['title']} <span class="time pull-right">{php echo date('H:i', $log['addtime'])}</span></div>
+							<div class="tips">{$log['note']}</div>
+						</div>
+						{if $order['delivery_handle_type'] == 'app' && $log['type'] == 'delivery_instore'}
+							<div id="map" class="map-info border-1px" style="height: 160px; background: #FFF; margin-top: -1em; z-index: 10000"></div>
+						{/if}
+					</div>
+				{/loop}
+			</div>
+			<div id="order-refund" class="tab">
+				<div class="refund-detail">
+					<div class="row no-gutter refund-de-title">
+						<div class="col-60">退款金额<span class="color-danger">¥{$order['final_fee']}</span></div>
+						<div class="col-40"><span>{$order['refund_status_cn']}</span></div>
+					</div>
+					<div class="refund-detail-con">
+						<div class="row no-gutter">订单编号:<span>{$order['order_sn']}</span></div>
+						<div class="row no-gutter">退款周期:<span>1-15个工作日</span></div>
+						<div class="row no-gutter">支付方式:<span>{$order['pay_type_cn']}</span></div>
+						{if !empty($order['refund_channel'])}
+							<div class="row no-gutter">退款方式:<span>{$order['refund_channel_cn']}</span></div>
+						{/if}
+						{if !empty($order['refund_account'])}
+							<div class="row no-gutter">退款账户:<span>{$order['refund_account']}</span></div>
+						{/if}
+					</div>
+				</div>
+				<div class="refund-plan">
+					{loop $refund_logs $key $log}
+						<div class="order-refund-item">
+							<div class="guide">
+								{if $refundmaxid != $key}
+								<img src="{WE7_WMALL_TPL_URL}static/img/order_status_service_grey.png" alt="" />
+								{else}
+								<img src="{WE7_WMALL_TPL_URL}static/img/order_status_service.png" alt="" />
+								{/if}
+							</div>
+							<div class="order-refund-info">
+								<div class="arrow-left"></div>
+								<div class="clearfix">{$log['title']} <span class="time pull-right">{php echo date('H:i', $log['addtime'])}</span></div>
+								<div class="tips">{$log['note']}</div>
+							</div>
+						</div>
+					{/loop}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="popup popup-order-map-info">
+	<div class="page">
+		<header>
+			<a class="pull-left btn-close-popup" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+			<a class="pull-right btn-refresh"><i class="icon icon-refresh"></i></a>
+		</header>
+		<nav>
+			<a class="pull-right btn-info" href="javascript:;"><i class="icon icon-question"></i></a>
+		</nav>
+		<div class="content">
+			<div class="map-current" id="map-current" style="height: 100%">
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+{if $order['delivery_handle_type'] == 'app'}
+	require(['map'], function(AMap){
+		var map = new AMap.Map('map', {
+			resizeEnable: true,
+			center: [116.397428, 39.90923],
+			zoom: 13
+		});
+		var current_map = new AMap.Map('map-current', {
+			resizeEnable: true,
+			center: [116.397428, 39.90923],
+			zoom: 15
+		});
+
+		var marker = new AMap.Marker({
+			position: [{$order['accept_location_y']}, {$order['accept_location_x']}],
+			offset: new AMap.Pixel(-35, -35),
+			content: '<div class="marker-mine-route"></div>'
+		});
+		marker.setMap(current_map);
+
+		{if !empty($order['buy_location_x']) && !empty($order['buy_location_y'])}
+			var marker = new AMap.Marker({
+				position: [{$order['buy_location_y']}, {$order['buy_location_x']}],
+				offset: new AMap.Pixel(-27, -74),
+				content: '<div class="marker-start-route"></div>'
+			});
+			marker.setMap(current_map);
+		{/if}
+
+		{if $order['status'] == 3}
+			map.panTo(["{$order['delivery_success_location_y']}", "{$order['delivery_success_location_x']}"]);
+			current_map.panTo(["{$order['delivery_success_location_y']}", "{$order['delivery_success_location_x']}"]);
+
+			var avatar = "{$deliveryer['avatar']}";
+			var marker = new AMap.Marker({
+				position: [{$order['delivery_success_location_y']}, {$order['delivery_success_location_x']}],
+				offset: new AMap.Pixel(-26, -80),
+				content: '<div class="marker-deliveyer-route"><img src='+ avatar +' alt=""/></div>'
+			});
+			marker.setMap(map);
+
+			var marker = new AMap.Marker({
+				position: [{$order['delivery_success_location_y']}, {$order['delivery_success_location_x']}],
+				offset: new AMap.Pixel(-26, -80),
+				content: '<div class="marker-deliveyer-route"><img src='+ avatar +' alt=""/></div>'
+			});
+			marker.setMap(current_map);
+		{else}
+			map.panTo(["{$deliveryer['location_y']}", "{$deliveryer['location_x']}"]);
+			var avatar = "{$deliveryer['avatar']}";
+			var marker = new AMap.Marker({
+				position: [{$deliveryer['location_y']}, {$deliveryer['location_x']}],
+				offset: new AMap.Pixel(-26, -80),
+				content: '<div class="marker-deliveyer-route"><img src='+ avatar +' alt=""/></div>'
+			});
+			marker.setMap(map);
+		{/if}
+
+		var set = '';
+		map.on('click', function(){
+			setTimeout(function(){
+				current_map.setFitView();
+			}, 500);
+			position_sync();
+			set = setInterval(position_sync, 60000);
+			$.popup('.popup-order-map-info');
+		});
+
+		function position_sync() {
+			$.showIndicator();
+			{if $order['status'] >= 3}
+				$.hideIndicator();
+				return;
+			{/if}
+			var markers = [];
+			$.post("{php echo imurl('system/common/deliveryer/location', array('id' => $order['deliveryer_id']))}", function(data){
+				$.hideIndicator();
+				var result = $.parseJSON(data);
+				if(result.message.errno != -1) {
+					var deliveryer = result.message.message;
+					var marker = new AMap.Marker({
+						position: [deliveryer.location_y, deliveryer.location_x],
+						offset: new AMap.Pixel(-26, -80),
+						content: '<div class="marker-deliveyer-route"><img src="'+ deliveryer.avatar +'" alt=""/></div>'
+					});
+					var marker1 = new AMap.Marker({
+						position: [deliveryer.location_y, deliveryer.location_x],
+						offset: new AMap.Pixel(-26, -80),
+						content: '<div class="marker-deliveyer-route"><img src="'+ deliveryer.avatar +'" alt=""/></div>'
+					});
+					map.panTo([deliveryer.location_y, deliveryer.location_x]);
+					map.remove(markers);
+					marker.setMap(map);
+
+					current_map.panTo([deliveryer.location_y, deliveryer.location_x]);
+					current_map.remove(markers);
+					marker1.setMap(current_map);
+					current_map.setFitView();
+					markers.push(marker);
+					markers.push(marker1);
+				}
+			});
+		}
+
+		$('.btn-close-popup').click(function(){
+			clearInterval(set);
+			$.closeModal('.popup-order-map-info');
+		});
+		$('.btn-refresh').click(function(){
+			position_sync();
+		});
+		$('.btn-info').click(function(){
+			alert('配送员位置一分钟更新一次，如果配送员远离您，那可能是正在为更早下单的用户配送，请耐心等待~');
+		});
+	});
+{/if}
+</script>
+{itemplate 'public/footer'}

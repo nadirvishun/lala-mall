@@ -1,0 +1,22 @@
+<style type="text/css">
+	.footer-bar.bar-tab .tab-item span.icon {color: {$menu['css']['iconColor']}}
+	.footer-bar.bar-tab .tab-item.active span.icon {color: {$menu['css']['iconColorActive']}}
+	.footer-bar.bar-tab .tab-item span.tab-label {color: {$menu['css']['textColor']}}
+	.footer-bar.bar-tab .tab-item.active span.tab-label {color: {$menu['css']['textColorActive']}}
+</style>
+<nav class="bar bar-tab footer-bar">
+	{if $menu['params']['navstyle'] == 0}
+		{loop $menu['data'] $item}
+			<a class="tab-item {php echo menu_active($item['link']);}" href="{$item['link']}">
+				<span class="icon {$item['icon']}"></span>
+				<span class="tab-label">{$item['text']}</span>
+			</a>
+		{/loop}
+	{else}
+		{loop $menu['data'] $item}
+			<a class="tab-item image" href="{$item['link']}">
+				<img src="{php echo tomedia($item['img']);}" alt="">
+			</a>
+		{/loop}
+	{/if}
+</nav>

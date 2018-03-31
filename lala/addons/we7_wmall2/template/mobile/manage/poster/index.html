@@ -1,0 +1,34 @@
+{itemplate 'public/header'}
+<div class="page page-poster">
+	<div class="content">
+		<div class="create-img">
+			<img src="{WE7_WMALL_TPL_URL}static/img/timg.gif" alt="">
+			<div class="text">正在生成海报,请稍后...</div>
+		</div>
+		<div class="img">
+			<img src="" alt="" id="img">
+		</div>
+		<div class="explain">
+			<div class="text">
+				说明: 长按下载海报,将海报分享到朋友圈,好友通过您分享的海报即可进入您的店铺
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function(){
+		var height = document.body.clientHeight;
+		$('.img').height(height);
+		$.post("{php echo imurl('manage/poster/index')}", function(data){
+			var result = $.parseJSON(data);
+			if(result.message.errno != 0) {
+				$.toast(result.message.message);
+				return false;
+			}
+			$('#img').attr('src', result.message.message);
+			$('.create-img').hide();
+			$('.img').show();
+		});
+	})
+</script>
+{itemplate 'public/footer'}

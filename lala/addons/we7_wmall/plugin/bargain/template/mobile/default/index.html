@@ -1,0 +1,214 @@
+{itemplate 'public/header'}
+<div class="page bargain">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">天天特价</h1>
+	</header>
+	{php get_mall_menu()}
+	<div class="content infinite-scroll activity js-infinite lazyload-container" style="z-index: 1;" data-href="{php echo imurl('bargain/index/index')}" data-distance="50" data-min="{$min}" data-container=".activity-list" data-tpl="tpl-bargain">
+		<div class="activity-banner border-1px-t">
+			<a href=""><img src="{php echo tomedia($config_bargain['thumb'])}" alt=""></a>
+		</div>
+		{if $config_bargain['template'] == 1}
+			<div class="activity-list">
+				{loop $bargains $bargain}
+					<div class="card border-1px-b">
+						<div class="card-content row">
+							<div class="col-33 image">
+								<div class="label">{$bargain['discount']}折</div>
+								<img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="goods-popup lazyload" data-id="{$bargain['goods_id']}" data-original="{$bargain['thumb']}" alt="" />
+							</div>
+							<div class="col-66">
+								<div class="package">{$bargain['title']}</div>
+								<div class="store-title"><i class="icon icon-favor-fill"></i>{$bargain['store']['title']}</div>
+								<div class="row">
+									<div class="col-66">
+										<div class="discount-price">
+											<span class="price-title">抢购价</span>
+											<span class="now-price"> ¥{$bargain['discount_price']}</span>
+											<span class="origin-price">¥{$bargain['price']}</span>
+										</div>
+										<div class="food-stock">
+											库存: {$bargain['discount_available_total']}份
+										</div>
+									</div>
+									<div class="col-33">
+										<p><a href="{php echo imurl('wmall/store/goods', array('sid' => $bargain['sid'], 'goods_id' => $bargain['goods_id']))}" class="button button-danger">{if $bargain['store']['is_in_business'] == 1}马上抢{else}请稍后{/if}</a></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{/loop}
+			</div>
+		{elseif $config_bargain['template'] == 2}
+			<div class="activity-list row clearfix">
+				{loop $bargains $bargain}
+					{php $i++}
+					<div class="activity-item col-50 {if $i % 2 != 0}border-1px-r{/if}">
+						<div class="activity-inner border-1px-b">
+							<div class="store-title">{$bargain['store']['title']}</div>
+							<div class="goods-image">
+								<div class="label">{$bargain['discount']}折</div>
+								<img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="goods-popup lazyload" data-id="{$bargain['goods_id']}" data-original="{$bargain['thumb']}" alt="" />
+								{if $bargain['store']['is_in_business'] == 0}
+									<div class="store-rest">商家休息中</div>
+								{/if}
+							</div>
+							<div class="goods-title">{$bargain['title']}</div>
+							<div class="month-soldnum">已售:{$bargain['sailed']}份</div>
+							<div class="price-buybtn clearfix">
+								<div class="price pull-left"><span class="now-price">￥{$bargain['discount_price']}</span><span class="origin-price">￥{$bargain['price']}</span></div>
+								{if $bargain['store']['is_in_business'] == 1}
+									<a href="{php echo imurl('wmall/store/goods', array('sid' => $bargain['sid'], 'goods_id' => $bargain['goods_id']))}" class="buybtn pull-right">抢购</a>
+								{else}
+									<span class="breakbtn pull-right">请稍后</span>
+								{/if}
+							</div>
+						</div>
+					</div>
+				{/loop}
+			</div>
+		{/if}
+		<div class="infinite-scroll-preloader hide">
+			<div class="preloader"></div>
+		</div>
+		<div class="activity-rule">
+			<div class="activity-rule-title border-1px-b">活动规则</div>
+			<div class="activity-rule-content">{$config_bargain['agreement']}</div>
+		</div>
+	</div>
+</div>
+{if $config_bargain['template'] == 1}
+<script id="tpl-bargain" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<div class="card border-1px-b">
+			<div class="card-content row">
+				<div class="col-33 image">
+					<div class="label"><{d[i].discount}>折</div>
+					<img src="<{d[i].thumb}>" alt="" class="goods-popup" data-id="<{d[i].goods_id}>" data-original="<{d[i].thumb}>">
+				</div>
+				<div class="col-66">
+					<div class="package"><{d[i]['title']}></div>
+					<div class="store-title"><i class="icon icon-favor-fill"></i><{d[i]['store']['title']}></div>
+					<div class="row">
+						<div class="col-66">
+							<div class=" discount-price">
+								<span class="price-title">抢购价</span>
+								<span class="now-price"> ¥<{d[i].discount_price}></span>
+								<span class="origin-price">¥<{d[i]['price']}></span>
+							</div>
+							<div class="food-stock">
+								库存: <{d[i].discount_available_total}>份
+							</div>
+						</div>
+						<div class="col-33">
+							<p><a href="{php echo imurl('wmall/store/goods')}&sid=<{d[i].sid}>&goods_id=<{d[i].goods_id}>" class="button button-danger"><{# if(d[i]['store']['is_in_business'] == 1){ }>马上抢<{# } else { }>请稍后<{# } }></a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<{# } }>
+</script>
+{elseif $config_bargain['template'] == '2'}
+<script id="tpl-bargain" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<div class="activity-item col-50 <{# if(i % 2 == 0){ }>border-1px-r<{# } }>">
+			<div class="activity-inner border-1px-b">
+				<div class="store-title"><{d[i]['store']['title']}></div>
+				<div class="goods-image">
+					<div class="label"><{d[i].discount}>折</div>
+					<img src="<{d[i].thumb}>" alt="" class="goods-popup" data-id="<{d[i].goods_id}>" data-original="<{d[i].thumb}>">
+					<{# if(d[i]['store']['is_in_business'] == 0){ }>
+						<div class="store-rest">商家休息中</div>
+					<{# } }>
+				</div>
+				<div class="goods-title"><{d[i]['title']}></div>
+				<div class="month-soldnum">已售:<{d[i]['sailed']}>份</div>
+				<div class="price-buybtn clearfix">
+					<div class="price pull-left"><span class="now-price">￥<{d[i].discount_price}></span><span class="origin-price">￥<{d[i]['price']}></span></div>
+					<{# if(d[i]['store']['is_in_business'] == 1){ }>
+						<a href="{php echo imurl('wmall/store/goods')}&sid=<{d[i].sid}>&goods_id=<{d[i].goods_id}>" class="buybtn pull-right">抢购</a>
+					<{# } else { }>
+						<span class="breakbtn pull-right">请稍后</span>
+					<{# } }>
+				</div>
+			</div>
+		</div>
+	<{# } }>
+</script>
+{/if}
+<script id="goods-detail" type="text/html">
+	<div class="popup popup-goods-detail">
+		<div class="content-block">
+			<div class="goods-img">
+				<{# if(!d.slides.length){ }>
+					<img src="<{d.thumb_}>" width= alt=""/>
+				<{# } else { }>
+					<div class="swiper-container" data-space-between='0' data-pagination='.swiper-pagination'>
+						<div class="swiper-wrapper">
+							<{# for(var j = 0, len = d.slides.length; j < len; j++){ }>
+							<div class="swiper-slide"><img src="<{d.slides[j]}>" alt=""></div>
+							<{# } }>
+						</div>
+						<div class="swiper-pagination"></div>
+					</div>
+				<{# } }>
+				<a href="#" class="close-popup" data-popup=".popup-goods-detail"><span class="icon icon-close"></span></a>
+			</div>
+			<div class="goods-name">
+				<{d.title}>
+			</div>
+			<div class="sell-info">已售<{d.sailed}>&nbsp;&nbsp;好评<{d.comment_good}></div>
+			<{# if(d.is_options == 0){ }>
+				<div class="row no-gutter goods-num">
+					<div class="col-50 price">￥<span class="fee"><{d.price}></span></div>
+					<div class="col-50 text-right operate-num">
+						<{# if(d.is_in_business == 1){ }>
+						<a href="{php echo imurl('wmall/store/goods')}&sid=<{d.sid}>&goods_id=<{d.goods_id}>" class="button button-danger button-fill col-50 pull-right">抢购</a>
+						<{# } }>
+					</div>
+				</div>
+			<{# } }>
+			<div class="goods-evaluate">商品评价</div>
+			<div class="praise text-center">好评率 <span class="rate"><{d.comment_good_percent}></span><span class="num">(共<{d.comment_total}>人评价)</span></div>
+			<div class="progress">
+				<div class="progress-bar">
+					<div class="progress-active" style="width:<{d.comment_good_percent}>;"></div>
+				</div>
+			</div>
+			<div class="goods-desc">商品描述</div>
+			<div class="goods-desc-con">
+				<{d.description}><br>
+				温馨提示: 图片仅供参考,请以实物为准;<br>
+				高峰时段及恶劣天气,请提前下单
+			</div>
+		</div>
+	</div>
+</script>
+<script>
+	require(['laytpl'], function(laytpl){
+		$(document).on('click', '.goods-popup', function(){
+			var id = $(this).data('id');
+			$.showIndicator();
+			$.post("{php echo imurl('bargain/index/detail');}", {id: id}, function(data) {
+				var result = $.parseJSON(data);
+				if(result.message.errno != 0) {
+					$.hideIndicator();
+					$.toast(result.message.message);
+				} else {
+					var gettpl = $('#goods-detail').html();
+					laytpl(gettpl).render(result.message.message, function(html){
+						$.hideIndicator();
+						$.popup(html);
+						$(".swiper-container").swiper({autoplay: 1000});
+					});
+				}
+				return false;
+			});
+		});
+	});
+</script>
+
+{itemplate 'public/footer'}

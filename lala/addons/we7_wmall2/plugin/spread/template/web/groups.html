@@ -1,0 +1,146 @@
+{itemplate 'public/header'}
+
+{if $op == 'post'}
+<!-- 添加页面 -->
+<div class="page clearfix">
+	<h2>编辑推广员等级</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">等级名称</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" class="form-control" name="title" value="{$ad['title']}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">一级佣金比例</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<input type="text" class="form-control" name="commission1" value="{$ad['commission1']}">
+					<span class="input-group-addon js-random">%</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">二级级佣金比例</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<input type="text" class="form-control" name="commission2" value="{$ad['commission2']}">
+					<span class="input-group-addon js-random">%</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">升级条件</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon">
+						{if $config['group_update_mode'] == 'order_money'}
+							推广订单总额满
+						{elseif $config['group_update_mode'] == 'order_money_1'}
+							一级推广订单金额满
+						{elseif $config['group_update_mode'] == 'order_count'}
+							推广订单总数满
+						{elseif $config['group_update_mode'] == 'order_count_1'}
+							一级推广订单总数满
+						{elseif $config['group_update_mode'] == 'self_order_money'}
+							自购订单金额满
+						{elseif $config['group_update_mode'] == 'self_order_count'}
+							自购订单数量满
+						{elseif $config['group_update_mode'] == 'down_count'}
+							下线总人数满
+						{elseif $config['group_update_mode'] == 'down_count_1'}
+							一级总人数满
+						{/if}
+					</span>
+					<input type="number" class="form-control" name="group_condition" value="{$ad['group_condition']}" digits="true">
+					<span class="input-group-addon">
+						{if $config['group_update_mode'] == 'order_money' || $config['group_update_mode'] == 'order_money_1' || $config['group_update_mode'] == 'self_order_money'}
+							元
+						{elseif $config['group_update_mode'] == 'order_count' || $config['group_update_mode'] == 'order_count_1' || $config['group_update_mode'] == 'self_order_count'}
+							单
+						{elseif $config['group_update_mode'] == 'down_count' || $config['group_update_mode'] == 'down_count_1'}
+							人
+						{/if}
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{else}
+<!-- 首页 -->
+<form action="" class="form-table">
+	<div class="panel panel-table">
+		<div class="panel-heading">
+			<a href="{php echo iurl('spread/groups/post');}" class="btn btn-primary btn-sm">添加推广员等级</a>
+		</div>
+		<div class="alert alert-info">推广员等级的升级条件请在基本设置中选择。 <a href="{php echo iurl('spread/config')}" target="_blank">立即设置</a></div>
+		<div class="panel-body table-responsive js-table">
+			{if empty($groups)}
+			<div class="no-result">
+				<p>还没有相关数据</p>
+			</div>
+			{else}
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>名称</th>
+						<th>一级佣金比例</th>
+						<th>二级佣金比例</th>
+						<th>升级条件</th>
+						<th class="text-right">操作</th>
+					</tr>
+				</thead>
+					{loop $groups $group}
+					<tr>
+						<td>{$group['id']}</td>
+						<td>{$group['title']}</td>
+						<td>{$group['commission1']}%</td>
+						<td>{$group['commission2']}%</td>	
+						<td>
+							{if $config['group_update_mode'] == 'order_money'}
+								推广订单总额满
+							{elseif $config['group_update_mode'] == 'order_money_1'}
+								一级推广订单金额满
+							{elseif $config['group_update_mode'] == 'order_count'}
+								推广订单总数满
+							{elseif $config['group_update_mode'] == 'order_count_1'}
+								一级推广订单总数满
+							{elseif $config['group_update_mode'] == 'self_order_money'}
+								自购订单金额满
+							{elseif $config['group_update_mode'] == 'self_order_count'}
+								自购订单数量满
+							{elseif $config['group_update_mode'] == 'down_count'}
+								下线总人数满
+							{elseif $config['group_update_mode'] == 'down_count_1'}
+								一级总人数满
+							{/if}
+							{$group['group_condition']}
+							{if $config['group_update_mode'] == 'order_money' || $config['group_update_mode'] == 'order_money_1' || $config['group_update_mode'] == 'self_order_money'}
+								元
+							{elseif $config['group_update_mode'] == 'order_count' || $config['group_update_mode'] == 'order_count_1' || $config['group_update_mode'] == 'self_order_count'}
+								单
+							{elseif $config['group_update_mode'] == 'down_count' || $config['group_update_mode'] == 'down_count_1'}
+								人
+							{/if}
+						</td>
+						<td class="text-right">
+							<a href="{php echo iurl('spread/groups/post', array('id' => $group['id']))}" class="btn btn-default btn-sm" title="编辑" data-toggle="tooltip" data-placement="top" >编辑</a>
+							<a href="{php echo iurl('spread/groups/del', array('id' => $group['id']))}" class="btn btn-default btn-sm js-remove" data-confirm="确定删除该推广员?">删除</a>
+						</td>
+					</tr>
+					{/loop}
+			</table>
+			{/if}
+		</div>
+	</div>
+</form>
+{/if}
+{itemplate 'public/footer'}

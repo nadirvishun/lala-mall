@@ -1,0 +1,189 @@
+{itemplate 'public/header'}
+{if $ta == 'index'}
+<div class="page wxarr">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">微信排号</h1>
+	</header>
+	{php get_mall_menu();}
+	<div class="content">
+		<div class="arr-block">
+			<ul class="wxarr-tab">
+				<li>
+					<a href="javascript:;" onclick="location.reload(true);"><span class="wx-reset"></span>刷新状态</a>
+				</li>
+				<li>
+					<a href="{php echo imurl('wmall/store/assign/post', array('sid' => $sid));}" ><span class="wx-quhao"></span>我要取号</li>
+				</a>
+			</ul>
+		</div>
+		<div class="list-block">
+			<ul>
+				{loop $data $da}
+				<li class="item-content">
+					<div class="item-inner">
+						<div class="item-title"><i class="icon icon-radio"></i> {$da['title']}</div>
+					</div>
+				</li>
+				{/loop}
+			</ul>
+		</div>
+	</div>
+</div>
+{/if}
+
+{if $ta == 'post'}
+<div class="page arrpeople">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">我要排号</h1>
+		<button class="button button-link button-nav pull-right" id="form-submit">保存</button>
+	</header>
+	{php get_mall_menu();}
+	<div class="content">
+		{if $store['assign_mode'] == 2}
+		<div class="arr-block" id="new-guest-queue-section">
+			<h5>选择队列</h5>
+			<ul class="arr-ls">
+				{loop $data $da}
+					<li class="choose-queue-setting-label" data-id="{$da['id']}"><a href="javascript:;">{$da['title']}</a></li>
+				{/loop}
+			</ul>
+		</div>
+		{/if}
+		<div class="list-block">
+			<ul>
+				<li>
+					<div class="item-content">
+						<div class="item-inner">
+							<div class="item-title label">客人数量</div>
+							<div class="item-input">
+								<input type="text" name="guest_num" value="2" id="guest_num" placeholder="填写人数">
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item-content">
+						<div class="item-inner">
+							<div class="item-title label">手机号</div>
+							<div class="item-input">
+								<input type="text" name="mobile" value="{$_W['member']['mobile']}" id="mobile" placeholder="填写手机号">
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+{/if}
+
+{if $ta == 'mine'}
+<div class="page wxarr wx-wait">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">微信排号</h1>
+	</header>
+	{php get_mall_menu();}
+	<div class="content">
+		<div class="wxwait-status">
+			<h5>还需等待 <span>{$count}</span> 桌，您的号码是</h5>
+			<div class="wxwait-arr">{$mine['number']}</div>
+			<div class="wxwait-arr-cur">{$queue['title']}，已叫号至{$now_number}</div>
+		</div>
+		<div class="arr-block">
+			<ul class="wxarr-tab">
+				<li>
+					<a href="javascript:;" onclick="location.reload(true);"><span class="wx-reset"></span>刷新状态</a>
+				</li>
+				<li>
+					<a href="javascript:;" class="cancel-board" data-id="{$mine['id']}"><span class="wx-cancel"></span>取消排号</li>
+				</a>
+				<li>
+					<a href="{php echo imurl('wmall/store/assign/goods', array('sid' => $sid))}"><span class="wx-order"></span>预点菜</li>
+				</a>
+			</ul>
+		</div>
+		<div class="list-block">
+			<ul>
+				{loop $data $da}
+				<li class="item-content">
+					<div class="item-inner">
+						<div class="item-title">
+							<i class="icon icon-radio"></i>
+							{$da['title']}
+							{if !empty($wait[$da['id']]) && $wait[$da['id']]['num'] > 0}
+								<span>{$wait[$da['id']]['num']}人正在排队</span>
+							{/if}
+						</div>
+					</div>
+				</li>
+				{/loop}
+			</ul>
+		</div>
+	</div>
+</div>
+{/if}
+<script type="text/javascript">
+	{if $ta == 'mine'}
+		function refresh() {
+			location.reload();
+		}
+		setTimeout(refresh, 60000);
+	{/if}
+
+	$('.cancel-board').click(function(){
+		var id = $(this).data('id');
+		$.confirm('确认取消排队?', function(){
+			$.post("{php echo imurl('wmall/store/assign/cancel', array('sid' => $sid));}", {id: id}, function(data){
+				location.href = "{php echo imurl('wmall/store/assign/index', array('sid' => $sid));}";
+				return false;
+			});
+		});
+	});
+
+	$('#new-guest-queue-section .choose-queue-setting-label').click(function(){
+		$('.choose-queue-setting-label').removeClass('arr-ls-active');
+		$(this).addClass('arr-ls-active');
+		return;
+	});
+
+	$('#form-submit').click(function(){
+		if($(this).hasClass('disabled')) {
+			return false;
+		}
+		var queue_id = 0;
+		{if $store['assign_mode'] == 2}
+			if(!$('#new-guest-queue-section .choose-queue-setting-label.arr-ls-active').size()) {
+				$.toast('请选择排队队列');
+				return false;
+			}
+			queue_id = $('#new-guest-queue-section .choose-queue-setting-label.arr-ls-active').data('id');
+		{/if}
+		var guest_num = parseInt($.trim($('#guest_num').val()));
+		if(isNaN(guest_num) || !guest_num) {
+			$.toast('客人数量错误');
+			return false;
+		}
+
+		var mobile = $.trim($('#mobile').val());
+		var reg = /^[01][3456789][0-9]{9}$/;
+		if(!mobile || !reg.test(mobile)) {
+			$.toast('手机号有误');
+			return false;
+		}
+		$(this).addClass('disabled');
+		$.post("{php echo imurl('wmall/store/assign/post', array('sid' => $sid));}", {queue_id: queue_id, guest_num: guest_num, mobile: mobile}, function(data){
+			var data = $.parseJSON(data);
+			if(data.message.errno == -1) {
+				$(this).removeClass('disabled');
+				$.toast(data.message.message);
+			} else {
+				location.href = "{php echo imurl('wmall/store/assign/mine', array('sid' => $sid));}";
+			}
+			return false;
+		});
+	});
+</script>
+{itemplate 'public/footer'}

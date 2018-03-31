@@ -1,0 +1,21 @@
+{itemplate 'public/header'}
+<script type="text/javascript">
+	function QFH5ready() {
+		QFH5.getUserInfo(function(state, data){
+			if(state == 1){
+				$.post("{php echo imurl('wmall/auth/qianfan', array('forward' => $forward));}", data, function(data) {
+					var data = $.parseJSON(data);
+					if(data.message.errno != 0) {
+						$.toast(data.message.message);
+						QFH5.jumpLogin(function(state,data){});
+					} else {
+						location.href = data.message.url;
+					}
+				});
+			} else {
+				QFH5.jumpLogin(function(state,data){});
+			}
+		});
+	}
+</script>
+{itemplate 'public/footer'}

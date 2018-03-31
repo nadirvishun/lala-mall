@@ -1,0 +1,334 @@
+{itemplate 'public/header'}
+<link href="../addons/we7_wmall/plugin/ordergrant/static/css/mobile/index.css" rel="stylesheet" type="text/css"/>
+{if $op == 'list'}
+<div class="page order-share-list">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">订单分享</h1>
+	</header>
+	{php get_mall_menu();}
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('wmall/home/orderShare')}" data-distance="50" data-min="{$min}" data-container=".order-share-list" data-tpl="tpl-order-share">
+		{if empty($comments)}
+			<div class="common-no-con">
+				<img src="{WE7_WMALL_TPL_URL}static/img/comment_no_con.png" alt="">
+				<p>还没有分享记录</p>
+			</div>
+		{else}
+			<div class="order-share-list">
+				{loop $comments $comment}
+					<div class="order-share-item row">
+						<div class="col-15">
+							<img src="{$comment['avatar']}" alt="">
+						</div>
+						<div class="col-85">
+							<div class="user">
+								<div class="username">
+									{$comment['username']}
+									<span class="order-time pull-right">{$comment['addtime']}</span>
+								</div>
+								<div class="stars">
+									<span class="star-rank-outline">
+										<span class="star-rank-active" style="width:{$comment['score']}%"></span>
+									</span>
+									<span class="delivery-time">{$comment['lasttime']}分钟送达</span>
+								</div>
+							</div>
+							{if !empty($comment['note'])}
+								<div class="comment">{$comment['note']}</div>
+							{/if}
+							<div class="list-block media-list">
+								<ul>
+									<li>
+										<a href="{php echo imurl('wmall/store/goods', array('sid' => $comment['sid']))}" class="item-link item-content">
+											<div class="item-media">
+												<img src="{$comment['logo']}">
+											</div>
+											<div class="item-inner">
+												<div class="item-title">{$comment['store']['title']}</div>
+												{if $comment['activity']['num'] > 0}
+													{php $num = 0}
+													{loop $comment['activity']['items'] $item}
+														{php $num++}
+														<div class="tags tags-{$item['type']} item-text" {if $num > 1}style="display: none"{/if}>{$item['title']}</div>
+													{/loop}
+												{/if}
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<div class="order">
+								<span>TA的订单:</span>
+								<div class="order-goods row">
+									{loop $comment['goods'] $good}
+										<div class="goods-item col-25">
+											<img src="{php echo tomedia($good['thumb'])}" alt="">
+											<div class="goods-num">{$good['goods_num']}份</div>
+											<div class="goods-title">{$good['goods_title']}</div>
+										</div>
+									{/loop}
+								</div>
+								<div class="other">
+									实付：
+									<span class="price">￥<span>{$comment['final_fee']}</span></span>
+									<a href="{php echo imurl('wmall/store/goods', array('sid' => $comment['sid'], 'id' => $comment['oid'], 'f' => 1))}" class="reorder pull-right">跟一单</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				{/loop}
+			</div>
+			<div class="infinite-scroll-preloader hide">
+				<div class="preloader"></div>
+			</div>
+		{/if}
+	</div>
+</div>
+<script id="tpl-order-share" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<div class="order-share-item row">
+			<div class="col-15">
+				<img src="<{d[i].avatar}>" alt="">
+			</div>
+			<div class="col-85">
+				<div class="user">
+					<div class="username">
+						<{d[i].username}>
+						<span class="order-time pull-right"><{d[i].addtime}></span>
+					</div>
+					<div class="stars">
+							<span class="star-rank-outline">
+								<span class="star-rank-active" style="width:<{d[i].score}>%"></span>
+							</span>
+						<span class="delivery-time"><{d[i].store.delivery_time}>分钟送达</span>
+					</div>
+				</div>
+				<{# if(d[i].note != ''){ }>
+					<div class="comment"><{d[i].note}></div>
+				<{# } }>
+				<div class="list-block media-list">
+					<ul>
+						<li>
+							<a href="{php echo imurl('wmall/store/goods')}&sid=<{d[i].sid}>" class="item-link item-content">
+								<div class="item-media">
+									<img src="<{d[i].logo}>">
+								</div>
+								<div class="item-inner">
+									<div class="item-title"><{d[i].store.title}></div>
+									<{# if(d[i].activity.num > 0){ }>
+										<{# var num = 0; }>
+										<{# for(var j in d[i].activity['items']){ }>
+											<{# num++ }>
+											<{# var item = d[i].activity['items'][j]; }>
+											<div class="item-text <{item.type}>" style="<{# if(num > 1){ }>display: none;<{# } }>"><{item.title}></div>
+										<{# } }>
+									<{# } }>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="order">
+					<span>TA的订单:</span>
+					<div class="order-goods row">
+						<{# for(var k in d[i].goods){ }>
+							<{# var good = d[i].goods[k]; }>
+							<div class="goods-item col-25">
+								<img src="<{good.thumb}>" alt="">
+								<div class="goods-num"><{good.goods_num}>份</div>
+								<div class="goods-title"><{good.goods_title}></div>
+							</div>
+						<{# } }>
+					</div>
+					<div class="other">
+						实付：
+						<span class="price">￥<span><{d[i].final_fee}></span></span>
+						<a href="{php echo imurl('wmall/store/goods')}&sid=<{d[i].sid}>" class="reorder pull-right">再来一单</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	<{# } }>
+</script>
+{/if}
+
+{if $op == 'detail'}
+<div class="page order-share">
+	<nav class="bar bar-tab"><a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id'], 'id' => $id, 'f' => 1))}">跟一单</a></nav>
+	<div class="content">
+		<div class="container">
+			<div class="store-wrapper">
+				<div class="store-logo-wrapper">
+					<div class="store-logo">
+						<img src="{php echo tomedia($store['logo'])}" alt="">
+					</div>
+				</div>
+				<div class="store-comment-info">
+					<h3 class="store-title">{$store['title']}</h3>
+					<div class="store-comment">
+						<span class="star-rank-outline">
+							<span class="star-rank-active" style="width: {$store['score_cn']}%"></span>
+						</span>
+						<span class="customer-score">&nbsp;{$store['score']}</span>
+					</div>
+					<div class="delivery-info">
+						起送价￥{$store['send_price']}
+						&nbsp;&nbsp;|&nbsp;&nbsp;配送费￥{$store['delivery_price']}
+						&nbsp;&nbsp;|&nbsp;&nbsp;{$store['delivery_time']}分钟
+					</div>
+				</div>
+				{if $activity['num'] > 0}
+					<div class="activity-container">
+						{if $activity['num'] > 1}
+							{php $num = 0}
+							<div class="activity-num pull-right"> <i class="icon icon-arrow-down"></i></div>
+						{/if}
+						{loop $activity['items'] $item}
+							{php $num++}
+							<div class="tags tags-{$item['type']} {if $num > 1}activity-row hide{/if}">{$item['title']}</div>
+						{/loop}
+						{if $store['delivery_free_price'] > 0}
+							<div class="activity-row free {if $num > 1}hide{/if}">
+								满{$store['delivery_free_price']}元免配送费
+							</div>
+						{/if}
+						{if !empty($store['hot_goods'])}
+							<div class="dashed-line"></div>
+							<div class="hot">
+								热销:
+								{loop $store['hot_goods'] $hot}
+									{$hot['goods']}
+								{/loop}
+							</div>
+						{/if}
+					</div>
+				{/if}
+			</div>
+			<div class="dotted-area">
+				<span class="circle circle-left"></span>
+				<span class="circle circle-right"></span>
+				<span class="dotted-line"></span>
+			</div>
+			<div class="order">
+				<div class="order-detail">
+					<h3>订单明细</h3>
+					<div class="order-details-con">
+						<div class="inner-con border-1px-b">
+							{loop $goods $good}
+								<div class="row no-gutter">
+									<div class="col-55 goods-title">
+										{$good['goods_title']}
+									</div>
+									<div class="col-10 text-right color-muted">×{$good['goods_num']}</div>
+									<div class="col-35 text-right color-black">
+										￥{$good['goods_price']}
+									</div>
+								</div>
+							{/loop}
+						</div>
+
+						<div class="inner-con border-1px-b">
+							{if $order['box_price'] > 0}
+								<div class="row no-gutter">
+									<div class="col-80">餐盒费</div>
+									<div class="col-20 text-right color-black">￥{$order['box_price']}</div>
+								</div>
+							{/if}
+							<div class="row no-gutter">
+								<div class="col-80">包装费</div>
+								<div class="col-20 text-right color-black">￥{$order['pack_fee']}</div>
+							</div>
+							<div class="row no-gutter">
+								<div class="col-80">配送费</div>
+								<div class="col-20 text-right color-black">￥{$order['delivery_fee']}</div>
+							</div>
+							{if $order['order_type'] == 3}
+								<div class="row no-gutter">
+									<div class="col-80">服务费</div>
+									<div class="col-20 text-right color-black">￥{$order['serve_fee']}</div>
+								</div>
+							{/if}
+						</div>
+						{if !empty($discounts)}
+							<div class="inner-con border-1px-b">
+								{loop $discounts $discount}
+									<div class="row no-gutter">
+										<div class="col-80 icon-before">
+											<span class="tags tags-{$discount['type']}">{$discount['name']}</span>
+										</div>
+										<div class="col-20 text-right color-black">{$discount['note']}</div>
+									</div>
+								{/loop}
+							</div>
+						{/if}
+						<div class="inner-con">
+							<div class="row no-gutter">
+								<div class="col-50 color-muted">订单 <span class="color-black">￥{$order['total_fee']}</span> - 优惠<span class="color-black">￥{$order['discount_fee']}</span></div>
+								<div class="col-25 text-right color-muted">总计</div>
+								<div class="col-25 text-right color-danger count">￥<span class="final-fee">{$order['final_fee']}</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="comments">
+				<div class="comment-detail">
+					<div class="comment-title">
+						<h3>我的评价</h3>
+					</div>
+					<div class="comment-stars">
+						<span class="star-rank-outline">
+							<span class="star-rank-active" style="width: {$comment['score']}%"></span>
+						</span>
+					</div>
+					<div class="my-comment">{$comment['note']}</div>
+					{if !empty($comment['data']['good'])}
+						<div class="favourable-goods">
+							<i class="icon favor"></i>
+							{loop $comment['data']['good'] $good}
+								<span class="goods-label">{$good}</span>
+							{/loop}
+						</div>
+					{/if}
+				</div>
+			</div>
+			{if !empty($hot_goods)}
+				<div class="goods">
+					<div class="best-seller">
+						<h3 class="best-seller-title">热销商品</h3>
+						<ul class="best-seller-list row">
+							{loop $hot_goods $hot}
+								<li class="col-33">
+									<a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id'], 'goods_id' => $hot['id']))}">
+										<div class="best-seller-img">
+											<img src="{php echo tomedia($hot['thumb'])}" alt="">
+										</div>
+										<span class="seller-item-name">{$hot['title']}</span>
+										<span class="seller-item-sale">已售{$hot['sailed']}</span>
+										<div class="seller-item-price">¥<span class="price">{$hot['price']}</span></div>
+									</a>
+								</li>
+							{/loop}
+						</ul>
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</div>
+<script>
+	$(function() {
+		$(document).on('click', '.activity-container', function(){
+			if($(this).hasClass('active')) {
+				$(this).find('.activity-row').addClass('hide');
+				$(this).find('.activity-num i').addClass('fa-arrow-down').removeClass('fa-arrow-up');
+			} else {
+				$(this).find('.activity-row').removeClass('hide');
+				$(this).find('.activity-num i').addClass('fa-arrow-up').removeClass('fa-arrow-down');
+			}
+			$(this).toggleClass('active');
+		});
+	});
+</script>
+{/if}
+{itemplate 'public/footer'}

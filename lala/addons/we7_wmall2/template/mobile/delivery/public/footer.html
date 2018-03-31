@@ -1,0 +1,222 @@
+<script>
+	$(function(){
+		wx.ready(function () {
+			sharedata = {
+				title: "{$_share['title']}",
+				desc: "{$_share['desc']}",
+				link: "{$_share['link']}",
+				imgUrl: "{$_share['imgUrl']}",
+				success: function(){},
+				cancel: function(){}
+			};
+			wx.onMenuShareAppMessage(sharedata);
+			wx.onMenuShareTimeline(sharedata);
+		});
+
+		if($("#scanqrcode").size() > 0) {
+			$(document).on('click', '#scanqrcode', function(){
+				wx.ready(function(){
+					wx.scanQRCode({
+						needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+						scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+						success: function (res) {
+							var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+						}
+					});
+				});
+			});
+		}
+
+		$(document).off('click', '.photoBrowser-image-item');
+		$(document).on('click', '.photoBrowser-image-item', function(){
+			var $parents = $(this).parent();
+			var thumbs = [];
+			$($parents).find('img').each(function(){
+				var thumb = $(this).attr('src');
+				if(thumb) {
+					thumbs.push(thumb);
+				}
+			});
+			var myPhotoBrowserPopup = $.photoBrowser({
+				photos: thumbs
+			});
+			myPhotoBrowserPopup.open();
+		});
+
+		if($("img.lazyload").size() > 0) {
+			require(['jquery.lazyload'], function(){
+				$("img.lazyload").lazyload({
+					container: $('.lazyload-container'),
+					effect : 'fadeIn',
+					threshold : 350
+				});
+			});
+		}
+
+		$(document).on("click", '.js-open-modal', function(e) {
+			e.preventDefault();
+			var modal = $(this).data('modal');
+			if(!modal || !$(modal).size()) {
+				return false;
+			}
+			$.iopenModal(modal, function(){});
+		});
+
+		if($(".js-checkbox").length > 0) {
+			$(document).on('click', '.js-checkbox', function(){
+				var obj = $(this), confirm = obj.data("confirm"), url = obj.data("href"), value = obj.prop('checked') ? (obj.attr('value') || 1) : 0, name = obj.attr('name');
+				handler = function() {
+					if(obj.attr("submitting") == "1") {
+						return;
+					}
+					obj.attr("submitting", 1);
+					$.showIndicator();
+					var params = {};
+					params[name] = value;
+					$.post(url, params, function(ret) {
+						$.hideIndicator();
+						var result = $.parseJSON(ret);
+						var errno = result.message.errno,
+							url = result.message.url ? result.message.url : '',
+							message = result.message.message;
+						if(!errno) {
+							$.toast(message, url);
+						} else {
+							$.toast(message, url);
+							obj.removeAttr("submitting").html(html);
+						}
+					}).fail(function() {
+						obj.removeAttr("submitting");
+						$.toast('网络异常');
+					});
+				};
+				if(confirm) {
+					$.confirm(confirm, handler);
+				} else {
+					handler();
+				}
+			});
+		}
+
+		$(document).on("click", '.js-post', function(e) {
+			e.preventDefault();
+			var obj = $(this), confirm = obj.data("confirm"), url = obj.data("href") || obj.attr("href"), data = obj.data("set") || {}, html = obj.html();
+			handler = function() {
+				e.preventDefault();
+				if(obj.attr("submitting") == "1") {
+					return;
+				}
+				obj.attr("submitting", 1);
+				$.showIndicator();
+				$.post(url, {data: data}, function(ret) {
+					$.hideIndicator();
+					var result = $.parseJSON(ret);
+					var errno = result.message.errno,
+							url = result.message.url ? result.message.url : '',
+							message = result.message.message;
+					if(!errno) {
+						$.toast(message, url);
+					} else {
+						$.toast(message, url);
+						obj.removeAttr("submitting").html(html);
+					}
+				}).fail(function() {
+					obj.removeAttr("submitting");
+					$.toast('网络异常');
+				});
+			};
+			if(confirm) {
+				$.confirm(confirm, handler);
+			} else {
+				handler();
+			}
+		});
+
+		$(document).on("click", '.js-modal', function(e) {
+			e.preventDefault();
+			var obj = $(this), confirm = obj.data("confirm");
+			var handler = function() {
+				$("#js-modal").remove(), e.preventDefault();
+				var url = obj.data("href") || obj.attr("href"), data = obj.data("set"), modal;
+				$.ajax(url, {
+					type: "get",
+					dataType: "html",
+					cache: false,
+					data: data
+				}).done(function(result) {
+					$.hideIndicator();
+					if (result.substr(0, 10) == '{"message"') {
+						var json = eval("(" + result + ")");
+						var errno = json.message.errno, message = json.message.message;
+						if(errno) {
+							$.toast(message);
+							return;
+						}
+					}
+					modal = $('<div class="popup page-js-modal" id="js-modal"></div>');
+					$(document.body).append(modal);
+					modal.iappend(result, function() {
+						$.popup('#js-modal');
+					});
+				});
+			};
+			if (confirm) {
+				$.confirm(confirm, handler);
+			} else {
+				handler();
+			}
+		});
+
+		if($('.btn-captcha').length > 0) {
+			$(document).on('click', '.btn-captcha', function() {
+				var href = $(this).data('href');
+				href = href + Math.random();
+				$(this).attr('src', href);
+			});
+		}
+
+		$(document).on("infinite", '.js-infinite', function() {
+			var $this = $(this);
+			var id = $this.data('min'), href = $this.data('href'), tpl = $this.data('tpl'), container = $this.data('container');
+			if(!id || !href || !tpl || $this.data('loading') == 1) return false;
+			$this.data('loading', 1);
+			$this.find('.infinite-scroll-preloader').removeClass('hide');
+			$.post(href, {min: id, time: timeStamp}, function(data){
+				var result = $.parseJSON(data);
+				if(result.message.errno != 0) {
+					$.toast(result.message.message);
+					return;
+				}
+				$this.attr('data-min', result.message.min) || $this.data('min', result.message.min);
+				if(!result.message.min) {
+					$.detachInfiniteScroll($('.infinite-scroll'));
+					$('.infinite-scroll-preloader').remove();
+					return;
+				}
+				$this.find('.infinite-scroll-preloader').removeClass('hide');
+				$this.data('loading', 0);
+				var tpl = $('#' + $this.data('tpl')).html();
+				require(['laytpl'], function(laytpl){
+					laytpl(tpl).render(result.message.message, function(html){
+						$this.find(container).append(html);
+					});
+				});
+			});
+		});
+
+		$(document).on('click', '.swiper-slide.js-url', function(){
+			var url = $(this).data('link');
+			if(url) {
+				location.href = url;
+			}
+		});
+
+		setInterval(function(){
+			$.post("{php echo imurl('system/common/cron')}", function(){});
+		}, 30000);
+
+		$.init();
+	});
+</script>
+</body>
+</html>

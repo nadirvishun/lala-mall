@@ -1,0 +1,262 @@
+{itemplate 'public/header'}
+<style>
+	#page-app-index{background-color: #fff;}
+	#page-app-index .header-container{position: relative; z-index: 100000; padding: 0.2rem 5%; margin: 0 auto; color: #fff; background-color: rgba(0,0,0,0.3);}
+	#page-app-index .header-container .address{font-size: 0.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.8rem;}
+	#page-app-index .header-container .address .icon{font-size: 0.8rem; vertical-align: middle; margin-right: 0.2rem;}
+	#page-app-index .header-container .action{text-align: right; font-size: 0.7rem;}
+	#page-app-index .action .action-item{position: relative; display: inline-block; text-align: center; vertical-align: middle; margin: 0 0.3rem; color: #fff;}
+	#page-app-index .header-container .action .action-title{font-size: 0.5rem; width: 100%;}
+	#page-app-index .head-banner{height: 8rem;}
+	#page-app-index .head-banner img{width: 100%; height: 8rem;}
+	#page-app-index .headline{height: 2rem; padding: 0.5rem; font-size: 0.7rem; margin-left: 0; width: 100%;}
+	#page-app-index .headline .headline-image{height: 1rem}
+	#page-app-index .headline .headline-image img{width: 100%; padding-right: 0.5rem; height: 0.6rem; margin: 0.2rem 0;}
+	#page-app-index .headline .headline-list{padding-left: 0.5rem;}
+	#page-app-index .headline .headline-list .js-notice{height: 1rem; overflow: hidden}
+	#page-app-index .headline .headline-item{line-height: 1rem; height: 1rem;}
+	#page-app-index .headline .headline-item a{color: #333;}
+	#page-app-index .category-list{font-size: 0.6rem; padding: 0.5rem 0;}
+	#page-app-index .category-list .col-25{padding: 5px 0; text-align: center;}
+	#page-app-index .category-list .col-25 a{display: block; color: #333}
+	#page-app-index .category-list .col-25 a img{margin: 0 auto; display: inline-block; width: 60%;}
+	#page-app-index .swiper-pagination-bullet-active{background-color: #ffcc00;}
+	#page-app-index .cubes{padding: 0 0.5rem;}
+	#page-app-index .cubes img{border-radius: 0.2rem;}
+	#page-app-index .new-goods-cube img{height: 6rem; width: 100%;}
+	#page-app-index .cubes a{display: block; position: relative;}
+	#page-app-index .cubes .cube-container .cube-text{position: absolute; width: 100%; padding-left: 0.2rem; padding-top: 0.1rem;}
+	#page-app-index .cubes .cube-container .cube-text .cube-text-title{font-size: 0.65rem; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+	#page-app-index .cubes .cube-container .cube-text .cube-text-subtitle{font-size: 0.55rem; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+	#page-app-index .recommend{padding: 0 0.5rem; color: #000; font-size: 0.75rem;}
+	#page-app-index .recommend .recommend-title{margin-bottom: 0.1rem;}
+	#page-app-index .recommend .recommend-list{position: relative; min-height: 15rem;}
+	#page-app-index .recommend .recommend-list .recommend-item{color: #333; display: block; border-radius: 0.2rem; margin-bottom: 0.5rem; padding: 0.5rem; background-repeat: no-repeat; background-position: 100% 0; background-size: 50% 100%;}
+	#page-app-index .recommend .recommend-list .recommend-item .store-description{font-size: 0.6rem; color: #999;}
+	#page-app-index .recommend .recommend-list .recommend-item .is-in-business{margin-top: 0.5rem;}
+	#page-app-index .recommend .recommend-list .recommend-item .is-in-business,#page-app-index .recommend .recommend-list .recommend-item .distance{font-size: 0.5rem; line-height: 1rem;}
+	#page-app-index .recommend .recommend-list .recommend-item .icon{font-size: 0.8rem; margin-right: 0.2rem;}
+</style>
+<div class="page" id="page-app-index">
+	<span id="js-lat" class="hide">{$_GPC['lat']}</span>
+	<span id="js-lng" class="hide">{$_GPC['lng']}</span>
+	<div class="header-container row no-gutter">
+		<div class="address col-60"><span class="icon icon-location"></span><span id="position">获取位置中...</span></div>
+		<div class="action col-40">
+			<a class="action-item" href="{php echo imurl('wmall/home/hunt');}">
+				<span class="icon icon-search"></span>
+				<div class="action-title">搜索</div>
+			</a>
+			<a class="action-item">
+				<span class="icon icon-global"></span>
+				<div class="action-title">客服</div>
+			</a>
+		</div>
+	</div>
+	<div class="content">
+		{if !empty($slides)}
+			<div class="swiper-container head-banner" data-space-between='0' data-pagination='.swiper-slide-pagination' data-autoplay="3000">
+				<div class="swiper-wrapper">
+					{loop $slides $slide}
+						<div class="swiper-slide" data-link="{$slide['link']}">
+							<img src="{php echo tomedia($slide['thumb']);}"alt="">
+						</div>
+					{/loop}
+				</div>
+			</div>
+		{/if}
+		{if !empty($notices)}
+			<div class="headline row no-gutter border-1px-b">
+				<div class="headline-image col-20 border-1px-r"><img src="{WE7_WMALL_TPL_URL}static/img/head_line.png" alt=""/></div>
+				<div class="headline-list col-80">
+					<div class="js-notice" data-speed="4">
+						<ul>
+							{loop $notices $notice}
+								<li class="headline-item">
+									{if !empty($notice['link'])}
+										<a href="{$notice['link']}">{$notice['title']}</a>
+									{else}
+										<a href="{php echo imurl('wmall/home/notice', array('id' => $notice['id']))}">{$notice['title']}</a>
+									{/if}
+								</li>
+							{/loop}
+						</ul>
+					</div>
+				</div>
+			</div>
+		{/if}
+		{if !empty($categorys_chunk)}
+			<div class="swiper-container category-list" data-space-between='0' data-pagination='.swiper-category-pagination' data-autoplay="0">
+				<div class="swiper-wrapper">
+					{loop $categorys_chunk $row}
+						<div class="swiper-slide">
+							<div class="row no-gutter nav">
+								{loop $row $category}
+									<div class="col-25">
+										<a href="{$category['link']}">
+											<img src="{php echo tomedia($category['thumb']);}" alt="{$category['title']}" />
+											<div class="text-center">{$category['title']}</div>
+										</a>
+									</div>
+								{/loop}
+							</div>
+						</div>
+					{/loop}
+				</div>
+				{if count($categorys_chunk) > 1}
+					<div class="swiper-pagination swiper-category-pagination"></div>
+				{/if}
+			</div>
+		{/if}
+		{if !empty($cubes)}
+			<div class="cubes">
+				<div class="new-goods-cube">
+					<a href="{$cubes[0]['link']}"><img src="{php echo tomedia($cubes[0]['thumb'])}" alt=""/></a>
+				</div>
+				<div class="row cube-container">
+					<div class="col-33">
+						<a href="{$cubes[1]['link']}">
+							<div class="cube-text">
+								<div class="cube-text-title">{$cubes[1]['title']}</div>
+								<div class="cube-text-subtitle">{$cubes[1]['tips']}</div>
+							</div>
+							<img src="{php echo tomedia($cubes[1]['thumb'])}" alt=""/>
+						</a>
+					</div>
+					<div class="col-33">
+						<a href="{$cubes[2]['link']}">
+							<div class="cube-text">
+								<div class="cube-text-title">{$cubes[2]['title']}</div>
+								<div class="cube-text-subtitle">{$cubes[2]['tips']}</div>
+							</div>
+							<img src="{php echo tomedia($cubes[2]['thumb'])}" alt=""/>
+						</a>
+					</div>
+					<div class="col-33">
+						<a href="{$cubes[3]['link']}">
+							<div class="cube-text">
+								<div class="cube-text-title">{$cubes[3]['title']}</div>
+								<div class="cube-text-subtitle">{$cubes[3]['tips']}</div>
+							</div>
+							<img src="{php echo tomedia($cubes[3]['thumb'])}" alt=""/>
+						</a>
+					</div>
+				</div>
+			</div>
+		{/if}
+		<div class="recommend">
+			<div class="recommend-title">门店推荐</div>
+			<div class="recommend-list">
+				<div class="common-no-con">
+					<img src= "{WE7_WMALL_TPL_URL}static/img/store_no_con.png" alt="" />
+					<p>努力加载中...</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="//webapi.amap.com/maps?v=1.3&key=550a3bf0cb6d96c3b43d330fb7d86950"></script>
+<script type="text/html" id="tpl-recommend-list">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<a href="<{d[i].url}>" class="recommend-item border-1px" style="background-image: url(<{d[i].logo}>)">
+			<div class="store-title"><{d[i].title}></div>
+			<div class="store-description"><{d[i].content}></div>
+			<div class="is-in-business"><span class="icon icon-rest"></span><{# if(d[i].is_rest == 1){ }>门店休息中<{# }else{ }>门店营业中<{# } }></div>
+			<div class="distance"><span class="icon icon-lbs"></span>距离门店<{d[i].distance}>km</div>
+		</a>
+	<{# } }>
+</script>
+<script>
+	$(function(){
+		$(document).on('click', '.head-banner .swiper-slide', function(){
+			var url = $(this).data('link');
+			location.href = url;
+			return;
+		});
+
+		function getLocation() {
+			var map, geolocation;
+			map = new AMap.Map('allmap');
+			map.plugin('AMap.Geolocation', function() {
+				geolocation = new AMap.Geolocation({
+					enableHighAccuracy: true //是否使用高精度定位，默认:true
+				});
+				geolocation.getCurrentPosition();
+				AMap.event.addListener(geolocation, 'complete', getPositionInfo);//返回定位信息
+				AMap.event.addListener(geolocation, 'error', function(){
+					require(['tiny'], function(tiny){
+						if(!tiny.cookie.get('__getPosition')) {
+							location.reload();
+							tiny.cookie.set('__getPosition', 1, 300);
+						} else {
+							getPositionInfo();
+						}
+					});
+				});
+			});
+		}
+
+		function getPositionInfo(data) {
+			if(typeof data != 'undefined') {
+				require(['tiny'], function(tiny){
+					tiny.cookie.set('__getPosition', 0, -1000);
+				});
+				var point = data.position;
+				$('#js-lat').html(point.lat);
+				$('#js-lng').html(point.lng);
+				var lnglatXY = [point.lng, point.lat]; //已知点坐标
+				var map = new AMap.Map('allmap');
+				map.plugin('AMap.Geocoder', function() {
+					var geocoder = new AMap.Geocoder();
+					geocoder.getAddress(lnglatXY, function(status, result) {
+						if (status === 'complete' && result.info === 'OK') {
+							var obj = result.regeocode.addressComponent;
+							var position = result.regeocode.formattedAddress;
+							position = position.replace(obj.province, '');
+							position = position.replace(obj.district, '');
+							position = position.replace(obj.city, '');
+							$('#position').html(position);
+						}
+					});
+				});
+			}
+			getStoreList();
+			return ;
+		}
+
+		function getStoreList() {
+			var params = {
+				lat: $('#js-lat').html(),
+				lng: $('#js-lng').html(),
+				position: $('#position').html()
+			}
+			$.post("{php echo imurl('wmall/home/home/list')}", params, function(data){
+				var result = $.parseJSON(data);
+				if(result.message.error != 0) {
+					$.toast(result.message.message);
+					return false;
+				}
+				if(result.message.message.length == 0) {
+					$('.recommend-list .common-no-con').find('p').html('附近没有符合条件的商户');
+					$('.recommend-list .common-no-con').removeClass('hide');
+				} else {
+					var gettpl = $('#tpl-recommend-list').html();
+					require(['laytpl'], function(laytpl){
+						laytpl(gettpl).render(result.message.message, function(html){
+							$('.recommend-list .common-no-con').addClass('hide');
+							$('.recommend-list').append(html);
+							return;
+						});
+					});
+				}
+			});
+		}
+		{if !$_GPC['d']}
+			getLocation();
+		{else}
+			getStoreList();
+		{/if}
+	});
+</script>
+{itemplate 'public/footer'}
+

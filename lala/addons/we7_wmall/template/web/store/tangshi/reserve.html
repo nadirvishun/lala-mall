@@ -1,0 +1,144 @@
+{itemplate 'public/header'}
+<div class="clearfix">
+{if $ta== 'list'}
+<form action="" class="form-table form form-validate" method="post">
+	<div class="panel panel-table">
+		<div class="panel-heading">
+			<a href="{php echo iurl('store/tangshi/reserve/post');}" class="btn btn-primary btn-sm">新建预订开放时间段</a>
+			<a href="{php echo iurl('store/tangshi/reserve/batch_post');}" class="btn btn-primary btn-sm">批量创建</a>
+		</div>
+		<div class="panel-body table-responsive js-table">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th width="40">
+						<div class="checkbox checkbox-inline">
+							<input type="checkbox" name="ids[]" />
+							<label></label>
+						</div>
+					</th>
+					<th>桌台区域或类型</th>
+					<th>最低消费</th>
+					<th>预定预付款</th>
+					<th>开放时间点</th>
+					<th style="text-align:right">操作</th>
+				</tr>
+				</thead>
+				{loop $reserves $reserve}
+				<tr>
+					<td>
+						<div class="checkbox checkbox-inline">
+							<input type="checkbox" name="ids[]" value="{$reserve['id']}"/>
+							<label></label>
+						</div>
+					</td>
+					<td>{$categorys[$reserve['table_cid']]['title']}</td>
+					<td>{$categorys[$reserve['table_cid']]['limit_price']}</td>
+					<td>{$categorys[$reserve['table_cid']]['reservation_price']}</td>
+					<td>{$reserve['time']}</td>
+					<td align="right">
+						<a href="{php echo iurl('store/tangshi/reserve/post', array('id' => $reserve['id']));}" class="btn btn-default">编辑</a>
+						<a href="{php echo iurl('store/tangshi/reserve/del', array('id' => $reserve['id']));}" data-confirm="确定删除吗?" class="btn btn-default js-remove">删除</a>
+					</td>
+				</tr>
+				{/loop}
+			</table>
+			{if !empty($reserves)}
+			<div class="btn-region clearfix">
+				<div class="pull-left">
+					<a href="{php echo iurl('store/tangshi/reserve/del')}" class="btn btn-danger btn-sm js-batch" data-batch="remove" data-confirm="确定删除吗?">批量删除</a>
+				</div>
+				<div class="pull-right">
+					{$pager}
+				</div>
+			</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{/if}
+
+{if $ta== 'post'}
+<div class="page clearfix">
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require">* </span>开放时间点</label>
+			<div class="col-sm-6 col-xs-6">
+				<div class="input-group clockpicker">
+					<input type="text" class="form-control" value="09:00" name="time" value="{$item['time']}" required="true">
+					<span class="input-group-addon"><span class="fa fa-clock-o"></span></span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require">* </span>桌台区域或类型</label>
+			<div class="col-sm-6 col-xs-6">
+				<select name="table_cid" id="table_cid" class="form-control" digits="true">
+					<option value="0">==桌台类型==</option>
+					{loop $categorys $category}
+					<option value="{$category['id']}" {if $item['table_cid'] == $category['id']}selected{/if}>{$category['title']}</option>
+					{/loop}
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require"> </span></label>
+			<div class="col-sm-6 col-xs-6">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{/if}
+
+{if $ta== 'batch_post'}
+<div class="page clearfix">
+	<form class="form-horizontal form form-validate" id="form-batch-post" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require">* </span>桌台区域或类型</label>
+			<div class="col-sm-6 col-xs-6">
+				<select name="table_cid" id="table_cid" class="form-control" required="true">
+					<option value="0">==桌台类型==</option>
+					{loop $categorys $category}
+					<option value="{$category['id']}" {if $item['table_cid'] == $category['id']}selected{/if}>{$category['title']}</option>
+					{/loop}
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require">* </span>开始时间点</label>
+			<div class="col-sm-6 col-xs-6">
+				<div class="input-group clockpicker">
+					<input type="text" class="form-control" value="09:00" name="time" value="{$item['time']}" required="true">
+					<span class="input-group-addon"><span class="fa fa-clock-o"></span></span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require">* </span>创建间隔(单位： 分钟)</label>
+			<div class="col-sm-6 col-xs-6">
+				<input type="number" class="form-control" value="30" name="time_space" value="{$item['time_space']}" required="true">
+				<span class="help-block">例如每30分钟设立一个预订时间点： 30</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require">* </span>创建数量</label>
+			<div class="col-sm-6 col-xs-6">
+				<input type="number" max="15" min="1" class="form-control" value="15" name="num" value="">
+				<span class="help-block">一次最多创建15个预订时间点</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require"> </span></label>
+			<div class="col-sm-6 col-xs-6">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{/if}
+</div>
+
+{itemplate 'public/footer'}

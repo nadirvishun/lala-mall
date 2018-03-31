@@ -1,0 +1,173 @@
+{itemplate 'public/header'}
+{if $op == 'index'}
+<form action="" class="form-table">
+	<div class="panel panel-table">
+		<div class="panel-heading">
+			<a href="{php echo iurl('deliveryer/group/post');}" class="btn btn-primary btn-sm">添加配送员等级</a>
+		</div>
+		<div class="panel-body table-responsive js-table">
+			{if empty($groups)}
+			<div class="no-result">
+				<p>还没有相关数据</p>
+			</div>
+			{else}
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>ID</th>
+					<th>等级名称</th>
+					<th>外卖配送费</th>
+					<th>跑腿配送费</th>
+					<th class="text-right">操作</th>
+				</tr>
+				</thead>
+				{loop $groups $item}
+					<tr>
+						<td>{$item['id']}</td>
+						<td>{$item['title']}</td>
+						<td>
+							{if $item['delivery_fee']['takeout']['deliveryer_fee_type'] ==1 }
+								 每单固定：{$item['delivery_fee']['takeout']['deliveryer_fee']}元
+							{elseif $item['delivery_fee']['takeout']['deliveryer_fee_type'] ==2 }
+								按配送费提成：{$item['delivery_fee']['takeout']['deliveryer_fee']}%
+							{elseif $item['delivery_fee']['takeout']['deliveryer_fee_type'] ==3 }
+								按距离收取
+								基础配送费：{$item['delivery_fee']['takeout']['deliveryer_fee']['start_fee']}元，
+								包含：{$item['delivery_fee']['takeout']['deliveryer_fee']['start_km']}公里，
+								超出{$item['delivery_fee']['takeout']['deliveryer_fee']['start_km']}公里
+								费用：{$item['delivery_fee']['takeout']['deliveryer_fee']['pre_km']}元/每公里，
+								最高：{$item['delivery_fee']['takeout']['deliveryer_fee']['max_fee']}元
+							{/if}
+						</td>
+						<td>
+							{if $item['delivery_fee']['errander']['deliveryer_fee_type'] ==1 }
+								每单固定：{$item['delivery_fee']['errander']['deliveryer_fee']}元
+							{elseif $item['delivery_fee']['errander']['deliveryer_fee_type'] ==2 }
+								按配送费提成：{$item['delivery_fee']['errander']['deliveryer_fee']}%
+							{elseif $item['delivery_fee']['errander']['deliveryer_fee_type'] ==3 }
+								按距离收取
+								基础配送费：{$item['delivery_fee']['errander']['deliveryer_fee']['start_fee']}元，
+								包含：{$item['delivery_fee']['errander']['deliveryer_fee']['start_km']}公里，
+								超出{$item['delivery_fee']['errander']['deliveryer_fee']['start_km']}公里
+								费用：{$item['delivery_fee']['errander']['deliveryer_fee']['pre_km']}元/每公里，
+								最高：{$item['delivery_fee']['errander']['deliveryer_fee']['max_fee']}元
+							{/if}
+						</td>
+						<td class="text-right">
+							<a href="{php echo iurl('deliveryer/group/post', array('id' => $item['id']))}" class="btn btn-default btn-sm" title="编辑" data-toggle="tooltip" data-placement="top" >编辑</a>
+							<a href="{php echo iurl('deliveryer/group/del', array('id' => $item['id']))}" class="btn btn-default btn-sm js-remove" data-confirm="确定删除该等级?">删除</a>
+						</td>
+					</tr>
+				{/loop}
+			</table>
+			{/if}
+		</div>
+	</div>
+</form>
+{/if}
+{if $op == 'post'}
+<div class="page clearfix">
+	<h2>编辑配送员等级</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">等级名称</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" class="form-control" name="title" value="{$group['title']}">
+			</div>
+		</div>
+		<div class="form-group hide">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">升级条件</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon"></span>
+					<input type="text" class="form-control" name="group_condition" value="{$group['group_condition']}">
+					<span class="input-group-addon"></span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">平台给配送员每单支付金额(外卖单)</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<label class="input-group-addon">
+						<input type="radio" name="deliveryer_takeout_fee_type" value="1" {if $group['delivery_fee']['takeout']['deliveryer_fee_type'] == 1 || !$group['delivery_fee']['takeout']['deliveryer_fee_type']}checked{/if}>
+					</label>
+					<span class="input-group-addon">每单固定</span>
+					<input type="text" class="form-control" name="deliveryer_takeout_fee_1" {if $group['delivery_fee']['takeout']['deliveryer_fee_type'] == 1}value="{$group['delivery_fee']['takeout']['deliveryer_fee']}"{/if}>
+					<span class="input-group-addon">元</span>
+				</div>
+				<br>
+				<div class="input-group">
+					<label class="input-group-addon">
+						<input type="radio" name="deliveryer_takeout_fee_type" value="2" {if $group['delivery_fee']['takeout']['deliveryer_fee_type'] == 2}checked{/if}>
+					</label>
+					<span class="input-group-addon">每单按照订单配送费提成</span>
+					<input type="text" class="form-control" name="deliveryer_takeout_fee_2" {if $group['delivery_fee']['takeout']['deliveryer_fee_type'] == 2}value="{$group['delivery_fee']['takeout']['deliveryer_fee']}"{/if}>
+					<span class="input-group-addon">%</span>
+				</div>
+				<br>
+				<div class="input-group">
+					<label class="input-group-addon">
+						<input type="radio" name="deliveryer_takeout_fee_type" value="3" {if $group['delivery_fee']['takeout']['deliveryer_fee_type'] == 3}checked{/if}>
+					</label>
+					<span class="input-group-addon">每单基础配送费</span>
+					<input type="text" class="form-control" name="deliveryer_takeout_fee_3[start_fee]" {if $group['delivery_fee']['takeout']['deliveryer_fee_type'] == 3}value="{$group['delivery_fee']['takeout']['deliveryer_fee']['start_fee']}"{/if}>
+					<span class="input-group-addon">元,超过</span>
+					<input type="text" class="form-control" name="deliveryer_takeout_fee_3[start_km]" {if $group['delivery_fee']['takeout']['deliveryer_fee_type'] == 3}value="{$group['delivery_fee']['takeout']['deliveryer_fee']['start_km']}"{/if}>
+					<span class="input-group-addon">公里,超过部分每公里增加</span>
+					<input type="text" class="form-control" name="deliveryer_takeout_fee_3[pre_km]" {if $group['delivery_fee']['takeout']['deliveryer_fee_type'] == 3}value="{$group['delivery_fee']['takeout']['deliveryer_fee']['pre_km']}"{/if}>
+					<span class="input-group-addon">元,最高</span>
+					<input type="text" class="form-control" name="deliveryer_takeout_fee_3[max_fee]" {if $group['delivery_fee']['takeout']['deliveryer_fee_type'] == 3}value="{$group['delivery_fee']['takeout']['deliveryer_fee']['max_fee']}"{/if}>
+					<span class="input-group-addon">元</span>
+				</div>
+				<div class="help-block text-danger">第三种提成模式仅适用于开启按照距离收取配送费的计费模式。</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">平台给跑腿员每单支付金额(跑腿单)</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<label class="input-group-addon">
+						<input type="radio" name="deliveryer_errander_fee_type" value="1" {if $group['delivery_fee']['errander']['deliveryer_fee_type'] == 1 || !$group['delivery_fee']['errander']['deliveryer_fee_type']}checked{/if}>
+					</label>
+					<span class="input-group-addon">每单固定</span>
+					<input type="text" class="form-control" name="deliveryer_errander_fee_1" {if $group['delivery_fee']['errander']['deliveryer_fee_type'] == 1}value="{$group['delivery_fee']['errander']['deliveryer_fee']}"{/if}>
+					<span class="input-group-addon">元</span>
+				</div>
+				<br>
+				<div class="input-group">
+					<label class="input-group-addon">
+						<input type="radio" name="deliveryer_errander_fee_type" value="2" {if $group['delivery_fee']['errander']['deliveryer_fee_type'] == 2}checked{/if}>
+					</label>
+					<span class="input-group-addon">每单按照订单配送费提成</span>
+					<input type="text" class="form-control" name="deliveryer_errander_fee_2" {if $group['delivery_fee']['errander']['deliveryer_fee_type'] == 2}value="{$group['delivery_fee']['errander']['deliveryer_fee']}"{/if}>
+					<span class="input-group-addon">%</span>
+				</div>
+				<br>
+				<div class="input-group">
+					<label class="input-group-addon">
+						<input type="radio" name="deliveryer_errander_fee_type" value="3" {if $group['delivery_fee']['errander']['deliveryer_fee_type'] == 3}checked{/if}>
+					</label>
+					<span class="input-group-addon">每单基础配送费</span>
+					<input type="text" class="form-control" name="deliveryer_errander_fee_3[start_fee]" {if $group['delivery_fee']['errander']['deliveryer_fee_type'] == 3}value="{$group['delivery_fee']['errander']['deliveryer_fee']['start_fee']}"{/if}>
+					<span class="input-group-addon">元,超过</span>
+					<input type="text" class="form-control" name="deliveryer_errander_fee_3[start_km]" {if $group['delivery_fee']['errander']['deliveryer_fee_type'] == 3}value="{$group['delivery_fee']['errander']['deliveryer_fee']['start_km']}"{/if}>
+					<span class="input-group-addon">公里,超过部分每公里增加</span>
+					<input type="text" class="form-control" name="deliveryer_errander_fee_3[pre_km]" {if $group['delivery_fee']['errander']['deliveryer_fee_type'] == 3}value="{$group['delivery_fee']['errander']['deliveryer_fee']['pre_km']}"{/if}>
+					<span class="input-group-addon">元,最高</span>
+					<input type="text" class="form-control" name="deliveryer_errander_fee_3[max_fee]" {if $group['delivery_fee']['errander']['deliveryer_fee_type'] == 3}value="{$group['delivery_fee']['errander']['deliveryer_fee']['max_fee']}"{/if}>
+					<span class="input-group-addon">元</span>
+				</div>
+				<div class="help-block text-danger">第三种提成模式仅适用于开启按照距离收取配送费的计费模式。</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{/if}
+{itemplate 'public/footer'}

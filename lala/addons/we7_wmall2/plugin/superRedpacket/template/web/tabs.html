@@ -1,0 +1,16 @@
+<div class="second-sidebar-title">{$_W['_plugin']['title']}</div>
+<div class="nav slimscroll">
+	<div class="menu-header">超级红包</div>
+	<ul class="menu-item">
+		{ifp 'superRedpacket.grant'}
+			<li {if $_W['_action'] == 'grant'}class="active"{/if}>
+				<a href="{php echo iurl('superRedpacket/grant')}">发放红包</a>
+			</li>
+		{/if}
+		{ifp 'superRedpacket.share'}
+			<li {if $_W['_action'] == 'share'}class="active"{/if}>
+				<a href="{php echo iurl('superRedpacket/share')}">分享红包</a>
+			</li>
+		{/if}
+	</ul>
+</div>

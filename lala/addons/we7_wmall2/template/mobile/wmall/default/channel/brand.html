@@ -1,0 +1,90 @@
+{itemplate 'public/header'}
+<div class="page brand">
+	<header class="bar bar-nav bar-new border-1px-b">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">为您优选</h1>
+	</header>
+	<div class="content">
+		{if $ta == 'list'}
+			<div class="banner">
+				<a href=""><img src="http://xs01.meituan.net/waimai_i/img/activity/brand/banner.30c77576.jpg" alt=""></a>
+			</div>
+			<div class="brand-wall border-1px-tb row clearfix">
+				{loop $stores $store}
+					{php $j++;}
+					{if $j <= 7}
+						<div class="brand-item col-25 border-1px-r">
+							<a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id']));}" {if count($stores) > 4 && $j <= 4}class="border-1px-b"{/if}><img src="{php echo tomedia($store['logo'])}" alt=""></a>
+						</div>
+					{elseif $j == 8}
+						<div class="brand-item col-25">
+							<a href="{php echo imurl('wmall/channel/brand/more');}"><span class="more">查看更多<br>{php echo count($stores);}</span></a>
+						</div>
+					{/if}
+				{/loop}
+			</div>
+			<div class="brand-near">
+				<div class="brand-title">
+					附近品牌商家
+				</div>
+				{loop $stores $store}
+				<div class="store-list">
+					<div class="store-info border-1px-tb">
+						<div class="store-info-left pull-left">
+							<a href="{php echo imurl('wmall/store/goods', array('op'=> 'index', 'sid' => $store['id']));}"><img src="{php echo tomedia($store['logo']);}" alt=""></a>
+						</div>
+						<div class="store-info-right pull-left">
+							<div class="item-name">
+								<span>{$store['title']}</span>
+							</div>
+							<div class="item-min-delivery">
+								<span>起送价<span class="item-min-price">￥{$store['send_price']}</span></span>
+								<span class="devide-span">|</span>
+								<span>配送费<span class="item-min-price">￥{$store['delivery_price']}</span></span>
+								<button class="item-btn"><a href="{php echo imurl('wmall/store/goods', array('op'=> 'index', 'sid' => $store['id']));}">进店</a></button>
+							</div>
+							{if !empty($store['activity']['items']['discount'])}
+								<div class="item-discount discount">
+									{$store['activity']['items']['discount']['title']}
+								</div>
+							{/if}
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					{if !empty($store['goods'])}
+						<div class="goods">
+							<div class="goods-list border-1px-b">
+								{loop $store['goods'] $good}
+									{php $i++;}
+									<div class="goods-item {if $i > 1}border-1px-l{/if} pull-left">
+										<div class="goods-pic">
+											<a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id'], 'goods_id' => $good['id']));}"><img src="{php echo tomedia($good['thumb']);}" alt=""></a>
+										</div>
+										<div class="goods-name">{$good['title']}</div>
+										<div class="goods-price"><span>¥{$good['price']}</span></div>
+									</div>
+								{/loop}
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					{/if}
+				</div>
+				{/loop}
+			</div>
+		{else if $ta == 'more'}
+			<div class="brand-warp border-1px-b row">
+				{loop $stores $store}
+					{php $m++;}
+					<div class="more-item col-33 {if $m % 3 != 0}border-1px-r{/if}">
+						<div class="border-1px-b ">
+							<a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id']));}"><img src="{php echo tomedia($store['logo'])}" alt=""></a>
+						</div>
+					</div>
+				{/loop}
+				<div class="clearfix"></div>
+				<p class="no-more">没有更多了~</p>
+			</div>
+		{/if}
+	</div>
+</div>
+{itemplate 'public/footer'}

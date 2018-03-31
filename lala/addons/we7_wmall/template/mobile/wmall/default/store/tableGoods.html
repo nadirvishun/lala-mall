@@ -1,0 +1,153 @@
+{itemplate 'public/header'}
+<script type='text/javascript' src='{WE7_WMALL_URL}static/js/components/light7/iscroll-probe.js' charset='utf-8'></script>
+<div class="page store shopcategory" id="page-app-goods">
+	<nav class="bar bar-tab no-gutter shop-cart-bar">
+		<div class="" id="cartEmpty">
+			<div class="left empty">
+				<span class="cart">
+					<span class="icon icon-cart"></span>
+				</span>
+				购物车是空的
+			</div>
+			<div class="right text-center bg-grey">未点菜</div>
+		</div>
+		<div class="hide" id="cartNotEmpty">
+			<div class="left">
+			<span class="cart">
+				<span class="icon icon-cart"></span>
+				<span class="badge bg-danger" id="cartNum">0</span>
+			</span>
+				共<span class="sum">￥<span id="totalPrice">0</span>元</span>
+			</div>
+			<div class="right text-center bg-grey">还差￥<span id="sendCondition">0</span>元起送</div>
+			<div class="right text-center bg-danger hide" id="btnSubmit">选好了</div>
+		</div>
+	</nav>
+	<header class="bar bar-nav common-bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title open-popup" data-popup=".popup-privilege">{$store['title']}</h1>
+		<a class="pull-right" href="javascript:;" id="btn-favorite" data-id="{$store['id']}" data-uid="{$_W['member']['uid']}">
+			<i class="fa {if !empty($is_favorite)}icon icon-favorfill{else}icon icon-favor{/if}"></i>
+		</a>
+	</header>
+	<div class="store-notice open-popup" data-popup=".popup-privilege">
+		<span class="js-scroll-notice text-center">
+			当前桌台: {$table['category']['title']}~{$table['title']}号桌
+		</span>
+	</div>
+	<div class="buttons-tab">
+		<a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id']));}" class="button active">商品</a>
+		<a href="{php echo imurl('wmall/store/comment', array('sid' => $store['id']));}" class="button">评价</a>
+		<a href="{php echo imurl('wmall/store/index', array('sid' => $store['id']));}" class="button">商家</a>
+	</div>
+	<div class="parent-category-wrapper">
+		<div class="parent-category">
+			<div id="cateMenu">
+				<ul class="category-list">
+					{loop $categorys $category}
+						{if !empty($cate_goods[$category['id']])}
+							<li>
+								<a href="javascript:;">
+									{$category['title']}
+								</a>
+							</li>
+						{/if}
+					{/loop}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="content lazyload-container">
+		<div class="category-container row no-gutter" style="padding-left: 20%">
+			{if !empty($tokens)}
+			<div class="coupon-show-container">
+				<div class="coupon-show">
+					<div class="coupon-sum">
+						<span>￥</span>{$token_price}
+					</div>
+					<div class="division">
+						<img src="{WE7_WMALL_TPL_URL}static/img/division.png" alt="" />
+					</div>
+					<div class="coupon-info">
+						<div class="coupon-title">商家代金券</div>
+						{if $token_nums > 1}
+						<div class="condition">内含{$token_nums}张券</div>
+						{else}
+						<div class="condition">满{$token['condition']}元可用</div>
+						{/if}
+					</div>
+					<div class="get">
+						<span class="btn-get" id="get-coupon">领券</span>
+					</div>
+				</div>
+			</div>
+			{/if}
+		</div>
+		<div class="category-container row no-gutter" id="category-container">
+			<div class="children-category col-100">
+				<form action="{php echo imurl('wmall/store/table/post', array('sid' => $sid, 'table_id' => $table_id), true);}" method="post" id="goods-form">
+					<input type="hidden" name="goods" value=""/>
+					{loop $categorys $cate_row}
+						{if !empty($cate_goods[$cate_row['id']])}
+							<div class="children-category-wrapper">
+								<div class="heading">{$cate_row['title']}</div>
+								<ul class="list-block media-list">
+									{loop $cate_goods[$cate_row['id']] $ds}
+										<li id="goods-{$ds['id']}" {if $_GPC['goods_id'] == $ds['id']}class="active"{/if}>
+										<a class="item-content" data-id="{$ds['id']}" href="javascript:;">
+											<div class="item-media">
+												{if !empty($ds['label'])}
+													<span class="sale-badge bg-danger">{$ds['label']}</span>
+												{/if}
+												<img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="goods-popup lazyload" data-id="{$ds['id']}" data-original="{php echo tomedia($ds['thumb']);}" alt=""/>
+											</div>
+											<div class="item-inner">
+												<div class="item-title-row">
+													<div class="item-title">{$ds['title']}</div>
+												</div>
+												<div class="item-text">
+													{if !empty($ds['content'])}
+														<div class="goods-info">{$ds['content']}</div>
+													{/if}
+													<div class="sell-info">已售{$ds['sailed']}{$ds['unitname']}&nbsp;&nbsp; 好评{$ds['comment_good']}</div>
+													<div class="price">
+														<span class="fee">￥{$ds['discount_price']}</span>
+													</div>
+												</div>
+											</div>
+										</a>
+										{if $store['is_in_business_hours']}
+											{if !$ds['is_options'] && !$ds['is_attrs']}
+												{if !$ds['discount_available_total'] && !$ds['total']}
+													<div class="goods-tips">已售完</div>
+												{else}
+													<div class="operate-num operate-goods">
+														<span class="hide minus">
+															<span class="icon icon-minus" data-goods-id="{$ds['id']}" data-option-id="0"></span>
+															<span class="num">0</span>
+														</span>
+														<span class="icon icon-plus" data-goods-id="{$ds['id']}" data-option-id="0"></span>
+													</div>
+												{/if}
+											{elseif $ds['is_options'] == 1 || $ds['is_attrs'] == 1}
+												<div class="operate-goods">
+													<span class="select-spec goods-option" data-id="{$ds['id']}">可选规格</span>
+													<span class="badge hide">0</span>
+												</div>
+											{/if}
+										{else}
+											<div class="goods-tips">店铺休息中</div>
+										{/if}
+										</li>
+									{/loop}
+								</ul>
+							</div>
+						{/if}
+					{/loop}
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{itemplate 'store/goodsTangshiCommon'}
+{itemplate 'public/footer'}

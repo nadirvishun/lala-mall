@@ -1,0 +1,61 @@
+{itemplate 'public/header'}
+{if $op == 'list'}
+<form action="" class="form-table form-validate" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>投诉类型</th>
+					<th style="text-align:right;">操作</th>
+				</tr>
+				</thead>
+				<tbody>
+				{if !empty($report)}
+					{loop $report $row}
+					<tr>
+						<td>
+							<input type="text" name="report[]" value="{$row}" class="form-control" style="width:500px"/>
+						</td>
+						<td class="text-right">
+							<a href="javascript:;" class="btn btn-danger btn-sm report-del"><i class="fa fa-times"></i> </a>
+						</td>
+					</tr>
+					{/loop}
+				{/if}
+				<tr>
+					<td colspan="2">
+						<a href="javascript:;" id="report-add"><i class="fa fa-plus-circle"></i> 添加投诉类型</a>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<div class="btn-region clearfix">
+				<div class="pull-left">
+					<input name="token" type="hidden" value="{$_W['token']}" />
+					<input type="submit" class="btn btn-primary btn-sm" name="submit" value="提交修改" />
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<script>
+$(function(){
+	$('#report-add').click(function(){
+		var html = '<tr>'+
+				'		<td>'+
+				'			<input type="text" name="report[]" class="form-control" style="width:500px"/>'+
+				'		</td>'+
+				'		<td class="text-right">'+
+				'			<a href="javascript:;" class="btn btn-danger btn-sm report-del"><i class="fa fa-times"></i> </a>'+
+				'		</td>'+
+				'	</tr>';
+		$(this).parents('tr').before(html);
+	});
+	$(document).on('click', '.report-del', function(){
+		$(this).parents('tr').remove();
+	});
+});
+</script>
+{/if}
+{itemplate 'public/footer'}

@@ -1,0 +1,450 @@
+{itemplate 'public/header'}
+<div class="dispatch">
+	<div class="alert alert-warning">
+		<span>绿色标注代表配送员在线中且有未完成的订单; 灰色标注代表配送员离线中(5分钟没有上传地址位置即视为离线); 红色标注代表配送员在线中且没有未完成的订单</span><br>
+	</div>
+	<div class="clearfix dispatch-container">
+		<input name="sid" value="{$sid}" type="hidden"/>
+		<input name="deliveryer_id" value="{deliveryer_id}" type="hidden"/>
+		<div class="col-md-3">
+			<form action="./index.php" class="form-horizontal form-filter">
+				{php echo tpl_form_filter_hidden('order/dispatch/map');}
+				<div class="form-group">
+					<select name="sid" id="select-sid" class="form-control">
+						<option value="">所属店铺</option>
+						{loop $stores $store}
+							<option value="{$store['id']}" {if $store['id'] == $sid}selected{/if}>{$store['title']}</option>
+						{/loop}
+					</select>
+				</div>
+			</form>
+			<div class="order-list"></div>
+			<div class="scroll-preloader">
+				<div class="preloader"></div>
+			</div>
+		</div>
+		<div class="col-md-9 map">
+			<div id="allmap"></div>
+			<div class="deliveryer-container-switch">
+				<span class="icon icon-menu"></span>
+			</div>
+			<div class="deliveryer-container">
+				<form action="./index.php" class="form-horizontal form-filter" id="form-deliveryer">
+					{php echo tpl_form_filter_hidden('order/dispatch/map');}
+					<div class="form-group">
+						<select name="deliveryer_id" id="select-deliveryer" class="form-control">
+							<option value="">选择配送员</option>
+							{loop $deliveryer_alls $alls}
+								<option value="{$alls['deliveryer_id']}" {if $alls['deliveryer_id'] == $deliveryer_id}selected{/if}>{$alls['deliveryer']['title']}</option>
+							{/loop}
+						</select>
+					</div>
+				</form>
+				<div class="deliveryer-list"></div>
+				<table class="table table-hover deliveryer-current-orders hide">
+					<thead>
+						<tr>
+							<th>商家名称</th>
+							<th>送餐地</th>
+							<th>订单状态</th>
+						</tr>
+					</thead>
+					<tbody class="deliveryer-current-order-list"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script id="tpl-order-list" type="text/html">
+	<{# for(var i in d){ }>
+	<{# if(!d[i]) {continue;} }>
+		<div class="order-item clearfix" data-id="<{d[i].id}>">
+			<div class="pickup-address"><span class="icon icon-qu"></span><{d[i].store.address}></div>
+			<div class="delivery-address"><span class="icon icon-shou"></span><{d[i].address}></div>
+			<div class="dispatch-info">
+				<div class="col-md-4">
+					<a href="javascript:;">#<{d[i].serial_sn}></a>
+				</div>
+				<div class="col-md-4">
+					<span><{d[i].paytime_cn}></span>
+					<span>下单</span>
+				</div>
+				<div class="col-md-4"><a href="{php echo iurl('order/takeout/detail');}&id=<{d[i].id}>" target="_blank">详情</a></div>
+				<div class="select-status"><span class="icon icon-check"></span></div>
+			</div>
+		</div>
+	<{# } }>
+</script>
+
+<script id="tpl-deliveryer-list" type="text/html">
+	<{# for(var i in d){ }>
+		<{# if(!d[i]) {continue;} }>
+		<div class="deliveryer-item <{d[i].css}>" data-id="<{d[i].id}>">
+			<div class="js-deliveryer deliveryer-name <{d[i].css}>" data-type="order" title="点击此处查看配送员已接订单">
+				<u><{d[i].title}></u>
+				<span class="scan-deliveryer-orders">（查看已接订单）</span>
+				<{# if(d[i].css == 'active') {}>
+					<a class="btn btn-danger pull-right" href="">要单</a>
+				<{# } }>
+			</div>
+			<div class="deliveryer-mobile"><{d[i].mobile}></div>
+			<div class="clearfix deliveryer-info" data-id="<{d[i].id}>">
+				<div class="col-md-4">取: <span><{d[i].wait_pickup}></span></div>
+				<div class="col-md-4">送: <span><{d[i].wait_delivery}></span></div>
+				<div class="col-md-4">完: <span><{d[i].finish}></span></div>
+			</div>
+			<div class="clearfix deliveryer-dispatch">
+				<div class="col-md-3" data-id="<{d[i].id}>"><span class="js-deliveryer icon icon-attention" data-type="map"></span></div>
+				<div class="col-md-6"><span class="btn-dispatch-submit" data-id="<{d[i].id}>">指派给他</span></div>
+				<div class="col-md-3" data-id="<{d[i].id}>"><span class="js-deliveryer icon icon-location" data-type="location"></span></div>
+			</div>
+		</div>
+	<{# } }>
+</script>
+
+<script id="tpl-deliveryer-current-order-list" type="text/html">
+	<{# for(var i in d){ }>
+		<{# if(!d[i]) {continue;} }>
+		<tr>
+			<td><{d[i].store_title}></td>
+			<td><{d[i].address}></td>
+			<td>
+				<span><{d[i].delivery_status_cn}></span>
+				<{# if(d[i].time_interval.timeout_text) {}>
+					<span class="<{d[i].time_interval.timeout_css}>"><{d[i].time_interval.timeout_text}></span>
+				<{# } }>
+			</td>
+		</tr>
+	<{# } }>
+</script>
+
+<script type="text/javascript" src="//webapi.amap.com/maps?v=1.3&key=550a3bf0cb6d96c3b43d330fb7d86950&plugin=AMap.Driving,AMap.Geocoder,AMap.ToolBar"></script>
+<script>
+irequire(['laytpl', 'select2'], function(laytpl){
+	var dispatch = {
+		markerDeliveryer: [],
+		markerOrder: [],
+		markerDeliveryOrder: [],
+		lineOrder: [],
+		lineDeliveryOrder: []
+	};
+
+	dispatch.init = function(params) {
+		var map = new AMap.Map('allmap', {
+			resizeEnable: true,
+			zoom: 14
+		});
+		map.addControl(new AMap.ToolBar());
+		dispatch.map = map;
+
+		dispatch.initGetData();
+
+		$(document).on('click', '.deliveryer-container-switch', function() {
+			$(this).toggleClass('active');
+			if($(this).hasClass('active')) {
+				$(this).css('right', '20%');
+				$('.deliveryer-container').show();
+				return false
+			}
+			$(this).css('right', '0');
+			$('.deliveryer-container').hide();
+		});
+
+		$(document).on('click', '.btn-dispatch-submit', function() {
+			var ids = [];
+			$('.order-item.active').each(function() {
+				var id = $(this).data('id');
+				ids.push(id);
+			});
+			if(ids.length == 0) {
+				Notify.error('请选择要调度订单');
+				return false;
+			}
+			var deliveryer_id = $(this).data('id');
+			if(!deliveryer_id) {
+				Notify.error('请指定要派送的配送员');
+				return false;
+			}
+			Notify.confirm('确定进行订单指派吗?', function(){
+				util.loading();
+				$.post("{php echo iurl('order/dispatch/dispatch')}", {ids: ids, deliveryer_id: deliveryer_id}, function(data) {
+					var result = $.parseJSON(data);
+					util.loaded();
+					if(result.message.errno != 0) {
+						Notify.error(result.message.message);
+						return false;
+					} else {
+						Notify.success('指派成功');
+						dispatch.initGetData();
+					}
+				});
+			});
+		});
+
+		$(document).on('click', '.order-item', function() {
+			$(this).toggleClass('active');
+			dispatch.map.remove(dispatch.markerOrder);
+			dispatch.map.remove(dispatch.lineOrder);
+
+			$('.order-item.active').each(function() {
+				var id = $(this).data('id');
+				var length = $('.order-item.active').length;
+				$('.select-order-nums').html(length);
+				dispatch.polylineOrder(dispatch.orders[id]);
+			});
+			//dispatch.map.setFitView();
+		});
+
+		$(document).on('click', '.mark-container .icon-close', function() {
+			$(this).parents('.mark-container').remove();
+		});
+
+		$(document).on('mouseover', '.deliveryer-item', function() {
+			var id = $(this).data('id');
+			$(this).addClass('active');
+			var css = $('#map-mark-' + id).data('css');
+			$('#map-mark-' + id).removeClass(css).addClass('hover');
+		});
+
+		$(document).on('mouseout', '.deliveryer-item', function() {
+			$(this).removeClass('active');
+			var id = $(this).data('id');
+			var css = $('#map-mark-' + id).data('css');
+			$('#map-mark-' + id).removeClass('hover').addClass(css);
+		});
+
+		$(document).on('click', '.deliveryer-current-orders', function(e) {
+			e.stopPropagation();
+		});
+		$(document).on('click', function(e) {
+			$('.deliveryer-current-orders').addClass('hide');
+		});
+
+		$(document).on('click', '.js-deliveryer', function() {
+			var $this = $(this);
+			var $parent = $this.parent();
+			var id = $parent.data('id');
+			var type = $this.data('type');
+			$.post("{php echo iurl('order/dispatch/deliveryer')}", {id: id}, function(data) {
+				var result = $.parseJSON(data);
+				if(result.message.errno != 0) {
+					Notify.error(result.message.message);
+					return false;
+				}
+				var deliveryer = result.message.message;
+				if(type == 'stat') {
+					var nums = $('.order-item.active').length;
+					var html = '<div class="mark-container">'+
+							'		<div class="deliveryer-name">'+ deliveryer.title+'<span class="pull-right icon icon-close"></span></div>'+
+							'		<div class="finish-delivey">今日已完成 '+deliveryer.finish+'</div>'+
+							'		<div>待取餐: '+deliveryer.wait_pickup+'</div>'+
+							'		<div class="wait-delivey">待送达: '+deliveryer.wait_delivery+'</div>'+
+							'		<div>所选择的<span class="select-order-nums">'+nums+'</span>笔订单</div>'+
+							'		<div class="btn btn-primary btn-dispatch-submit" data-id="'+deliveryer.id+'">派送给'+ deliveryer.title+'</div>'+
+							'	</div>';
+					$parent.append(html);
+					$parent.find('.wait-pickup').html(deliveryer.wait_pickup);
+					$parent.find('.wait-delivery').html(deliveryer.wait_delivery);
+				} else if(type == 'map') {
+					dispatch.map.remove(dispatch.markerDeliveryOrder);
+					dispatch.map.remove(dispatch.lineDeliveryOrder);
+
+					var orders = deliveryer.orders;
+					if($this.hasClass('icon-attentionfill')) {
+						$('.js-deliveryer.icon').removeClass('icon-attentionfill').addClass('icon-attention');
+						$this.removeClass('icon-attentionfill').addClass('icon-attention');
+						dispatch.map.remove(dispatch.markerDeliveryOrder);
+						dispatch.map.remove(dispatch.lineDeliveryOrder);
+					} else {
+						$('.js-deliveryer.icon').removeClass('icon-attentionfill').addClass('icon-attention');
+						$this.removeClass('icon-attention').addClass('icon-attentionfill');
+						$.each(orders, function(k, order){
+							dispatch.polylineOrder(order, 'deliveryer');
+						});
+						//dispatch.map.setFitView();
+					}
+				} else if(type == 'order') {
+					var orders = deliveryer.orders;
+					if(orders.length > 0) {
+						var gettpl = $('#tpl-deliveryer-current-order-list').html();
+						laytpl(gettpl).render(deliveryer.orders, function(html){
+							$('.deliveryer-current-order-list').html(html);
+						});
+					} else {
+						var html = '<div class="no-order">还没有订单</div>';
+						$('.deliveryer-current-order-list').html(html);
+					}
+					var top = $this.parents('.deliveryer-item').offset().top;
+					$('.deliveryer-current-orders').removeClass('hide').css('top', top);
+				} else if(type == 'location') {
+					dispatch.map.panTo([deliveryer.location_y, deliveryer.location_x]);
+				}
+			});
+		});
+
+		$('#select-sid, #select-deliveryer').select2({});
+		$(document).on('change', '#select-sid, #select-deliveryer', function() {
+			dispatch.initGetData();
+		});
+
+		setInterval(function(){
+			dispatch.initGetData();
+		}, 30000);
+	};
+
+	dispatch.polyline = function(lineArr, type) {
+		var type = type ? type : 'order';
+		if(type == 'order') {
+			var polyline = new AMap.Polyline({
+				path: lineArr,          //设置线覆盖物路径
+				strokeColor: "#3366FF", //线颜色
+				strokeOpacity: 1,       //线透明度
+				strokeWeight: 3,        //线宽
+				strokeStyle: "solid",   //线样式
+				strokeDasharray: [10, 5] //补充线样式
+			});
+		} else {
+			var polyline = new AMap.Polyline({
+				path: lineArr,          //设置线覆盖物路径
+				strokeColor: "#999", //线颜色
+				strokeOpacity: 1,       //线透明度
+				strokeWeight: 3,        //线宽
+				strokeStyle: "dashed",   //线样式
+				strokeDasharray: [10, 5] //补充线样式
+			});
+		}
+		polyline.setMap(dispatch.map);
+		return polyline;
+	};
+
+	dispatch.polylineOrder = function(order, type) {
+		var markerKey = 'markerOrder';
+		var lineKey = 'lineOrder';
+		var marker_start_class = 'marker-start-route';
+		var marker_end_class = 'marker-end-route';
+		if(type == 'deliveryer') {
+			markerKey = 'markerDeliveryOrder';
+			lineKey = 'lineDeliveryOrder';
+			marker_start_class = 'marker-start-route marker-start-deliveryer-route';
+			marker_end_class = 'marker-end-route marker-end-deliveryer-route';
+			if(order.delivery_status == 4) {
+				marker_start_class = 'marker-start-route marker-start-deliveryer-route delivery-status-4';
+			}
+		}
+
+		var marker = new AMap.Marker({
+			position: [order.store.location_y, order.store.location_x],
+			offset: new AMap.Pixel(-19, -52),
+			content: '<div class="' + marker_start_class +'"></div>'
+		});
+		marker.setMap(dispatch.map);
+		dispatch[markerKey].push(marker);
+
+		if(order.location_y && order.location_x) {
+			var marker = new AMap.Marker({
+				position: [order.location_y, order.location_x],
+				offset: new AMap.Pixel(-19, -52),
+				content: '<div class="' + marker_end_class +'"></div>'
+			});
+			marker.setMap(dispatch.map);
+			dispatch[markerKey].push(marker);
+
+			var lineArr = [
+				[order.location_y, order.location_x],
+				[order.store.location_y, order.store.location_x],
+			];
+			var polyline = dispatch.polyline(lineArr, type);
+			dispatch[lineKey].push(polyline);
+		} else {
+			var config = {php echo json_encode($_W['we7_wmall']['config']['takeout']['range']);};
+			var geocoder = new AMap.Geocoder({
+				city: config.city
+			});
+			geocoder.getLocation(order.address, function(status, result) {
+				if(status === 'complete' && result.info === 'OK') {
+					var position = result.geocodes[0].location;
+					if(position) {
+						order.location_y = position.lng;
+						order.location_x = position.lat;
+
+						var marker = new AMap.Marker({
+							position: [order.location_y, order.location_x],
+							offset: new AMap.Pixel(-19, -52),
+							content: '<div class="' + marker_end_class +'"></div>'
+						});
+						marker.setMap(dispatch.map);
+						dispatch[markerKey].push(marker);
+
+						var lineArr = [
+							[order.location_y, order.location_x],
+							[order.store.location_y, order.store.location_x],
+						];
+						var polyline = dispatch.polyline(lineArr, type);
+						dispatch[lineKey].push(polyline);
+					}
+				}
+			});
+		}
+	};
+
+	dispatch.initGetData = function() {
+		$('.scroll-preloader').removeClass('hide');
+		$('.order-list').html('');
+		var sid = $('#select-sid').val();
+		var deliveryer_id = $('#select-deliveryer').val();
+		$.post("{php echo iurl('order/dispatch/map')}", {sid: sid, deliveryer_id: deliveryer_id }, function(data){
+			var result = $.parseJSON(data);
+			if(result.message.errno != 0) {
+				Notify.error(result.message.message);
+				return false;
+			}
+			dispatch.orders = result.message.message.orders;
+			dispatch.deliveryers = result.message.message.deliveryers;
+
+			dispatch.map.remove(dispatch.markerOrder);
+			dispatch.map.remove(dispatch.lineOrder);
+			$('.scroll-preloader').removeClass('hide');
+			if(dispatch.orders != '') {
+				var gettpl = $('#tpl-order-list').html();
+				laytpl(gettpl).render(dispatch.orders, function(html){
+					$('.order-list').html(html);
+				});
+			} else {
+				var html = '<div class="no-result">还没有订单</div>';
+				$('.order-list').html(html);
+			}
+			$('.scroll-preloader').addClass('hide');
+
+			if(dispatch.deliveryers.length > 0) {
+				var gettpl = $('#tpl-deliveryer-list').html();
+				laytpl(gettpl).render(dispatch.deliveryers, function(html){
+					$('.deliveryer-list').html(html);
+				});
+			}
+
+			dispatch.map.remove(dispatch.markerDeliveryer);
+			$.each(dispatch.deliveryers, function(k, v) {
+				var content = '<div class="map-mark '+v.css+'" id="map-mark-'+ v.id+'" data-id="'+ v.id+'" data-css="'+v.css+'">'+
+						'		<span class="deliveryer-name js-deliveryer" data-type="stat">'+ v.title+'</span>'+
+						'		<span class="delivery-times-info"><span class="wait-pickup">'+ v.wait_pickup+'</span> / <span class="wait-delivery">'+ v.wait_delivery+'</span></span>'+
+						'		<span class="icon icon-attention js-deliveryer" data-type="map"></span>'+
+						'		<img class="location-dot" src="{WE7_WMALL_URL}static/img/location_dot.png" alt=""/>'+
+						'	</div>';
+				if(v.location_x && v.location_y) {
+					var marker = new AMap.Marker({
+						position: [v.location_y, v.location_x],
+						offset: new AMap.Pixel(-40, -45),
+						content: content
+					});
+					marker.setMap(dispatch.map);
+					dispatch.markerDeliveryer.push(marker);
+				}
+			});
+			//dispatch.map.setFitView();
+		});
+	};
+	dispatch.init();
+});
+
+</script>
+{itemplate 'public/footer'}

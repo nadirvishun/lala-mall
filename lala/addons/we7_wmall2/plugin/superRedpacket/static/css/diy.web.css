@@ -1,0 +1,54 @@
+.app-preview{float: left; width: 328px; border: 1px solid #ddd; border-radius: 10px; background: #fff; padding: 10px; overflow: hidden; margin-bottom: 100px;}
+.app-preview .app-header{height: 44px; background: #fff; position: relative;}
+.app-preview .app-header:before{content: ""; position: absolute; top: 15px; left: 112px; height: 8px; width: 8px; background: #ddd; border-radius: 8px;}
+.app-preview .app-header:after{content: ""; position: absolute; top: 15px; left: 128px; height: 8px; width: 50px; background: #ddd; border-radius: 8px;}
+.app-preview .title{height: 61px; background: url(../img/titlebar.png) 0 0 no-repeat; background-size: 100% auto; padding: 0 50px; font-size: 15px; color: #fff; text-align: center; line-height: 61px; cursor: default; overflow: hidden; display: block; white-space: nowrap; text-overflow: ellipsis;}
+.app-preview .main{position: relative; overflow: hidden; min-height: 400px; border: 1px solid #ddd; border-top: 0;}
+.app-preview .app-footer{height: 24px; width: 60px; margin: 15px auto 5px; border: 1px solid #ddd; border-radius: 5px;}
+
+#sharemodal{display: block; width: 100%; margin: 0 0 80px 0; left: 0; right: 0; top: 60px; position: relative; text-align: center; overflow: visible;}
+#sharemodal .banner{width: 94%; height: 80px; margin: 0 auto; position: relative;  border-top-left-radius: 10px; border-top-right-radius: 10px;}
+#sharemodal .banner img{width: 100%; min-height: 80px; max-height: 100px; position: absolute; bottom: 0; left: 0;}
+#sharemodal .container{width: 94%; margin: 0 auto; padding: 5px 15px 10px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;}
+#sharemodal .redpacket{background-color: #fff; margin-bottom: 12px; border-radius: 6px; padding: 8px 16px;}
+#sharemodal .redpacket .redpacket-info{height: 32px; line-height: 32px; clear: both; width: 100%; margin: 0 auto;}
+#sharemodal .redpacket .redpacket-info .col-75{font-size: 18px; width: 75%; float: left;}
+#sharemodal .redpacket .redpacket-info .redpacket-title{display: block; height: 32px; line-height: 32px;}
+#sharemodal .redpacket .price{width: 25%; float: left;}
+#sharemodal .redpacket .price span{font-size: 26px;}
+#sharemodal .redpacket .circle-container{position: relative;}
+#sharemodal .redpacket .circle-container .circle{display: block; width: 16px; height: 16px; position: absolute; border-radius: 16px; top: -8px; z-index: 20;}
+#sharemodal .redpacket .circle-container .circle-left{left: -24px;}
+#sharemodal .redpacket .circle-container .circle-right{right: -24px;}
+#sharemodal .redpacket-limit{height: 32px; line-height: 32px; font-size: 13px; color: #666; width: 100%; margin: 0 auto;}
+#sharemodal .redpacket-limit .col-50{width: 50%; float: left;}
+#sharemodal .redpacket-limit .use-days-limit{visibility: hidden;}
+#sharemodal .go-home a{display: block; padding: 8px 4px; border-radius: 4px; font-size: 16px; max-width: 50%; margin: 0 auto;}
+#sharemodal .icon-close{display: inline-block; font-size: 20px; width: 36px; height: 36px; text-align: center; line-height: 40px; color: #fff; background: rgba(0,0,0,.7); border-radius: 100%; margin-top: 20px;}
+
+.app-editor{float: left; width: 600px; background: #fdfdfd; padding: 15px 10px; margin-left: 18px; border: 1px solid #ddd; border-radius: 5px; margin-top: 55px; margin-bottom: 100px;}
+.app-editor .editor-arrow{height: 0; position: relative;}
+.app-editor .editor-arrow:before{position: absolute; font-family: simsun; content: "◆"; top: 8px; left: -21px; display: block; width: 9px; height: 18px; font-size: 24px; color: #fdfdfd; z-index: 111;}
+.app-editor .editor-arrow:after{position: absolute; font-family: simsun; content: "◆"; top: 8px; left: -22px; color: #ddd; z-index: 11; display: block; width: 9px; height: 18px; font-size: 24px;}
+.app-editor .line{height: 10px; width: 100%; position: relative; margin: 5px 0;}
+.app-editor .line:before{height: 0; content: ''; position: absolute; bottom: 5px; left: 14px; right: 14px; border: 1px dashed #eee;}
+.app-editor .list-item{padding: 10px 0; background: #fff; border: 1px solid #e7eaec; border-radius: 3px;}
+.app-editor .form-group{border: 0; margin: 10px 0; padding: 0;}
+.app-editor .control-label{padding: 5px 0; text-align: right}
+.app-editor .form-items{margin: 0 14px;}
+.app-editor .form-items .col-sm-10.color{padding-right: 0;}
+.app-editor .form-items .item{background: #fff; padding: 10px; margin-bottom: 10px; overflow: hidden; border: 1px solid #e7eaec; border-radius: 3px;}
+.app-editor .form-items .item .btn-del{height: 0; width: 100%; display: block; position: relative;}
+.app-editor .form-items .item .btn-del:before{content: "×"; position: absolute; height: 16px; width: 16px; text-align: center; line-height: 14px; color: #fff; cursor: pointer; background: rgba(0,0,0,0.3); border-radius: 16px; top: -6px; right: -6px; z-index: 10;}
+.app-editor .form-items .item .input-group{margin-bottom: 0;}
+.app-editor .form-items .item .hour a.hour-add{position: relative; top: 5px;}
+.app-editor .form-items .item .hour a.hour-del{top: 11px;}
+.app-editor .form-items .item .hour-del:before{content: "×"; position: absolute; height: 16px; width: 16px; text-align: center; line-height: 14px; color: #fff; cursor: pointer; background: rgba(0,0,0,0.3); border-radius: 16px; top: -6px; right: -6px; z-index: 10;}
+.app-editor .form-items .item .category-container .col-sm-3{padding-left: 0;}
+.app-editor .form-items .item .category-container .category-item{position: relative; height: 80px; border: 1px solid #eee; margin-bottom: 10px;}
+.app-editor .form-items .item .category-container .category-item img{width: 100%; height: 80px;}
+.app-editor .form-items .item .category-container .category-item .title{position: absolute; height: 20px;left: 0; right: 0;bottom: -1px; background: rgba(0,0,0,0.5); color: #fff; text-align: center; font-size: 12px; line-height: 20px; cursor: pointer;}
+.app-editor .list-item .uid-container{padding: 0 14px; margin: 10px 0;}
+.app-editor .list-item .uid-container textarea{resize: none;}
+.app-action{width: 946px; background: #fdfdfd; left: 245px; border: 1px solid #ddd; border-radius: 3px; position: fixed; bottom: 0;  box-shadow: 0 0 8px rgba(0,0,0,0.1); z-index: 2000;}
+.app-action .action{padding: 10px; text-align: right; position: relative; font-size: 12px;}

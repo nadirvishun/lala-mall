@@ -1,0 +1,12 @@
+{itemplate 'public/header'}
+<div class="page notice" style="background: #fff">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">公告</h1>
+	</header>
+	{php get_mall_menu();}
+	<div class="content content-padded">
+		{$notice['content']}
+	</div>
+</div>
+{itemplate 'public/footer'}

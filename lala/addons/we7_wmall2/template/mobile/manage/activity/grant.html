@@ -1,0 +1,209 @@
+{itemplate 'public/header'}
+<div class="page grant">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title open-popup">创建满赠优惠</h1>
+	</header>
+	<div class="content">
+		{if empty($activity['id'])}
+			<div class="list-block">
+				<ul>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title label">起始日期</div>
+								<div class="item-input">
+									<input type="text" placeholder="请选择开始日期" name="starttime" data-toggle='date' class="align-right" />
+									<i class="icon icon-right"></i>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="border-1px-b">
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title label">结束日期</div>
+								<div class="item-input">
+									<input type="text" placeholder="请选择结束日期" name="endtime" data-toggle='date' class="align-right" />
+									<i class="icon icon-right"></i>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="activity-box">
+				<div class="activity-title">满赠规则</div>
+				<ul id="activity-content">
+					<li class="activity-col">
+						<span>满</span>
+						<div class="input-box">
+							<input type="text" name="condition[]" value="">
+						</div>
+						<span>元,赠送</span>
+						<div class="input-box">
+							<input type="text" name="back[]" value="">
+						</div>
+						<a href="javascript:;" class="activity-delete">
+							<i class="icon icon-delete"></i>
+						</a>
+					</li>
+					<li class="activity-col">
+						<span>满</span>
+						<div class="input-box">
+							<input type="text" name="condition[]" value="">
+						</div>
+						<span>元,赠送</span>
+						<div class="input-box">
+							<input type="text" name="back[]" value="">
+						</div>
+						<a href="javascript:;" class="activity-delete">
+							<i class="icon icon-delete"></i>
+						</a>
+					</li>
+					<li class="activity-col">
+						<span>满</span>
+						<div class="input-box">
+							<input type="text" name="condition[]" value="">
+						</div>
+						<span>元,赠送</span>
+						<div class="input-box">
+							<input type="text" name="back[]" value="">
+						</div>
+						<a href="javascript:;" class="activity-delete">
+							<i class="icon icon-delete"></i>
+						</a>
+					</li>
+					<li class="activity-col">
+						<span>满</span>
+						<div class="input-box">
+							<input type="text" name="condition[]" value="">
+						</div>
+						<span>元,赠送</span>
+						<div class="input-box">
+							<input type="text" name="back[]" value="">
+						</div>
+						<a href="javascript:;" class="activity-delete">
+							<i class="icon icon-delete"></i>
+						</a>
+					</li>
+				</ul>
+				<div class="activity-add">新增阶梯配置</div>
+			</div>
+			<div class="confirm">
+				<a href="javascript:;" class="submit">确认并保存</a>
+			</div>
+		{else}
+			<div class="list-block">
+				<ul>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title label">起始日期</div>
+								<div class="item-input align-right">
+									{php echo date('Y-m-d', $activity['starttime']);}
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title label">结束日期</div>
+								<div class="item-input align-right">
+									{php echo date('Y-m-d', $activity['endtime']);}
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="activitys">
+				<div class="activity-title">已创建活动</div>
+				<ul>
+					{loop $activity['data'] $item}
+						<li>
+							满{$item['condition']}元赠送{$item['back']}
+						</li>
+					{/loop}
+				</ul>
+			</div>
+			<div class="cancel">
+				<a href="{php echo imurl('manage/activity/grant/del')}" class="js-post button button-fill" data-confirm="确定撤销活动么">撤销此活动</a>
+			</div>
+		{/if}
+	</div>
+</div>
+<script>
+$(function(){
+	$(document).on('click', '.confirm .submit', function(){
+		var starttime = $.trim($(':text[name="starttime"]').val());
+		if(!starttime) {
+			$.toast('活动开始时间不能为空');
+			return false;
+		};
+		var endtime = $.trim($(':text[name="endtime"]').val());
+		if(!endtime) {
+			$.toast('活动结束时间不能为空');
+			return false;
+		};
+		
+		var options = [];
+		$('#activity-content .activity-col').each(function(){
+			var condition = $.trim($(this).find(':text[name="condition[]"]').val());
+			var back = $.trim($(this).find(':text[name="back[]"]').val());
+			if(condition && back) {
+				options.push({
+					condition: condition,
+					back: back,
+				});
+			}
+		});
+
+		$(this).addClass('disabled');
+		var params = {
+			starttime: starttime,
+			endtime: endtime,
+			options: options,
+		};
+		$.post("{php echo imurl('manage/activity/grant');}", params, function(data){
+			var result = $.parseJSON(data);
+			if(result.message.errno != 0) {
+				$.toast(result.message.message);
+				$('.confirm .submit').removeClass('disabled');
+				return false;
+			}
+			$.toast('店铺满赠活动创建完成', "{php echo imurl('manage/activity/index');}");
+		})
+	});
+
+	$(document).on('click', '.activity-delete', function(){
+		$(this).parent().remove();
+	});
+
+	$(document).on('click', '.activity-add', function(){
+		var size = $('#activity-content .activity-col').size();
+		if(size >= 4){
+			$.toast('最多只能添加4个活动');
+			return false;
+		}
+		var html = '<li class="activity-col">'+
+					'	<span>满</span>'+
+					'	<div class="input-box">'+
+					'		<input type="text" name="condition[]" value="">'+
+					'	</div>'+
+					'	<span>元,赠送</span>'+
+					'	<div class="input-box">'+
+					'		<input type="text" name="back[]" value="">'+
+					'	</div>'+
+					'	<a href="javascript:;" class="activity-delete">'+
+					'		<i class="icon icon-delete"></i>'+
+					'	</a>'+
+					'</li>';
+		$('#activity-content').append(html);
+	});
+})
+</script>
+
+
+{itemplate 'public/footer'}

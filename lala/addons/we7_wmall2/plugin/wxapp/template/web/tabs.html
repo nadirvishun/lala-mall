@@ -1,0 +1,29 @@
+<div class="second-sidebar-title">{$_W['_plugin']['title']}</div>
+<div class="nav slimscroll">
+	<div class="menu-header">设置</div>
+	<ul class="menu-item">
+		{ifp 'wxapp.config'}
+			<li {if $_GPC['op'] == 'basic'}class="active"{/if}>
+				<a href="{php echo iurl('wxapp/config/basic');}">基础设置</a>
+			</li>
+			<li {if $_GPC['op'] == 'wxtemplate'}class="active"{/if}>
+				<a href="{php echo iurl('wxapp/config/wxtemplate');}">模板消息</a>
+			</li>
+			<li {if $_GPC['op'] == 'payment'}class="active"{/if}>
+				<a href="{php echo iurl('wxapp/config/payment');}">支付方式</a>
+			</li>
+			<li {if $_GPC['ac'] == 'extpage'}class="active"{/if}>
+				<a href="{php echo iurl('wxapp/extpage')}">页面配置</a>
+			</li>
+			<li {if $_GPC['ac'] == 'menu'}class="active"{/if}>
+				<a href="{php echo iurl('wxapp/menu')}">底部导航</a>
+			</li>
+		{/if}
+	</ul>
+	<div class="menu-header">小程序</div>
+	<ul class="menu-item">
+		<li {if $_GPC['op'] == 'release'}class="active"{/if}>
+		<a href="{php echo iurl('wxapp/release');}">发布与审核</a>
+		</li>
+	</ul>
+</div>

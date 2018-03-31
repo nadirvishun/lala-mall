@@ -1,0 +1,225 @@
+{itemplate 'public/header'}
+<style>
+	.page-errander-index .head-banner{width: 100%; height: 6.75rem; overflow: hidden; padding: 0}
+	.page-errander-index .head-banner img{width: 100%; height: 100%;}
+	.page-errander-index .head-tabs{overflow: hidden; background: #fff; height: 3.5rem;}
+	.page-errander-index .head-tabs .tabs-head-item{position: relative; float: left; width: 50%; height: 100%; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; flex-direction: column; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; background: #ffedc0; font-size: .8rem;}
+	.page-errander-index .head-tabs .tabs-head-item.active{color: #333; background: #ffd161;}
+	.page-errander-index .head-tabs .tabs-head-item.active:after{position: absolute; display: block; content: " "; bottom: -.15rem; left: 0; right: 0; margin-left: auto; margin-right: auto; width: .3rem; height: .3rem; background: #fff; transform: rotate(45deg);}
+	.page-errander-index .head-tabs .tabs-head-item .buy-icon{background-image: url(https://xs01.meituan.net/banma_paotui/dist/images/paotui_tabhead_new.png); background-repeat: no-repeat; background-size: 200% 200%; width: 3rem; height: 1.5rem; background-position: 0 0;}
+	.page-errander-index .head-tabs .tabs-head-item .delivery-icon{background-image: url(https://xs01.meituan.net/banma_paotui/dist/images/paotui_tabhead_new.png); background-repeat: no-repeat; background-size: 200% 200%; width: 3rem; height: 1.5rem; background-position: 100% 100%;}
+	.page-errander-index .main-container{height: 20.375rem;}
+	.page-errander-index .main-container .category-container{position: relative; overflow: hidden; width: 100%;}
+	.page-errander-index .main-container .category-container>.category-title{background: #fff; text-align: center; font-size: .8rem; color: #333; padding: .65rem 0;}
+	.page-errander-index .main-container .category-container .category-title .icon{font-size: 0.9rem;}
+	.page-errander-index .main-container .category-buy-container .search{background: #fff; padding: 0 1rem; height: 2rem; display: block;}
+	.page-errander-index .main-container .category-buy-container .search-inner{background: #eaeff2; border-radius: 2.5rem; height: 2rem; display: flex; padding-left: .8rem;}
+	.page-errander-index .main-container .category-buy-container .search-inner .search-input{-webkit-box-flex: 1; flex: 1; background: #eaeff2;}
+	.page-errander-index .main-container .category-buy-container .search-inner .search-input input{width: 100%; height: 100%; background: #eaeff2; font-size: .7rem; color: #333; border: none; line-height: 1.5;}
+	.page-errander-index .main-container .category-buy-container .search-inner .search-submit{background: #ffd161; color: #000; width: 4rem; border-radius: 2rem; text-align: center; line-height: 2rem; font-size: .7rem;}
+	.page-errander-index .main-container .category-buy-container .record{height: 2.6rem; padding: 0.8rem 0; background: #fff; position: relative; overflow: hidden;}
+	.page-errander-index .main-container .category-buy-container .record .js-notice{height: 1rem; width: 100%; overflow: hidden}
+	.page-errander-index .main-container .category-buy-container .record ul{font-size: .6rem; padding: 0 1rem;}
+	.page-errander-index .main-container .category-buy-container .record li{width: 100%; height: 1rem; line-height: 1rem;}
+	.page-errander-index .main-container .category-buy-container .record li .record-item{height: 1rem; overflow: hidden; display: block; white-space: nowrap; text-overflow: ellipsis;}
+	.page-errander-index .main-container .category-buy-container .record li .delivery-time{height: 1rem; color: #999; text-align: right; line-height: 1rem;}
+	.page-errander-index .main-container .category-buy-container .record li .action{color: #ffb000;}
+	.page-errander-index .main-container .category-buy-container .category-list{overflow: hidden; background: #fff; height: 13.5rem; padding: .7rem 1.25rem .6rem;}
+	.page-errander-index .main-container .category-buy-container .category-list .category-item{float: left; width: 50%; height: 3.6rem; display: flex; margin-bottom: .4rem;}
+	.page-errander-index .main-container .category-buy-container .category-list .category-item:nth-child(odd) {padding-right: 1.17rem;}
+	.page-errander-index .main-container .category-buy-container .category-list .category-item:nth-child(2n) {padding-left: 1.17rem;}
+	.page-errander-index .main-container .category-buy-container .category-list .category-item .category-info{display: flex; -webkit-box-flex: 1; flex: 1; -webkit-box-orient: vertical; -webkit-box-direction: normal; flex-direction: column; -webkit-box-pack: center; justify-content: center;}
+	.page-errander-index .main-container .category-buy-container .category-list .category-item .category-info .category-title{font-size: .8rem; color: #333;}
+	.page-errander-index .main-container .category-buy-container .category-list .category-item .category-info .category-subtitle{font-size: .6rem; color: #999;}
+	.page-errander-index .main-container .category-buy-container .category-list .category-item .category-logo{margin: .3rem 0; height: 3rem; width: 3rem;}
+	.page-errander-index .main-container .category-delivery-container .category-list .category-item{width: 25%; height: 4.625rem; float: left; background: #fff; font-size: .6rem; color: #333; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; flex-direction: column; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; position: relative;    box-sizing: border-box;}
+	.page-errander-index .main-container .category-delivery-container .category-list .category-item.active{background: #eff0f1;}
+	.page-errander-index .main-container .category-delivery-container .category-list .category-item.active:after{content: " "; position: absolute; display: block; background-image: url(https://xs01.meituan.net/banma_paotui/dist/images/paotui-check.png); background-repeat: no-repeat; background-size: 100% 100%; height: .8rem; width: .8rem; right: .25rem; bottom: .25rem;}
+	.page-errander-index .main-container .category-delivery-container .category-list .category-item .category-logo{margin-bottom: .5rem; width: 1.5rem; height: 1.5rem;}
+	.page-errander-index .main-container .category-delivery-container .category-list .category-item .category-logo img{width: 100%; height: 100%;}
+	.page-errander-index .main-container .category-delivery-container .list-block{margin: 0.5rem 0;}
+	.page-errander-index .main-container .category-delivery-container .list-block .item-title{font-size: 0.75rem;}
+	.page-errander-index .main-container .category-delivery-container .list-block .item-after{color: #5f646e; font-size: 0.75rem;}
+	.page-errander-index .main-container .category-delivery-container .btn-delivery-submit{text-align: center; height: 2rem; line-height: 2rem; font-size: .8rem; color: #000; background: #ffd161; margin: 1rem .75rem .8rem;}
+</style>
+<div class="page page-errander-index">
+	<div class="content">
+		<div class="head-banner swiper-container slide" data-space-between='0' data-pagination='.swiper-slide-pagination' data-autoplay="5000">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide" data-link="{$slide['link']}">
+					<img src="https://peisong.meituan.com/static/app/runner/images/banner20170323.jpg" alt=""/>
+				</div>
+				<div class="swiper-slide" data-link="{$slide['link']}">
+					<img src="https://peisong.meituan.com/static/app/runner/images/banner20170323.jpg" alt=""/>
+				</div>
+			</div>
+		</div>
+		<div class="head-tabs">
+			<div class="tabs-head-item active" data-container=".category-buy-container">
+				<span class="buy-icon"></span>
+				帮我买
+			</div>
+			<div class="tabs-head-item" data-container=".category-delivery-container">
+				<span class="delivery-icon"></span>
+				帮我送
+			</div>
+		</div>
+		<div class="main-container">
+			<div class="category-container category-buy-container">
+				<div class="category-title">
+					<span class="icon icon-cart"></span>
+					想买点什么
+				</div>
+				<div class="search">
+					<div class="search-inner">
+						<div class="search-input">
+							<input type="text" placeholder="输入您想要买的商品">
+						</div>
+						<div class="search-submit">帮我买</div>
+					</div>
+				</div>
+				<div class="record">
+					<div class="js-notice" data-speed="4">
+						<ul>
+							<li class="row no-gutter">
+								<div class="record-item col-80">
+									<span class="action">【大家都在买】</span>
+									田*买了 煎饼（双蛋，不要辣和葱花，8元），起酥面包（黄桃，2个），美丹苏打饼干鲜葱味（1袋，14元左右）
+								</div>
+								<div class="delivery-time col-20">38分钟送达</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="category-list border-1px-t">
+					<div class="category-item">
+						<div class="category-info">
+							<div class="category-title">买小吃</div>
+							<div class="category-subtitle">美味在身边</div>
+						</div>
+						<div class="category-logo">
+							<img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xiaochi.png" alt=""/>
+						</div>
+					</div>
+					<div class="category-item">
+						<div class="category-info">
+							<div class="category-title">买小吃</div>
+							<div class="category-subtitle">美味在身边</div>
+						</div>
+						<div class="category-logo">
+							<img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xiaochi.png" alt=""/>
+						</div>
+					</div>
+					<div class="category-item">
+						<div class="category-info">
+							<div class="category-title">买小吃</div>
+							<div class="category-subtitle">美味在身边</div>
+						</div>
+						<div class="category-logo">
+							<img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xiaochi.png" alt=""/>
+						</div>
+					</div>
+					<div class="category-item">
+						<div class="category-info">
+							<div class="category-title">买小吃</div>
+							<div class="category-subtitle">美味在身边</div>
+						</div>
+						<div class="category-logo">
+							<img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xiaochi.png" alt=""/>
+						</div>
+					</div>
+					<div class="category-item">
+						<div class="category-info">
+							<div class="category-title">买小吃</div>
+							<div class="category-subtitle">美味在身边</div>
+						</div>
+						<div class="category-logo">
+							<img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xiaochi.png" alt=""/>
+						</div>
+					</div>
+					<div class="category-item">
+						<div class="category-info">
+							<div class="category-title">买小吃</div>
+							<div class="category-subtitle">美味在身边</div>
+						</div>
+						<div class="category-logo">
+							<img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xiaochi.png" alt=""/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="category-container category-delivery-container hide">
+				<div class="category-title">
+					<span class="icon icon-lock"></span>
+					想送啥
+				</div>
+				<div class="category-list border-1px-tb clearfix">
+					<div class="category-item">
+						<div class="category-logo"><img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xianhua.png" alt=""/>.</div>
+						<div class="category-title">鲜花</div>
+					</div>
+					<div class="category-item">
+						<div class="category-logo"><img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xianhua.png" alt=""/>.</div>
+						<div class="category-title">鲜花</div>
+					</div>
+					<div class="category-item">
+						<div class="category-logo"><img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xianhua.png" alt=""/>.</div>
+						<div class="category-title">鲜花</div>
+					</div>
+					<div class="category-item">
+						<div class="category-logo"><img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xianhua.png" alt=""/>.</div>
+						<div class="category-title">鲜花</div>
+					</div>
+					<div class="category-item">
+						<div class="category-logo"><img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xianhua.png" alt=""/>.</div>
+						<div class="category-title">鲜花</div>
+					</div>
+					<div class="category-item">
+						<div class="category-logo"><img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xianhua.png" alt=""/>.</div>
+						<div class="category-title">鲜花</div>
+					</div>
+					<div class="category-item">
+						<div class="category-logo"><img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xianhua.png" alt=""/>.</div>
+						<div class="category-title">鲜花</div>
+					</div>
+					<div class="category-item">
+						<div class="category-logo"><img src="//xs01.meituan.net/banma_paotui/dist/public/paotui-xianhua.png" alt=""/>.</div>
+						<div class="category-title">鲜花</div>
+					</div>
+				</div>
+				<div class="list-block border-1px-tb">
+					<ul>
+						<li>
+							<div class="item-content item-link">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">重量</div>
+									<div class="item-after">3kg</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item-content item-link">
+								<div class="item-inner">
+									<div class="item-title">物品价值</div>
+									<div class="item-after">100元以下</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="btn-delivery-submit">帮我送</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function() {
+		$(document).on('click', '.tabs-head-item', function() {
+			$(this).addClass('active').siblings().removeClass('active');
+			var container = $(this).data('container');
+			$(container).removeClass('hide').siblings().addClass('hide');
+		});
+	})
+</script>
+{itemplate 'public/footer'}
+

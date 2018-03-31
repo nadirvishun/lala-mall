@@ -1,0 +1,32 @@
+{itemplate 'public/header'}
+<div class="page message">
+	<div class="content">
+		<div class="container {$type}">
+			<div class="icon-area"><i class="icon icon-icon"></i></div>
+			<div class="text-area">
+				<h2 class="msg-title">{$title}</h2>
+				<div class="desc">{$message}</div>
+			</div>
+			<div class="btn-area">
+				<p>
+					<a href="{$redirect}" class="button">{if !empty($btn_text)}{$btn_text}{else}确定{/if}</a>
+				</p>
+			</div>
+			<div class="extra-area">
+				<a href="{php echo imurl('wmall/home/index');}">返回首页</a>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	{if !empty($close)}
+		$('.btn-area a').click(function(){
+			wx.ready(function(){
+				wx.closeWindow();
+			});
+		});
+	{/if}
+});
+</script>
+{itemplate 'public/footer'}

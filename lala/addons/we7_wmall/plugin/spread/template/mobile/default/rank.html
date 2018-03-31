@@ -1,0 +1,117 @@
+{itemplate 'public/header'}
+<link rel="stylesheet" href="../addons/we7_wmall/plugin/spread/static/css/index.css">
+<div class="page page-ranking">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">佣金排行榜</h1>
+	</header>
+	{itemplate 'nav'}
+	<div class="content {if $rank['type'] == 1 || $rank['type'] == 0}infinite-scroll js-infinite{/if}" {if $rank['type'] == 1 || $rank['type'] == 0}data-href="{php echo imurl('spread/rank/index')}" data-distance="50" data-min="{$min}" data-container=".list-item-content" data-tpl="tpl-getcash"{/if}>
+		<div class="banner">
+			<div class="avatar">
+				<img src="{php echo tomedia($_W['member']['avatar'])}" alt="">
+			</div>
+			<div class="row no-gutter">
+				<div class="col-33">
+					<div class="titles">累积佣金</div>
+					<div class="days">
+						{if $rank['type'] == 0}
+							{if empty($final_fee)}
+								0 元
+							{else}
+								{$final_fee}元
+							{/if}
+						{else}
+							{$count_final_fee}元
+						{/if}
+					</div>
+				</div>
+				<div class="col-33">
+					<div class="titles">{$_W['member']['nickname']}</div>
+				</div>
+				<div class="col-33">
+					<div class="titles">佣金排名</div>
+					<div class="days">
+						{if $rank['type'] == 2}
+							暂未上榜
+						{elseif $rank['type'] == 1 || $rank['type'] == 0}
+							{if $count > 301}
+								暂未上榜
+							{else}
+								{$count}名
+							{/if}
+						{/if}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="ranking-content">
+			<div class="ranking-list">
+				<div class="list-title clearfix">
+					<div class="col">排名</div>
+					<div class="col">昵称</div>
+					<div class="col">累计佣金</div>
+				</div>
+				<div class="list-item-content">
+					{if $rank['type'] == 2}
+						{php $i = 1;}
+						{loop $rank['infomation'] $item}
+							<div class="list-item clearfix">
+								<div class="col">
+									{if $i <4}
+										<img src="{WE7_WMALL_TPL_URL}static/img/medal-{$i}.png" alt=""/>
+									{else}
+										{$i}
+									{/if}
+								</div>
+								<div class="col clearfix">
+									<div class="avatar">
+										<img src="{php echo tomedia($item['avatar'])}" alt="">
+									</div>
+									<div class="nickname">{$item['nickname']}</div>
+								</div>
+								<div class="col">¥{$item['commission']}</div>
+							</div>
+						{php $i++;}
+						{/loop}
+					{elseif $rank['type'] == 1 || $rank['type'] == 0}
+						{loop $getcash $item}
+							<div class="list-item clearfix">
+								<div class="col">
+									{if $item['i'] < 4}
+										<img src="{WE7_WMALL_TPL_URL}static/img/medal-{$item['i']}.png" alt=""/>
+									{else}
+										{$item['i']}
+									{/if}
+								</div>
+								<div class="col clearfix">
+									<div class="avatar">
+										<img src="{php echo tomedia($item['avatar'])}" alt="">
+									</div>
+									<div class="nickname">{$item['nickname']}</div>
+								</div>
+								<div class="col">¥{$item['final_fee']}</div>
+							</div>
+						{/loop}
+					{/if}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script id="tpl-getcash" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<div class="list-item clearfix">
+		<div class="col"><{d[i].i}></div>
+		<div class="col clearfix">
+			<div class="avatar">
+				<img src="<{d[i].avatar}>" alt="">
+			</div>
+			<div class="nickname"><{d[i].nickname}></div>
+		</div>
+		<div class="col">¥<{d[i].final_fee}></div>
+	</div>
+	<{# } }>
+</script>
+{itemplate 'public/footer'}

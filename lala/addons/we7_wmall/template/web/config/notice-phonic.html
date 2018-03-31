@@ -1,0 +1,99 @@
+{itemplate 'public/header'}
+<div class="page clearfix config-notice-phonic">
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">新订单提醒</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="file" name="new" value="{$phonic['new']}">
+				{if !empty($phonic['new'])}
+					<div class="audio-container">
+						<div class="audio-msg">
+							<div class="icon audio-player-play" data-attach="{WE7_WMALL_URL}{$phonic['new']}"><span><i class="fa fa-play"></i></span></div>
+						</div>
+					</div>
+				{/if}
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">催单提醒</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="file" name="remind" value="{$phonic['remind']}">
+				{if !empty($phonic['remind'])}
+					<div class="audio-container">
+						<div class="audio-msg">
+							<div class="icon audio-player-play" data-attach="{WE7_WMALL_URL}{$phonic['remind']}"><span><i class="fa fa-play"></i></span></div>
+						</div>
+					</div>
+				{/if}
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">退单提醒</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="file" name="refund" value="{$phonic['refund']}">
+				{if !empty($phonic['refund'])}
+					<div class="audio-container">
+						<div class="audio-msg">
+							<div class="icon audio-player-play" data-attach="{WE7_WMALL_URL}/{$phonic['refund']}"><span><i class="fa fa-play"></i></span></div>
+						</div>
+					</div>
+				{/if}
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">订单完成提醒</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="file" name="end" value="{$phonic['end']}">
+				{if !empty($phonic['end'])}
+					<div class="audio-container">
+						<div class="audio-msg">
+							<div class="icon audio-player-play" data-attach="{WE7_WMALL_URL}/{$phonic['end']}"><span><i class="fa fa-play"></i></span></div>
+						</div>
+					</div>
+				{/if}
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="确定" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+<script>
+	require(['jquery.jplayer'], function(){
+		$(".audio-player-play").click(function(){
+			var src = $(this).data("attach");
+			if(!src) {
+				return;
+			}
+			if ($("#player")[0]) {
+				var player = $("#player");
+			} else {
+				var player = $('<div id="player"></div>');
+				$(document.body).append(player);
+			}
+			player.data('control', $(this));
+			player.jPlayer({
+				playing: function() {
+					$(this).data('control').find("i").removeClass("fa-play").addClass("fa-stop");
+				},
+				pause: function (event) {
+					$(this).data('control').find("i").removeClass("fa-stop").addClass("fa-play");
+				},
+				swfPath: "resource/components/jplayer",
+				supplied: "mp3,wma,wav,amr",
+				solution: "html, flash"
+			});
+			player.jPlayer("setMedia", {mp3: $(this).data("attach")}).jPlayer("play");
+			if($(this).find("i").hasClass("fa-stop")) {
+				player.jPlayer("stop");
+			} else {
+				$('.audio-msg').find('.fa-stop').removeClass("fa-stop").addClass("fa-play");
+				player.jPlayer("setMedia", {mp3: $(this).data("attach")}).jPlayer("play");
+			}
+		});
+	});
+</script>
+{itemplate 'public/footer'}

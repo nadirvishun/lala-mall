@@ -1,0 +1,207 @@
+{itemplate 'public/header'}
+<link rel="stylesheet" href="../addons/we7_wmall/plugin/spread/static/css/index.css">
+{if $op == 'index'}
+
+<div class="page page-getCash">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">提现明细</h1>
+	</header>
+	{itemplate 'nav'}
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('spread/getCash/index')}" data-distance="50" data-min="{$min}" data-container=".spread-list" data-tpl="tpl-spread">
+		<div class="buttons-tab activity_status">
+			<a href="{php echo ifilter_url('status:-1');}" class="button {if $status == -1}active{/if}">所有</a>
+			<a href="{php echo ifilter_url('status:2');}" class="button {if $status == 2}active{/if}">申请中</a>
+			<a href="{php echo ifilter_url('status:1');}" class="button {if $status == 1}active{/if}">提现成功</a>
+			<a href="{php echo ifilter_url('status:3');}" class="button {if $status == 3}active{/if}">已撤销</a>
+		</div>
+		<div class="list-block">
+			{if empty($records)}
+				<div class="no-data">
+					<div class="bg"></div>
+					<p>暂时没有提现记录哦～</p>
+				</div>
+			{else}
+			<ul class="border-1px-tb spread-list">
+				{loop $records $record}
+					<li class="item-content list-item border-1px-b">
+						<div class="item-inner">
+							<div class="item-title">
+								<div class="code">编号: {$record['trade_no']}</div>
+								<div class="commission">申请佣金:{$record['get_fee']}实际金额:{$record['final_fee']},个人所得税:{$record['take_fee']}元</div>
+								<div class="time">申请时间:{$record['addtime']}</div>
+							</div>
+							<div class="item-after">
+								<div>+{$record['final_fee']}</div>
+								<div>
+									{if $record['status'] == 1}
+									已成功
+									{elseif $record['status'] == 2}
+									申请中
+									{else}
+									已撤销
+									{/if}
+								</div>
+							</div>
+						</div>
+					</li>
+				{/loop}
+			</ul>
+			{/if}
+		</div>
+	</div>
+</div>
+<script id="tpl-spread" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<li class="item-content list-item border-1px-b">
+			<div class="item-inner">
+				<div class="item-title">
+					<div class="code">编号: <{d[i].trade_no}></div>
+					<div class="commission">申请佣金:<{d[i].get_fee}> 实际金额:<{d[i].final_fee}>,个人所得税:<{d[i].take_fee}>元</div>
+					<div class="time">申请时间:<{d[i].addtime}></div>
+				</div>
+				<div class="item-after">
+					<div>+<{d[i].final_fee}></div>
+					<div>
+						<{# if(d[i].status == 1) {}>
+						已成功
+						<{# } else if(d[i].status == 2) { }>
+						申请中
+						<{# } else { }>
+						已撤销
+						<{#} }>
+					</div>
+				</div>
+			</div>
+		</li>
+	<{# }}>
+</script>
+{/if}
+
+{if $op == 'application'}
+<div class="page page-getcash-log">
+	<header class="bar bar-nav common-bar-nav">
+		<a href="javascript:;" class="pull-left back"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">申请提现</h1>
+	</header>
+	{itemplate 'nav'}
+	<div class="content">
+		<div class="list-block border-1px-tb">
+			<ul>
+				<li class="item-content">
+					<div class="item-inner">
+						<div class="item-title">
+							账户可用余额：<span class="price">¥ {$member['spreadcredit2']}</span>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="list-block border-1px-tb">
+			<div class="list-item">
+				<div class="list-title">提现金额</div>
+				<div class="list-input">
+					<input type="text" id="fee">
+				</div>
+				<div class="help">
+					<ul>
+						<li>最低提现金额为{$config['withdraw']}元</li>
+						<li>提现费率为{$config['withdrawcharge']}%</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="list-block">
+			<ul class="border-1px-tb" style="background-color: #FFF">
+			{if !empty($config['cashcredit'])}
+				{if in_array('wechat', $config['cashcredit'])}
+				<li class="mode">
+					<label class="label-checkbox item-content ">
+						<div class="item-inner">
+							<div class="item-title">提现到微信</div>
+						</div>
+						<input type="radio" name="channel" class="channel" value="wechat" checked>
+						<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+					</label>
+				</li>
+				{/if}
+				{if in_array('credit2', $config['cashcredit'])}
+				<li class="mode">
+					<label class="label-checkbox item-content border-1px-t">
+						<div class="item-inner">
+							<div class="item-title">提现到余额</div>
+						</div>
+						<input type="radio" name="channel" class="channel" value="credit" {if count($config['cashcredit']) == 1}checked{/if}>
+						<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+					</label>
+				</li>
+				{/if}
+			{else}
+				<li class="item-content">
+					<div class="item-inner">
+						<div class="item-title">平台当前未设置提现方式,请联系平台管理员</div>
+					</div>
+				</li>
+			{/if}
+			</ul>
+		</div>
+		<div class="tab">
+			{if $member['spreadcredit2'] < $config['withdraw']}
+			<a href="javascript:;" class="button button-fill disabled">不足{$config['withdraw']}元</a>
+			{elseif empty($config['cashcredit'])}
+			<a href="javascript:;" class="button button-fill disabled">未设置提现方式</a>
+			{else}
+			<a href="javascript:;" class="button button-fill button-danger">提现</a>
+			{/if}
+		</div>
+	</div>
+</div>
+
+<script>
+$(function(){
+	$(document).on('click', '.button-danger', function(){
+		var member = {php echo json_encode($member)};
+		var config = {php echo json_encode($config)};
+		var fee = parseFloat($.trim($('#fee').val()));
+		if(isNaN(fee)) {
+			$.toast('提现金额有误');
+			return false;
+		}
+		if(fee > member.spreadcredit2) {
+			$.toast('提现金额大于可用余额');
+			return false;
+		}
+		if(fee < config.withdraw) {
+			$.toast('提现金额不能小于' + config.withdraw + '元');
+			return false;
+		}
+		var channel = $('.channel:checked').val();
+		if(!channel) {
+			$.toast('请选择佣金提现渠道');
+			return false;
+		}
+		var params = {
+			fee: fee,
+			channel: channel
+		}
+
+		var rule_fee = parseFloat((fee * config.withdrawcharge/100).toFixed(2));
+		var final_fee = (fee - rule_fee).toFixed(2);
+		var tips = "提现金额" + fee + "元,手续费" + rule_fee + "元,实际到账" + final_fee + "元,确定提现吗";
+		$.confirm(tips, function(){
+			$.post("{php echo imurl('spread/getCash/application')}", params, function(data){
+				var result = $.parseJSON(data);
+				if(result.message.errno == -1) {
+					$.toast(result.message.message);
+				} else {
+					$.toast("申请提现成功,平台会尽快处理", "{php echo imurl('spread/getCash/index')}");
+				}
+				return false;
+			})
+		});
+	});
+})
+</script>
+
+{/if}
+{itemplate 'public/footer'}

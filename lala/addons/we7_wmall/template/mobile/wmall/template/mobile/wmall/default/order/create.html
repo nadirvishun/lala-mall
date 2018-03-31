@@ -1,0 +1,783 @@
+{itemplate 'public/header'}
+<script type='text/javascript' src='{WE7_WMALL_URL}static/js/components/light7/iscroll-probe.js' charset='utf-8'></script>
+<div class="page order-confirm">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">提交订单</h1>
+	</header>
+	<nav class="bar bar-tab no-gutter order-bar">
+		<div class="left">
+			<span class="pull-left">
+				已优惠
+				<span class="activity-price">￥{$activity_price}</span>
+			</span>
+			<span class="pull-right">
+				还需付
+				<span class="sum"><span class="wait-price">￥{$waitprice}</span></span>
+			</span>
+		</div>
+		<div class="right text-center bg-danger" id="order-submit">确认下单</div>
+	</nav>
+	{if !empty($activityed['list']['vip_delivery'])}
+		<nav class="bar bar-tab info-bar">
+			<img src="{WE7_WMALL_TPL_URL}static/img/vip_effective.png" alt="">
+			尊贵的会员, 已为您节省<span class="delivery-activity-price">{$activityed['list']['vip_delivery']['value']}</span>元
+		</nav>
+	{/if}
+	<div class="content">
+		<form method="post" id="order-form" action="{php echo imurl('wmall/order/create/submit', array('sid' => $sid));}">
+			<input type="hidden" name="sid" value="{$sid}">
+			<input type="hidden" name="address_id" id="address_id" value="{$address_id}">
+			<input type="hidden" name="record_id" id="record_id" value="{$recordid}">
+			<input type="hidden" name="redPacket_id" id="redPacket_id" value="{$redPacket_id}">
+			<input type="hidden" name="note" id="order-note" value="">
+			<input type="hidden" name="delivery_time" id="delivery-time" value="{$predict_time}">
+			<input type="hidden" name="delivery_day" id="delivery-day" value="{$predict_day}">
+			<input type="hidden" name="delivery_index" id="delivery-index" value="{$predict_index}">
+			{if $store['delivery_type'] == 2}
+				<input type="radio" name="order_type" class="order_type hide" value="2" checked>
+				<div class="content-block-title">选择配送方式 <span class="color-danger">（仅支持到店自提）</span></div>
+			{/if}
+			{if $store['delivery_type'] == 1}
+				<input type="radio" name="order_type" class="order_type hide" value="1" checked>
+			{/if}
+			{if $store['delivery_type'] == 3}
+				<div class="content-block-title">选择配送方式</div>
+				<div class="list-block media-list pay-method">
+					<ul class="border-1px-tb">
+						<li>
+							<label class="label-checkbox item-content border-1px-b">
+								<div class="item-inner">
+									<div class="item-title">商家配送</div>
+								</div>
+								<input type="radio" name="order_type" class="order_type" value="1" checked id="order-type-1">
+								<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+							</label>
+						</li>
+						<li>
+							<label class="label-checkbox item-content">
+								<div class="item-inner">
+									<div class="item-title">到店自提</div>
+								</div>
+								<input type="radio" name="order_type" class="order_type" value="2" id="order-type-2">
+								<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+							</label>
+						</li>
+					</ul>
+				</div>
+			{/if}
+			{if $store['delivery_type'] == 2 || $store['delivery_type'] == 3}
+			<div class="list-block {if $store['delivery_type'] == 3}hide{/if}" id="delivery-time-2">
+				<ul class="border-1px-tb">
+					<li>
+						<a href="javascript:;" class="item-link item-content delivery-time">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">自提时间</div>
+								<div class="item-after"><span class="color-black delivery-time-show">下单后直接去自提</span><span class="color-orange hide">(大约12:00到)</span></div>
+							</div>
+						</a>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title label">下单人</div>
+								<div class="item-input">
+									<input type="text" name="username" placeholder="您的姓名" value="{$_W['member']['realname']}">
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title label">手机号</div>
+								<div class="item-input">
+									<input type="text" name="mobile" placeholder="手机号" value="{$_W['member']['mobile']}">
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			{/if}
+			{if $store['delivery_type'] == 1 || $store['delivery_type'] == 3}
+			<div class="list-block address" id="address-container">
+				<ul>
+					<li>
+						<a class="item-link item-content external border-1px-b" href="{php echo imurl('wmall/member/address', array('sid' => $sid, 'redirect_type' => 'order', 'recordid' => $_GPC['recordid']));}">
+							<div class="item-inner">
+								{if !empty($address)}
+									<div class="item-text">
+										<div><span class="name">{$address['realname']}</span><span class="tel">{$address['mobile']}</span></div>
+										<div>地址:{$address['address']}</div>
+									</div>
+								{else}
+									<div class="item-title">请选择送达地址</div>
+								{/if}
+							</div>
+						</a>
+						<div class="top-line"></div>
+					</li>
+					<li id="delivery-time-1" class="border-1px-b">
+						<a href="#" class="item-link item-content delivery-time">
+							<div class="item-inner">
+								<div class="item-title">请选择送达时间</div>
+								<div class="item-after"><span class="color-black delivery-time-show">{$text_time}</span></div>
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+			{/if}
+			<div class="list-block hide">
+				<ul class="border-1px-tb">
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">
+									余额抵扣
+									<span class="color-danger"> ￥{$_W['member']['credit2']}</span>
+								</div>
+								<div class="item-after">
+									<label class="label-switch switch-sm">
+										<input type="checkbox" name="deductcredit2" id="deductcredit2" value="1">
+										<div class="checkbox"></div>
+									</label>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="content-block-title">选择支付方式</div>
+			<div class="list-block media-list pay-method">
+				<ul class="border-1px-tb">
+					{loop $store['payment'] $row}
+						<li>
+							<label class="label-checkbox item-content border-1px-b">
+								<div class="item-inner">
+									<div class="item-title">{$pay_types[$row]['text']}</div>
+								</div>
+								<input type="radio" name="pay_type" class="pay_type" value="{$row}" {if $row == 'wechat'}checked{/if}>
+								<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+							</label>
+						</li>
+					{/loop}
+				</ul>
+			</div>
+			<div class="list-block coupon-info">
+				<ul class="border-1px-tb">
+					<li>
+						<a href="javascript:;" class="item-link item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">商家代金券</div>
+								<div class="item-after color-danger {if !empty($coupons)}open-popup{/if}" data-popup=".popup-coupon">
+									{$coupon_text}
+								</div>
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="javascript:;" class="item-link item-content">
+							<div class="item-inner">
+								<div class="item-title">平台红包</div>
+								<div class="item-after color-danger {if !empty($redPackets)}open-popup{/if}" data-popup=".popup-redPacket">
+									{$redPacket_text}
+								</div>
+							</div>
+						</a>
+					</li>
+					{if $cart['bargain_use_limit'] == 2}
+						<li class="help-block">
+							<div class="color-danger">特价商品不与代金券同时使用</div>
+						</li>
+					{/if}
+					{if !empty($redPacket)}
+						<li class="help-block">
+							{if $redPacket['type'] == 'mallNewMember'}
+								<div class="color-danger">首单红包不与其他优惠同享</div>
+							{/if}
+						</li>
+					{/if}
+				</ul>
+			</div>
+			<div class="list-block">
+				<ul class="border-1px-tb">
+					<li>
+						<a class="item-link item-content border-1px-b">
+							<div class="item-inner">
+								<div class="item-title">备注</div>
+								<div class="item-after order-note" id="order-note-show">(选填)可填入特殊要求</div>
+							</div>
+						</a>
+					</li>
+					{if $store['invoice_status']}
+						<li>
+							<div class="item-content invoice">
+								<div class="item-inner border-1px-b">
+									<div class="item-title">需要发票</div>
+									<div class="item-after">
+										<label class="label-switch switch-sm invoice-status">
+											<input type="checkbox" value="1">
+											<div class="checkbox"></div>
+										</label>
+									</div>
+								</div>
+							</div>
+						</li>
+					{/if}
+					<li class="hide invoice-value">
+						<div class="item-content">
+							<input type="text" id="invoice" placeholder="输入个人或者公司抬头"/>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="list-block detail-info">
+				<ul class="border-1px-tb">
+					<li>
+						<div class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">{$store['title']}</div>
+								<div class="item-after">本单由 <span class="color-black">{if $store['delivery_mode'] == 1}商家配送{else}{$_config_mall['delivery_title']}{/if}</span> </div>
+							</div>
+						</div>
+					</li>
+					<li class="order-list">
+						<div class="inner-con border-1px-b">
+							{loop $cart['data'] $val}
+								{loop $val $val1}
+									<div class="row no-gutter">
+										{if $val1['bargain_id'] > 0}
+											<div class="col-60 icon-before">
+												<img src="{WE7_WMALL_TPL_URL}static/img/zhe_b.png">
+												{$val1['title']}
+											</div>
+										{else}
+											<div class="col-60">
+												{$val1['title']}
+											</div>
+										{/if}
+										<div class="col-10 text-right color-muted">×{$val1['num']}</div>
+										<div class="col-30 text-right">
+											{if $val1['bargain_id'] > 0}
+												<span class="color-muted text-line-through">￥{$val1['total_price']}</span>
+											{/if}
+											<span class="color-black">￥{$val1['total_discount_price']}</span>
+										</div>
+									</div>
+								{/loop}
+							{/loop}
+						</div>
+					</li>
+					<li class="order-list">
+						<div class="inner-con border-1px-b">
+							{if $cart['box_price'] > 0}
+								<div class="row no-gutter">
+									<div class="col-80">餐盒费</div>
+									<div class="col-20 text-right color-black">￥{$cart['box_price']}</div>
+								</div>
+							{/if}
+							<div class="row no-gutter">
+								<div class="col-80">包装费</div>
+								<div class="col-20 text-right color-black">￥{$store['pack_price']}</div>
+							</div>
+							{if $distance > 0}
+								<div class="row no-gutter row-distance">
+									<div class="col-80">配送距离</div>
+									<div class="col-20 text-right color-black">{$distance}公里</div>
+								</div>
+							{/if}
+							<div class="row no-gutter row-delivery-fee">
+								{if $store['delivery_fee_mode'] == 2}
+									<div class="col-80 delivery-fee-modal">配送费 <i class="icon icon-question-circle"></i></div>
+								{else}
+									<div class="col-80">配送费</div>
+								{/if}
+								<div class="col-20 text-right color-black">￥<span id="delivery-price">{$delivery_price}</span></div>
+							</div>
+						</div>
+					</li>
+
+					<li class="order-list color-muted" style="font-size: .6rem; padding-top: .15rem">
+						{if $cart['bargain_use_limit'] == 1}
+							特价商品按照优惠后价格计算满减
+						{elseif $cart['bargain_use_limit'] == 2}
+							特价优惠不与满减优惠,满赠优惠等同享
+						{/if}
+					</li>
+
+					{if !empty($activityed['list'])}
+						<li class="order-list activity-list">
+							<div class="inner-con border-1px-b">
+								{loop $activityed['list'] $key $row}
+									<div class="row no-gutter activity-row activity-{$key} {if $key == 'selfDelivery' && $store['delivery_type'] != 2}hide{/if}">
+										<div class="col-50 icon-before"><img src="{WE7_WMALL_TPL_URL}static/img/{$row['icon']}">{$row['name']}</div>
+										<div class="col-50 text-right color-black {if $row['type'] == 'delivery'}delivery-activity-price-text{/if}">{$row['text']}</div>
+									</div>
+								{/loop}
+							</div>
+						</li>
+					{/if}
+					<li class="order-list">
+						<div class="inner-con">
+							<div class="row no-gutter">
+								<div class="col-60 color-muted">订单 <span class="color-black total-price">￥{php echo $cart['price'] + $cart['box_price'] + $store['pack_price'] + $delivery_price}</span> - 优惠 <span class="color-black activity-price">￥{$activity_price}</span></div>
+								<div class="col-20 text-right color-muted">总计</div>
+								<div class="col-20 text-right color-black"><span class="wait-price">￥{$waitprice}</span></div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="list-block explain-info">
+				<ul>
+					{if $_W['we7_wmall']['config']['takeout']['handle_time_limit'] > 0}
+						<li>{$_W['we7_wmall']['config']['takeout']['handle_time_limit']}分钟内商户未接单,将自动取消</li>
+					{/if}
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="modal modal-no-buttons delivery-time-modal not-remove">
+	<div class="modal-inner">
+		<div class="modal-title">
+			<div>请选择送达时间</div>
+		</div>
+		<div class="modal-text">
+			<div class="category-container">
+				<div class="parent-category" id="delivery-time-parent">
+					<ul>
+						{loop $delivery_time['days'] $i $day}
+							<li {if !$i}class="active"{/if} data-value="{$day}"><a href="javascript:;">{$day}</a></li>
+						{/loop}
+					</ul>
+				</div>
+				<div class="children-category" id="delivery-time-children">
+					<div class="children-category-wrapper">
+						<ul id="category1">
+							{if $time_flag == 1}
+								<li data-value="尽快送达" data-id="{$predict_index}" data-extra-price="{$predict_extra_price}" class="time-flag"><a href="javascript:;">尽快送达 <span>({$predict_delivery_price})</span></a></li>
+								<li class="delivery-tips time-flag">约{$predict_time}送达</li>
+							{/if}
+							{loop $delivery_time['times'] $i $time}
+								<li data-value="{$time['start']} ~ {$time['end']}" data-id="{$i}" data-extra-price="{$time['fee']}" class="{if $time['timestamp'] <= $predict_timestamp && !$delivery_time['reserve']}hide init-hide{/if}">
+									<a href="javascript:;">{$time['start']}~{$time['end']} <span>({$time['delivery_price_cn']})</span></a>
+								</li>
+							{/loop}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="popup popup-remark" id="popup-remark">
+	<div class="content-block">
+		<div class="popup-header row no-gutter">
+			<div class="col-25"><a href=""><span class="icon icon-arrow-left"></span></a></div>
+			<div class="col-50 text-center">填写备注</div>
+			<div class="col-25 text-right"><a href="javascript:;" class="sure close-popup" id="note-submit">确定</a></div>
+		</div>
+		<div class="popup-body">
+			<textarea name="" id="note-textarea" placeholder="给商家留言,可输入对商家的要求"></textarea>
+			{if !empty($store['order_note'])}
+				<div class="specs-select">
+					{loop $store['order_note'] $order_note}
+						<span class="spec-item">{$order_note}</span>
+					{/loop}
+				</div>
+			{/if}
+		</div>
+	</div>
+</div>
+
+<div class="popup popup-coupon" id="popup-coupon">
+	<div class="page coupon coupon-select">
+		<header class="bar bar-nav common-bar-nav">
+			<a class="pull-left close-popup" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+			<h1 class="title">选择代金券</h1>
+		</header>
+		<div class="content">
+			<div class="content-padded">
+				<a href="{php echo imurl('wmall/order/create/index', array('sid' => $sid, 'address_id' => $_GPC['address_id']));}" class="button button-light button-big">不使用代金券</a>
+			</div>
+			<div class="coupon-list content-padded">
+				{loop $coupons $coupon}
+				<div class="coupon-list-item" data-recordid="{$coupon['id']}">
+					<div class="coupon-panel">
+						<label class="label-checkbox item-content">
+							<input type="radio" name="recordid" value="{$coupon['id']}" class="coupon-radio">
+							<div class="item-media">
+								<i class="icon icon-form-checkbox"></i>
+							</div>
+							<div class="item-inner">
+								<div class="row no-gutter">
+									<div class="col-40 text-center">
+										<div class="price"><span>￥</span>{$coupon['discount']}</div>
+										<div class="condition">满{$coupon['condition']}元可用</div>
+									</div>
+									<div class="col-60">
+										<div class="store-title">{$store['title']}</div>
+										<div class="date">有效期至{php echo date('Y-m-d', $coupon['endtime'])}</div>
+									</div>
+								</div>
+							</div>
+						</label>
+					</div>
+				</div>
+				{/loop}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="popup popup-redPacket" id="popup-redPacket">
+	<div class="page">
+		<header class="bar bar-nav common-bar-nav">
+			<a class="pull-left close-popup" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+			<h1 class="title">选择红包</h1>
+		</header>
+		<div class="content redPacket-my">
+			<div class="content-padded">
+				<a href="{php echo imurl('wmall/order/create/index', array('sid' => $sid, 'address_id' => $_GPC['address_id']));}" class="button button-light button-big">不使用红包</a>
+			</div>
+			<div class="redPacket-list content-padded">
+				{loop $redPackets $redPacket}
+					<div class="redPacket-list-item border-1px" data-id="{$redPacket['id']}">
+						<div class="redPacket-info row">
+							<div class="col-50">
+								<span class="redPacket-title">{$redPacket['title']}</span>
+							</div>
+							<div class="col-50 text-right">
+								<div class="price">￥<span class="price-num">{$redPacket['discount']}</span></div>
+							</div>
+						</div>
+						<div class="redPacket-use-limit row">
+							<div class="col-60">限{php echo date('Y-m-d', $redPacket['starttime'])}~{php echo date('Y-m-d', $redPacket['endtime'])}使用</div>
+							<div class="col-40 text-right">
+								{if $redPacket['condition'] > 0}
+									<p class="use-condition">满{$redPacket['condition']}元可用</p>
+								{else}
+									<p class="use-condition">满任意金额元可用</p>
+								{/if}
+							</div>
+						</div>
+						<div class="dash-line">
+							<span class="border-1px-r circle circle-left"></span>
+							<span class="border-1px-l circle circle-right"></span>
+						</div>
+						<span class="selected-status"></span>
+					</div>
+				{/loop}
+			</div>
+		</div>
+	</div>
+</div>
+
+{if $store['delivery_fee_mode'] == 2}
+<div class="modal modal-no-buttons modal-notice modal-delivery-fee">
+	<div class="modal-inner">
+		<div class="modal-title">
+			<div>计价细则</div>
+		</div>
+		<div class="modal-text">
+			<div class="notice">
+				{$store['delivery_price_extra']['start_km']}千米内，收取{$store['delivery_price_extra']['start_fee']}元配送费 <br>
+				{$store['delivery_price_extra']['start_km']}千米以上，每增加1千米，多收取{$store['delivery_price_extra']['pre_km_fee']}元
+			</div>
+			<a href="javascript:;" onclick="$.icloseModal('.modal-notice', true);" class="button button-big button-fill button-danger close-modal">我知道了</a>
+		</div>
+	</div>
+</div>
+{/if}
+<script>
+$(function(){
+	var recordid = 0, redPacket_id = 0;
+	$(document).on('click', '.scan-rules', function(){
+		var $parent = $(this).parents('.coupon-list-item');
+		$parent.find('.coupon-rules').toggleClass('hide');
+	});
+
+	$(document).on('click', '#popup-coupon .coupon-radio', function(e){
+		recordid = $(this).parents('.coupon-list-item').data('recordid');
+		$.closeModal('.popup-coupon');
+		$.showIndicator();
+		setTimeout(function(){
+			location.href = "{php echo imurl('wmall/order/create/index', array('sid' => $sid, 'address_id' => $_GPC['address_id']));}&recordid=" + recordid;
+		}, 1000);
+		return;
+	});
+
+	$(document).on('click', '#popup-redPacket .redPacket-list-item', function(e){
+		redPacket_id = $(this).data('id');
+		$(this).toggleClass('active');
+		$.closeModal('.popup-redPacket');
+		$.showIndicator();
+		setTimeout(function(){
+			location.href = "{php echo imurl('wmall/order/create/index', array('sid' => $sid, 'address_id' => $_GPC['address_id']));}&recordid=" + recordid + "&redPacket_id=" + redPacket_id;
+		}, 1000);
+		return;
+	});
+
+	$(document).on('click', '#order-submit', function(){
+		{if $send_diff > 0}
+			send_tips();
+			return false;
+		{/if}
+		var $this = $(this);
+		if($(this).hasClass('bg-grey')) {
+			return false;
+		}
+		$(this).removeClass('bg-danger').addClass('bg-grey');
+		var order_type = $(':radio[name="order_type"]:checked').val();
+		var username = '';
+		var mobile = '';
+		if(order_type == 1) {
+			if(!$('#address_id').val()) {
+				$(this).addClass('bg-danger').removeClass('bg-grey');
+				$.toast('请选择收货地址');
+				return false;
+			}
+		} else if(order_type == 2) {
+			var username = $.trim($(':text[name="username"]').val());
+			if(!username) {
+				$(this).addClass('bg-danger').removeClass('bg-grey');
+				$.toast('请填写下单人');
+				return false;
+			}
+			var mobile = $.trim($(':text[name="mobile"]').val());
+			var reg = /^1[34578][0-9]{9}$/;
+			if(!reg.test(mobile)) {
+				$(this).addClass('bg-danger').removeClass('bg-grey');
+				$.toast("手机号格式错误");
+				return false;
+			}
+		}
+		if(!$('.pay_type:checked').val()) {
+			$(this).addClass('bg-danger').removeClass('bg-grey');
+			$.toast('请选择支付方式');
+			return false;
+		}
+		var params = {
+			delivery_index: $('#delivery-index').val(),
+			delivery_day: $('#delivery-day').val(),
+			delivery_time: $('#delivery-time').val(),
+			address_id: $('#address_id').val(),
+			deductcredit2: $('#deductcredit2:checked').val(),
+			record_id: $('#record_id').val(),
+			redPacket_id: $('#redPacket_id').val(),
+			note: $('#order-note').val(),
+			pay_type: $('.pay_type:checked').val(),
+			invoice: $('#invoice').val(),
+			order_type: order_type,
+			username: username,
+			mobile: mobile
+		};
+		$.post("{php echo imurl('wmall/order/create/submit', array('sid' => $sid));}", params, function(data){
+			var result = $.parseJSON(data);
+			if(result.message.errno != 0) {
+				if(result.message.errno == -1) {
+					$(this).addClass('bg-danger').removeClass('bg-grey');
+					$.toast(result.message.message);
+				} else {
+					$.alert(result.message.message, function(){
+						location.href = "{php echo imurl('wmall/store/goods', array('sid' => $sid));}";
+					});
+				}
+			} else {
+				$.toast('下单成功');
+				location.href = "{php echo imurl('system/paycenter/pay', array('sid' => $sid, 'order_type' => 'takeout'));}&id=" + result.message.message;
+			}
+			return false;
+		});
+	});
+
+	var delivery_price = "{$delivery_price}";
+	var delivery_price_basic = "{$delivery_price_basic}";
+	var waitprice = "{$waitprice}";
+	var cartprice = "{$cart['price']}";
+	var totalprice = {php echo $cart['price'] + $cart['box_price'] + $store['pack_price'] + $delivery_price};
+	var delivery_activity_price = "{$delivery_activity_price}";
+	var self_delivery_activity_price = "{$self_delivery_activity_price}";
+	var activity_price = "{$activity_price}";
+	var activity_notSelfDelivery_price = "{$activity_notSelfDelivery_price}";
+
+	{if $send_diff > 0}
+		function send_tips() {
+			$.modal({
+				title: '不满起送价',
+				text: '当前商品不满起送价，是否再添加其他商品一同下单？',
+				buttons: [
+					{
+						text: '查看地址',
+						onClick: function() {
+							location.href = "{php echo imurl('wmall/member/address', array('sid' => $sid, 'redirect_type' => 'order', 'recordid' => $_GPC['recordid'], 'redPacket_id' => $_GPC['redPacket_id']));}";
+							return false;
+						}
+					},
+					{
+						text: '<span class="color-danger">好的</span>',
+						onClick: function() {
+							location.href = "{php echo imurl('wmall/store/goods', array('sid' => $sid, 'address_id' => $address['id']));}";
+							return false;
+						}
+					}
+				]
+			});
+			return false;
+		}
+		send_tips();
+	{elseif $store['delivery_fee_mode'] == 3 && !empty($cookie_price_original) && $cookie_price['delivery_price'] != $cookie_price_original['delivery_price']}
+		$.toast('由于配送地址/时间发生变化,配送费也发生了变化');
+	{/if}
+	//配送方式
+	$(document).on('click', '#order-type-1', function(){
+		$('#address-container').show();
+		$('#delivery-time-2').hide();
+		$('#delivery-time-1').show();
+		$('#delivery-price').html(delivery_price);
+		$('.total-price').html('￥' + totalprice);
+		$('.activity-price').html('￥' + activity_price);
+		waitprice_temp = totalprice - activity_price;
+		$('.wait-price').html('￥' + waitprice_temp);
+		$('.activity-row').hide();
+		$(".activity-row:not(.activity-selfDelivery)").show();
+		$('.info-bar').show();
+		$('.row-delivery-fee, .row-distance').show();
+	});
+
+	$(document).on('click', '#order-type-2', function(){
+		$('#address-container').hide();
+		$('#delivery-time-2').show();
+		$('#delivery-time-1').hide();
+		$('#delivery-price').html(0);
+		$('.activity-delivery').hide();
+		$('.activity-selfDelivery').show();
+
+		$('.activity-row').hide();
+		$(".activity-row.activity-selfDelivery").show();
+
+		$('.info-bar').hide();
+		var totalprice_temp = (totalprice - 0 - delivery_price).toFixed(2);
+		$('.total-price').html('￥' + totalprice_temp);
+
+		activityprice_temp = (activity_price - activity_notSelfDelivery_price + parseFloat(self_delivery_activity_price)).toFixed(2);
+		$('.activity-price').html('￥' + activityprice_temp);
+		waitprice_temp = (totalprice_temp - activityprice_temp).toFixed(2);
+		$('.wait-price').html('￥' + waitprice_temp);
+		$('.row-delivery-fee, .row-distance').hide();
+	});
+
+	//选择时间
+	$(document).on('click', '.delivery-time-show', function(){
+		$.iopenModal('.delivery-time-modal', function(){
+			var init_show = $('#delivery-time-children li').not('.hide').size();
+			if(!init_show) {
+				var now_day = $('#delivery-time-parent li.active');
+				now_day.next().trigger('click');
+				now_day.addClass('hide');
+			}
+			$('.delivery-time-modal .children-category-wrapper').height(350);
+			if($.device.iphone) {
+				new IScroll('.delivery-time-modal .children-category-wrapper', {probeType: 3, mouseWheel: true, click: false, tap: true})
+			} else {
+				new IScroll('.delivery-time-modal .children-category-wrapper', {probeType: 3, mouseWheel: true, click: true})
+			}
+		});
+	});
+
+	$(document).on('click', '#delivery-time-children li:not(.delivery-tips)', function(){
+		var day = $('#delivery-time-parent li.active').data('value');
+		var time = $(this).data('value');
+		var index = $(this).data('id');
+		var order_type = $('.order_type:checked').val();
+		if(order_type == 2) {
+			$('#delivery-index').val(index);
+			$('#delivery-time').val(time);
+			$('#delivery-day').val(day);
+			$('.delivery-time-show').html(day + ' ' + time);
+			$.icloseModal('.delivery-time-modal', true);
+			return false;
+		}
+		var delivery_extra_price = $(this).data('extra-price');
+		var delivery_price_new = parseFloat(delivery_price_basic) + parseFloat(delivery_extra_price);
+		totalprice_temp = totalprice - delivery_price + delivery_price_new;
+		activityprice_temp = activity_price;
+		if(delivery_activity_price > 0) {
+			activityprice_temp = activity_price - delivery_activity_price + delivery_price_new;
+			$('.delivery-activity-price').html(delivery_price_new);
+			$('.delivery-activity-price-text').html('-￥' + delivery_price_new);
+		}
+		waitprice_temp = (totalprice_temp - activityprice_temp).toFixed(2);
+		$('.activity-price').html('￥' + activityprice_temp);
+		$('#delivery-price').html(delivery_price_new);
+		$('.total-price').html('￥' + totalprice_temp);
+		$('.wait-price').html('￥' + waitprice_temp);
+
+		$('#delivery-index').val(index);
+		$('#delivery-time').val(time);
+		$('#delivery-day').val(day);
+		$('.delivery-time-show').html(day + ' ' + time);
+		$.icloseModal('.delivery-time-modal', true);
+		return false;
+	});
+	var today_date = "{php echo date('m-d')}";
+	var time_flag = "{$time_flag}";
+	$(document).on('click', '#delivery-time-parent li', function(){
+		$(this).siblings().removeClass('active');
+		$(this).addClass('active');
+		var date = $(this).data('value');
+		if(today_date == date) {
+			if(time_flag == 1) {
+				$('#delivery-time-children li.time-flag').removeClass('hide');
+			}
+			$('#delivery-time-children li.init-hide').addClass('hide');
+		} else {
+			$('#delivery-time-children li.time-flag').addClass('hide');
+			$('#delivery-time-children li.init-hide').removeClass('hide');
+		}
+		if($.device.iphone) {
+			new IScroll('.delivery-time-modal .children-category-wrapper', {probeType: 3, mouseWheel: true, click: false, tap: true})
+		} else {
+			new IScroll('.delivery-time-modal .children-category-wrapper', {probeType: 3, mouseWheel: true, click: true})
+		}
+		return false;
+	});
+
+	//备注
+	$(document).on('click', '#order-note-show', function(){
+		$.popup('.popup-remark');
+	});
+
+	$(document).on('click', '#popup-remark .spec-item', function(){
+		var note = $('#note-textarea').val();
+		$('#note-textarea').val(note + ' ' + $(this).html());
+	});
+
+	$(document).on('click', '#note-submit', function(){
+		var note = $('#note-textarea').val();
+		if(note == '') {
+			note = '(选填)可填入特殊要求';
+		}
+		$('#order-note-show').html(note);
+		$('#order-note').val(note);
+	});
+
+	//发票
+	$(document).on('click', '.invoice-status', function(){
+		if($(this).find('input').prop('checked')) {
+			$('.invoice-value').removeClass('hide');
+		} else {
+			$('.invoice-value').addClass('hide');
+		}
+	});
+
+	$(document).on('click', '.delivery-fee-modal', function(){
+		$.iopenModal('.modal-delivery-fee', function(){});
+	});
+});
+</script>
+{itemplate 'public/footer'}

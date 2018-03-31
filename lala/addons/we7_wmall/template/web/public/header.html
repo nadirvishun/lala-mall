@@ -1,0 +1,354 @@
+{itemplate 'public/header-base'}
+<body>
+	{if defined('IN_MANAGE')}
+	<div id="app-sidebar">
+		<div id="app-first-sidebar">
+			<a class="team-logo-wrap" href="">
+				<div class="team-logo">
+					<img width="32px" height="32px" src="{php echo tomedia($_W['we7_wmall']['config']['mall']['logo']);}" alt="">
+				</div>
+				<span class="plateform-name">{$_W['we7_wmall']['config']['mall']['title']}</span>
+			</a>
+			<div class="nav">
+				<ul class="clearfix">
+					{ifp 'dashboard'}
+						<li class="{if $_W['_controller'] == 'dashboard'}active{/if}">
+							<a href="{php echo iurl('dashboard/index');}">
+								<i class="icon icon-scan"></i>
+								概况
+							</a>
+						</li>
+					{/if}
+					{ifp 'order'}
+						<li class="{if $_W['_controller'] == 'order'}active{/if}">
+							<a href="{php echo iurl('order/takeout/list');}">
+								<i class="icon icon-order"></i>
+								订单
+							</a>
+						</li>
+					{/if}
+					{ifp 'paycenter'}
+						<li class="{if $_W['_controller'] == 'paycenter'}active{/if}">
+							<a href="{php echo iurl('paycenter/paybill');}">
+								<i class="icon icon-order"></i>
+								收银台
+							</a>
+						</li>
+					{/if}
+					{ifp 'statcenter'}
+						<li class="{if $_W['_controller'] == 'statcenter'}active{/if}">
+							<a href="{php echo iurl('statcenter/takeout');}">
+								<i class="icon icon-data"></i>
+								数据
+							</a>
+						</li>
+					{/if}
+					{ifp 'merchant'}
+						<li class="{if $_W['_controller'] == 'merchant'}active{/if}">
+							<a href="{php echo iurl('merchant/store/list');}">
+								<i class="icon icon-shop"></i>
+								商户
+							</a>
+						</li>
+					{/if}
+					{ifp 'service'}
+						<li class="{if $_W['_controller'] == 'service'}active{/if}">
+							<a href="{php echo iurl('service/comment');}">
+								<i class="icon icon-refund"></i>
+								售后
+							</a>
+						</li>
+					{/if}
+					{ifp 'deliveryer'}
+						<li class="{if $_W['_controller'] == 'deliveryer'}active{/if}">
+							<a href="{php echo iurl('deliveryer/account/list');}">
+								<i class="icon icon-people"></i>
+								配送员
+							</a>
+						</li>
+					{/if}
+					{ifp 'clerk'}
+						<li class="{if $_W['_controller'] == 'clerk'}active{/if}">
+							<a href="{php echo iurl('clerk/account/list');}">
+								<i class="icon icon-person2"></i>
+								店员
+							</a>
+						</li>
+					{/if}
+					{ifp 'member'}
+						<li class="{if $_W['_controller'] == 'member'}active{/if}">
+							<a href="{php echo iurl('member/index');}">
+								<i class="icon icon-peoplelist"></i>
+								顾客
+							</a>
+						</li>
+					{/if}
+					<li class="{if defined('IN_PLUGIN') || $_W['_controller'] == 'plugin'}active{/if}">
+						<a href="{php echo iurl('plugin/index');}">
+							<i class="icon icon-app"></i>
+							应用
+						</a>
+					</li>
+					{ifp 'config'}
+						<li class="{if $_W['_controller'] == 'config'}active{/if}">
+							<a href="{php echo iurl('config/mall');}">
+								<i class="icon icon-settings"></i>
+								设置
+							</a>
+						</li>
+					{/if}
+					{if $_W['perms'] == 'all'}
+						<li class="{if $_W['_controller'] == 'perm'}active{/if}">
+							<a href="{php echo iurl('perm/role');}">
+								<i class="icon icon-lock"></i>
+								权限
+							</a>
+						</li>
+					{/if}
+					{if !empty($_W['isfounder'])}
+						<li class="{if $_W['_controller'] == 'system'}active{/if}">
+							<a href="{php echo iurl('system/plugin/index');}">
+								<i class="icon icon-switch"></i>
+								系统
+							</a>
+						</li>
+					{/if}
+				</ul>
+			</div>
+		</div>
+		<div id="app-second-sidebar">
+			{php build_menu();}
+		</div>
+	</div>
+	<div id="app-container">
+		<div class="sys-message hide"></div>
+		<div id="app-third-sidebar" class="clearfix">
+			<ul class="nav-list">
+				<li><a href="javascritp:;">{$_W['page']['title']}</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="javascript:;" class="dropdown-toggle account-info" data-toggle="dropdown">
+						<span class="pic">
+							<img src="{php echo tomedia("headimg_" . $_W['uniacid'] . ".jpg");}?time={php echo time()} alt=""/>
+						</span>
+						{$_W['account']['name']} <span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="{php echo url('account/display');}" target="_blank"><i class="icon icon-similar"></i> 切换公众号</a></li>
+						<li><a href="{php echo url('account/post', array('uniacid' => $_W['uniacid']));}" target="_blank"><i class="icon icon-weixin"></i> 编辑公众号</a></li>
+						<li><a href="{php echo url('utility/emulator');}" target="_blank"><i class="icon icon-machinery"></i> 模拟测试</a></li>
+						{if !empty($_W['isfounder'])}
+							<li class="divider"></li>
+							<li><a href="{php echo iurl('system/cloud/auth');}"><i class="icon icon-down"></i> 系统更新</a></li>
+							<li><a href="{php echo url('user/profile');}" target="_blank"><i class="icon icon-lock"></i> 修改密码</a></li>
+						{/if}
+						<li><a href="{php echo url('cloud/upgrade');}" target="_blank"><i class="icon icon-back"></i> 返回系统</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div id="app-inner">
+	{elseif defined('IN_AGENT')}
+	<div id="app-sidebar">
+		<div id="app-first-sidebar">
+			<a class="team-logo-wrap" href="">
+				<div class="team-logo">
+					<img width="32px" height="32px" src="{php echo tomedia($_W['we7_wmall']['config']['mall']['logo']);}" alt="">
+				</div>
+				<span class="plateform-name">{$_W['agent']['area']}</span>
+			</a>
+			<div class="nav">
+				<ul class="clearfix">
+					<li class="{if $_W['_controller'] == 'dashboard'}active{/if}">
+						<a href="{php echo iurl('dashboard/index');}">
+							<i class="icon icon-scan"></i>
+							概况
+						</a>
+					</li>
+					<li class="{if $_W['_controller'] == 'order'}active{/if}">
+						<a href="{php echo iurl('order/takeout/list');}">
+							<i class="icon icon-order"></i>
+							订单
+						</a>
+					</li>
+					<li class="{if $_W['_controller'] == 'paycenter'}active{/if}">
+						<a href="{php echo iurl('paycenter/paybill');}">
+							<i class="icon icon-order"></i>
+							收银台
+						</a>
+					</li>
+					<li class="{if $_W['_controller'] == 'statcenter'}active{/if}">
+						<a href="{php echo iurl('statcenter/index');}">
+							<i class="icon icon-data"></i>
+							数据
+						</a>
+					</li>
+					<li class="{if $_W['_controller'] == 'merchant'}active{/if}">
+						<a href="{php echo iurl('merchant/store/list');}">
+							<i class="icon icon-shop"></i>
+							商户
+						</a>
+					</li>
+					<li class="{if $_W['_controller'] == 'service'}active{/if}">
+						<a href="{php echo iurl('service/comment');}">
+							<i class="icon icon-refund"></i>
+							售后
+						</a>
+					</li>
+					<li class="{if $_W['_controller'] == 'finance'}active{/if}">
+						<a href="{php echo iurl('finance/order');}">
+							<i class="icon icon-refund"></i>
+							财务
+						</a>
+					</li>
+					<li class="{if $_W['_controller'] == 'deliveryer'}active{/if}">
+						<a href="{php echo iurl('deliveryer/account/list');}">
+							<i class="icon icon-people"></i>
+							配送员
+						</a>
+					</li>
+					<li class="{if $_W['_controller'] == 'plugin'}active{/if}">
+						<a href="{php echo iurl('plugin/index');}">
+							<i class="icon icon-app"></i>
+							应用
+						</a>
+					</li>
+					<li class="{if $_W['_controller'] == 'config'}active{/if}">
+						<a href="{php echo iurl('config/mall');}">
+							<i class="icon icon-settings"></i>
+							设置
+						</a>
+					</li>
+					<li class="{if $_W['_controller'] == 'agent'}active{/if}">
+						<a href="{php echo iurl('agent/setting');}">
+							<i class="icon icon-settings"></i>
+							代理
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="app-second-sidebar">
+			{php build_menu();}
+		</div>
+	</div>
+	<div id="app-container">
+		<div class="sys-message hide"></div>
+		<div id="app-third-sidebar" class="clearfix">
+			<ul class="nav-list">
+				<li><a href="javascritp:;">{$_W['page']['title']}</a></li>
+			</ul>
+		</div>
+		<div id="app-inner">
+	{elseif defined('IN_MERCHANT')}
+	<div id="app-sidebar">
+		<div id="app-first-sidebar">
+			<a class="team-logo-wrap" href="">
+				<div class="team-logo">
+					<img width="32px" height="32px" src="{php echo tomedia($store['logo'])}" alt="">
+				</div>
+				<span class="plateform-name">{$store['title']}</span>
+			</a>
+			<div class="nav">
+				<ul class="clearfix">
+					<li class="{if $_W['_controller'] == 'dashboard'}active{/if}">
+						<a href="{php echo iurl('store/dashboard/index');}">
+							<i class="icon icon-scan"></i>
+							概况
+						</a>
+					</li>
+					<li class="{if $_W['_action'] == 'order'}active{/if}">
+						<a href="{php echo iurl('store/order/takeout');}">
+							<i class="icon icon-waimai"></i>
+							外卖
+						</a>
+					</li>
+					<li class="{if $_W['_action'] == 'tangshi'}active{/if}">
+						<a href="{php echo iurl('store/tangshi/order');}">
+							<i class="icon icon-store"></i>
+							店内
+						</a>
+					</li>
+					<li class="{if $_W['_controller'] == 'paycenter'}active{/if}">
+						<a href="{php echo iurl('store/paycenter/paybill');}">
+							<i class="icon icon-order"></i>
+							收银台
+						</a>
+					</li>
+					<li class="{if $_W['_action'] == 'goods'}active{/if}">
+						<a href="{php echo iurl('store/goods/index');}">
+							<i class="icon icon-goods"></i>
+							商品
+						</a>
+					</li>
+					<li class="{if $_W['_action'] == 'service'}active{/if}">
+						<a href="{php echo iurl('store/service/comment');}">
+							<i class="icon icon-refund"></i>
+							售后
+						</a>
+					</li>
+					<li class="{if $_W['_action'] == 'finance'}active{/if}">
+						<a href="{php echo iurl('store/finance/order');}">
+							<i class="icon icon-recharge"></i>
+							财务
+						</a>
+					</li>
+					<li class="{if $_W['_action'] == 'statistic'}active{/if}">
+						<a href="{php echo iurl('store/statistic/order');}">
+							<i class="icon icon-data"></i>
+							分析
+						</a>
+					</li>
+					<li class="{if $_W['_action'] == 'activity'}active{/if}">
+						<a href="{php echo iurl('store/activity/shopIndex');}">
+							<i class="icon icon-activity"></i>
+							营销
+						</a>
+					</li>
+					<li class="hide {if $_W['_action'] == 'member'}active{/if}">
+						<a href="{php echo iurl('store/member/index');}">
+							<i class="icon icon-peoplelist"></i>
+							顾客
+						</a>
+					</li>
+					<li class="{if $_W['_action'] == 'shop'}active{/if}">
+						<a href="{php echo iurl('store/shop/setting');}">
+							<i class="icon icon-settings"></i>
+							门店
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="app-second-sidebar">
+			{php build_menu();}
+		</div>
+	</div>
+	<div id="app-container">
+		<div class="sys-message hide"></div>
+		<div id="app-third-sidebar" class="clearfix">
+			<ul class="nav-list">
+				<li><a href="javascritp:;">{$_W['page']['title']}</a></li>
+			</ul>
+			<div class="pull-right user-section">
+				{if !empty($_W['clerk'])}
+				<div class="pull-left wm-user-name">
+					<a href="javascript:;" class="text">
+						<span class="names">{$_W['clerk']['title']}</span>
+						<span><i class="fa fa-trans fa-angle-down"></i></span>
+					</a>
+					<ul class="drop-menu">
+						<li class="page-jump"><a href="{php echo iurl('store/shop/account')}">修改密码</a></li>
+						<li class="page-jump"><a href="{php echo iurl('store/oauth/loginout')}">退出</a></li>
+					</ul>
+				</div>
+				{/if}
+				<div class="pull-left wm-notice">
+					<a class="page-jump notice-jump" href="{php echo iurl('store/shop/notice/list')}"><i class="fa fa-bell"></i><span class="badge hide" id="notice-total">0</span></a>
+				</div>
+			</div>
+		</div>
+		<div id="app-inner">
+	{/if}
+

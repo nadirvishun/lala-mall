@@ -1,0 +1,26 @@
+<div class="second-sidebar-title">{$_W['_plugin']['title']}</div>
+<div class="nav slimscroll">
+	{ifp 'creditshop.order'}
+		<div class="menu-header">兑换</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'order'}class="active"{/if}>
+				<a href="{php echo iurl('creditshop/order');}">兑换记录</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'creditshop.config' || 'creditshop.cover'}
+		<div class="menu-header">设置</div>
+		<ul class="menu-item">
+			{ifp 'creditshop.config'}
+				<li {if $_W['_action'] == 'config'}class="active"{/if}>
+					<a href="{php echo iurl('creditshop/config/index');}">系统设置</a>
+				</li>
+			{/if}
+			{ifp 'creditshop.cover'}
+				<li {if $_W['_action'] == 'cover'}class="active"{/if}>
+					<a href="{php echo iurl('creditshop/cover/index');}">入口设置</a>
+				</li>
+			{/if}
+		</ul>
+	{/if}
+</div>

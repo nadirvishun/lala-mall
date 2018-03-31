@@ -1,0 +1,246 @@
+{itemplate 'public/header'}
+<link href="../addons/we7_wmall/plugin/errander/static/css/web/diy.web.css" rel="stylesheet" type="text/css"/>
+<div class="clearfix">
+	<div class="app-preview">
+		<div class="app-header"></div>
+		<div class="app-body">
+			<div class="title">跑腿首页</div>
+			<div class="main" id="app-preview"></div>
+		</div>
+		<div class="app-footer"></div>
+	</div>
+	<div class="app-editor form-horizontal" id="app-editor">
+		<div class="editor-arrow"></div>
+		<div class="inner"></div>
+	</div>
+</div>
+<div class="app-action">
+	<div class="nav" id="nav">
+		<nav class="btn btn-link"><span class="icon icon-set"></span> 页面设置</nav>
+		<nav class="btn btn-link active"><span class="icon icon-plus"></span> 秒杀时间段</nav>
+		<nav class="btn btn-link active"><span class="icon icon-plus"></span> 秒杀会场</nav>
+		<nav class="btn btn-link active"><span class="icon icon-plus"></span> 秒杀广告</nav>
+		<nav class="btn btn-link active"><span class="icon icon-plus"></span> 秒杀商品</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 列表导航</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 富文本</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 标题栏</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 辅助线</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 辅助空白</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 按钮组</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 按钮组2</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 单图组</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 图片轮播</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 图片橱窗</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 图片展播</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 图片组</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 音频播放</nav>
+		<nav class="btn btn-link"><span class="icon icon-plus"></span> 优惠组券</nav>
+	</div>
+	<div class="action">
+		<nav class="btn btn-default btn-sm pull-left" id="gotop">返回顶部</nav>
+		<nav class="btn btn-primary btn-sm btn-save">保存并设置</nav>
+	</div>
+</div>
+
+<script type="text/html" id="tpl-page">
+	<div class="head-banner select-container <(if params.container == '.head-banner')>active<(/if)>" data-container=".head-banner" data-type="slide">
+		<(each slide as item)>
+			<img src="<(tomedia item.img)>" alt="">
+		<(/each)>
+		<div class="btn-edit-del">
+			<div class="btn-edit">编辑</div>
+			<div class="btn-del">删除</div>
+		</div>
+	</div>
+	<div class="head-tabs">
+		<div class="tabs-head-item <(if params.type == 'buy')>active<(/if)>" data-type="buy">
+			<span class="buy-icon"></span>
+			帮我买
+		</div>
+		<div class="tabs-head-item <(if params.type == 'delivery')>active<(/if)>" data-type="delivery">
+			<span class="delivery-icon"></span>
+			帮我送
+		</div>
+	</div>
+	<div class="main-container">
+		<div class="category-container category-buy-container <(if params.type != 'buy')>hide<(/if)>">
+			<div class="category-title">
+				<span class="icon icon-cart"></span>
+				想买点什么
+			</div>
+			<div class="search">
+				<div class="search-inner">
+					<div class="search-input">
+						<input type="text" placeholder="输入您想要买的商品">
+					</div>
+					<div class="search-submit">帮我买</div>
+				</div>
+			</div>
+			<div class="record">
+				<div class="js-notice" data-speed="4">
+					<ul>
+						<li class="row no-gutter">
+							<div class="record-item col-80">
+								<span class="action">【大家都在买】</span>
+								田*买了 煎饼（双蛋，不要辣和葱花，8元），起酥面包（黄桃，2个），美丹苏打饼干鲜葱味（1袋，14元左右）
+							</div>
+							<div class="delivery-time col-20">38分钟送达</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="category-list category-buy-list select-container border-1px-t <(if params.container == '.category-buy-list')>active<(/if)>" data-container=".category-buy-list" data-type="categoryBuy">
+				<(each categoryBuy as item)>
+					<div class="category-item">
+						<div class="category-info">
+							<div class="category-title"><(item.title)></div>
+							<div class="category-subtitle"><(item.subtitle)></div>
+						</div>
+						<div class="category-logo">
+							<img src="<(tomedia item.img)>" alt=""/>
+						</div>
+					</div>
+				<(/each)>
+				<div class="btn-edit-del">
+					<div class="btn-edit">编辑</div>
+					<div class="btn-del">删除</div>
+				</div>
+			</div>
+		</div>
+		<div class="category-container category-delivery-container <(if params.type != 'delivery')>hide<(/if)>"">
+			<div class="category-title">
+				<span class="icon icon-lock"></span>
+				想送啥
+			</div>
+			<div class="category-list category-delivery-list select-container border-1px-tb clearfix <(if params.container == '.category-delivery-list')>active<(/if)>" data-container=".category-delivery-list" data-type="categoryDelivery">
+				<(each categoryDelivery as item)>
+					<div class="category-item">
+						<div class="category-logo"><img src="<(tomedia item.img)>" alt=""/>.</div>
+						<div class="category-title"><(item.title)></div>
+					</div>
+				<(/each)>
+				<div class="btn-edit-del">
+					<div class="btn-edit">编辑</div>
+					<div class="btn-del">删除</div>
+				</div>
+			</div>
+			<div class="list-block border-1px-tb">
+				<ul>
+					<li>
+						<div class="item-content item-link">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">重量</div>
+								<div class="item-after">3kg</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content item-link">
+							<div class="item-inner">
+								<div class="item-title">物品价值</div>
+								<div class="item-after">100元以下</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="btn-delivery-submit">帮我送</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="tpl-editor">
+	<div class="form-items <(if params.container != '.head-banner')>hide<(/if)>" data-min="1" data-max="5" data-type="slide">
+		<div class="inner">
+			<(each slide as item index)>
+				<div class="item" data-id="<(index)>">
+					<span class="btn-del del-item" title="删除"></span>
+					<div class="item-body">
+						<div class="item-image">
+							<img src="<(tomedia item.img)>" id="cimg-<(index)>">
+						</div>
+						<div class="item-form">
+							<div class="input-group">
+								<input type="text" class="form-control input-sm diy-bind" placeholder="请选择图片或输入图片地址" value="<(item.img)>" data-bind-parent="<(index)>" data-bind-child="slide" data-bind="img" id="pimg-<(index)>">
+								<span class="input-group-addon btn btn-default js-selectImg" data-input="#pimg-<(index)>" data-element="#cimg-<(index)>">选择图片</span>
+							</div>
+							<div class="input-group">
+								<input type="text" class="form-control input-sm diy-bind" value="<(item.link)>" placeholder="请选择链接或输入链接地址" id="plink-<(index)>" data-bind-parent="<(index)>" data-bind-child="slide" data-bind="link">
+								<span class="input-group-addon btn btn-default js-selectLink" data-input="#plink-<(index)>">选择链接</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			<(/each)>
+		</div>
+		<div class="btn btn-default btn-block addItem"><i class="icon icon-plus"></i> 添加一个</div>
+	</div>
+	<div class="form-items <(if params.container != '.category-buy-list')>hide<(/if)>" data-min="2" data-max="6" data-type="categoryBuy">
+		<div class="inner">
+			<(each categoryBuy as item index)>
+				<div class="item" data-id="<(index)>">
+					<span class="btn-del del-item" title="删除"></span>
+					<div class="item-body">
+						<div class="item-image">
+							<img src="<(tomedia item.img)>" id="cimg-<(index)>">
+							<div class="text js-selectImg" data-input="#pimg-<(index)>" data-element="#cimg-<(index)>">选择图片</div>
+							<input type="hidden" class="form-control input-sm diy-bind" value="<(item.img)>" data-bind-parent="<(index)>" data-bind-child="categoryBuy" data-bind="img" id="pimg-<(index)>">
+						</div>
+						<div class="item-form">
+							<div class="input-group">
+								<span class="input-group-addon">标题</span>
+								<input type="text" class="form-control input-sm diy-bind" value="<(item.title)>" data-bind-parent="<(index)>" data-bind-child="categoryBuy" data-bind="title"/>
+								<span class="input-group-addon border-0-lr">副标题</span>
+								<input type="text" class="form-control input-sm diy-bind"  value="<(item.subtitle)>" data-bind-parent="<(index)>" data-bind-child="categoryBuy" data-bind="subtitle" />
+							</div>
+							<div class="input-group">
+								<input type="text" class="form-control input-sm diy-bind" value="<(item.link)>" placeholder="请选择链接或输入链接地址" id="plink-<(index)>" data-bind-parent="<(index)>" data-bind-child="categoryBuy" data-bind="link">
+								<span class="input-group-addon btn btn-default js-selectLink" data-input="#plink-<(index)>">选择链接</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			<(/each)>
+		</div>
+		<div class="btn btn-default btn-block addItem"><i class="icon icon-plus"></i> 添加一个</div>
+	</div>
+	<div class="form-items <(if params.container != '.category-delivery-list')>hide<(/if)>" data-min="1" data-max="8" data-type="categoryDelivery">
+		<div class="inner">
+			<(each categoryDelivery as item index)>
+				<div class="item" data-id="<(index)>">
+					<span class="btn-del del-item" title="删除"></span>
+					<div class="item-body">
+						<div class="item-image">
+							<img src="<(tomedia item.img)>" id="cimg-<(index)>">
+							<div class="text js-selectImg" data-input="#pimg-<(index)>" data-element="#cimg-<(index)>">选择图片</div>
+							<input type="hidden" class="form-control input-sm diy-bind" value="<(item.img)>" data-bind-parent="<(index)>" data-bind-child="categoryDelivery" data-bind="img" id="pimg-<(index)>">
+						</div>
+						<div class="item-form">
+							<div class="input-group">
+								<span class="input-group-addon">标题</span>
+								<input type="text" class="form-control input-sm diy-bind" value="<(item.title)>" data-bind-parent="<(index)>" data-bind-child="categoryDelivery" data-bind="title"/>
+							</div>
+							<div class="input-group">
+								<input type="text" class="form-control input-sm diy-bind" value="<(item.link)>" placeholder="请选择链接或输入链接地址" id="plink-<(index)>" data-bind-parent="<(index)>" data-bind-child="categoryDelivery" data-bind="link">
+								<span class="input-group-addon btn btn-default js-selectLink" data-input="#plink-<(index)>">选择链接</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			<(/each)>
+		</div>
+		<div class="btn btn-default btn-block addItem"><i class="icon icon-plus"></i> 添加一个</div>
+	</div>
+</script>
+<script language="javascript">
+	var path = '../../plugin/errander/static/js/diypage';
+	irequire([path, 'tmodtpl'],function(diypage, tmodtpl){
+		diypage.init({
+			tmodtpl: tmodtpl,
+			attachurl: "{$_W['attachurl']}",
+			id: '{php echo intval($_GPC["id"])}',
+			data: {if !empty($diypage['data'])}{php echo json_encode($diypage['data'])}{else}null{/if}
+		});
+	});
+</script>
+{itemplate 'public/footer'}

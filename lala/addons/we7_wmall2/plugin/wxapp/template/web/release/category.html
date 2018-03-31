@@ -1,0 +1,56 @@
+<form class="form-horizontal form-validate" action="{php echo iurl('wxapp/release/submit_audit');}" method="post" enctype="multipart/form-data">
+	<input type='hidden' id="first_id" name='first_id' />
+	<input type="hidden" id="second_id" name="second_id"/>
+	<input type="hidden" id="first_class" name="first_class"/>
+	<input type="hidden" id="second_class" name="second_class"/>
+	<input type="hidden" id="third_id" name="third_id"/>
+	<input type="hidden" id="third_class" name="third_class"/>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button data-dismiss="modal" class="close" type="button">×</button>
+				<h4 class="modal-title">选择服务类目</h4>
+			</div>
+			<div class="modal-body" style="padding: 15px">
+				<table class="table table-hover table-bordered text-center" style="margin-bottom: 0;">
+					<tr>
+						<th>一级类名</th>
+						<th>二级类目</th>
+						<th>三级类目</th>
+						<th>操作</th>
+					</tr>
+					<tbody class="content">
+						{loop $result $res}
+							<tr>
+								<td>{$res['first_class']}</td>
+								<td>{$res['second_class']}</td>
+								<td>{$res['third_class']}</td>
+								<td>
+									<a href="javascript:;" class="btn btn-default choose" data-firstid="{$res['first_id']}" data-secondid="{$res['second_id']}" data-firstclass="{$res['first_class']}" data-secondclass="{$res['second_class']}" data-thirdid="{$res['third_id']}" data-thirdclass="{$res['third_class']}">选择</a>
+								</td>
+							</tr>
+						{/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" type="submit">提交</button>
+				<button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+			</div>
+		</div>
+	</div>
+</form>
+<script>
+$(function(){
+	$(".choose").click(function(){
+		$("#first_id").val($(this).attr('data-firstid'));
+		$("#second_id").val($(this).attr('data-secondid'));
+		$("#first_class").val($(this).attr('data-firstclass'));
+		$("#second_class").val($(this).attr('data-secondclass'));
+		$('#third_id').val($(this).attr('data-thirdid'));
+		$('#third_class').val($(this).attr('data-thirdclass'));
+		$('.choose').removeClass('btn-primary').addClass('btn-default');
+		$(this).removeClass('btn-default').addClass('btn-primary');
+	});
+})
+</script>

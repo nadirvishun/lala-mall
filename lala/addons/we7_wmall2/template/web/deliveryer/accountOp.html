@@ -1,0 +1,33 @@
+{if $op == 'lots'}
+<form class="form-horizontal form-validate" action="{php echo iurl('deliveryer/account/lots', array('set' => 1));}" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="deliveryerIds" value="{$deliveryer_ids}"/>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button data-dismiss="modal" class="close" type="button">×</button>
+				<h4 class="modal-title">选择代理</h4>
+			</div>
+			{if $_W['is_agent']}
+			<div class="modal-body">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">选择代理</label>
+					<div class="col-sm-9 col-xs-12">
+						<select name="agentid" class="form-control">
+							<option value="">请选择</option>
+							{loop $agents $item}
+							<option value="{$item['id']}" >{$item['title']}[{$item['area']}]</option>
+							{/loop}
+						</select>
+					</div>
+				</div>
+			</div>
+			{/if}
+			<div class="modal-footer">
+				<button class="btn btn-primary" type="submit">提交</button>
+				<button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+			</div>
+		</div>
+	</div>
+</form>
+
+{/if}

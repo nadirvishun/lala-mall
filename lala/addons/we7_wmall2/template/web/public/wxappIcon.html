@@ -1,0 +1,136 @@
+<style>
+	#select-wxapp-icon-modal .modal-dialog{width: 750px;}
+	#select-wxapp-icon-modal .modal-dialog .modal-body{padding: 10px;}
+	#select-wxapp-icon-modal .icon-container{overflow-y: auto; padding: 20px;}
+	#select-wxapp-icon-modal .icon-container a{display: block; float: left; text-align: center; overflow: hidden; height: 60px; width: 80px; margin: 5px;}
+	#select-wxapp-icon-modal .icon-container a:hover{background: #f6f6f6;}
+	#select-wxapp-icon-modal .icon-container a i{display: block; font-size: 30px; height: 38px; color: #676a6c;}
+	#select-wxapp-icon-modal .icon-container a span{display: block; height: 1.3em; overflow: hidden; word-break: break-all;}
+	#select-wxapp-icon-modal .icon-container .tabbar-list .item{width: 100px; padding: 10px; float: left; margin: 5px; cursor: pointer;}
+	#select-wxapp-icon-modal .icon-container .tabbar-list .item .icon{display: block; height: auto; overflow: hidden; text-align: center;}
+	#select-wxapp-icon-modal .icon-container .tabbar-list .item .icon img{width: 30px; display: inline-block;}
+	#select-wxapp-icon-modal .icon-container .tabbar-list .item .name{background: none; text-align: center; display: block; color: #888; font-size: 14px; line-height: 22px;}
+</style>
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button data-dismiss="modal" class="close" type="button">×</button>
+			<h4 class="modal-title">选择图标</h4>
+		</div>
+		<div class="modal-body clearfix">
+			<div class="icon-container">
+				<div class="tabbar-list">
+					<div class="item" data-index="1">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-1.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-1-active.png">
+						</div>
+						<div class="name">首页</div>
+					</div>
+					<div class="item" data-index="2">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-2.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-2-active.png">
+						</div>
+						<div class="name">分类</div>
+					</div>
+					<div class="item" data-index="3">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-3.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-3-active.png">
+						</div>
+						<div class="name">订单</div>
+					</div>
+					<div class="item" data-index="4">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-4.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-4-active.png">
+						</div>
+						<div class="name">购物车</div>
+					</div>
+					<div class="item" data-index="5">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-5.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-5-active.png">
+						</div>
+						<div class="name">我的</div>
+					</div>
+					<div class="item" data-index="6">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-6.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-6-active.png">
+						</div>
+						<div class="name">促销</div>
+					</div>
+					<div class="item" data-index="7">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-7.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-7-active.png">
+						</div>
+						<div class="name">发现</div>
+					</div>
+					<div class="item" data-index="8">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-8.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-8-active.png">
+						</div>
+						<div class="name">精选</div>
+					</div>
+					<div class="item" data-index="9">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-9.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-9-active.png">
+						</div>
+						<div class="name">优选好货</div>
+					</div>
+					<div class="item" data-index="10">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-10.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-10-active.png">
+						</div>
+						<div class="name">关注</div>
+					</div>
+					<div class="item" data-index="11">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-11.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-11-active.png">
+						</div>
+						<div class="name">良品</div>
+					</div>
+					<div class="item" data-index="12">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-12.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-12-active.png">
+						</div>
+						<div class="name">热卖</div>
+					</div>
+					<div class="item" data-index="13">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-13.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-13-active.png">
+						</div>
+						<div class="name">新品</div>
+					</div>
+					<div class="item" data-index="14">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-14.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-14-active.png">
+						</div>
+						<div class="name">人气</div>
+					</div>
+					<div class="item" data-index="15">
+						<div class="icon">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-15.png">
+							<img src="../addons/we7_wmall/plugin/wxapp/static/img/tabbar/icon-15-active.png">
+						</div>
+						<div class="name">跑腿</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+		</div>
+	</div>
+</div>
+

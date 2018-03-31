@@ -1,0 +1,54 @@
+<div class="second-sidebar-title">
+	店铺
+</div>
+<div class="nav slimscroll">
+	<div class="menu-header">设置</div>
+	<ul class="menu-item">
+		<li {if $_W['_op'] == 'setting'}class="active"{/if}>
+			<a href="{php echo iurl('store/shop/setting');}">店铺设置</a>
+		</li>
+	</ul>
+	{if !empty($_W['clerk'])}
+		<div class="menu-header">账户设置</div>
+		<ul class="menu-item">
+			<li {if $_W['_op'] == 'account'}class="active"{/if}>
+			<a href="{php echo iurl('store/shop/account', array('id' => $_W['clerk']['id']));}">账户设置</a>
+			</li>
+		</ul>
+	{/if}
+	<div class="menu-header">店员</div>
+	<ul class="menu-item">
+		<li {if $_W['_op'] == 'clerk' && $_W['_ta'] != 'cover'}class="active"{/if}>
+			<a href="{php echo iurl('store/shop/clerk/list');}">店员列表</a>
+		</li>
+		<li {if $_W['_op'] == 'clerk' && $_W['_ta'] == 'cover'}class="active"{/if}>
+			<a href="{php echo iurl('store/shop/clerk/cover');}">管理入口</a>
+		</li>
+	</ul>
+	{if $_W['we7_wmall']['store']['delivery_mode'] == 1}
+	<div class="menu-header">配送员</div>
+	<ul class="menu-item">
+		<li {if $_W['_op'] == 'deliveryer' && $_W['_ta'] !=  'cover'}class="active"{/if}>
+		<a href="{php echo iurl('store/shop/deliveryer/list');}">配送员列表</a>
+		</li>
+		<li {if $_W['_op'] == 'deliveryer' && $_W['_ta'] ==  'cover'}class="active"{/if}>
+		<a href="{php echo iurl('store/shop/deliveryer/cover');}">注册&登陆</a>
+		</li>
+	</ul>
+	{/if}
+	<div class="menu-header">打印机</div>
+	<ul class="menu-item">
+		<li {if $_W['_op'] == 'printer' &&  in_array($_W['_ta'], array('list', 'post'))}class="active"{/if}>
+		<a href="{php echo iurl('store/shop/printer/list');}">打印机列表</a>
+		</li>
+		<li {if $_W['_op'] == 'printer' && in_array($_W['_ta'], array('label_list', 'label_post'))}class="active"{/if}>
+		<a href="{php echo iurl('store/shop/printer/label_list');}">打印标签</a>
+		</li>
+	</ul>
+	<div class="menu-header">平台公告</div>
+	<ul class="menu-item">
+		<li {if $_W['_op'] == 'notice'}class="active"{/if}>
+		<a href="{php echo iurl('store/shop/notice/list');}">消息列表</a>
+		</li>
+	</ul>
+</div>

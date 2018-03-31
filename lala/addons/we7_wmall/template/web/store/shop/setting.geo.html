@@ -1,0 +1,1040 @@
+{itemplate 'public/header'}
+<div class="page clearfix">
+<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data" style="max-width: 100%">
+<input type="hidden" name="id" value="{$id}">
+<ul class="nav nav-tabs" role="tablist">
+	<li role="presentation" {if $_GPC['type'] == 'basic' || !$_GPC['type']}class="active"{/if}><a href="#basic" aria-controls="basic" role="tab" data-toggle="pill">基本信息</a></li>
+	<li role="presentation" {if $_GPC['type'] == 'qualification'}class="active"{/if}><a href="#qualification" aria-controls="qualification" role="tab" data-toggle="pill">营业资质</a></li>
+	<li role="presentation" {if $_GPC['type'] == 'instore'}class="active"{/if}><a href="#instore" aria-controls="instore" role="tab" data-toggle="pill">店内点餐设置</a></li>
+	<li role="presentation" {if $_GPC['type'] == 'takeout'}class="active"{/if}><a href="#takeout" aria-controls="takeout" role="tab" data-toggle="pill">外卖设置</a></li>
+	<li role="presentation" {if $_GPC['type'] == 'page'}class="active"{/if}><a href="#page" aria-controls="page" role="tab" data-toggle="pill">页面设置</a></li>
+	<li role="presentation" {if $_GPC['type'] == 'high'}class="active"{/if}><a href="#high" aria-controls="high" role="tab" data-toggle="pill">支付设置</a></li>
+	<li role="presentation" {if $_GPC['type'] == 'remind'}class="active"{/if}><a href="#remind" aria-controls="remind" role="tab" data-toggle="pill">催单回复</a></li>
+	<li role="presentation" {if $_GPC['type'] == 'comment'}class="active"{/if}><a href="#comment" aria-controls="comment" role="tab" data-toggle="pill">评价回复</a></li>
+	<li role="presentation" {if $_GPC['type'] == 'template'}class="active"{/if}><a href="#template" aria-controls="template" role="tab" data-toggle="pill">模板配置</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane {if $_GPC['type'] == 'basic' || !$_GPC['type']}active{/if}" role="tabpanel" id="basic">
+	<h3>商户基本信息</h3>
+	{if $item['id'] > 0}
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">商户访问地址</label>
+		<div class="col-sm-9 col-xs-12">
+			<p class="form-control-static js-clip" data-href="{$sys_url}">系统：<a href="javascript:;" title="点击复制链接">{$sys_url}</a></p>
+		</div>
+	</div>
+	{/if}
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">门店名称</label>
+		<div class="col-sm-9 col-xs-12">
+			<input type="text" class="form-control" name="title" value="{$item['title']}" required="true">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">所属分类</label>
+		<div class="col-sm-9 col-xs-12">
+			{loop $categorys $category}
+			{if $category['is_sys'] == 1}
+			<div class="checkbox checkbox-inline">
+				<input type="checkbox" name="cid[]" id="cid-{$category['id']}" value="{$category['id']}" {if in_array($category['id'], $item['cid'])}checked{/if}>
+				<label for="cid-{$category['id']}">{$category['title']}</label>
+			</div>
+			{/if}
+			{/loop}
+			<span class="help-block">选择门店分类，可多选</span>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">门店LOGO</label>
+		<div class="col-sm-9 col-xs-12">
+			{php echo tpl_form_field_image('logo', $item['logo']);}
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">门店描述</label>
+		<div class="col-sm-9 col-xs-12">
+			<input type="text" class="form-control" name="content" value="{$item['content']}" required="true">
+			<div class="help-block">粉丝分享时调用.</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">门店电话</label>
+		<div class="col-sm-9 col-xs-12">
+			<input type="text" class="form-control" name="telephone" value="{$item['telephone']}" required="true">
+		</div>
+	</div>
+	<div id="hour">
+		<div id="hour-tpl" class="clockpicker">
+			{if !empty($item['business_hours'])}
+			{loop $item['business_hours'] $hour}
+			<div class="form-group hour-item">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">营业时间</label>
+				<div class="col-sm-9 col-xs-4 col-md-3">
+					<div class="input-group">
+						<input type="text" readonly name="business_start_hours[]" class="form-control" placeholder="" value="{$hour['s']}">
+						<span class="input-group-addon">至</span>
+						<input type="text" readonly name="business_end_hours[]" class="form-control" placeholder="" value="{$hour['e']}">
+					</div>
+				</div>
+				<div class="col-sm-9 col-xs-4 col-md-3" style="padding-top:6px">
+					<a href="javascript:;" onclick="$(this).parent().parent().remove()"><i class="fa fa-times-circle" title="删除时间段"> </i></a>
+				</div>
+			</div>
+			{/loop}
+			{else}
+			<div class="form-group hour-item">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">营业时间</label>
+				<div class="col-sm-9 col-xs-4 col-md-3">
+					<div class="input-group">
+						<input type="text" readonly name="business_start_hours[]" class="form-control" placeholder="">
+						<span class="input-group-addon">至</span>
+						<input type="text" readonly name="business_end_hours[]" class="form-control" placeholder="">
+					</div>
+				</div>
+				<div class="col-sm-9 col-xs-4 col-md-3" style="padding-top:6px">
+					<a href="javascript:;" onclick="$(this).parent().parent().remove()"><i class="fa fa-times-circle" title="删除时间段"> </i></a>
+				</div>
+			</div>
+			{/if}
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<a href="javascript:;" id="hour-add"><i class="fa fa-plus-circle"></i> 添加营业时间</a>
+			<div class="help-block">请完善营业时间信息。最多可添加3个时间段</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">门店特色</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			{php echo itpl_ueditor('description', $item['description']);}
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">门店实景</label>
+		<div class="col-sm-9 col-xs-9 col-md-9 thumbs">
+			<a href="javascript:;" class="btn btn-primary" id="selectThumb">选择图片</a>
+			<div class="help-block">建议图片尺寸:640*120</div>
+			{if !empty($item['thumbs'])}
+			{loop $item['thumbs'] $slide}
+			<div class="col-lg-4">
+				<input type="hidden" name="thumbs[image][]" value="{$slide['image']}">
+				<div class="panel panel-default panel-slide">
+					<div class="btnClose" onclick="$(this).parent().parent().remove()"><i class="fa fa-times"></i></div>
+					<div class="panel-body">
+						<img src="{php echo tomedia($slide['image']);}" alt="" width="100%" height="170">
+						<div>
+							<input class="form-control last pull-right" placeholder="跳转链接" name="thumbs[url][]" value="{$slide['url']}">
+						</div>
+					</div>
+				</div>
+			</div>
+			{/loop}
+			{/if}
+			<div id="slideContainer"></div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">详细地址</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<input type="text" name="address" class="form-control" value="{$item['address']}" required="true">
+			<div class="help-block">请尽可能详细. 商家自提地址为这里设置的地址.</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">地图标识</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			{php echo tpl_form_field_tiny_coordinate('map', $item['map']);}
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">商家QQ</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<input type="text" class="form-control" name="sns[qq]" value="{$item['sns']['qq']}">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">商家微信</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<input type="text" class="form-control" name="sns[weixin]" value="{$item['sns']['weixin']}">
+		</div>
+	</div>
+	<div class="form-group {if $_W['role'] == 'operator'}hide{/if}">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<input type="text" class="form-control" name="displayorder" value="{$item['displayorder']}">
+			<div class="help-block">数字越大，越靠前</div>
+		</div>
+	</div>
+</div>
+<div class="tab-pane {if $_GPC['type'] == 'qualification'}active{/if}" role="qualification" id="qualification">
+	<h3>营业资质设置</h3>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">营业执照</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			{php echo tpl_form_field_image('qualification[business]', $item['qualification']['business']['thumb']);}
+			<div class="help-block">请上传营业执照照片。建议上传前加水印</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">餐饮服务许可证</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			{php echo tpl_form_field_image('qualification[service]', $item['qualification']['service']['thumb']);}
+			<div class="help-block">请上传餐饮服务许可证。建议上传前加水印</div>
+		</div>
+	</div>
+</div>
+<div class="tab-pane {if $_GPC['type'] == 'instore'}active{/if}" role="tabpanel" id="instore">
+	<h3>店内点餐设置</h3>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">排号功能</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="radio radio-inline">
+				<input type="radio" name="is_assign" id="is-assign-1" value="1" {if $item['is_assign'] == 1}checked{/if}>
+				<label for="is-assign-1">开启</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="is_assign" id="is-assign-0" value="0" {if  !$item['is_assign']}checked{/if}>
+				<label for="is-assign-0">关闭</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">预定功能</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="radio radio-inline">
+				<input type="radio" name="is_reserve" id="is-reserve-1" value="1" {if $item['is_reserve'] == 1}checked{/if}>
+				<label for="is-reserve-1">开启</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="is_reserve" id="is-reserve-0" value="0" {if !$item['is_reserve']}checked{/if}>
+				<label for="is-reserve-0">关闭</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">店内点餐</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="radio radio-inline">
+				<input type="radio" name="is_meal" id="is-meal-1" value="1" {if $item['is_meal'] == 1}checked{/if}>
+				<label for="is-meal-1">开启</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="is_meal" id="is-meal-0" value="0" {if !$item['is_meal']}checked{/if}>
+				<label for="is-meal-0">关闭</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">点击门店直接跳转到</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="radio radio-inline">
+				<input type="radio" name="forward_mode" id="forward-mode-0" value="0" {if !$item['forward_mode']}checked{/if} onclick="$('.forward-url').hide();">
+				<label for="forward-mode-0">默认页(外卖)</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="forward_mode" id="forward-mode-1" value="1" {if $item['forward_mode'] == 1}checked{/if} onclick="$('.forward-url').hide();">
+				<label for="forward-mode-1">门店详情页</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="forward_mode" id="forward-mode-3" value="3" {if $item['forward_mode'] == 3}checked{/if} onclick="$('.forward-url').hide();">
+				<label for="forward-mode-3">排队</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="forward_mode" id="forward-mode-4" value="4" {if $item['forward_mode'] == 4}checked{/if} onclick="$('.forward-url').hide();">
+				<label for="forward-mode-4">预定</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="forward_mode" id="forward-mode-5" value="5" {if $item['forward_mode'] == 5}checked{/if} onclick="$('.forward-url').show();">
+				<label for="forward-mode-5">自定义链接</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group forward-url" {if $item['forward_mode'] != 5}style="display: none"{/if}>
+	<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+	<div class="col-sm-6 col-xs-6">
+		<input type="text" class="form-control" name="forward_url" value="{$item['forward_url']}" placeholder="填写自定义链接">
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-xs-12 col-sm-3 col-md-2 control-label">服务费设置</label>
+	<div class="col-sm-6 col-xs-6">
+		<div class="input-group">
+			<label class="input-group-addon">
+				<input type="radio" name="serve_fee[type]" value="1" {if $item['serve_fee']['type'] == 1 || !$item['serve_fee']['type']}checked{/if}>
+			</label>
+			<span class="input-group-addon">每单固定</span>
+			<input type="text" class="form-control" name="serve_fee[fee_1]" {if  $item['serve_fee']['type'] == 1}value="{$item['serve_fee']['fee']}"{/if}>
+			<span class="input-group-addon">元</span>
+		</div>
+		<br>
+		<div class="input-group">
+			<label class="input-group-addon">
+				<input type="radio" name="serve_fee[type]" value="2" {if $item['serve_fee']['type'] == 2}checked{/if}>
+			</label>
+			<span class="input-group-addon">每单按照订单价格收取</span>
+			<input type="text" class="form-control" name="serve_fee[fee_2]" {if $item['serve_fee']['type'] == 2}value="{$item['serve_fee']['fee']}"{/if}>
+			<span class="input-group-addon">%</span>
+		</div>
+		<div class="help-block text-danger">服务费只在店内点餐时候有效, 外卖订单无效</div>
+	</div>
+</div>
+</div>
+<div class="page-config-store-delivery tab-pane {if $_GPC['type'] == 'takeout'}active{/if}" role="tabpanel" id="takeout">
+	<h3>外卖设置</h3>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">配送方式</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="radio radio-inline">
+				<input type="radio" name="delivery_type" id="delivery-type-1" value="1" {if $item['delivery_type'] == 1 || !$item['delivery_type']}checked{/if}>
+				<label for="delivery-type-1">仅支持商家配送</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="delivery_type" id="delivery-type-2" value="2" {if $item['delivery_type'] == 2}checked{/if}>
+				<label for="delivery-type-2">仅支持到店自提</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="delivery_type" id="delivery-type-3" value="3" {if $item['delivery_type'] == 3}checked{/if}>
+				<label for="delivery-type-3">商家配送,到店自提都支持</label>
+			</div>
+			<div class="help-block">商家自提地址为门店信息里的地址.</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">可提前几天点外卖</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<input type="text" class="form-control" name="delivery_within_days" value="{$item['delivery_within_days']}">
+			<div class="help-block">单位：天，如果只接受当天订单，请填写0. 最多可提前6天</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">需提前几天预定外卖</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<input type="text" class="form-control" name="delivery_reserve_days" value="{$item['delivery_reserve_days']}">
+			<div class="help-block">单位：天，如果不需要提前预定，请填写0. 如果设置提前1天预定, 用户今天下单后, 能选择明天的配送时间进行配送</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">包装费</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="input-group">
+				<input type="text" class="form-control" name="pack_price" value="{$item['pack_price']}">
+				<span class="input-group-addon">元</span>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">起送价</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="input-group">
+				<input type="text" class="form-control" name="send_price" value="{$item['send_price']}" {if $item['delivery_mode'] == 2}disabled{/if}>
+				<span class="input-group-addon">元</span>
+			</div>
+			<div class="help-block">
+				<span class="text-danger">{if $item['delivery_mode'] == 2}当前门店的配送模式为平台配送,如需修改该项设置,请联系平台管理员{/if}</span>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">满多少元免配送费</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="input-group">
+				<input type="text" class="form-control" name="delivery_free_price" value="{$item['delivery_free_price']}" {if $item['delivery_mode'] == 2}disabled{/if}>
+				<span class="input-group-addon">元</span>
+			</div>
+			<div class="help-block">当用户订单满**元,不收取配送费</div>
+			<div class="help-block">
+				<span class="text-danger">{if $item['delivery_mode'] == 2}当前门店的配送模式为平台配送,如需修改该项设置,请联系平台管理员{/if}</span>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">预计送达时间</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="input-group">
+				<input type="text" class="form-control" name="delivery_time" value="{$item['delivery_time']}" {if $item['delivery_mode'] == 2}disabled{/if}>
+				<span class="input-group-addon">分钟</span>
+			</div>
+			<div class="help-block">
+				<span class="text-danger">{if $item['delivery_mode'] == 2}当前门店的配送模式为平台配送,如需修改该项设置,请联系平台管理员{/if}</span>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">服务半径</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="input-group">
+				<input type="text" class="form-control" name="serve_radius" value="{$item['serve_radius']}" {if $item['delivery_mode'] == 2}disabled{/if}>
+				<span class="input-group-addon">KM</span>
+			</div>
+			<div class="help-block">
+				<span class="text-danger">{if $item['delivery_mode'] == 2}当前门店的配送模式为平台配送,如需修改该项设置,请联系平台管理员{/if}</span>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">配送区域</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<input type="text" class="form-control" name="delivery_area" value="{$item['delivery_area']}">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">在配送半径之外是否允许下单</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="radio radio-inline">
+				<input type="radio" name="not_in_serve_radius" value="1" id="not-in-serve-radius-1" {if $item['not_in_serve_radius'] == 1}checked{/if} {if $item['delivery_mode'] == 2}disabled{/if}>
+				<label for="not-in-serve-radius-1">允许</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="not_in_serve_radius" value="0" id="not-in-serve-radius-0" {if !$item['not_in_serve_radius']}checked{/if} {if $item['delivery_mode'] == 2}disabled{/if}>
+				<label for="not-in-serve-radius-0">不允许</label>
+			</div>
+			<div class="help-block">
+				<span class="text-danger">{if $item['delivery_mode'] == 2}当前门店的配送模式为平台配送,如需修改该项设置,请联系平台管理员{/if}</span>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">收货地址是否自动获取</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="radio radio-inline">
+				<input type="radio" name="auto_get_address" value="1" id="auto-get-address-1" {if $item['auto_get_address'] == 1}checked{/if} {if $item['delivery_mode'] == 2}disabled{/if}>
+				<label for="auto-get-address-1">是, 高德地图自动获取</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="auto_get_address" value="0" id="auto-get-address-0" {if !$item['auto_get_address']}checked{/if} {if $item['delivery_mode'] == 2}disabled{/if}>
+				<label for="auto-get-address-0">否, 用户自己填写</label>
+			</div>
+			<span class="help-block">设置为用户自己填写后, 将不能获取用户的具体位置, 不能实现超出服务范围禁制下单的功能</span>
+			<div class="help-block">
+				<span class="text-danger">{if $item['delivery_mode'] == 2}当前门店的配送模式为平台配送,如需修改该项设置,请联系平台管理员{/if}</span>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require">*</span>配送费</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="radio radio-inline">
+				<input type="radio" name="delivery_fee_mode" value="1" id="delivery-fee-mode-1" {if $item['delivery_fee_mode'] == 1 || !$item['delivery_fee_mode']}checked{/if} {if $item['delivery_mode'] == 2}disabled{/if} onclick="$('.delivery-fee-mode').hide();$('.delivery-fee-mode-1').show();">
+				<label for="delivery-fee-mode-1">固定金额</label>
+			</div>
+			<div class="radio radio-inline hide">
+				<input type="radio" name="delivery_fee_mode" value="2" id="delivery-fee-mode-2" {if $item['delivery_fee_mode'] == 2}checked{/if} {if $item['delivery_mode'] == 2}disabled{/if} onclick="$('.delivery-fee-mode').hide();$('.delivery-fee-mode-2').show();">
+				<label for="delivery-fee-mode-2">按距离收取</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="delivery_fee_mode" id="delivery-fee-mode-3" value="3" {if $store['delivery_fee_mode'] == 3}checked{/if} {if $item['delivery_mode'] == 2}disabled{/if} onclick="$('.delivery-fee-mode').hide();$('.delivery-fee-mode-3').show();">
+				<label for="delivery-fee-mode-3">按区域收取</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group delivery-fee-mode delivery-fee-mode-1" {if $item['delivery_fee_mode'] == 1 || !$item['delivery_fee_mode']}style="display: block"{/if}>
+	<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+	<div class="col-sm-9 col-xs-12">
+		<div class="input-group">
+			<div class="input-group-addon">起送价</div>
+			<input type="number" name="send_price_1" value="{$store['send_price']}" class="form-control" {if $item['delivery_mode'] == 2}disabled{/if}/>
+			<div class="input-group-addon">元</div>
+			<div class="input-group-addon">满</div>
+			<input type="number" name="delivery_free_price_1" value="{$store['delivery_free_price']}" class="form-control" {if $item['delivery_mode'] == 2}disabled{/if}/>
+			<div class="input-group-addon">元免配送费</div>
+		</div>
+		<br>
+		<div class="input-group">
+			<div class="input-group-addon">每单</div>
+			<input type="text" name="delivery_price" value="{$item['delivery_price']}" class="form-control" {if $item['delivery_mode'] == 2}disabled{/if}/>
+			<div class="input-group-addon">元</div>
+		</div>
+	</div>
+</div>
+<div class="form-group delivery-fee-mode delivery-fee-mode-2" {if $item['delivery_fee_mode'] == 2}style="display: block"{/if}>
+<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+<div class="col-sm-9 col-xs-12">
+	<div class="input-group">
+		<div class="input-group-addon">起送价</div>
+		<input type="number" name="send_price_2" value="{$store['send_price']}" class="form-control" {if $item['delivery_mode'] == 2}disabled{/if}/>
+		<div class="input-group-addon">元</div>
+		<div class="input-group-addon">满</div>
+		<input type="number" name="delivery_free_price_2" value="{$store['delivery_free_price']}" class="form-control" {if $item['delivery_mode'] == 2}disabled{/if}/>
+		<div class="input-group-addon">元免配送费</div>
+	</div>
+	<br>
+	<div class="input-group">
+		<span class="input-group-addon">起步价</span>
+		<input type="text" class="form-control" name="start_fee" value="{$item['delivery_price_extra']['start_fee']}" {if $item['delivery_mode'] == 2}disabled{/if}>
+		<span class="input-group-addon">元包含</span>
+		<input type="text" class="form-control" name="start_km" value="{$item['delivery_price_extra']['start_km']}" {if $item['delivery_mode'] == 2}disabled{/if}>
+		<span class="input-group-addon">公里</span>
+	</div>
+	<br>
+	<div class="input-group">
+		<span class="input-group-addon">每增加1公里加</span>
+		<input type="text" class="form-control" name="pre_km_fee" value="{$item['delivery_price_extra']['pre_km_fee']}" {if $item['delivery_mode'] == 2}disabled{/if}>
+		<span class="input-group-addon">元</span>
+	</div>
+	<div class="help-block">
+		<strong class="text-danger">
+			特别注意: 设置按照"按距离收取"配送费后,系统会自动变更使用"平台配送"模式商家的某些配置。包括:收货地址被设置为自动获取, 超过配送范围是仍可下单
+		</strong>
+		<br/>
+	</div>
+</div>
+</div>
+<div class="form-group delivery-fee-mode delivery-fee-mode-3 hide" {if $store['delivery_fee_mode'] == 3}style="display: block"{/if}>
+<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+<div class="col-sm-9 col-xs-12">
+	{itemplate 'store/shop/geofence'}
+</div>
+</div>
+{if $item['delivery_mode'] == 1}
+<div class="form-group">
+	<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require">*</span>配送时间段</label>
+	<div class="col-sm-9 col-xs-12">
+		<div class="input-group">
+			<span class="input-group-addon">间隔</span>
+			<input type="text" class="form-control" name="pre_delivery_time_minute" value="">
+			<span class="input-group-addon">分钟</span>
+			<div class="input-group-btn btn-build-delivery-time">
+				<a href="javascript:;" class="btn btn-primary" >生成配送时间段</a>
+			</div>
+		</div>
+	</div>
+</div>
+{/if}
+<div id="delivery-times" class="delivery-times">
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-9 col-xs-12 containter">
+			{loop $item['delivery_times'] $time}
+			<div class="col-sm-6">
+				<div class="input-group">
+					<span class="input-group-addon">{$time['start']} ~ {$time['end']}</span>
+					<span class="input-group-addon">附加费</span>
+					<input type="text" class="form-control" name="times[fee][]" value="{$time['fee']}" placeholder="增加附加费" {if $item['delivery_mode'] == 2}disabled{/if}>
+					<input type="hidden" name="times[start][]" value="{$time['start']}"/>
+					<input type="hidden" name="times[end][]" value="{$time['end']}"/>
+					<input type="hidden" name="times[status][]" value="{$time['status']}">
+					<span class="input-group-addon">元</span>
+					<div class="input-group-btn">
+						<a href="javascript:;" class="btn btn-delivery-time-item {if $time['status'] == 1}btn-success{else}btn-default{/if}">{if $time['status'] == 1}使用中{else}已弃用{/if}</a>
+					</div>
+				</div>
+			</div>
+			{/loop}
+		</div>
+	</div>
+</div>
+</div>
+<div class="tab-pane {if $_GPC['type'] == 'page'}active{/if}" role="tabpanel" id="page">
+	<h3>页面设置</h3>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">公告</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<input type="text" name="notice" value="{$item['notice']}" class="form-control">
+			<div class="help-block">手机端将以滚动的方式展示</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">进入商品列表页提示</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<input type="text" name="tips" value="{$item['tips']}" class="form-control">
+			<div class="help-block">用户进入页面后, 将弹框提示设置的内容</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require"> </span>自定义订单备注</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			{if !empty($item['order_note'])}
+			{loop $item['order_note'] $order_note}
+			<div class="btn-group btn-label">
+				<input type="hidden" name="order_note[]" value="{$order_note}">
+				<a class="btn btn-default border-radius-4">{$order_note}</a>
+				<a class="btn btn-default label-delete">
+					<span class="fa fa-times-circle"></span>
+				</a>
+			</div>
+			{/loop}
+			{/if}
+			<a class="btn btn-success label-add"><i class="fa fa-plus-circle"></i> 添加</a>
+			<div class="help-block">例如: 带点醋, 不吃辣, 自带零钱, 延时送餐等</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require"> </span>是否需要审核评论</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="radio radio-inline">
+				<input type="radio" value="1" name="comment_status" id="comment-status-1" {if $item['comment_status'] == 1}checked{/if}>
+				<label for="comment-status-1">不需要审核</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" value="0" name="comment_status" id="comment-status-0" {if $item['comment_status'] == 0}checked{/if}>
+				<label for="comment-status-0">需要审核</label>
+			</div>
+			<span class="help-block">设置为"需要审核",用户评论后,需要管理员审核后才能显示到前台</span>
+		</div>
+	</div>
+	<div id="custom-url">
+		{if !empty($item['custom_url'])}
+		{loop $item['custom_url'] $url}
+		<div class="form-group item">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">门店详情页自定义链接</label>
+			<div class="col-sm-6">
+				<div class="input-group">
+					<span class="input-group-addon">链接文字</span>
+					<input type="text" class="form-control" name="custom_title[]" value="{$url['title']}">
+					<span class="input-group-addon">链接地址</span>
+					<input type="text" class="form-control" name="custom_link[]" value="{$url['url']}">
+				</div>
+			</div>
+			<div class="col-sm-1" style="margin-top:5px">
+				<a href="javascript:;" class="custom-url-del"><i class="fa fa-times-circle"></i> </a>
+			</div>
+		</div>
+		{/loop}
+		{else}
+		<div class="form-group item">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">门店详情页自定义链接</label>
+			<div class="col-sm-6">
+				<div class="input-group">
+					<span class="input-group-addon">链接文字</span>
+					<input type="text" class="form-control" name="custom_title[]" value="">
+					<span class="input-group-addon">链接地址</span>
+					<input type="text" class="form-control" name="custom_link[]" value="">
+				</div>
+			</div>
+			<div class="col-sm-1" style="margin-top:5px">
+				<a href="javascript:;" class="custom-url-del"><i class="fa fa-times-circle"></i> </a>
+			</div>
+		</div>
+		{/if}
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-9 col-xs-12">
+			<a href="javascript:;" id="custom-url-add"><i class="fa fa-plus-circle"></i> 添加门店详情页自定义链接</a>
+			<span class="help-block">该链接将在门店详情页面显示</span>
+		</div>
+	</div>
+</div>
+<div class="tab-pane {if $_GPC['type'] == 'high'}active{/if}" role="tabpanel" id="high">
+	<h3>高级设置</h3>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">支付后自动接单</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="radio radio-inline">
+				<input type="radio" name="auto_handel_order" id="auto-handel-order-1" value="1" {if $item['auto_handel_order'] == 1}checked{/if}>
+				<label for="auto-handel-order-1">开启</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="auto_handel_order" id="auto-handel-order-0" value="0" {if !$item['auto_handel_order']}checked{/if}>
+				<label for="auto-handel-order-0">关闭</label>
+			</div>
+			<span class="help-block">开启后, 用户下单支付后,系统会自动接单(设置订单为处理中.)</span>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">接单后自动通知配送员配送</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="radio radio-inline">
+				<input type="radio" name="auto_notice_deliveryer" id="auto-notice-deliveryer-1" value="1" {if $item['auto_notice_deliveryer'] == 1}checked{/if}>
+				<label for="auto-notice-deliveryer-1">开启</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="auto_notice_deliveryer" id="auto-notice-deliveryer-0" value="0" {if !$item['auto_notice_deliveryer']}checked{/if}>
+				<label for="auto-notice-deliveryer-0">关闭</label>
+			</div>
+			<span class="help-block">开启后, 店员接单后,系统会自动通知配送员进行配送(设置订单为待配送.仅对外卖订单有效).</span>
+			<span class="help-block"><span class="bg-danger">注意：设置支付后自动接单, 也会自动通知配送员抢单</span></span>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">支持开发票</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="radio radio-inline">
+				<input type="radio" name="invoice_status" id="invoice-status-1" value="1" {if $item['invoice_status'] == 1}checked{/if}>
+				<label for="invoice-status-1">支持</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="invoice_status" id="invoice-status-0" value="0" {if !$item['invoice_status']}checked{/if}>
+				<label for="invoice-status-0">不支持</label>
+			</div>
+			<span class="help-block">选择支持开发票后,用户在提交订单时可选择是否开发票</span>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">支持使用代金券抵付现金</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="radio radio-inline">
+				<input type="radio" name="token_status" id="token-status-1" value="1" {if $item['token_status'] == 1}checked{/if}>
+				<label for="token-status-1">支持</label>
+			</div>
+			<div class="radio radio-inline">
+				<input type="radio" name="token_status" id="token-status-0" value="0" {if !$item['token_status']}checked{/if}>
+				<label for="token-status-0">不支持</label>
+			</div>
+			<span class="help-block">选择支持使用代金券抵付现金,用户在满足代金券使用条件时(必须是在线支付才能使用代金券),可选择是否使用代金券</span>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">支付方式</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			{if in_array('wechat', $pay)}
+			<div class="checkbox checkbox-inline">
+				<input type="checkbox" name="payment[]" id="payment-wechat" value="wechat" {if in_array('wechat', $item['payment'])}checked{/if}>
+				<label for="payment-wechat">微信支付</label>
+			</div>
+			{/if}
+			{if in_array('alipay', $pay)}
+			<div class="checkbox checkbox-inline">
+				<input type="checkbox" name="payment[]" id="payment-alipay" value="alipay" {if in_array('alipay', $item['payment'])}checked{/if}>
+				<label for="payment-alipay">支付宝</label>
+			</div>
+			{/if}
+			{if in_array('credit', $pay)}
+			<div class="checkbox checkbox-inline">
+				<input type="checkbox" name="payment[]" id="payment-credit" value="credit" {if in_array('credit', $item['payment'])}checked{/if}>
+				<label for="payment-credit">余额支付</label>
+			</div>
+			{/if}
+			{if in_array('delivery', $pay)}
+			<div class="checkbox checkbox-inline">
+				<input type="checkbox" name="payment[]" id="payment-delivery" value="delivery" {if in_array('delivery', $item['payment'])}checked{/if}>
+				<label for="payment-delivery">货到付款</label>
+			</div>
+			{/if}
+			<span class="help-block">商户可根据自己的情况选择支付方式.更多支付方式请联系公众号管理员开通</span>
+		</div>
+	</div>
+</div>
+<div class="tab-pane {if $_GPC['type'] == 'remind'}active{/if}" role="tabpanel" id="remind">
+	<h3>催单回复</h3>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require"> </span>催单时间间隔</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<div class="input-group">
+				<input type="text" class="form-control" name="remind_time_limit" value="{$item['remind_time_limit']}">
+				<span class="input-group-addon">分钟</span>
+			</div>
+			<span class="help-block">用户在下单后可进行多次催单,该项可设置催单间隔.如:用户现在进行催单,如果设置了10分钟的间隔,那么用户下次催单只能在10分钟以后</span>
+		</div>
+	</div>
+	<div id="remind-reply">
+		{if !empty($item['remind_reply'])}
+		{loop $item['remind_reply'] $reply}
+		<div class="form-group item">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">自定义催单回复</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" name="remind_reply[]" value="{$reply}">
+			</div>
+			<div class="col-sm-1" style="margin-top:5px">
+				<a href="javascript:;" class="remind-reply-del"><i class="fa fa-times-circle"></i> </a>
+			</div>
+		</div>
+		{/loop}
+		{else}
+		<div class="form-group item">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">自定义催单回复</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" name="remind_reply[]" value="{$reply}">
+			</div>
+			<div class="col-sm-1" style="margin-top:5px">
+				<a href="javascript:;" class="remind-reply-del"><i class="fa fa-times-circle"></i> </a>
+			</div>
+		</div>
+		{/if}
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-9 col-xs-12">
+			<a href="javascript:;" class="remind-reply-add"><i class="fa fa-plus-circle"></i> 添加自定义催单回复</a>
+		</div>
+	</div>
+</div>
+<div class="tab-pane {if $_GPC['type'] == 'comment'}active{/if}" role="tabpanel" id="comment">
+	<h3>评价回复</h3>
+	<div id="comment-reply">
+		{if !empty($item['comment_reply'])}
+		{loop $item['comment_reply'] $creply}
+		<div class="form-group item">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">自定义评价回复</label>
+			<div class="col-sm-6">
+				<textarea class="form-control" name="comment_reply[]">{$creply}</textarea>
+			</div>
+			<div class="col-sm-1" style="margin-top:5px">
+				<a href="javascript:;" class="comment-reply-del"><i class="fa fa-times-circle"></i> </a>
+			</div>
+		</div>
+		{/loop}
+		{else}
+		<div class="form-group item">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">自定义评价回复</label>
+			<div class="col-sm-6">
+				<textarea class="form-control" name="comment_reply[]"></textarea>
+			</div>
+			<div class="col-sm-1" style="margin-top:5px">
+				<a href="javascript:;" class="comment-reply-del"><i class="fa fa-times-circle"></i> </a>
+			</div>
+		</div>
+		{/if}
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-9 col-xs-12">
+			<a href="javascript:;" class="comment-reply-add"><i class="fa fa-plus-circle"></i> 添加自定义评价回复</a>
+		</div>
+	</div>
+</div>
+<div class="tab-pane {if $_GPC['type'] == 'template'}active{/if}" role="tabpanel" id="template">
+	<h3>模板配置</h3>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">商品列表页风格</label>
+		<div class="col-sm-9 col-xs-9 col-md-9">
+			<a href="{php echo iurl('store/shop/setting/template', array('id' => $item['id'], 't' => 'index'));}" data-confirm="确定更换模块类型吗" class="js-post thumbnail {if $item['template'] == 'index' || !$item['template']}active{/if}" style="width:200px; float:left; margin-right:20px; border-width: 5px">
+				<img src="{WE7_WMALL_TPL_URL}purview/index.png">
+			</a>
+			<a href="{php echo iurl('store/shop/setting/template', array('id' => $item['id'], 't' => 'market'));}" data-confirm="确定更换模块类型吗" class="js-post thumbnail {if $item['template'] == 'market'}active{/if}" style="width:200px; float:left; margin-right:20px; border-width: 5px">
+				<img src="{WE7_WMALL_TPL_URL}purview/market.png">
+			</a>
+			<a href="{php echo iurl('store/shop/setting/template', array('id' => $item['id'], 't' => 'index1'));}" data-confirm="确定更换模块类型吗" class="js-post thumbnail {if $item['template'] == 'index1'}active{/if}" style="width:200px; float:left; margin-right:20px; border-width: 5px">
+				<img src="{WE7_WMALL_TPL_URL}purview/index1.png">
+			</a>
+		</div>
+	</div>
+</div>
+</div>
+<div class="form-group">
+	<div class="col-sm-9 col-xs-9 col-md-9">
+		<input type="hidden" name="token" value="{$_W['token']}">
+		<input type="submit" value="提交" class="btn btn-primary">
+	</div>
+</div>
+</form>
+</div>
+
+<script id="tpl-delivery-time" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<div class="col-sm-6">
+		<div class="input-group">
+			<span class="input-group-addon"><{d[i].start}> ~ <{d[i].end}></span>
+			<span class="input-group-addon">附加费</span>
+			<input type="text" class="form-control" name="times[fee][]" value="<{d[i].fee}>" placeholder="增加附加费">
+			<input type="hidden" name="times[start][]" value="<{d[i].start}>"/>
+			<input type="hidden" name="times[end][]" value="<{d[i].end}>"/>
+			<input type="hidden" name="times[status][]" value="1">
+			<span class="input-group-addon">元</span>
+			<div class="input-group-btn">
+				<a href="javascript:;" class="btn btn-success btn-delivery-time-item">使用中</a>
+			</div>
+		</div>
+	</div>
+	<{# } }>
+</script>
+<script type="text/javascript">
+require(['clockpicker'], function($){
+	$('.clockpicker :text').clockpicker({autoclose: true});
+
+	$('#selectImage').click(function(){
+		util.uploadMultiPictures(function(images){
+			var s = '';
+			$.each(images, function(){
+				s += '<div class="col-lg-4">'+
+						'	<input type="hidden" name="thumbs[image][]" value="'+this.filename+'">' +
+						'	<div class="panel panel-default panel-slide">'+
+						'		<div class="btnClose" onclick="$(this).parent().parent().remove()"><i class="fa fa-times"></i></div>' +
+						'		<div class="panel-body">'+
+						'			<img src="'+this.url+'" width="100%" height="170">'+
+						'			<div>'+
+						'				<input class="form-control last pull-right" placeholder="跳转链接" name="thumbs[url][]">'+
+						'			</div>'+
+						'		</div>'+
+						'	</div>'+
+						'</div>'
+			});
+			$('#slideContainer').append(s);
+		});
+	});
+
+	$('#hour-add').click(function(){
+		var hour_length = $('#hour .hour-item').length;
+		if(hour_length < 3) {
+			var html = '<div class="form-group hour-item clockpicker">' +
+					'<label class="col-xs-12 col-sm-3 col-md-2 control-label">营业时间</label>'+
+					'<div class="col-sm-9 col-xs-4 col-md-3">'+
+					'<div class="input-group">'+
+					'<input type="text" readonly name="business_start_hours[]" class="form-control" placeholder=""> '+
+					'<span class="input-group-addon">至</span>'+
+					'<input type="text" readonly name="business_end_hours[]" class="form-control" placeholder=""> '+
+					'</div>'+
+					'</div>'+
+					'<div class="col-sm-9 col-xs-4 col-md-3" style="padding-top:6px">'+
+					'<a href="javascript:;" onclick="$(this).parent().parent().remove()"><i class="fa fa-times-circle" title="删除时间段"> </i></a>'+
+					'</div>'+
+					'</div>';
+			$('#hour').append(html);
+			$('.clockpicker :text').clockpicker({autoclose: true});
+		} else {
+			util.message('最多可添加3个时间段', '', 'error');
+			return false;
+		}
+	});
+
+	$('.remind-reply-add').click(function(){
+		var html ='	<div class="form-group item">'+
+				'	<label class="col-xs-12 col-sm-3 col-md-2 control-label">自定义催单回复</label>'+
+				'	<div class="col-sm-6">'+
+				'		<input type="text" class="form-control" name="remind_reply[]" value="">'+
+				'	</div>'+
+				'	<div class="col-sm-1" style="margin-top:5px">'+
+				'		<a href="javascript:;" class="remind-reply-del"><i class="fa fa-times-circle"></i> </a>'+
+				'	</div>'+
+				'</div>';
+		if($('#remind-reply .item').size() >= 15) {
+			util.message('最多可添加15个自定义催单回复', '', 'error');
+			return false;
+		}
+		$('#remind-reply').append(html);
+	});
+
+	$('.comment-reply-add').click(function(){
+		var html ='	<div class="form-group item">'+
+				'	<label class="col-xs-12 col-sm-3 col-md-2 control-label">自定义评价回复</label>'+
+				'	<div class="col-sm-6">'+
+				'		<textarea class="form-control" name="comment_reply[]"></textarea>'+
+				'	</div>'+
+				'	<div class="col-sm-1" style="margin-top:5px">'+
+				'		<a href="javascript:;" class="comment-reply-del"><i class="fa fa-times-circle"></i> </a>'+
+				'	</div>'+
+				'</div>';
+		if($('#comment-reply .item').size() >= 15) {
+			util.message('最多可添加15个自定义评价回复', '', 'error');
+			return false;
+		}
+		$('#comment-reply').append(html);
+	});
+
+	$('#times-add').click(function(){
+		var html ='	<div class="input-group clockpicker" style="margin-bottom: 15px">'+
+				'		<input type="hidden" class="form-control" name="ids[]" value="">'+
+				'		<input type="text" class="form-control" name="starttime[]" value="">'+
+				'		<span class="input-group-addon">至</span>'+
+				'	<input type="text" class="form-control" name="endtime[]" value="">'+
+				'			<span class="input-group-addon"> <a href="javascript:;" class="times-del"><i class="fa fa-times"></i></a></span>'+
+				'	</div>';
+		$('#times-container').append(html);
+		$('.clockpicker :text').clockpicker({autoclose: true});
+	});
+
+	$('#custom-url-add').click(function(){
+		var html = '<div class="form-group item">'+
+				'	<label class="col-xs-12 col-sm-3 col-md-2 control-label">门店详情页自定义链接</label>'+
+				'		<div class="col-sm-6">'+
+				'			<div class="input-group">'+
+				'				<span class="input-group-addon">链接文字</span>'+
+				'				<input type="text" class="form-control" name="custom_title[]" value="">'+
+				'				<span class="input-group-addon">链接地址</span>'+
+				'				<input type="text" class="form-control" name="custom_link[]" value="">'+
+				'			</div>'+
+				'		</div>'+
+				'	<div class="col-sm-1" style="margin-top:5px">'+
+				'		<a href="javascript:;" class="custom-url-del"><i class="fa fa-times-circle"></i> </a>'+
+				'	</div>'+
+				'</div>';
+		;
+		if($('#custom-url .item').size() >= 3) {
+			Notify.error('最多可添加3个门店详情页自定义链接');
+			return false;
+		}
+		$('#custom-url').append(html);
+	});
+
+	$('#selectThumb').click(function(){
+		util.uploadMultiPictures(function(images){
+			var s = '';
+			$.each(images, function(){
+				s += '<div class="col-lg-4">'+
+						'	<input type="hidden" name="thumbs[image][]" value="'+this.filename+'">' +
+						'	<div class="panel panel-default panel-slide">'+
+						'		<div class="btnClose" onclick="$(this).parent().parent().remove()"><i class="fa fa-times"></i></div>' +
+						'		<div class="panel-body">'+
+						'			<img src="'+this.url+'" width="100%" height="170">'+
+						'			<div>'+
+						'				<input class="form-control last pull-right" placeholder="跳转链接" name="thumbs[url][]">'+
+						'			</div>'+
+						'		</div>'+
+						'	</div>'+
+						'</div>'
+			});
+			$('#slideContainer').append(s);
+		});
+	});
+
+	$(document).on('click', '.remind-reply-del, .comment-reply-del, .times-del, .custom-url-del', function(){
+		$(this).parent().parent().remove();
+		return false;
+	});
+});
+
+irequire(['tiny', 'laytpl'], function(tiny, laytpl){
+	$(document).on('click', '.label-add', function(){
+		var $this = $(this);
+		tiny.prompt($this, '', function(data) {
+			if(!data) {
+				return false;
+			}
+			var html = '<div class="btn-group btn-label">'+
+					'		<input type="hidden" name="order_note[]" value="'+ data +'">'+
+					'		<a class="btn btn-default border-radius-4">'+data+'</a>'+
+					'		<a class="btn btn-default label-delete">'+
+					'		    <span class="fa fa-times-circle"></span>'+
+					'	    </a>'+
+					'	</div>';
+			$this.before(html);
+		});
+	});
+
+	$(document).on('click', '.label-delete', function(){
+		$(this).parents('.btn-group').remove();
+	});
+
+	{if $item['delivery_mode'] == 1}
+		$(document).on('click', '.btn-build-delivery-time', function(){
+			tiny.confirm($(this), '确定重新生成配送时间段吗?', function(){
+				var pre_minute = parseInt($.trim($(':text[name="pre_delivery_time_minute"]').val()));
+				if(isNaN(pre_minute)) {
+					util.message('时间间隔只能是整数');
+					return false;
+				}
+				if(!pre_minute) {
+					util.message('时间间隔必须大于0');
+					return false;
+				}
+				$.post("{php echo iurl('common/utility/build_time');}", {pre_minute: pre_minute}, function(data) {
+					var result = $.parseJSON(data);
+					if(result.message.errno == -1) {
+						util.message(result.message.message);
+						return false;
+					}
+					var gettpl = $('#tpl-delivery-time').html();
+					laytpl(gettpl).render(result.message.message, function(html){
+						$('#delivery-times .containter').html(html);
+					});
+				});
+			});
+		});
+
+		$(document).on('click', '.btn-delivery-time-item', function(){
+			if($(this).hasClass('btn-success')) {
+				$(this).parent().prev().prev().val(0);
+				$(this).removeClass('btn-success').addClass('btn-default');
+				$(this).html('已弃用');
+			} else {
+				$(this).parent().prev().prev().val(1);
+				$(this).removeClass('btn-default').addClass('btn-success');
+				$(this).html('使用中');
+			}
+		});
+		{/if}
+		});
+</script>
+{itemplate 'public/footer'}

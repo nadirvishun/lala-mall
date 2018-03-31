@@ -1,0 +1,62 @@
+{if $op == 'changes'}
+<form class="form-horizontal form-validate" id="form-changes" action="{php echo iurl('merchant/account/changes');}" method="post" enctype="multipart/form-data">
+	<input type='hidden' name='id' value='{$id}' />
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button data-dismiss="modal" class="close" type="button">×</button>
+				<h4 class="modal-title">账户变动</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">商户logo</label>
+					<div class="col-sm-9 col-xs-12">
+						<img src="" alt="">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">商户信息</label>
+					<div class="col-sm-9 col-xs-12"></div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">当前余额</label>
+					<div class="col-sm-9 col-xs-12"></div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">变化</label>
+					<div class="col-sm-9 col-xs-12">
+						<div class="radio radio-inline">
+							<input type="radio" value="1" name="change" id="change-1" checked="" required="" aria-required="true" aria-invalid="false" class="valid">
+							<label for="change-1">增加</label>
+						</div>
+						<div class="radio radio-inline">
+							<input type="radio" value="2" name="change" id="change-2" checked="" required="" aria-required="true" aria-invalid="false" class="valid">
+							<label for="change-2">减少</label>
+						</div>
+						<div class="radio radio-inline">
+							<input type="radio" value="3" name="change" id="change-3" checked="" required="" aria-required="true" aria-invalid="false" class="valid">
+							<label for="change-3">最终余额</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">数目</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="number" name="amount" class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">备注</label>
+					<div class="col-sm-9 col-xs-12">
+						<textarea name="remark"  class="form-control"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" type="submit">提交</button>
+				<button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+			</div>
+		</div>
+	</div>
+</form>
+{/if}

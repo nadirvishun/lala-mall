@@ -1,0 +1,39 @@
+<div class="second-sidebar-title">配送员</div>
+<div class="nav slimscroll">
+	{ifp 'deliveryer.account'}
+		<div class="menu-header">入驻</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'account'}class="active"{/if}>
+				<a href="{php echo iurl('deliveryer/account/list');}">入驻列表</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'deliveryer.plateform' || 'deliveryer.getcash' || 'deliveryer.current'}
+		<div class="menu-header">平台</div>
+		<ul class="menu-item">
+			{ifp 'deliveryer.plateform'}
+				<li {if $_W['_action'] == 'plateform'}class="active"{/if}>
+					<a href="{php echo iurl('deliveryer/plateform/list');}">平台配送员</a>
+				</li>
+			{/if}
+			{ifp 'deliveryer.getcash'}
+				<li {if $_W['_action'] == 'getcash'}class="active"{/if}>
+					<a href="{php echo iurl('deliveryer/getcash/list');}">提现申请</a>
+				</li>
+			{/if}
+			{ifp 'deliveryer.current'}
+				<li {if $_W['_action'] == 'current'}class="active"{/if}>
+					<a href="{php echo iurl('deliveryer/current/list');}">账户明细</a>
+				</li>
+			{/if}
+		</ul>
+	{/if}
+	{ifp 'deliveryer.cover'}
+		<div class="menu-header">入口</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'cover'}class="active"{/if}>
+				<a href="{php echo iurl('deliveryer/cover/list');}">注册&登陆</a>
+			</li>
+		</ul>
+	{/if}
+</div>

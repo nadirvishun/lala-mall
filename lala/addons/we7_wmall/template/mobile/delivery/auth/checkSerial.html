@@ -1,0 +1,31 @@
+{itemplate 'public/header'}
+<style>
+	.check-serial .content{background-color: #fff;}
+	.check-serial .header{height: 8rem;}
+	.check-serial .header .logo{position: relative; height: 4.4rem; width: 4.4rem; border-radius: 0.8rem; margin: 0 auto; top: 2rem;}
+	.check-serial .header .logo img{height: 4.4rem; width: 4.4rem; border-radius: 0.8rem; display: block;}
+	.check-serial .content-block-title{color: #333; font-size: 1.1rem; text-align: center;}
+	.check-serial .input-container{padding: 0 0.5rem; margin: 1.5rem 0;}
+	.check-serial .input-container .input-inner{padding: 0.5rem 0;}
+	.check-serial .input-container .input-serial{width: 100%; border: none; text-align: center;}
+	.check-serial .button-success{background-color: #4caf50;}
+</style>
+<div class="page check-serial">
+	<div class="content">
+		<div class="header">
+			<div class="logo">
+				<img src="{php echo tomedia($config_mall['logo']);}" alt=""/>
+			</div>
+		</div>
+		<div class="content-block-title" style="">请输入序列号</div>
+		<div class="input-container">
+			<div class="input-inner border-1px-b">
+				<input class="input-serial" type="text" name="" placeholder="序列号"/>
+			</div>
+		</div>
+		<div class="content-padded">
+			<a href="javascript:;" class="button button-big button-fill button-success">确定</a>
+		</div>
+	</div>
+</div>
+{itemplate 'public/footer'}

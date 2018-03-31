@@ -1,0 +1,62 @@
+{itemplate 'public/header'}
+{if $ta == 'index'}
+<div class="page clearfix">
+	<h2>页面设置</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="alert alert-warning">提醒：页面设置改动后需重新提交微信审核，并且审核通过后才可生效。不填写或者为空,将使用系统默认的</div>
+		{loop $extpages $page}
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">{$page['title']}</label>
+				<div class="col-sm-9 col-xs-12">
+					<div class="input-group js-colorpicker">
+						<span class="input-group-addon">背景颜色</span>
+						<input class="form-control" type="text" name="pages[{$page['key']}][navigationBarBackgroundColor]"  placeholder="背景颜色" value="{$config_extpage[$page['key']]['navigationBarBackgroundColor']}">
+						<span class="input-group-addon" style="width:35px;border-left:none;background-color:{$config_extpage[$page['key']]['navigationBarBackgroundColor']}"></span>
+						<span class="input-group-btn">
+							<button class="btn btn-default colorpicker" type="button">选择颜色 <i class="fa fa-caret-down"></i></button>
+							<button class="btn btn-default colorclean" type="button"><span><i class="fa fa-remove"></i></span></button>
+						</span>
+					</div>
+				</div>
+			</div>
+		{/loop}
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提 交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{/if}
+
+{if $ta == 'cover'}
+<div class="page clearfix">
+	<form class="form-horizontal form" id="form1" action="" method="post" enctype="multipart/form-data">
+		<h3 class="margin-t-0">小程序入口</h3>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">直接URL</label>
+			<div class="col-sm-9 col-xs-12">
+				<p class="form-control-static js-clip" data-text="{$urls['wxapp']}" title="点击复制">
+					<a href="javascript:;">{$urls['wxapp']}</a>
+				</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">访问二维码</label>
+			{if $legel == 1}
+				<div class="col-sm-9 col-xs-12">
+					<img src="{php echo tomedia($path)}?t={php echo time();}" class="qrcode-block" width="150px" height="150px">
+					<br>
+					<a href="{php echo iurl('store/wxapp/index/cover');}" class="btn btn-primary js-post" style="margin-top: 20px; margin-left: 30px;">重新生成</a>
+				</div>
+			{else}
+				<div class="col-sm-9 col-xs-12">
+					<a href="{php echo iurl('store/wxapp/index/cover');}" class="btn btn-primary js-post">生成小程序店铺二维码</a>
+				</div>
+			{/if}
+		</div>
+	</form>
+</div>
+{/if}
+{itemplate 'public/footer'}

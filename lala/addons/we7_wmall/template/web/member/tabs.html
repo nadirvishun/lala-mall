@@ -1,0 +1,42 @@
+<div class="second-sidebar-title">顾客</div>
+<div class="nav slimscroll">
+	<div class="menu-header">概况</div>
+	<ul class="menu-item">
+		{ifp 'member.index'}
+			<li {if $_W['_action'] == 'index'}class="active"{/if}>
+				<a href="{php echo iurl('member/index');}">顾客概况</a>
+			</li>
+		{/if}
+		{ifp 'member.list'}
+			<li {if $_W['_action'] == 'list'}class="active"{/if}>
+				<a href="{php echo iurl('member/list/list');}">顾客列表</a>
+			</li>
+		{/if}
+		<li {if $_W['_action'] == 'groups'}class="active"{/if}>
+			<a href="{php echo iurl('member/groups')}">顾客等级</a>
+		</li>
+<!--
+		<li {if $_W['_action'] == 'sync'}class="active"{/if}>
+		<a href="{php echo iurl('member/sync/index');}">同步顾客数据</a>
+		</li>
+-->
+	</ul>
+	<div class="menu-header">顾客信息</div>
+	<ul class="menu-item">
+		{ifp 'member.address'}
+			<li {if $_W['_action'] == 'address'}class="active"{/if}>
+				<a href="{php echo iurl('member/address');}">顾客地址</a>
+			</li>
+		{/if}
+		{ifp 'member.coupon'}
+			<li {if $_W['_action'] == 'coupon'}class="active"{/if}>
+				<a href="{php echo iurl('member/coupon');}">顾客代金券</a>
+			</li>
+		{/if}
+		{ifp 'member.redpacket'}
+			<li {if $_W['_action'] == 'redpacket'}class="active"{/if}>
+				<a href="{php echo iurl('member/redpacket');}">顾客红包</a>
+			</li>
+		{/if}
+	</ul>
+</div>

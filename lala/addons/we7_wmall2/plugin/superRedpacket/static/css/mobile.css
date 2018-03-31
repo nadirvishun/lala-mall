@@ -1,0 +1,36 @@
+.share-redpacket .banner{line-height: 0.9}
+.share-redpacket .receive{width: 95%; margin: 0 auto; background: rgba(255,255,255,0.6); border-radius: 0.15rem; padding: .5rem 5%;}
+.share-redpacket .receive .mobile-input{height: 2.4rem; width: 100%; border: none; font-size: 0.8rem;  padding-left: 10px; border-radius: 4px; margin-bottom: 0.8rem;}
+.share-redpacket .receive .mobile-input::-webkit-input-placeholder { color: #999; }
+.share-redpacket .title-line{background: url(../img/bg-ling.png) no-repeat; background-size: 100% auto; background-position: 0; color: #333333; text-align: center; font-weight: normal; margin: 0.25rem auto 0; width: 95%; font-size: 0.8rem;}
+.share-redpacket .records-agreement{width: 95%; margin: 0.5rem auto 0; background: rgba(255,255,255,0.6); border-radius: 0.15rem; padding: .5rem 0;}
+.share-redpacket .records-agreement .records-container .item-content:active{background: none;}
+.share-redpacket .agreement-inner{padding: 0 5%; font-size: 0.75rem;}
+.share-redpacket .redpacket{width: 95%; margin: 0 auto; background: rgba(255,255,255,0.6); border-radius: 0.15rem; padding: .5rem;}
+.share-redpacket .redpacket-item{box-sizing: border-box; min-height: 3.2rem; background: url(https://xs01.meituan.net/waimai_c_activity_web/img/resource/red-enve2/result-bg.c1682c6b.png) no-repeat; background-size: 100% 100%; text-align: center; padding: 0.2rem 0.8rem 0; margin-bottom: 0.5rem;}
+.share-redpacket .redpacket-item.activity-empty{height: 5rem; line-height: 5rem; padding: 0; font-size: 1.1rem; font-weight: bold; color: #ccc; margin-bottom: 0}
+.share-redpacket .redpacket-item .image{width: 2.5rem; margin: 0.3rem 0.5rem 0 0;}
+.share-redpacket .redpacket-item .image img{width: 2.5rem; height: 2.5rem;}
+.share-redpacket .redpacket-item .redpacket-info{max-width: 5.9rem; height: 2.8rem;}
+.share-redpacket .redpacket-item .redpacket-info span{display: block;}
+.share-redpacket .redpacket-item .redpacket-info .redpacket-title{max-width: 5.9rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 0.8rem; margin-top: 0.5rem; margin-bottom: 0.2rem;}
+.share-redpacket .redpacket-item .redpacket-info .use-condition{font-size: 0.7rem; color: #666;}
+.share-redpacket .redpacket-item .price{font-size: 2.2rem;}
+.share-redpacket .redpacket-item .price span{font-size: 1rem; font-weight: bold;}
+.share-redpacket .redpacket-item .redpacket-bottom{border-top: 1px dashed #eaeaea; color: #a9a9a9; font-size: 0.6rem; padding: 0.2rem 0;}
+.share-redpacket .redpacket-item .redpacket-bottom a{display: table-cell; vertical-align: middle; padding-left: 0.3rem;}
+.share-redpacket .redpacket-item .redpacket-bottom .use-days-limit{max-width: 80%; text-align: left;}
+.share-redpacket .redpacket .other{margin-top: .5rem;}
+.share-redpacket .redpacket .get-success{margin: 0.5rem 0; text-align: center; font-size: 0.75rem; color: #333;}
+.share-redpacket .redpacket .give-redpacket{margin-top: 0.8rem;}
+.share-redpacket .list-block{margin:0;}
+.share-redpacket .list-block ul,.share-redpacket .list-block .item-inner{border:0;}
+.share-redpacket .list-block ul{padding: 0 .5rem; background: none;}
+.share-redpacket .list-block .item-content{padding-left: 0;}
+.share-redpacket .list-block ul li:not(:last-child):after{content:""; width:100%; height: 1px; background-image: -webkit-linear-gradient(top, hsla(0,0%,100%,.1), hsla(0,0%,0%,.1)); background-image: -moz-linear-gradient(top, hsla(0,0%,100%,.1), hsla(0,0%,0%,.1)); background-image: -ms-linear-gradient(top, hsla(0,0%,100%,.1), hsla(0,0%,0%,.1)); background-image: -o-linear-gradient(top, hsla(0,0%,100%,.1), hsla(0,0%,0%,.1));background-image: linear-gradient(top, hsla(0,0%,100%,.1), hsla(0,0%,0%,.1)); position: absolute; z-index: 1; left: 0;}
+.share-redpacket .list-block ul li:last-child{border-bottom: 0;}
+.share-redpacket .list-block ul li img{width: 2rem; height: 2rem; border-radius: 50%;}
+.share-redpacket .list-block.media-list .item-top .item-title{font-weight: normal; font-size: .65rem;}
+.share-redpacket .list-block.media-list .item-top .item-after{font-weight: normal; font-size: .65rem; color: #3d1415;}
+.share-redpacket .list-block.media-list .item-bottom .item-subtitle{font-weight: normal; font-size: .55rem;}
+.share-redpacket .list-block.media-list .item-bottom .item-after{font-weight: normal; font-size: .55rem;}

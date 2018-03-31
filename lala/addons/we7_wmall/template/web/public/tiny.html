@@ -1,0 +1,217 @@
+<script type="text/html" id="select-fans-containter">
+	<div class="modal fade" id="select-fans-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">选择粉丝</h4>
+				</div>
+				<form class="form-horizontal form" id="form-first-order" action="" method="post">
+					<div class="modal-body">
+						<div class="alert alert-warning">
+							如果待添加的店员未关注公众号, 需要先关注公众号<br>
+							如果未搜索到粉丝,您可以尝试去<a href="{php echo url('mc/fans');}" target="_blank">"粉丝列表"</a>里 同步全部粉丝信息,然后搜索粉丝
+						</div>
+						<div class="form-group" style="margin: 0; margin-bottom: 20px">
+							<div class="input-group">
+								<input class="form-control" name="keyword" id="keyword" type="text" placeholder="输入粉丝昵称或粉丝编号进行搜索"/>
+								<div class="input-group-btn">
+									<a class="btn btn-primary" href="javascript:;" id="search"><i class="fa fa-search"></i> 搜索</a>
+								</div>
+							</div>
+						</div>
+						<table class="table table-hover table-bordered text-center">
+							<thead>
+							<tr>
+								<th class="text-center">头像</th>
+								<th class="text-center">昵称</th>
+								<th class="text-center">性别</th>
+								<th class="text-center">操作</th>
+							</tr>
+							</thead>
+							<tbody class="content">
+							<tr>
+								<td colspan="4">
+									<h4><i class="fa fa-info-circle"></i> <span id="info">输入粉丝昵称或粉丝编号进行搜索</span></h4>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</script>
+<script type="text/html" id="select-fans-data">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<tr>
+		<td><img src="<{d[i].tag.avatar}>" width="50" alt=""/></td>
+		<td><{d[i].nickname}></td>
+		<td><{d[i].tag.sex}></td>
+		<td><a href="javascript:;" class="btn btn-primary" data-fanid="<{d[i].fanid}>">选择</a></td>
+	</tr>
+	<{# } }>
+</script>
+<script type="text/html" id="select-store-containter">
+	<div class="modal fade" id="select-store-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">选择商家</h4>
+				</div>
+				<form class="form-horizontal form" id="form-first-order" action="" method="post">
+					<div class="modal-body">
+						<div class="form-group" style="margin: 0; margin-bottom: 20px">
+							<div class="input-group">
+								<input class="form-control" name="keyword" id="keyword" type="text" placeholder="输入商家名称进行搜索"/>
+								<div class="input-group-btn">
+									<a class="btn btn-primary" href="javascript:;" id="search"><i class="fa fa-search"></i> 搜索</a>
+								</div>
+							</div>
+						</div>
+						<table class="table table-hover table-bordered text-center">
+							<thead>
+							<tr>
+								<th class="text-center"></th>
+								<th class="text-center">名称</th>
+								<th class="text-center">入驻时间</th>
+								<th class="text-center">操作</th>
+							</tr>
+							</thead>
+							<tbody class="content">
+							<tr>
+								<td colspan="4">
+									<h4><i class="fa fa-info-circle"></i> <span id="info">输入商家名称进行搜索</span></h4>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+				<div class="modal-footer hide">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary btn-submit">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+<script type="text/html" id="select-store-data">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<tr>
+		<td><img src="<{d[i].logo}>" width="50" alt=""/></td>
+		<td><{d[i].title}></td>
+		<td><{d[i].addtime}></td>
+		<td><a href="javascript:;" class="btn btn-default btn-item" data-id="<{d[i].id}>">选择</a></td>
+	</tr>
+	<{# } }>
+</script>
+<script type="text/html" id="select-goods-containter">
+	<div class="modal fade" id="select-goods-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">选择商品</h4>
+				</div>
+				<form class="form-horizontal form" id="form-first-order" action="" method="post">
+					<div class="modal-body">
+						<div class="form-group" style="margin: 0; margin-bottom: 20px">
+							<div class="input-group">
+								<input class="form-control" name="keyword" id="keyword" type="text" placeholder="输入商品名称进行搜索"/>
+								<div class="input-group-btn">
+									<a class="btn btn-primary" href="javascript:;" id="search"><i class="fa fa-search"></i> 搜索</a>
+								</div>
+							</div>
+						</div>
+						<table class="table table-hover table-bordered text-center">
+							<thead>
+							<tr>
+								<th class="text-center"></th>
+								<th class="text-center">名称</th>
+								<th class="text-center">价格</th>
+								<th class="text-center">库存</th>
+								<th class="text-center">操作</th>
+							</tr>
+							</thead>
+							<tbody class="content">
+							<tr>
+								<td colspan="5">
+									<h4><i class="fa fa-info-circle"></i> <span id="info">输入商品名称进行搜索</span></h4>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+				<div class="modal-footer hide">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary btn-submit">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+<script type="text/html" id="select-goods-data">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<tr>
+		<td><img src="<{d[i].thumb}>" width="50" alt=""/></td>
+		<td><{d[i].title}></td>
+		<td><{d[i].price}></td>
+		<td><{d[i].total}></td>
+		<td><a href="javascript:;" class="btn btn-default btn-item" data-id="<{d[i].id}>">选择</a></td>
+	</tr>
+	<{# } }>
+</script>
+
+<script type="text/html" id="select-account-containter">
+	<div class="modal fade" id="select-account-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">选择公众号</h4>
+				</div>
+				<form class="form-horizontal form" id="form-first-order" action="" method="post">
+					<div class="modal-body">
+						<div class="form-group" style="margin: 0; margin-bottom: 20px">
+							<div class="input-group">
+								<input class="form-control" name="keyword" id="keyword" type="text" placeholder="输入公众号名称进行搜索"/>
+								<div class="input-group-btn">
+									<a class="btn btn-primary" href="javascript:;" id="search"><i class="fa fa-search"></i> 搜索</a>
+								</div>
+							</div>
+						</div>
+						<table class="table table-hover table-bordered text-center">
+							<thead>
+							<tr>
+								<th class="text-center">公众号</th>
+								<th class="text-center">uniacid</th>
+								<th class="text-center">操作</th>
+							</tr>
+							</thead>
+							<tbody class="content">
+							<tr>
+								<td colspan="4">
+									<h4><i class="fa fa-info-circle"></i> <span id="info">输入公众号名称进行搜索</span></h4>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</script>
+<script type="text/html" id="select-account-data">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<tr>
+		<td><{d[i].name}></td>
+		<td><{d[i].uniacid}></td>
+		<td><a href="javascript:;" class="btn btn-primary" data-uniacid="<{d[i].uniacid}>">选择</a></td>
+	</tr>
+	<{# } }>
+</script>

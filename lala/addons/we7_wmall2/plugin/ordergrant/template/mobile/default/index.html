@@ -1,0 +1,187 @@
+{itemplate 'public/header'}
+<link href="../addons/we7_wmall/plugin/ordergrant/static/css/mobile/index.css" rel="stylesheet" type="text/css"/>
+<div class="page ordergrant">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">下单有礼</h1>
+	</header>
+	{php get_mall_menu();}
+	<div class="content">
+		<div class="banner">
+			<div class="avatar">
+				{if !empty($_W['member']['avatar'])}
+					<img src="{php echo tomedia($_W['member']['avatar']);}" alt="">
+				{else}
+					<img src="{WE7_WMALL_TPL_URL}static/img/head.png" alt="">
+				{/if}
+			</div>
+			<a class="detail" href="{php echo imurl('ordergrant/record')}">详细记录</a>
+			<a href="#" class="open-popup open-agreement agreement" data-popup=".popup-agreement">活动规则</a>
+			<div class="row no-gutter">
+				<div class="col-33">
+					<div class="titles">连续下单</div>
+					<div class="days">{$order_days_amount['continuous']}天</div>
+				</div>
+				<div class="col-33">
+					<div class="titles">{$_W['member']['nickname']}</div>
+				</div>
+				<div class="col-33">
+					<div class="titles">累计下单</div>
+					<div class="days">{$order_days_amount['sum']}天</div>
+				</div>
+			</div>
+		</div>
+		<div class="calendar">
+			<div class="titles">
+				<span class="icon icon-calendar"></span>
+				{$year}年{$month}月
+			</div>
+			<div class="calendar-inner">
+				{loop $calendar $week}
+					<div class="week clearfix">
+						{loop $week $day}
+							<div class="day pull-left {if !empty($day['today'])}today{/if}" data-day="{$day['day']}" data-grant="{$day['grant']}">
+								{if !empty($day['day'])}
+									<p class="num">{$day['day']}</p>
+									{if !empty($day['grant'])}
+										<p class="grant"><span class="icon icon-recharge"></span>{$day['grant']}</p>
+									{/if}
+									{if !empty($day['title'])}
+										<p class="special" style="background: {$day['color']};">{$day['title']}</p>
+									{/if}
+									{if !empty($day['signed'])}
+										<i class="icon icon-check signed"></i>
+									{/if}
+								{/if}
+							</div>
+						{/loop}
+					</div>
+				{/loop}
+			</div>
+		</div>
+		<div class="reward-container">
+			<div class="titles">
+				<span class="text"><i class="icon icon-gifts"></i> 连续下单有礼</span>
+				<span class="subtitle pull-right">连续下单即可领取</span>
+			</div>
+			<div class="reward-inner">
+				<div class="award">
+					<div class="award-list">
+						{loop $config_ordergrant['continuous'] $continuous}
+							<div class="item {if !empty($continuous_get[$continuous['days']])}active{/if}">
+								<div class="grant">+{$continuous['grant']}<br>{$grantType}</div>
+								<div class="circle"><i class="icon icon-check"></i> </div>
+								<div class="days">{$continuous['days']}天</div>
+								{if $order_days_amount['max'] < $continuous['days']}
+									<div class="text btn-get disabled">不可领</div>
+								{else}
+									{if empty($continuous_get[$continuous['days']])}
+										<div class="text btn-get" data-type="1" data-days="{$continuous['days']}">可领取</div>
+									{else}
+										<div class="text btn-get" data-type="1" data-days="{$continuous['days']}">已领取</div>
+									{/if}
+								{/if}
+							</div>
+						{/loop}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="reward-container">
+			<div class="titles">
+				<span class="text"><i class="icon icon-gifts"></i> 累计下单有礼</span>
+				<span class="subtitle pull-right">累计下单满足即可领取</span>
+			</div>
+			<div class="reward-inner">
+				<div class="award">
+					<div class="award-list">
+						{loop $config_ordergrant['all'] $all}
+							<div class="item {if !empty($all_get[$all['days']])}active{/if}">
+								<div class="grant">+{$all['grant']}<br>{$grantType}</div>
+								<div class="circle"><i class="icon icon-check"></i> </div>
+								<div class="days">{$all['days']}天</div>
+								{if $order_days_amount['sum'] < $all['days']}
+									<div class="text btn-get disabled">不可领</div>
+								{else}
+									{if empty($all_get[$all['days']])}
+										<div class="text btn-get" data-type="2" data-days="{$all['days']}">可领取</div>
+									{else}
+										<div class="text btn-get" data-type="2" data-days="{$all['days']}">已领取</div>
+									{/if}
+								{/if}
+							</div>
+						{/loop}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal modal-no-buttons modal-notice modal-order-grant">
+	<div class="modal-inner">
+		<div class="modal-title">
+			<div>本日下单奖励明细</div>
+		</div>
+		<div class="modal-text">
+			<div class="notice"></div>
+			<a href="javascript:;" class="button button-big button-fill button-danger js-close-modal" data-modal=".modal-order-grant">知道了</a>
+		</div>
+	</div>
+</div>
+
+<div class="popup popup-card-agreement popup-agreement">
+	<div class="page card-agreement">
+		<header class="bar bar-nav common-bar-nav">
+			<a class="pull-left close-popup" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+			<h1 class="title">下单有礼规则详解</h1>
+		</header>
+		<div class="content" style="background: #FFF">
+			<div class="content-padded">
+				{$config_ordergrant['agreement']}
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(function() {
+	$(document).on('click', '.btn-get', function() {
+		var parent = $(this).parent();
+		if(parent.hasClass('active')) {
+			$.toast('您已领取该奖');
+			return
+		}
+		if($(this).hasClass('disabled')) {
+			$.toast('您还没有达到领取该奖励的条件');
+			return
+		}
+		var type = $(this).data('type');
+		var days = $(this).data('days');
+		$.post("{php echo imurl('ordergrant/index/get')}", {type: type, days: days}, function(data) {
+			var result = $.parseJSON(data);
+			if(!result.message.errno) {
+				$.toast(result.message.message, location.href);
+			} else {
+				$.toast(result.message.message);
+			}
+		})
+	});
+
+	$(document).on('click', '.day', function() {
+		var grant = $(this).data('grant');
+		var day = $(this).data('day');
+		var date = new Date();
+		var today_day = date.getDate();
+		var difference = day - today_day;
+		if(difference >= 0 && grant > 0) {
+			$.post("{php echo imurl('ordergrant/index/next')}", {difference: difference}, function(data) {
+				var result = $.parseJSON(data);
+				if(result.message.errno == 0) {
+					$('.modal-order-grant .notice').html(result.message.message);
+					$.iopenModal('.modal-order-grant', function(){});
+				}
+			})
+		}
+	});
+})
+</script>
+{itemplate 'public/footer'}

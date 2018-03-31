@@ -1,0 +1,110 @@
+<style type="text/css">
+	#select-wxapp-link-modal .modal-dialog{width: 750px;}
+	#select-wxapp-link-modal .modal-dialog .modal-body{padding: 15px;}
+	#select-wxapp-link-modal .link-container{height: 420px; overflow-y: auto;}
+	#select-wxapp-link-modal .page-header{padding: 9px 0; margin-top: 5px; margin-bottom: 8px}
+	#select-wxapp-link-modal .page-header h4{margin: 0; font-size: 14px; font-weight: 600}
+	#select-wxapp-link-modal .btn{margin-bottom: 3px; border: 1px solid #e7eaec;}
+	#select-wxapp-link-modal .btn:hover{border: 1px solid #d2d2d2; background: #ffffff; text-decoration: none}
+	#select-wxapp-link-modal .btn-wxapp:hover{background: #1ab394; text-decoration: none}
+</style>
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button data-dismiss="modal" class="close" type="button">×</button>
+			<h4 class="modal-title">选择链接</h4>
+		</div>
+		<div class="modal-body clearfix link-container">
+			<ul class="nav nav-tabs" role="tablist">
+				{if in_array('wmall', $getType) || in_array('all', $getType)}
+				<li role="presentation" class="active"><a href="#takeout" aria-controls="takeout" role="tab" data-toggle="pill">外卖</a></li>
+				{/if}
+				{if in_array('errander', $getType) || in_array('all', $getType)}
+				{if check_plugin_perm('errander')}
+					<li role="presentation"><a href="#errander" aria-controls="errander" role="tab" data-toggle="pill">跑腿</a></li>
+				{/if}
+				{/if}
+				{if in_array('webview', $getType) || in_array('all', $getType)}
+				<li role="presentation">
+					<a href="#third" aria-controls="third" role="tab" data-toggle="pill">第三方链接</a>
+				</li>
+				{/if}
+				{if in_array('phone', $getType) || in_array('all', $getType)}
+				<li role="presentation">
+					<a href="#phone" aria-controls="phone" role="tab" data-toggle="pill">电话</a>
+				</li>
+				{/if}
+				{if in_array('wxapp', $getType) || in_array('all', $getType)}
+				<li role="presentation">
+					<a href="#wxapp" aria-controls="wxapp" role="tab" data-toggle="pill">小程序</a>
+				</li>
+				{/if}
+			</ul>
+			<div class="tab-content">
+				<div class="alert alert-info" style="margin-top: 10px; margin-bottom: 10px">
+					如果底部菜单中已经选择该链接，页面中选择后点击无效。
+					底部菜单只可选择部分页面地址
+				</div>
+				<div class="tab-pane active" role="tabpanel" id="takeout">
+					{loop $data['takeout'] $da}
+						<div class="page-header">
+							<h4><i class="fa fa-folder-open-o"></i> {$da['title']}</h4>
+						</div>
+						{loop $da['items'] $item}
+							<div class="btn btn-default btn-sm btn-link" data-href="{$item['url']}" title="{$item['title']}">{$item['title']}</div>
+						{/loop}
+					{/loop}
+				</div>
+				<div class="tab-pane" role="tabpanel" id="errander">
+					{loop $data['errander'] $da}
+						<div class="page-header">
+							<h4><i class="fa fa-folder-open-o"></i> {$da['title']}</h4>
+						</div>
+						{loop $da['items'] $item}
+							<div class="btn btn-default btn-sm btn-link" data-href="{$item['url']}" title="{$item['title']}">{$item['title']}</div>
+						{/loop}
+					{/loop}
+				</div>
+				<div class="tab-pane" role="tabpanel" id="third">
+					<div class="input-group">
+						<span class="input-group-addon">https://</span>
+						<input type="text" placeholder="请输入已在小程序管理后台配置白名单的域名 例如：www.baidu.com" class="form-control">
+						<span class="input-group-addon btn btn-primary btn-webview" style="border: 0; background: #1ab394;">确认使用</span>
+					</div>
+					<div class="help-block text-danger" style="color: #a94442;">
+						注意：1. 目标链接域名需到
+						<a href="https://mp.weixin.qq.com/" target="_black" class="text-danger"><b>小程序管理后台</b></a>配置域名白名单 
+					</div>
+					<div class="help-block" style="color: #a94442; padding-left: 43px;">
+						2. 目标链接必须支持https，否则无法打开
+					</div>
+					<div class="help-block" style="color: #a94442; padding-left: 43px;">
+						3. 点击链接将跳出小程序与小程序无关
+					</div>
+				</div>
+				<div class="tab-pane" role="tabpanel" id="phone">
+					<div class="input-group">
+						<span class="input-group-addon">电话</span>
+						<input type="text" placeholder="请在此输入有效电话号码" class="form-control">
+						<span class="input-group-addon btn btn-primary btn-phone" style="border: 0; background: #1ab394;">确认使用</span>
+					</div>
+				</div>
+				<div class="tab-pane" role="tabpanel" id="wxapp">
+					<div class="input-group">
+						<span class="input-group-addon">APPID</span>
+						<input type="text" name="appid" placeholder="请在此输入APPID" class="form-control">
+					</div>
+					<div class="help-block" style="color: #a94442;">注意：必须是同一个公众号下的小程序appid，否则无法跳转</div>
+					<div class="input-group" style="margin-top: 30px;">
+						<span class="input-group-addon">小程序链接</span>
+						<input type="text" name="url" placeholder="请在此输入小程序链接" class="form-control">
+					</div>
+					<div class="help-block" style="color: #a94442;">注意：小程序链接留空默认跳到小程序首页</div>
+					<div class="btn-group" style="width: 100%; margin-top: 10px; text-align: center;">
+						<button class="btn btn-primary btn-wxapp" style="float: none; border-color: #1ab394;">确认使用</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

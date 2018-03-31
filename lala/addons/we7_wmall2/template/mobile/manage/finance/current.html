@@ -1,0 +1,149 @@
+{itemplate 'public/header'}
+{if $ta == 'list'}
+<div class="page page-current-log">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="icon pull-left icon icon-arrow-left back" href=""></a>
+		<h1 class="title">账户明细</h1>
+	</header>
+	{itemplate 'public/nav'}
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('manage/finance/current', array('trade_type' => $trade_type))}" data-distance="50" data-min="{$min}" data-container=".record-container" data-tpl="tpl-inout">
+		<div class="buttons-tab">
+			<a href="{php echo imurl('manage/finance/current', array('trade_type' => '0'))}" class="button {if $trade_type == 0}active{/if}">全部</a>
+			<a href="{php echo imurl('manage/finance/current', array('trade_type' => '1'))}" class="button {if $trade_type == 1}active{/if}">外卖店内入账</a>
+			<a href="{php echo imurl('manage/finance/current', array('trade_type' => '4'))}" class="button {if $trade_type == 4}active{/if}">买单入账</a>
+			<a href="{php echo imurl('manage/finance/current', array('trade_type' => '2'))}" class="button {if $trade_type == 2}active{/if}">提现</a>
+			<a href="{php echo imurl('manage/finance/current', array('trade_type' => '3'))}" class="button {if $trade_type == 3}active{/if}">其他</a>
+		</div>
+		{if empty($records)}
+			<div class="no-data">
+				<div class="bg"></div>
+				<p>没有任何记录哦～</p>
+			</div>
+		{else}
+		<div class="record-list">
+			<ul class="record-container">
+				{loop $records $record}
+					<li class="border-1px-b">
+						<a href="{php echo imurl('manage/finance/current/detail', array('id' => $record['id']));}">
+							<div class="record-name">
+								<span>{$record['trade_type_cn']}</span>
+								{if $record['fee'] > 0}
+									<span class="right color-success">+{$record['fee']}</span>
+								{else}
+									<span class="right color-danger">{$record['fee']}</span>
+								{/if}
+							</div>
+							<div class="record-time">
+								{php echo date('Y-m-d H:i', $record['addtime'])}
+								<span class="right">¥{$record['amount']}</span>
+							</div>
+						</a>
+					</li>
+				{/loop}
+			</ul>
+		</div>
+		<div class="infinite-scroll-preloader hide">
+			<div class="preloader"></div>
+		</div>
+		{/if}
+	</div>
+</div>
+<script id="tpl-inout" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+		<li class="border-1px-b">
+			<a href="{php echo imurl('manage/finance/current/detail');}&id=<{d[i].id}>">
+				<div class="record-name">
+					<span><{d[i].trade_type_cn}></span>
+					<{# if(d[i].fee > 0){ }>
+						<span class="right color-success">+<{d[i].fee}></span>
+					<{# } else { }>
+						<span class="right color-danger"><{d[i].fee}></span>
+					<{# } }>
+				</div>
+				<div class="record-time">
+					<{d[i].addtime_cn}>
+					<span class="right">¥<{d[i].amount}></span>
+				</div>
+			</a>
+		</li>
+	<{# } }>
+</script>
+{/if}
+
+{if $ta == 'detail'}
+<div class="page page-current-detail">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="icon pull-left icon icon-arrow-left back"></a>
+		<h1 class="title">交易详情</h1>
+	</header>
+	{itemplate 'public/nav'}
+	<div class="content trade-details border-1px-tb">
+		<div class="row no-gutter border-1px-b">
+			<div class="col-20 color-gray">交易类型</div>
+			<div class="col-80 text-right">
+				{if $current['trade_type'] == 1}
+					订单入账
+				{elseif $current['trade_type'] == 2}
+					申请提现
+				{else}
+					其他变动
+				{/if}
+			</div>
+		</div>
+		<div class="row no-gutter border-1px-b">
+			<div class="col-20 color-gray">余额变动</div>
+			<div class="col-80 text-right {if $current['fee'] > 0}color-success{else}color-danger{/if}">￥{$current['fee']}</div>
+		</div>
+		<div class="row no-gutter border-1px-b">
+			<div class="col-20 color-gray">变动后账户余额</div>
+			<div class="col-80 text-right">￥{$current['amount']}</div>
+		</div>
+		{if $current['trade_type'] == 2}
+			<div class="row no-gutter border-1px-b">
+				<div class="col-20 color-gray">订单号</div>
+				<div class="col-80 text-right color-black">{$getcash_log['trade_no']}</div>
+			</div>
+			<div class="row no-gutter border-1px-b">
+				<div class="col-20 color-gray">提现金额</div>
+				<div class="col-80 text-right color-black">￥{$getcash_log['get_fee']}</div>
+			</div>
+			<div class="row no-gutter border-1px-b">
+				<div class="col-20 color-gray">手续费</div>
+				<div class="col-80 text-right color-black">￥{$getcash_log['take_fee']}</div>
+			</div>
+			<div class="row no-gutter border-1px-b">
+				<div class="col-20  color-gray">实际到账</div>
+				<div class="col-80 text-right color-black">￥{$getcash_log['final_fee']}</div>
+			</div>
+			<div class="row no-gutter border-1px-b">
+				<div class="col-20 color-gray">提现人</div>
+				<div class="col-80 text-right color-black">{$getcash_log['account']['realname']}</div>
+			</div>
+			<div class="row no-gutter border-1px-b">
+				<div class="col-20 color-gray">开始时间</div>
+				<div class="col-80 text-right color-black">{php echo date('Y-m-d H:i', $getcash_log['addtime'])}</div>
+			</div>
+			<div class="row no-gutter border-1px-b">
+				<div class="col-20 color-gray">提现状态</div>
+				<div class="col-80 text-right color-black">{if $record['status'] == 1}申请成功{else}申请中{/if}</div>
+			</div>
+		{elseif $current['trade_type'] == 1}
+			<div class="row no-gutter border-1px-b">
+				<div class="col-20 color-gray">订单号</div>
+				<div class="col-80 text-right color-black">{$current['extra']}</div>
+			</div>
+		{/if}
+		<div class="row no-gutter border-1px-b">
+			<div class="col-20 color-gray">变动时间</div>
+			<div class="col-80 text-right color-black">{php echo date('Y-m-d H:i', $current['addtime'])}</div>
+		</div>
+		{if !empty($current['remark'])}
+			<div class="row no-gutter">
+				<div class="col-20 color-gray">备注</div>
+				<div class="col-80 text-right color-black">{$current['remark']}</div>
+			</div>
+		{/if}
+	</div>
+</div>
+{/if}
+{itemplate 'public/footer'}

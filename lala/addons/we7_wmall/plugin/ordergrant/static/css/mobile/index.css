@@ -1,0 +1,137 @@
+.ordergrant header{border: none}
+.ordergrant .banner{padding: 0.2rem 0; text-align: center; color: #fff; background: url(../../img/bg-mypage.png) no-repeat center center; background-size: cover; position: relative;}
+.ordergrant .banner .detail{position: absolute; height: 1.2rem; line-height: 1.2rem;width: 3rem; color: #fff; font-size: 0.6rem; text-align: center; background: rgba(255, 255, 255, 0.2); border-radius: 0.7rem; right: 0.4rem; top: 0.3rem;}
+.ordergrant .banner .agreement{position: absolute; height: 1.2rem; line-height: 1.2rem;width: 3rem; color: #fff; font-size: 0.6rem; text-align: center; background: rgba(255, 255, 255, 0.2); border-radius: 0.7rem; left: 0.4rem; top: 0.3rem;}
+.ordergrant .avatar img{width: 2.75rem; height: 2.75rem; border-radius: 100%; border: 2px solid #fff;}
+.ordergrant .titles{font-size: 0.6rem;}
+.ordergrant .calendar{margin-top: 0.5rem; padding: 0 0.5rem; overflow: hidden;}
+.ordergrant .calendar .titles{height: 2rem; padding: 0 0.5rem; line-height: 2rem; font-size: 0.8rem; background: #fff; color: #ff2d4b; border-bottom: 1px solid #f2f2f2;}
+.ordergrant .calendar .titles span.icon.icon-calendar{font-size: 0.8rem; margin-right: 0.2rem;}
+.ordergrant .calendar .calendar-inner{background: #fff; padding: 0.5rem; width: 100%;}
+.ordergrant .calendar .calendar-inner .week{border-top: 1px solid #f4f4f4;}
+.ordergrant .calendar .calendar-inner .week:first-child{border: 0}
+.ordergrant .calendar .calendar-inner .day{height: 2.8rem; width: 14.28%; border-left: 1px solid #f4f4f4; color: #777; font-size: 0.8rem; position: relative; overflow: hidden;}
+.ordergrant .calendar .calendar-inner .day:nth-child(7n+1){border: 0;}
+.ordergrant .calendar .calendar-inner .day.today:before{position: absolute; top: 0; left: 0; right: 0; bottom: 0; content: ""; border: 1px solid #ff2d4b;}
+.ordergrant .calendar .calendar-inner .day p.num{height: 1.2rem; padding-left: 0.3rem; margin: 0}
+.ordergrant .calendar .calendar-inner .day p.grant{margin: 0; height: 0.8rem; font-size: 0.6rem; line-height: 0.8rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align: center; align-items: center;}
+.ordergrant .calendar .calendar-inner .day p.grant span.icon.icon-recharge{font-size: 0.5rem; color: #ff2c4b;}
+.ordergrant .calendar .calendar-inner .day p.special{color: #fff; margin: 0; height: 0.8rem; font-size: 0.6rem; line-height: 0.8rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align: center; position: absolute; bottom: 0; width: 100%;}
+.ordergrant .calendar .calendar-inner .day .signed{position: absolute; top: 0.2rem; right: 0.4rem; height: 0.8rem; width: 0.8rem; line-height: 0.8rem; color: #ff2d4b; font-size: 1.1rem;}
+.ordergrant .reward-container{margin-top: 0.2rem; overflow: hidden; position: relative;}
+.ordergrant .reward-container .titles{height: 1.6rem; line-height: 1.6rem; color: #888; font-size: 0.7rem; padding: 0 0.3rem;}
+.ordergrant .reward-container .titles .text .icon{font-size: 0.8rem;}
+.ordergrant .reward-container .titles .subtitle{font-size: 0.6rem;}
+.ordergrant .reward-container .reward-inner{height: auto; width: 100%; overflow: hidden; position: relative;}
+.ordergrant .reward-container .reward-inner:before{position: absolute; top: 2.5rem; left: 0; right: 0; content: ""; height: 0.25rem; background: #fff;}
+.ordergrant .reward-container .reward-inner .award{height: 5.7rem; width: 100%; overflow-x: auto; overflow-y: hidden;}
+.ordergrant .reward-container .reward-inner .award-list {height: 5.2rem; width: auto; display: inline-flex;}
+.ordergrant .reward-container .reward-inner .award-list .item{height: 5rem; width: 3.6rem; overflow: hidden; position: relative;}
+.ordergrant .reward-container .reward-inner .award-list .item .grant{color: #666; font-size: 0.55rem; height: 1.6rem; width: 2.6rem; padding-top: 0.2rem; line-height: 0.6rem; text-align: center; margin: auto; background: #fff; border-radius: 0.1rem; position: relative;}
+.ordergrant .reward-container .reward-inner .award-list .item .grant:before {content: ""; position: absolute; bottom: -0.15rem; left: 50%; height: 0.3rem; width: 0.3rem; margin-left: -0.15rem; background: #fff; transform: rotate(45deg); -moz-transform: rotate(45deg); -webkit-transform: rotate(45deg);}
+.ordergrant .reward-container .reward-inner .award-list .item .circle{height: 1rem; width: 1rem; background: #fff; margin: 0.3rem auto 0; border-radius: 1.4rem; position: relative; color: #fff; font-size: 1rem; font-weight: bold; line-height: 0.9rem; text-align: center;}
+.ordergrant .reward-container .reward-inner .award-list .item.active .circle{background-color: #ff2d4b;}
+.ordergrant .reward-container .reward-inner .award-list .item .days{color: #888; font-size: 0.6rem; text-align: center;}
+.ordergrant .reward-container .reward-inner .award-list .item.active .days{color: #ff2d4b;}
+.ordergrant .reward-container .reward-inner .award-list .item .text{font-size: 0.6rem; text-align: center; width: 2.4rem; border: 1px solid #ccc; margin: auto; border-radius: 0.1rem; line-height: 1rem; color: #999;}
+.ordergrant .reward-container .reward-inner .award-list .item.active .text{border-color: #ff2d4b; color: #ff2d4b;}
+.label-warning{background-color: #ff9326;}
+.label-success{background-color: #4cd964;}
+.label-primary{background-color: #337ab7;;}
+.label-info{background-color: #04ab02;}
+.label-danger{background-color: #f6383a;}
+.label-default{background-color: #777;}
+.ordergrant-record .grant-list{background-color: #fff;}
+.ordergrant-record .grant-list .grant-item{position: relative; display: flex; padding: .5rem; align-items: center; overflow: hidden;}
+.ordergrant-record .grant-list .grant-item:before{content: " "; position: absolute; top: 0; right: .5rem; height: 1px; border-top: 1px solid #D9D9D9; color: #D9D9D9; transform-origin: 0 0; transform: scaleY(0.5); left: .5rem;}
+.ordergrant-record .grant-list .grant-item:first-child:before{border: 0;}
+.ordergrant-record .grant-list .grant-item .item-inner{width: 100%; overflow: hidden; box-sizing: border-box; -webkit-box-flex: 1; display: block;}
+.ordergrant-record .grant-list .grant-item .item-inner .titles{font-size: 0.8rem; color: #666;}
+.ordergrant-record .grant-list .grant-item .item-inner .text{font-size: 0.65rem; color: #666;}
+.ordergrant-record .grant-list .grant-item .item-inner .label{display: inline-block; padding: 0 .2rem; margin: 0 .1rem; font-size: 0.6rem; color: #fff;}
+.ordergrant-record .grant-list .grant-item .grant{vertical-align: middle; margin-right: .5rem; color: #ff2d4b}
+
+.order-share-list .order-share-item{background-color: #fff; padding: 0.5rem; font-size: 0.8rem; margin-bottom: 0.5rem}
+.order-share-list .order-share-item .order-time{font-size: 0.6rem; color : #999; margin-top: 0.2rem;}
+.order-share-list .order-share-item img{border-radius: 100%}
+.star-rank-outline{margin-bottom: -0.05rem;}
+.order-share-list .order-share-item .delivery-time{font-size: 0.6rem; color: #999; margin-left: 0.5rem;}
+.order-share-list .order-share-item .comment{font-size: 0.6rem;}
+.order-share-list .order-share-item .list-block{margin-top: 0.2rem; margin-bottom: 0.4rem;}
+.order-share-list .order-share-item .list-block .item-content{padding-left: 0.5rem; background-color: rgba(211,211,211,0.2);}
+.order-share-list .order-share-item .list-block .item-content .item-media img{width: 2.5rem; height: 2.5rem;}
+.order-share-list .order-share-item .list-block .item-content .item-title{font-size: 0.8rem; font-weight: normal;}
+.order-share-list .order-share-item .list-block .item-content .item-text{height: auto; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 0.6rem;}
+.order-share-list .order-share-item .order{background-color: rgba(211,211,211,0.2); padding-bottom: 0.2rem;}
+.order-share-list .order-share-item .order>span{margin-left: 0.5rem; font-size: 0.6rem;}
+.order-share-list .order-share-item .order .order-goods{margin-left: 0; line-height: 1;}
+.order-share-list .order-share-item .order .order-goods .goods-item{margin-top: 0.2rem; position: relative;}
+.order-share-list .order-share-item .order .order-goods .goods-item img{width: 100%; height: 3rem;}
+.order-share-list .order-share-item .order .order-goods .goods-item .goods-num{position: absolute; top: 0; right: 0; height: 0.8rem; display: inline-block; text-align: center; line-height: 1rem; background: #ff2d4b; font-size: 0.5rem; color: #fff; padding: 0 0.1rem;}
+.order-share-list .order-share-item .order .order-goods .goods-item .goods-title{position: absolute; bottom: 0.1rem; font-size: 0.5rem; background-color: rgba(0,0,0,0.6); width: 100%; color: #fff; height: 0.8rem; line-height: 1rem; text-align: center}
+.order-share-list .order-share-item .order .other{padding: 0 0.5rem; margin-top: 0.5rem; font-size: 0.6rem;}
+.order-share-list .order-share-item .order .other .price{color: #ff2d4b;}
+.order-share-list .order-share-item .order .other .price span{font-size: 0.8rem;}
+.order-share-list .order-share-item .order .other .reorder{border: 1px solid #ff2d4b; color: #ff2d4b; padding: 0.1rem 0.4rem; font-size: 0.6rem; border-radius: 0.2rem; margin-top: -0.1rem;}
+
+.order-share .bar-tab{border-top: none;}
+.order-share .bar-tab>a{display: block; background: #ff2d4b; color: #fff; text-align: center; height: 2.5rem; line-height: 2.5rem;}
+.order-share .content{background: url(../../img/ordershare-bg.jpg) no-repeat; background-size: 100% 100%; background-attachment: fixed;}
+.order-share .container{box-sizing: border-box; margin: 3.125rem 1rem 1rem;}
+.order-share .container .store-wrapper{background: #fff; border-radius: 0.2rem 0.2rem 0 0;}
+.order-share .container .store-logo-wrapper{position: relative; height: 2.75rem;}
+.order-share .container .store-logo-wrapper .store-logo{position: absolute; left: 50%; top: -2.75rem; width: 5.5rem; height: 5.5rem; margin-left: -2.75rem; padding-top: 0.5rem; border-radius: 50%; box-sizing: border-box; background: #fff;}
+.order-share .container .store-logo-wrapper .store-logo img{display: block; width: 4.5rem; height: 4.5rem; border-radius: 50%; margin: 0 auto; border: 1px solid #f4f4f4; object-fit: contain;}
+.order-share .container .store-wrapper .store-comment-info .store-title{height: 1.25rem; margin: 0 0.5rem; font-size: 0.9rem; text-align: center; color: #333; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; word-wrap: break-word; word-break: break-all; padding: 0; font-weight: normal;}
+.order-share .container .store-wrapper .store-comment-info .store-comment{margin-top: 0.25rem; text-align: center;}
+.order-share .container .store-wrapper .store-comment-info .store-comment .customer-score{display: inline-block; color: #656565; font-size: 0.8rem; line-height: 0.8rem; vertical-align: middle;}
+.order-share .container .store-wrapper .store-comment-info .delivery-info{margin-top: 0.25rem; text-align: center; font-size: 0.6rem; color: #a9a9a9;}
+.order-share .container .store-wrapper .activity-container{position: relative; width: 90%; padding: 0.75rem 0 0.25rem; margin: 0.75rem auto 0; border-top: 1px dotted #e5e5e5; font-size: 0.55rem;}
+.order-share .dotted-area{position: relative; height: 20px; background: #fff; margin: 0 10px;}
+.order-share .dotted-area .circle{position: absolute; width: 10px; height: 20px; background: url(../../img/half-circle.png) no-repeat; background-size: 10px auto;}
+.order-share .dotted-area .circle-left{left: -10px}
+.order-share .dotted-area .circle-right{right: -10px; transform: rotateY(180deg);}
+.order-share .dotted-area .dotted-line{display: block; width: 90%; height: 10px; margin: 0 auto; border-bottom: 1px dotted #e5e5e5;}
+.order-share .comments{background-color: #fff;}
+.order-share .comments .comment-detail{width: 90%; margin: 0 auto; padding: 0.75rem 0; border-top: 1px dotted #e5e5e5;}
+.order-share .comment-detail h3{font-size: 0.8rem; font-weight: normal; text-align: center; margin: 0}
+.order-share .comment-detail .comment-stars{margin-top: 0.25rem; text-align: center;}
+.order-share .comment-detail .my-comment{font-size: 0.75rem; color: #000; margin: 0.2rem 0;}
+.order-share .comment-detail .favourable-goods{margin: 0.2rem 0;}
+.order-share .comment-detail .favourable-goods .icon.favor{display: inline-block; width: 0.6rem; height: 0.6rem; margin-right: 0.2rem; background: url(../../img/comment_favor_icon.png) no-repeat; background-size: cover;}
+.order-share .comment-detail .favourable-goods .goods-label{margin: 0 .15rem; height: .9rem; line-height: .9rem; display: inline-block; background: #eceff2; color: #919cae; border-radius: .9rem; padding: 0 .3rem; font-size: .6rem;}
+.order-share .goods{background: #fff; border-radius: 0 0 0.2rem 0.2rem;}
+.order-share .goods .best-seller{width: 90%; margin: 0 auto; padding: 0.75rem 0; border-top: 1px dotted #e5e5e5;}
+.order-share .goods .best-seller .best-seller-title{font-size: 0.8rem; font-weight: normal; text-align: center; margin: 0}
+.order-share .goods .best-seller .best-seller-list{margin-top: 0.75rem; margin-bottom: -0.75rem;}
+.order-share .goods .best-seller .best-seller-list li{margin-bottom: 0.75rem;}
+.order-share .goods .best-seller .best-seller-list .best-seller-img{margin-bottom: 0.25rem; height: 4rem;}
+.order-share .goods .best-seller .best-seller-list .best-seller-img img{width: 100%; height: 4rem;}
+.order-share .goods .best-seller .seller-item-name{display: block; line-height: 1rem; font-size: 0.7rem; color: #2C3038; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+.order-share .goods .best-seller .seller-item-sale{display: block; line-height: 0.9rem; font-size: 0.55rem; color: #656565;}
+.order-share .goods .best-seller .seller-item-price{height: 1rem; line-height: 1rem; font-size: 0.55rem; color: #F01800;}
+.order-share .goods .best-seller .seller-item-price .price{font-size: 0.8rem;}
+.order-share .order{background-color: #fff;}
+.order-share .order-detail{width: 90%; margin: 0 auto; padding: 0.75rem 0;}
+.order-share .order-detail h3{font-size: 0.8rem; font-weight: normal; text-align: center; margin: 0}
+.order-share .order-detail .order-details-con{margin-top: 0.75rem;}
+.order-share .order-detail .order-details-con .col-55{width: 55%;}
+.order-share .order-detail .order-details-con .col-10{width: 10%;}
+.order-share .order-detail .order-details-con .col-35{width: 35%;}
+.order-share .order-detail .order-details-con .goods-title{font-size: 0.7rem; color: #3d4145;}
+.order-share .order-detail .order-details-con .inner-con{font-size: 0.7rem; color: #3d4145; padding: .5rem 0 .05rem 0;}
+.order-share .order-detail .order-details-con .inner-con .col-50{line-height: 1rem;}
+.order-share .order-detail .order-details-con .inner-con .col-25{line-height: 1rem;}
+.order-share .order-detail .order-details-con .inner-con .count{margin-top: -0.1rem}
+.order-share .order-detail .order-details-con .final-fee{font-size: 0.95rem;}
+
+
+
+
+
+
+
+
+
+
+

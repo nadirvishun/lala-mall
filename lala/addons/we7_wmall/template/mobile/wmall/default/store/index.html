@@ -1,0 +1,285 @@
+{itemplate 'public/header'}
+<div class="page store-detail" id="page-app-store">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">商户详情</h1>
+		<a class="pull-right" href="javascript:;" id="btn-favorite" data-id="{$store['id']}" data-uid="{$_W['member']['uid']}">
+			<i class="fa {if !empty($is_favorite)}icon icon-favorfill{else}icon icon-favor{/if}"></i>
+		</a>
+	</header>
+	{php get_mall_menu();}
+	<div class="content">
+		{if !empty($store['thumbs'])}
+		<div class="swiper-container swiper-container-horizontal" data-space-between='30' data-pagination='.swiper-pagination' data-autoplay="2000">
+			<div class="swiper-wrapper">
+				{loop $store['thumbs'] $thumb}
+				<div class="swiper-slide js-url" data-link="{$thumb['url']}">
+					<img src="{php echo tomedia($thumb['image']);}"alt="">
+				</div>
+				{/loop}
+			</div>
+			<div class="swiper-pagination"></div>
+		</div>
+		{/if}
+		<div class="row no-gutter banner border-1px-b">
+			<div class="col-33 text-center">
+				<img src="{php echo tomedia($store['logo']);}" alt="" class="logo"/>
+			</div>
+			<div class="col-67">
+				<div class="goods-title">{$store['title']}</div>
+				<div class="star-rank">
+					<span class="star-rank-outline">
+						<span class="star-rank-active" style="width:{$store['score_cn']}%"></span>
+						<span class="star-rank-value">{$store['score']}</span>
+					</span>
+				</div>
+				<div class="sell-info">已售:{$store['sailed']}份</div>
+			</div>
+		</div>
+		<div class="row no-gutter delivery-info">
+			<div class="col-33 border-1px-r">起送价￥{$store['send_price']}</div>
+			<div class="col-33 border-1px-r">配送￥{$store['delivery_price']}</div>
+			<div class="col-33">送达时长{$store['delivery_time']}分钟</div>
+		</div>
+		<div class="grid-nav grid-money border-1px-tb">
+			<div class="grid-money-title border-1px-b">
+				商家服务
+			</div>
+			<div class="row no-gutter">
+				<div class="col-20">
+					<a href="{php echo imurl('wmall/store/goods', array('sid' => $sid));}" class="external">
+						<i class="icon icon-takeout"></i>
+						<span>点外卖</span>
+					</a>
+				</div>
+				{if $store['is_meal'] == 1}
+					<div class="col-20">
+						<a href="javascript:;" id="scanqrcode">
+							<i class="icon icon-meal"></i>
+							<span>堂食</span>
+						</a>
+					</div>
+				{/if}
+				{if $store['is_reserve'] == 1}
+					<div class="col-20">
+						<a href="{php echo imurl('wmall/store/reserve', array('sid' => $sid));}" class="external">
+							<i class="icon icon-reserve"></i>
+							<span>预定</span>
+						</a>
+					</div>
+				{/if}
+				{if $store['is_assign'] == 1}
+					<div class="col-20">
+						<a href="{php echo imurl('wmall/store/assign', array('sid' => $sid));}" class="external">
+							<i class="icon icon-assign"></i>
+							<span>排号</span>
+						</a>
+					</div>
+				{/if}
+				{if $store['is_paybill'] == 1}
+					<div class="col-20">
+						<a href="{php echo imurl('wmall/store/paybill', array('sid' => $sid));}" class="external">
+							<i class="icon icon-signboard"></i>
+							<span>买单</span>
+						</a>
+					</div>
+				{/if}
+			</div>
+		</div>
+		{if !empty($store['custom_url'])}
+		<div class="list-block">
+			<ul class="border-1px-tb">
+				{loop $store['custom_url'] $row}
+				<li>
+					<a href="{$row['url']}" class="item-content item-link">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">
+								<img src="{WE7_WMALL_TPL_URL}static/img/goods.png" alt="" />
+								{$row['title']}
+							</div>
+						</div>
+					</a>
+				</li>
+				{/loop}
+			</ul>
+		</div>
+		{/if}
+		<div class="list-block">
+			<ul class="border-1px-tb">
+				<li>
+					<div class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">
+								<img src="{WE7_WMALL_TPL_URL}static/img/clock-grey.png" alt="" />
+								{$store['business_hours_cn']}
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<a href="http://m.amap.com/?q={$store['location_x']},{$store['location_y']}&name={$store['address']}" class="item-content item-link">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">
+								<img src="{WE7_WMALL_TPL_URL}static/img/location-grey.png" alt="" />
+								{$store['address']}
+							</div>
+						</div>
+					</a>
+				</li>
+				<li>
+					<a href="tel:{$store['telephone']}" class="item-content item-link">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">
+								<img src="{WE7_WMALL_TPL_URL}static/img/tel-grey.png" alt="" />
+								{$store['telephone']}
+							</div>
+						</div>
+					</a>
+				</li>
+				{if !empty($store['sns']['qq'])}
+				<li>
+					<a href="http://wpa.qq.com/msgrd?v=3&uin={$store['sns']['qq']}&site=qq&menu=yes" class="item-content item-link">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">
+								<span><i class="icon icon-qq"></i></span>
+								{$store['sns']['qq']}
+							</div>
+						</div>
+					</a>
+				</li>
+				{/if}
+				{if !empty($store['sns']['weixin'])}
+				<li>
+					<a href="javascript:;" class="item-content item-link">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">
+								<span><i class="icon icon-weixin"></i></span>
+								{$store['sns']['weixin']}
+							</div>
+						</div>
+					</a>
+				</li>
+				{/if}
+				{if !empty($store['notice'])}
+				<li>
+					<div class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title text">
+								<img src="{WE7_WMALL_TPL_URL}static/img/voice-grey.png" alt="" />
+								{$store['notice']}
+							</div>
+						</div>
+					</div>
+				</li>
+				{/if}
+				{if !empty($store['description'])}
+				<li>
+					<a href="javascript:;" class="item-content item-link open-popup" data-popup=".popup-store-description">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">
+								<span><i class="icon icon-weixin"></i></span>
+								门店特色
+							</div>
+						</div>
+					</a>
+				</li>
+				{/if}
+			</ul>
+		</div>
+		<div class="list-block">
+			<ul class="border-1px-tb">
+				{loop $activity['items'] $row}
+				<li>
+					<div class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">
+								<img src="{WE7_WMALL_TPL_URL}static/img/{$row['type']}_b.png" alt="" />
+								{$row['title']}
+							</div>
+						</div>
+					</div>
+				</li>
+				{/loop}
+				{if $store['delivery_free_price'] > 0}
+				<li>
+					<div class="item-content">
+						<div class="item-inner">
+							<div class="item-title">
+								<img src="{WE7_WMALL_TPL_URL}static/img/mian_b.png" alt="" />
+								下单满{$store['delivery_free_price']}元免配送费
+							</div>
+						</div>
+					</div>
+				</li>
+				{/if}
+			</ul>
+		</div>
+		<div class="list-block">
+			<ul class="border-1px-tb">
+				<li>
+					<div class="item-content">
+						<div class="item-inner">
+							<div class="item-title">
+								<img src="{WE7_WMALL_TPL_URL}static/img/pay_b.png" alt="" />
+								支持在线支付
+							</div>
+						</div>
+					</div>
+				</li>
+				{if $store['invoice_status'] == 1}
+				<li>
+					<div class="item-content">
+						<div class="item-inner border-1px-t">
+							<div class="item-title">
+								<img src="{WE7_WMALL_TPL_URL}static/img/invoice_b.png" alt="" />
+								支持使用代金券抵付现金
+							</div>
+						</div>
+					</div>
+				</li>
+				{/if}
+			</ul>
+		</div>
+		{if !empty($store['qualification']) && !empty($store['qualification']['business']) || !empty($store['qualification']['service'])}
+			<div class="list-block store-qualification">
+				<div class="card border-1px-tb">
+					<div class="card-header border-1px-b">资质证照</div>
+					<div class="card-content">
+						<div class="row">
+							{if !empty($store['qualification']['business']['thumb'])}
+								<div class="col-25 photoBrowser-image-item"><img src="{php echo tomedia($store['qualification']['business']['thumb']);}" alt=""></div>
+							{/if}
+							{if !empty($store['qualification']['service']['thumb'])}
+								<div class="col-25 photoBrowser-image-item"><img src="{php echo tomedia($store['qualification']['service']['thumb']);}" alt=""></div>
+							{/if}
+						</div>
+					</div>
+				</div>
+			</div>
+		{/if}
+		<div class="report border-1px-tb">
+			<a href="{php echo imurl('wmall/store/report', array('sid' => $sid));}">举报商家</a>
+		</div>
+	</div>
+</div>
+
+<div class="popup popup-store-description">
+	<div class="page">
+		<header class="bar bar-nav common-bar-nav">
+			<h1 class="title">门店特色</h1>
+			<button class="button button-link button-nav pull-right close-popup">关闭</button>
+		</header>
+		<div class="content" style="background: #FFF">
+			<div class="content-padded">
+				{$store['description']}
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+require(['store', 'member'], function(store, member){
+	store.initIndex();
+	member.initFavorite();
+});
+</script>
+{itemplate 'public/footer'}

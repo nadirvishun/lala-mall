@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://www.we7.cc" versionCode="0.8,1.0">
+	<application setting="true">
+		<name><![CDATA[系统卡券]]></name>
+		<identifie><![CDATA[we7_coupon]]></identifie>
+		<version><![CDATA[5.2]]></version>
+		<type><![CDATA[business]]></type>
+		<ability><![CDATA[微擎卡券]]></ability>
+		<description><![CDATA[微擎卡券]]></description>
+		<author><![CDATA[淘宝大众乐科技]]></author>
+		<url><![CDATA[https://51myshop.cn]]></url>
+	</application>
+	<platform>
+		<subscribes>
+			<message type="user_get_card" />
+			<message type="user_del_card" />
+			<message type="user_consume_card" />
+		</subscribes>
+		<handles>
+		</handles>
+		<rule embed="false" />
+		<card embed="false" />
+	</platform>
+	<bindings>
+		<cover>
+			<entry title="会员卡入口设置" do="card" state="" direct="false" />
+			<entry title="收银台入口设置" do="clerk" state="" direct="false" />
+		</cover>
+		<menu>
+			<entry title="店员工作台" do="clerkdeskwelcome" state="" direct="false" />
+			<entry title="收银台收款统计" do="statpaycenter" state="" direct="false" />
+			<entry title="微信卡券回复" do="wxcardreply" state="" direct="false" />
+			<entry title="会员卡统计" do="statcard" state="" direct="false" />
+			<entry title="会员现金消费统计" do="statcash" state="" direct="false" />
+			<entry title="会员余额统计" do="statcredit2" state="" direct="false" />
+			<entry title="会员积分统计" do="statcredit1" state="" direct="false" />
+			<entry title="通知管理" do="noticemanage" state="" direct="false" />
+			<entry title="签到管理" do="signmanage" state="" direct="false" />
+			<entry title="店员管理" do="clerklist" state="" direct="false" />
+			<entry title="门店收银台" do="paycenter" state="" direct="false" />
+			<entry title="门店管理" do="storelist" state="" direct="false" />
+			<entry title="兑换真实物品" do="goodsexchange" state="" direct="false" />
+			<entry title="兑换优惠券" do="couponexchange" state="" direct="false" />
+			<entry title="优惠券派发" do="couponmarket" state="" direct="false" />
+			<entry title="优惠券核销" do="couponconsume" state="" direct="false" />
+			<entry title="会员卡管理" do="cardmanage" state="" direct="false" />
+			<entry title="优惠券管理" do="couponmanage" state="" direct="false" />
+			<entry title="会员属性" do="memberproperty" state="" direct="false" />
+			<entry title="会员卡设置" do="membercard" state="" direct="false" />
+		</menu>
+		<profile>
+			<entry title="会员卡" do="card" state="" direct="false" />
+			<entry title="兑换商城" do="activity" state="" direct="false" />
+		</profile>
+	</bindings>
+	<permissions>
+	</permissions>
+	<install><![CDATA[install.php]]></install>
+	<uninstall><![CDATA[]]></uninstall>
+	<upgrade><![CDATA[upgrade.php]]></upgrade>
+</manifest>

@@ -1,0 +1,194 @@
+{itemplate 'public/header'}
+<div class="page clearfix page-config-store-delivery">
+	<h2>其他批量操作</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data" >
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">支付方式</label>
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				{loop $payments $payment}
+					{if !empty($payment['value'])}
+						<div class="checkbox checkbox-inline">
+							<input type="checkbox" name="payment[]" id="payment-{$payment['value']}" value="{$payment['value']}" {if in_array($payment['value'], $extra['payment'])}checked{/if}>
+							<label for="payment-{$payment['value']}">{$payment['title']}</label>
+						</div>
+					{/if}
+				{/loop}
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否允许商家自己设置商品已售份数</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="custom_goods_sailed_status" id="custom-goods-sailed-status-1" {if $extra['custom_goods_sailed_status'] == 1}checked{/if}>
+					<label for="custom-goods-sailed-status-1">允许</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="custom_goods_sailed_status" id="custom-goods-sailed-status-0" {if $extra['custom_goods_sailed_status'] == 0 ||  !$extra['custom_goods_sailed_status']}checked{/if}>
+					<label for="custom-goods-sailed-status-0">不允许</label>
+				</div>
+				<div class="help-block text-danger">当设置为不允许时, 商品的销量会按照销量就行递增</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否允许商家审核顾客评价</label>
+			<div class="col-sm-8 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="self_audit_comment" id="self_audit_comment-1" required="true" onclick="$('.comment').show();" {if $extra['self_audit_comment'] == 1}checked{/if}>
+					<label for="self_audit_comment-1">允许</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="self_audit_comment" id="self_audit_comment-0" onclick="$('.comment').hide();" {if $extra['self_audit_comment'] == 0 || !$extra['self_audit_comment']}checked{/if}>
+					<label for="self_audit_comment-0">不允许</label>
+				</div>
+				<span class="help-block">注意:设置为不允许后,顾客对于商家的评价将直接审核通过并显示到手机端</span>
+			</div>
+		</div>
+		<div class="form-group comment" {if $extra['self_audit_comment'] == 0} style="display: none" {/if}>
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">顾客评价是否需要直接通过审核</label>
+			<div class="col-sm-8 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="comment_status" id="comment_status-1" {if $extra['comment_status'] == 1}checked{/if}>
+					<label for="comment_status-1">是</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="comment_status" id="comment_status-0" {if $extra['comment_status'] == 0 || !$extra['comment_status']}checked{/if}>
+					<label for="comment_status-0">否</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">预计送达时间计算方式</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="delivery_time_type" id="delivery_time_type-1" {if $extra['delivery_time_type'] == 1}checked{/if}>
+					<label for="delivery_time_type-1">门店手动设置</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="delivery_time_type" id="delivery_time_type-0" {if $extra['delivery_time_type'] == 0 ||  !$extra['delivery_time_type']}checked{/if}>
+					<label for="delivery_time_type-0">平台根据门店近30天的配送时间计算得出</label>
+				</div>
+				<div class="help-block text-danger">平台计算时间为近30天顾客支付成功到订单完成时间的平均值</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">支付后自动接单</label>
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<div class="radio radio-inline">
+					<input type="radio" name="auto_handel_order" id="auto-handel-order-1" value="1" {if $extra['auto_handel_order'] == 1}checked{/if}>
+					<label for="auto-handel-order-1">开启</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="auto_handel_order" id="auto-handel-order-0" value="0" {if !$extra['auto_handel_order'] || $extra['auto_handel_order'] == 0}checked{/if}>
+					<label for="auto-handel-order-0">关闭</label>
+				</div>
+				<span class="help-block">开启后, 用户下单支付后,系统会自动接单(设置订单为处理中.)</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">接单后自动通知配送员配送</label>
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<div class="radio radio-inline">
+					<input type="radio" name="auto_notice_deliveryer" id="auto-notice-deliveryer-1" value="1" {if $extra['auto_notice_deliveryer'] == 1}checked{/if}>
+					<label for="auto-notice-deliveryer-1">开启</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="auto_notice_deliveryer" id="auto-notice-deliveryer-0" value="0" {if !$extra['auto_notice_deliveryer'] || $extra['auto_notice_deliveryer'] == 0}checked{/if}>
+					<label for="auto-notice-deliveryer-0">关闭</label>
+				</div>
+				<span class="help-block">开启后, 店员接单后,系统会自动通知配送员进行配送(设置订单为待配送.仅对外卖订单有效).</span>
+				<span class="help-block"><span class="bg-danger">注意：设置支付后自动接单, 也会自动通知配送员抢单</span></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">附加费</label>
+			<div class="col-sm-9 col-xs-12">
+				<div id="extra-fee-container">
+					{if !empty($extra['extra_fee'])}
+						{loop $extra['extra_fee'] $fee}
+							<div class="attr-item">
+								<div class="input-group">
+									<div class="input-group-addon">名称</div>
+									<input type="text" class="form-control" name="extra[name][]" value="{$fee['name']}">
+									<div class="input-group-addon">金额</div>
+									<input type="text" class="form-control" name="extra[fee][]" value="{$fee['fee']}">
+									<input type="hidden" name="extra[status][]" value="{$fee['status']}">
+									<div class="input-group-btn">
+										<a href="javascript:;" class="btn btn-extra-fee {if $fee['status'] == 1}btn-success{else}btn-default{/if}">{if $fee['status'] == 1}开启{else}关闭{/if}</a>
+										<a href="javascript:;" class="btn btn-danger btn-del">删除</a>
+									</div>
+								</div>
+							</div>
+							<br>
+						{/loop}
+					{else}
+					<div class="attr-item">
+						<div class="input-group">
+							<div class="input-group-addon">名称</div>
+							<input type="text" class="form-control" name="extra[name][]" value="">
+							<div class="input-group-addon">金额</div>
+							<input type="text" class="form-control" name="extra[fee][]" value="">
+							<input type="hidden" name="extra[status][]" value="0">
+							<div class="input-group-btn">
+								<a href="javascript:;" class="btn btn-extra-fee btn-default">关闭</a>
+								<a href="javascript:;" class="btn btn-danger btn-del">删除</a>
+							</div>
+						</div>
+					</div>
+					<br>
+					{/if}
+				</div>
+				<a class="btn btn-primary btn-sm" id="add-extra-fee" href="javascript:;">添加附加费</a>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">将以上设置</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<div class="checkbox checkbox-inline">
+						<input type="checkbox" name="extra_sync" id="extra-sync" value="1"/>
+						<label for="extra-sync">同步到所有商户</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group col-sm-12">
+			<input type="submit" value="提交" class="btn btn-primary">
+		</div>
+	</form>
+</div>
+<script>
+	$(document).on('click', '#add-extra-fee', function() {
+		var html =  '<div class="attr-item">'+
+					'	<div class="input-group">'+
+					'		<div class="input-group-addon">名称</div>'+
+					'		<input type="text" class="form-control" name="extra[name][]" value="">'+
+					'		<div class="input-group-addon">金额</div>'+
+					'		<input type="text" class="form-control" name="extra[fee][]" value="">'+
+					'		<input type="hidden" name="extra[status][]" value="0">'+
+					'		<div class="input-group-btn">'+
+					'			<a href="javascript:;" class="btn btn-extra-fee btn-default">关闭</a>'+
+					'			<a href="javascript:;" class="btn btn-danger btn-del">删除</a>'+
+					'		</div>'+
+					'	</div>'+
+					'</div>'+
+					'<br>'
+		$('#extra-fee-container').append(html);
+	});
+
+	$(document).on('click', '#extra-fee-container .btn-del', function() {
+		$(this).parent().parent().parent().remove();
+	});
+
+	$(document).on('click', '#extra-fee-container .btn-extra-fee', function(){
+		if($(this).hasClass('btn-success')) {
+			$(this).parent().prev().val(0);
+			$(this).removeClass('btn-success').addClass('btn-default');
+			$(this).html('关闭');
+		} else {
+			$(this).parent().prev().val(1);
+			$(this).removeClass('btn-default').addClass('btn-success');
+			$(this).html('开启');
+		}
+	});
+</script>
+{itemplate 'public/footer'}

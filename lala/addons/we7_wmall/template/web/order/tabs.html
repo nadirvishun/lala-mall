@@ -1,0 +1,66 @@
+<div class="second-sidebar-title">订单</div>
+<div class="nav slimscroll">
+	{ifp 'order.takeout'}
+		<div class="menu-header">外卖</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'takeout' && $_GPC['filter_type'] == 'process'}class="active"{/if}>
+				<a href="{php echo iurl('order/takeout/list', array('filter_type' => 'process'));}">
+					未完成
+					{if !empty($_W['_process'])}
+						<span class="badge">{$_W['_process']}</span>
+					{/if}
+				</a>
+			</li>
+			<li {if $_W['_action'] == 'takeout' && $_GPC['filter_type'] == 'is_remind'}class="active"{/if}>
+				<a href="{php echo iurl('order/takeout/list', array('is_remind' => 1, 'filter_type' => 'is_remind'));}">
+					催单
+					{if !empty($_W['_remind'])}
+						<span class="badge">{$_W['_remind']}</span>
+					{/if}
+				</a>
+			</li>
+			<li {if $_W['_action'] == 'takeout' && $_GPC['filter_type'] == 'refund_status'}class="active"{/if}>
+				<a href="{php echo iurl('order/takeout/list', array('refund_status' => 1, 'filter_type' => 'refund_status'));}">
+					退款单
+					{if !empty($_W['_refund'])}
+						<span class="badge">{$_W['_refund']}</span>
+					{/if}
+				</a>
+			</li>
+			<li {if $_W['_action'] == 'takeout' && $_GPC['filter_type'] == 'all'}class="active"{/if}>
+				<a href="{php echo iurl('order/takeout/list', array('filter_type' => 'all'));}">所有订单</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'order.dispatch'}
+		<div class="menu-header">调度中心</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'dispatch'}class="active"{/if}>
+				<a href="{php echo iurl('order/dispatch/map');}">待指派</a>
+			</li>
+			<li {if $_W['_action'] == 'records' && $_W['_op'] == 'stat'}class="active"{/if}>
+				<a href="{php echo iurl('order/records/stat');}">接单统计</a>
+			</li>
+			<li {if $_W['_action'] == 'records' && $_W['_op'] == 'list'}class="active"{/if}>
+				<a href="{php echo iurl('order/records/list');}">接单记录</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'order.tangshi'}
+		<div class="menu-header">店内</div>
+		<ul class="menu-item">
+			<li {if $_W['_action'] == 'tangshi' && $_GPC['filter_type'] == 'process'}class="active"{/if}>
+				<a href="{php echo iurl('order/tangshi/list', array('filter_type' => 'process'));}">未完成</a>
+			</li>
+			<li {if $_W['_action'] == 'tangshi' && $_GPC['filter_type'] == 'is_remind'}class="active"{/if}>
+				<a href="{php echo iurl('order/tangshi/list', array('is_remind' => 1, 'filter_type' => 'is_remind'));}">催单</a>
+			</li>
+			<li {if $_W['_action'] == 'tangshi' && $_GPC['filter_type'] == 'refund_status'}class="active"{/if}>
+				<a href="{php echo iurl('order/tangshi/list', array('refund_status' => 1, 'filter_type' => 'refund_status'));}">退款单</a>
+			</li>
+			<li {if $_W['_action'] == 'tangshi' && $_GPC['filter_type'] == 'all'}class="active"{/if}>
+				<a href="{php echo iurl('order/tangshi/list', array('filter_type' => 'all'));}">所有订单</a>
+			</li>
+		</ul>
+	{/if}
+</div>

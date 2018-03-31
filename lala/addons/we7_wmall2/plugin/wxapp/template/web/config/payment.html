@@ -1,0 +1,133 @@
+{itemplate 'public/header'}
+<div class="page clearfix">
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="tab-pane" role="tabpanel">
+			<div class="panel panel-default panel-payment-switch">
+				<div class="panel-body">
+					<div class="col-sm-9 col-xs-12">
+						<h4>微信支付</h4>
+						<span><p>开启后在小程序中可以调起微信进行支付</p></span>
+					</div>
+					<div class="col-sm-2 pull-right">
+						<input type="checkbox" name="wxapp_type[wechat]" value="1" class="js-switch" {if in_array('wechat', $payment['wxapp'])}checked{/if}/>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">小程序AppId</label>
+						<div class="col-sm-9 col-xs-12">
+							<input type="text" class="form-control" name="wxapp[wechat][appid]" value="{$payment['wechat']['default']['appid']}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">小程序AppSecret</label>
+						<div class="col-sm-9 col-xs-12">
+							<input type="text" class="form-control" name="wxapp[wechat][appsecret]" value="{$payment['wechat']['default']['appsecret']}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">小程序商户ID</label>
+						<div class="col-sm-9 col-xs-12">
+							<input type="text" class="form-control" name="wxapp[wechat][mchid]" value="{$payment['wechat']['default']['mchid']}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">小程序商户API密钥</label>
+						<div class="col-sm-9 col-xs-12">
+							<div class="input-group">
+								<input type="text" class="form-control" name="wxapp[wechat][apikey]" value="{$payment['wechat']['default']['apikey']}">
+								<span class="input-group-addon js-random">生成新的</span>
+							</div>
+							<span class="help-block">此值需要手动在腾讯商户后台API密钥保持一致，<a href="http://bbs.we7.cc/thread-5788-1-1.html" target="_blank">查看设置教程</a></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">CERT证书文件</label>
+						<div class="col-sm-9 col-xs-12">
+							<textarea name="wxapp[wechat][apiclient_cert]" class="form-control" placeholder="为保证安全性, 不显示证书内容. 若要修改, 请直接输入" cols="30" rows="7"></textarea>
+							<span class="help-block">
+								{if !empty($payment['wechat']['default']['apiclient_cert'])}
+									<span class="label label-success">已上传</span>
+								{else}
+									<span class="label label-danger">未上传</span>
+								{/if}
+								从商户平台上下载支付证书, 解压并取得其中的 <span class="bg-danger">apiclient_cert.pem</span> 用记事本打开并复制文件内容, 填至此处
+							</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">KEy证书密钥</label>
+						<div class="col-sm-9 col-xs-12">
+							<textarea name="wxapp[wechat][apiclient_key]" class="form-control" placeholder="为保证安全性, 不显示证书内容. 若要修改, 请直接输入" cols="30" rows="7"></textarea>
+							<span class="help-block">
+								{if !empty($payment['wechat']['default']['apiclient_key'])}
+									<span class="label label-success">已上传</span>
+								{else}
+									<span class="label label-danger">未上传</span>
+								{/if}
+								从商户平台上下载支付证书, 解压并取得其中的 <span class="bg-danger">apiclient_key.pem</span> 用记事本打开并复制文件内容, 填至此处
+							</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">ROOTCA证书</label>
+						<div class="col-sm-9 col-xs-12">
+							<textarea name="wxapp[wechat][rootca]" class="form-control" placeholder="为保证安全性, 不显示证书内容. 若要修改, 请直接输入" cols="30" rows="7"></textarea>
+							<span class="help-block">
+								{if !empty($payment['wechat']['default']['rootca'])}
+									<span class="label label-success">已上传</span>
+								{else}
+									<span class="label label-danger">未上传</span>
+								{/if}
+								从商户平台上下载支付证书, 解压并取得其中的 <span class="bg-danger"> rootca.pem</span> 用记事本打开并复制文件内容, 填至此处
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default panel-payment-switch">
+				<div class="panel-body">
+					<div class="col-sm-9 col-xs-12">
+						<h4>余额支付</h4>
+						<span>开启后，粉丝可以用账户余额去平台消费.</span>
+					</div>
+					<div class="col-sm-2 pull-right">
+						<input type="checkbox" name="wxapp_type[credit]" value="1" class="js-switch" {if in_array('credit', $payment['wxapp'])}checked{/if}/>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default panel-payment-switch">
+				<div class="panel-body">
+					<div class="col-sm-9 col-xs-12">
+						<h4>货到付款</h4>
+						<span>设置是否支持货到付款</span>
+					</div>
+					<div class="col-sm-2 pull-right">
+						<input type="checkbox" name="wxapp_type[delivery]" value="1" class="js-switch" {if in_array('delivery', $payment['wxapp'])}checked{/if}/>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+<script>
+$(function(){
+	$('.js-random').click(function(){
+		var letters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+		var token = '';
+		for(var i = 0; i < 32; i++) {
+			var j = parseInt(Math.random() * (31 + 1));
+			token += letters[j];
+		}
+		$(this).prev().val(token);
+	});
+})
+</script>
+{itemplate 'public/footer'}

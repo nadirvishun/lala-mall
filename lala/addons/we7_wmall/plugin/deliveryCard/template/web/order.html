@@ -1,0 +1,124 @@
+{itemplate 'public/header'}
+{if $op == 'list'}
+<form action="./index.php?" class="form-horizontal form-filter">
+	{php echo tpl_form_filter_hidden('deliveryCard/order/list');}
+	<input type="hidden" name="setmeal_id" value="{$setmeal_id}"/>
+	<input type="hidden" name="paytime" value="{$paytime}"/>
+	<input type="hidden" name="endtime" value="{$endtime}"/>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐类型</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('setmeal_id:-1');}" class="btn {if $setmeal_id == -1}btn-primary{else}btn-default{/if}">不限</a>
+				{loop $cards $card}
+					<a href="{php echo ifilter_url('setmeal_id:' . $card['id']);}" class="btn {if $setmeal_id == $card['id']}btn-primary{else}btn-default{/if}">{$card['title']}</a>
+				{/loop}
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐购买时间</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('paytime:-1');}" class="btn {if $paytime == -1}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo ifilter_url('paytime:7');}" class="btn {if $paytime == 7}btn-primary{else}btn-default{/if}">一周内</a>
+				<a href="{php echo ifilter_url('paytime:15');}" class="btn {if $paytime == 15}btn-primary{else}btn-default{/if}">半月内</a>
+				<a href="{php echo ifilter_url('paytime:31');}" class="btn {if $paytime == 31}btn-primary{else}btn-default{/if}">一月内</a>
+				<a href="{php echo ifilter_url('paytime:93');}" class="btn {if $paytime == 93}btn-primary{else}btn-default{/if}">三月内</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐状态</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('status:-1');}" class="btn {if $status == -1}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo ifilter_url('status:1');}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">未到期</a>
+				<a href="{php echo ifilter_url('status:0');}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">已到期</a>
+			</div>
+		</div>
+	</div>
+	{if $status == 1}
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐到期时间</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('endtime:-1');}" class="btn {if $endtime == -1}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo ifilter_url('endtime:7');}" class="btn {if $endtime == 7}btn-primary{else}btn-default{/if}">一周内</a>
+				<a href="{php echo ifilter_url('endtime:15');}" class="btn {if $endtime == 15}btn-primary{else}btn-default{/if}">半月内</a>
+				<a href="{php echo ifilter_url('endtime:31');}" class="btn {if $endtime == 31}btn-primary{else}btn-default{/if}">一月内</a>
+				<a href="{php echo ifilter_url('endtime:93');}" class="btn {if $endtime == 93}btn-primary{else}btn-default{/if}">三月内</a>
+			</div>
+		</div>
+	</div>
+	{/if}
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">顾客信息</label>
+		<div class="col-sm-9 col-xs-12">
+			<input class="form-control" name="keyword" placeholder="输入用户名或手机号" type="text" value="{$_GPC['keyword']}">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-9 col-xs-12">
+			<button class="btn btn-primary">筛选</button>
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			<table class="table table-hover">
+				<thead class="navbar-inner">
+				<tr>
+					<th>头像</th>
+					<th>姓名</th>
+					<th>购买套餐</th>
+					<th>费用</th>
+					<th>支付方式</th>
+					<th>套餐开始时间</th>
+					<th>套餐结束时间</th>
+					<th>购买时间</th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $orders $order}
+				<tr>
+					<td><img src="{php echo tomedia($users[$order['uid']]['avatar']);}" alt="" width="50"/></td>
+					<td>{$users[$order['uid']]['realname']}</td>
+					<td>
+						<span class="label label-info">
+							{$cards[$order['card_id']]['title']}
+						</span>
+					</td>
+					<td>{$order['final_fee']}元</td>
+					<td>
+						<span class="{$pay_types[$order['pay_type']]['css']}">{$pay_types[$order['pay_type']]['text']}</span>
+					</td>
+					<td>
+						<span class="label label-danger">
+							{php echo date('Y-m-d', $order['starttime']);}
+						</span>
+					</td>
+					<td>
+						<span class="label label-success">
+							{php echo date('Y-m-d', $order['endtime']);}
+						</span>
+						{if $order['endtime'] <= time()}
+							<br/>
+							<span class="label label-warning label-br">已到期</span>
+						{/if}
+					</td>
+					<td>
+						{php echo date('Y-m-d', $order['paytime']);}
+					</td>
+				</tr>
+				{/loop}
+				</tbody>
+			</table>
+			{$pager}
+		</div>
+	</div>
+</form>
+{/if}
+{itemplate 'public/footer'}

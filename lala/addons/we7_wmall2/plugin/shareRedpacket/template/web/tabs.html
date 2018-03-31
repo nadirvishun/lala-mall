@@ -1,0 +1,25 @@
+<div class="second-sidebar-title">{$_W['_plugin']['title']}</div>
+<div class="nav slimscroll">
+	{ifp 'shareRedpacket.activity'}
+		<div class="menu-header">红包活动</div>
+		<ul class="menu-item">
+			<li {if $_GPC['ac'] == 'activity' && $_GPC['op'] == 'config'}class="active"{/if}>
+				<a href="{php echo iurl('shareRedpacket/activity/config')}">活动设置</a>
+			</li>
+			<li {if $_GPC['ac'] == 'activity' && $_GPC['op'] == 'invite'}class="active"{/if}>
+				<a href="{php echo iurl('shareRedpacket/activity/invite')}">邀请记录</a>
+			</li>
+			<li {if $_GPC['ac'] == 'activity' && $_GPC['op'] == 'ranking'}class="active"{/if}>
+				<a href="{php echo iurl('shareRedpacket/activity/ranking')}">分享排行</a>
+			</li>
+		</ul>
+	{/if}
+	{ifp 'shareRedpacket.cover'}
+		<div class="menu-header">设置</div>
+		<ul class="menu-item">
+			<li {if $_GPC['ac'] == 'cover'}class="active"{/if}>
+				<a href="{php echo iurl('shareRedpacket/cover')}">入口设置</a>
+			</li>
+		</ul>
+	{/if}
+</div>

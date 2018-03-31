@@ -1,0 +1,186 @@
+{itemplate 'public/header'}
+<style>
+	.locate .map{position: fixed; top: 2.2rem; z-index: 10000; width: 100%; max-width: 640px;}
+	.locate .map .address-container{width: 100%; max-width: 640px; background-color: #fff; position: absolute; top: 0; padding: 0.3rem 0.5rem; font-size: 0.7rem;}
+	.locate .map .address-container .current-location{padding-bottom: 0.3rem;}
+	.locate .map .address-container .house-number{height: 1.4rem; line-height: 1.4rem;}
+	.locate .map .address-container .house-number input{height: 1.4rem; border: none; outline: 0;}
+	.locate .map .address-container .house-number .col-20 a{height: 1.4rem; line-height: 1.4rem;}
+	.buttons-tab.select-tab{position: fixed; top: 244px; width: 100%; border-bottom: none; max-width: 640px;}
+	.buttons-tab.select-tab .button{height: 2.5rem; line-height: 2.5rem;}
+	.locate-ls{margin-top: 249px;}
+</style>
+<div class="page locate">
+	<header class="bar bar-nav">
+		<a class=" pull-left" href="{php echo imurl('errander/category1', array('id' => $id));}"><i class="icon icon-arrow-left"></i></a>
+		<div class="search-input">
+			<label class="icon locateicon" for="search"></label>
+			<input type="search" id='search' placeholder='请输入您的收货地址'/>
+		</div>
+	</header>
+	<div class="content">
+		<div class="map">
+			<div id="allmap" style="height:200px; width:100%"></div>
+			<div class="dot" style="display:block;"></div>
+			<div class="address-container border-1px-b">
+				<div class="current-location">当前位置&nbsp;&nbsp;&nbsp;<span id="position"></span></div>
+				<input name="lat" id="lat" type="hidden"/>
+				<input name="lng" id="lng" type="hidden"/>
+				<div class="house-number row no-gutter">
+					<input type="text" class="col-80" id="number" name="number" placeholder="请输入门牌号"/>
+					<div class="col-20">
+						<a class="button button-fill button-danger address-save" href="javascript:;">保存</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input name="id" id="cid" type="hidden" value="{$cid}"/>
+		<div class="buttons-tab select-tab border-1px-t">
+			<a href="javascript:;" class="button active" data-keywords=" ">全部</a>
+			<a href="javascript:;" class="button" data-keywords="小区">小区</a>
+			<a href="javascript:;" class="button" data-keywords="写字楼">写字楼</a>
+			<a href="javascript:;" class="button" data-keywords="学校">学校</a>
+		</div>
+		<ul class="locate-ls border-1px-tb" id="locate-ls"></ul>
+	</div>
+</div>
+
+<script type="text/javascript" src="//webapi.amap.com/maps?v=1.3&key=550a3bf0cb6d96c3b43d330fb7d86950"></script>
+<script>
+	$(function(){
+		var selectAddress = {};
+		selectAddress.init = function() {
+			selectAddress.map();
+			selectAddress.search();
+			selectAddress.selectTab();
+			selectAddress.selectLocation();
+			selectAddress.save();
+		}
+
+		selectAddress.map = function() {
+			var map = new AMap.Map('allmap', {
+				resizeEnable: true,
+				zoom: 15
+			});
+			map.plugin('AMap.Geolocation', function() {
+				var geolocation = new AMap.Geolocation({
+					enableHighAccuracy: true
+				});
+				geolocation.getCurrentPosition();
+				AMap.event.addListener(geolocation, 'complete', function(data){
+					var position = data.position;
+					map.panTo([position.lng, position.lat]);
+					selectAddress.getPositionInfo(position.lat, position.lng);
+					$('#lat').val(position.lat);
+					$('#lng').val(position.lng);
+				});
+				AMap.event.addListener(geolocation, 'error', function(){alert('定位出错')}); //返回定位出错信息
+			});
+
+			AMap.event.addListener(map, "dragend", function(){
+				var center = map.getCenter();
+				$('#lat').val(center.lat);
+				$('#lng').val(center.lng);
+				selectAddress.getPositionInfo(center.lat, center.lng);
+			});
+		}
+
+		selectAddress.search = function() {
+			$('#search').bind('input', function(){
+				var key = $.trim($(this).val());
+				if(!key) {
+					return false;
+				}
+				$.post("{php echo imurl('errander/category1/suggestion');}", {key: key}, function(data){
+					var result = $.parseJSON(data);
+					if(result.message.errno != -1) {
+						selectAddress.getAdress(result.message.message);
+					}
+				});
+			});
+		}
+
+		selectAddress.selectTab = function() {
+			$(document).on('click', '.buttons-tab .button', function() {
+				$(this).addClass('active').siblings().removeClass('active');
+				var lat = $('#lat').val();
+				var lng = $('#lng').val();
+				selectAddress.getPositionInfo(lat, lng);
+			});
+		}
+
+		selectAddress.selectLocation = function() {
+			$(document).on('click', '#locate-ls li', function(){
+				var lng = $(this).data('lng');
+				var lat = $(this).data('lat');
+				var name = $(this).data('name');
+				$('#lng').val(lng);
+				$('#lat').val(lat);
+				$('#position').html(name);
+				$('#number').val('');
+			});
+		}
+
+		selectAddress.save = function() {
+			$(document).on('click', '.address-save', function() {
+				var params = {
+					location_x : $('#lat').val(),
+					location_y : $('#lng').val(),
+					address : $('#position').html(),
+					number : $('#number').val()
+				};
+				if(params.number == '') {
+					$.toast('请选择地址');
+					return false;
+				}
+				if(params.number == '') {
+					$.toast('请填门牌号');
+					return false;
+				}
+				$.post("{php echo imurl('errander/category1/addaddress')}", params, function(data) {
+					var result = $.parseJSON(data);
+					if(result.message.errno == 0) {
+						var cid = $('#cid').val();
+						var url = "{php echo imurl('errander/category1')}&id=" + cid;
+						$.toast('保存地址成功', url);
+					} else {
+						$.toast(result.message.message);
+					}
+				})
+			});
+		}
+
+		selectAddress.getPositionInfo = function(lat, lng){
+			var keywords = $.trim($('.buttons-tab .button.active').data('keywords'));
+			$.getJSON('http://restapi.amap.com/v3/place/around?key=37bb6a3b1656ba7d7dc8946e7e26f39b&location='+lng+','+lat+'&radius=50000&sortrule=distance&extensions=all&output=json&keywords='+keywords+'&callback=getPositionAdress&json=?');
+			getPositionAdress = function(result) {
+				if(result.info == "OK"){
+					var re = [];
+					for(var i in result.pois){
+						var location = result.pois[i].location.split(',');
+						re.push({'name':result.pois[i].name, 'address':result.pois[i].address, 'lng':location[0],'lat':location[1]});
+					}
+					selectAddress.getAdress(re);
+				} else {
+					alert('获取位置失败！');
+				}
+			}
+		}
+
+		selectAddress.getAdress= function(re) {
+			var addressHtml = '';
+			for(var i=0; i < re.length; i++){
+				addressHtml += '<li class="border-1px-b '+ (i == 0 ? 'locate-ls-active' : '') +'" data-lng="'+re[i]['lng']+'" data-lat="'+re[i]['lat']+'" data-name="'+re[i]['name']+'" data-address="'+re[i]['address']+'">';
+				addressHtml += '<div class="locate-ls-info">'+(i == 0 ? '[推荐位置]' : '')+'   '+re[i]['name']+' </span></div>';
+				addressHtml += '<span> '+re[i]['address']+' </span>';
+				addressHtml += '</li>';
+			}
+			$('#locate-ls').html(addressHtml);
+		}
+
+		selectAddress.init();
+	});
+
+
+</script>
+{itemplate 'public/footer'}

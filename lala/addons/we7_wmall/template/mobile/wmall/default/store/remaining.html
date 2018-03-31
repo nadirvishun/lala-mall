@@ -1,0 +1,318 @@
+{itemplate 'public/header'}
+<style>
+	.remaining .remaining-activity{background-color: #fff; padding: 0.5rem 0.5rem; font-size: .7rem;}
+	.remaining .remaining-activity .activity-title{font-weight: bold; margin-right: 0.5rem; display: inline-block;}
+	.remaining .remaining-activity .activity-time{font-size: 0.6rem; display: inline-block; color: #999}
+	.remaining .remaining-activity .activity-time span{background-color: #333; color: #fff; padding: 0 0.2rem; margin: 0 0.2rem;}
+	.remaining .remaining-activity .more{color: #999; font-size: 0.6rem;margin-top: 0.1rem;}
+	.remaining .remaining-activity .goods-list{overflow: hidden; margin-top: 0.5rem; width: 100%}
+	.remaining .remaining-activity .goods-list ul{height: 6rem; width: 1000rem;}
+	.remaining .remaining-activity .goods-list .goods-item{width: 4.5rem; margin-right: 0.5rem;}
+	.remaining .remaining-activity .goods-list .goods-item img{width: 100%; height: 4.5rem;}
+	.remaining .remaining-activity .goods-list .goods-item .goods-title{font-size: 0.6rem; color: #333; height: 0.8rem; line-height: 0.8rem; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+	.remaining .remaining-activity .goods-list .goods-item .price{color: #f6383a; font-size: 0.5rem}
+	.remaining .remaining-activity .goods-list .goods-item .price i{font-style: normal}
+	.remaining .remaining-activity .goods-list .goods-item .price .now-price{font-size: 0.7rem;}
+	.remaining .remaining-activity .goods-list .goods-item .price .original-price{color: #999; text-decoration: line-through}
+	.remaining-more .remaining-image{height: 5rem;}
+	.remaining-more .remaining-image img{width: 100%; height: 5rem;}
+	.remaining-more .rob-time ul{margin-left: 0}
+	.remaining-more .rob-time ul li{background-color: #333; color: #fff; margin-left: 0; width: 25%; padding: 0.3rem 0;}
+	.remaining-more .rob-time ul li.active{background-color: #ff0; color: #f90}
+	.remaining-more .rob-time ul li span{display: block; font-size: 0.6rem; width: 100%; text-align: center;}
+	.remaining-more .goods-list{padding: 0 0.5rem; background-color: #fff}
+	.remaining-more .goods-list .goods-item{padding: 0.5rem 0; position: relative;}
+	.remaining-more .goods-list .goods-item .store-title{color: #666; font-size: 0.5rem;}
+	.remaining-more .goods-list .goods-item .goods-title{font-size: 0.7rem;}
+	.remaining-more .rob-info{font-size: 0.5rem;}
+	.remaining-more .tab-red{padding: 0 0.05rem;border-radius: 0.05rem; border: 1px solid #f6383a; color: #f6383a;}
+	.remaining-more .goods-list .goods-item .goods-remaining{color: #999}
+	.remaining-more .goods-list .goods-item .price{font-size: 0.5rem; color: #f6383a}
+	.remaining-more .goods-list .goods-item .price i{font-style: normal}
+	.remaining-more .goods-list .goods-item .price .now-price{font-size: 0.8rem;}
+	.remaining-more .goods-list .goods-item .price .original-price{color: #999; text-decoration: line-through}
+	.remaining-more .button-fill-danger{padding: 0.2rem 0.4rem; color: #fff; background-color: #f6383a; border-radius: 0.1rem; font-size: 0.6rem; position: absolute; bottom: 0.5rem; right: 0}
+</style>
+{if $ta == 'index'}
+<div class="page remaining">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="fa fa-arrow-left"></i></a>
+		<h1 class="title">限时活动</h1>
+	</header>
+	{itemplate 'public/nav'}
+	<div class="content">
+		<div class="remaining-activity">
+			<div class="activity-header clearfix">
+				<div class="activity-title">限时活动</div>
+				<div class="activity-time">
+					距离结束
+					<span>00</span>:<span>00</span>:<span>00</span>
+				</div>
+				<a href="{php echo imurl('wmall/store/remaining/more')}" class="more pull-right">更多<i class="fa fa-arrow-right"></i></a>
+			</div>
+			<div class="goods-list">
+				<ul>
+					<li class="goods-item pull-left">
+						<a href="">
+							<img src="https://img.waimai.baidu.com/pb/7446d3bc8339fede668a6b9e9dd5b1ed1f@s_0,w_228,h_140,q_100" alt="">
+							<div class="goods-title">葱爆孜然肉片</div>
+							<div class="price">
+								<i>￥</i><span class="now-price">9.9</span>&nbsp;<span class="original-price">￥20</span>
+							</div>
+						</a>
+					</li>
+					<li class="goods-item pull-left">
+						<a href="">
+							<img src="https://img.waimai.baidu.com/pb/7446d3bc8339fede668a6b9e9dd5b1ed1f@s_0,w_228,h_140,q_100" alt="">
+							<div class="goods-title">葱爆孜然肉片</div>
+							<div class="price">
+								<i>￥</i><span class="now-price">9.9</span>&nbsp;<span class="original-price">￥20</span>
+							</div>
+						</a>
+					</li>
+					<li class="goods-item pull-left">
+						<a href="">
+							<img src="https://img.waimai.baidu.com/pb/7446d3bc8339fede668a6b9e9dd5b1ed1f@s_0,w_228,h_140,q_100" alt="">
+							<div class="goods-title">葱爆孜然肉片</div>
+							<div class="price">
+								<i>￥</i><span class="now-price">9.9</span>&nbsp;<span class="original-price">￥20</span>
+							</div>
+						</a>
+					</li>
+					<li class="goods-item pull-left">
+						<a href="">
+							<img src="https://img.waimai.baidu.com/pb/7446d3bc8339fede668a6b9e9dd5b1ed1f@s_0,w_228,h_140,q_100" alt="">
+							<div class="goods-title">葱爆孜然肉片</div>
+							<div class="price">
+								<i>￥</i><span class="now-price">9.9</span>&nbsp;<span class="original-price">￥20</span>
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+{/if}
+
+{if $ta == 'more'}
+<div class="page remaining-more">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="fa fa-arrow-left"></i></a>
+		<h1 class="title">限时抢购</h1>
+	</header>
+	{itemplate 'public/nav'}
+	<div class="content">
+		<div class="remaining-image">
+			<img src="https://fuss10.elemecdn.com/d/9a/20aace2198fce4c8afc7e59f3ddb6png.png" alt="">
+		</div>
+		<div class="rob-time">
+			<ul class="row">
+				<li class="col-25 active border-1px-r">
+					<span>10:00</span>
+					<span>即将开始</span>
+				</li>
+				<li class="col-25 border-1px-r">
+					<span>10:00</span>
+					<span>即将开始</span>
+				</li>
+				<li class="col-25 border-1px-r">
+					<span>10:00</span>
+					<span>即将开始</span>
+				</li>
+				<li class="col-25">
+					<span>10:00</span>
+					<span>即将开始</span>
+				</li>
+			</ul>
+		</div>
+		<div class="goods-list">
+			<div class="goods-item border-1px-b row">
+				<div class="col-20">
+					<img src="//fuss10.elemecdn.com/f/4c/30ce2da57b7384c0bda162ab18316jpeg.jpeg?imageMogr/format/webp/" alt="">
+				</div>
+				<div class="col-80">
+					<div class="store-title">
+						<i></i>美食佳 (北张店)
+					</div>
+					<div class="goods-title">
+						<img src="" alt="">土豆炖鸡块 + 千叶豆腐 + 米饭
+					</div>
+					<div class="rob-info">
+						<span class="tab-red">已抢0份</span>
+						<span class="goods-remaining">剩余5份</span>
+					</div>
+					<div class="price">
+						<i>￥</i>
+						<span class="now-price">7.4</span>
+						<span class="original-price">￥27</span>
+					</div>
+				</div>
+				<a href="" class="button-fill-danger">立即抢购</a>
+			</div>
+			<div class="goods-item border-1px-b row">
+				<div class="col-20">
+					<img src="//fuss10.elemecdn.com/f/4c/30ce2da57b7384c0bda162ab18316jpeg.jpeg?imageMogr/format/webp/" alt="">
+				</div>
+				<div class="col-80">
+					<div class="store-title">
+						<i></i>美食佳 (北张店)
+					</div>
+					<div class="goods-title">
+						<img src="" alt="">土豆炖鸡块 + 千叶豆腐 + 米饭
+					</div>
+					<div class="rob-info">
+						<span class="tab-red">已抢0份</span>
+						<span class="goods-remaining">剩余5份</span>
+					</div>
+					<div class="price">
+						<i>￥</i>
+						<span class="now-price">7.4</span>
+						<span class="original-price">￥27</span>
+					</div>
+				</div>
+				<a href="" class="button-fill-danger">立即抢购</a>
+			</div>
+			<div class="goods-item border-1px-b row">
+				<div class="col-20">
+					<img src="//fuss10.elemecdn.com/f/4c/30ce2da57b7384c0bda162ab18316jpeg.jpeg?imageMogr/format/webp/" alt="">
+				</div>
+				<div class="col-80">
+					<div class="store-title">
+						<i></i>美食佳 (北张店)
+					</div>
+					<div class="goods-title">
+						<img src="" alt="">土豆炖鸡块 + 千叶豆腐 + 米饭
+					</div>
+					<div class="rob-info">
+						<span class="tab-red">已抢0份</span>
+						<span class="goods-remaining">剩余5份</span>
+					</div>
+					<div class="price">
+						<i>￥</i>
+						<span class="now-price">7.4</span>
+						<span class="original-price">￥27</span>
+					</div>
+				</div>
+				<a href="" class="button-fill-danger">立即抢购</a>
+			</div>
+			<div class="goods-item border-1px-b row">
+				<div class="col-20">
+					<img src="//fuss10.elemecdn.com/f/4c/30ce2da57b7384c0bda162ab18316jpeg.jpeg?imageMogr/format/webp/" alt="">
+				</div>
+				<div class="col-80">
+					<div class="store-title">
+						<i></i>美食佳 (北张店)
+					</div>
+					<div class="goods-title">
+						<img src="" alt="">土豆炖鸡块 + 千叶豆腐 + 米饭
+					</div>
+					<div class="rob-info">
+						<span class="tab-red">已抢0份</span>
+						<span class="goods-remaining">剩余5份</span>
+					</div>
+					<div class="price">
+						<i>￥</i>
+						<span class="now-price">7.4</span>
+						<span class="original-price">￥27</span>
+					</div>
+				</div>
+				<a href="" class="button-fill-danger">立即抢购</a>
+			</div>
+			<div class="goods-item border-1px-b row">
+				<div class="col-20">
+					<img src="//fuss10.elemecdn.com/f/4c/30ce2da57b7384c0bda162ab18316jpeg.jpeg?imageMogr/format/webp/" alt="">
+				</div>
+				<div class="col-80">
+					<div class="store-title">
+						<i></i>美食佳 (北张店)
+					</div>
+					<div class="goods-title">
+						<img src="" alt="">土豆炖鸡块 + 千叶豆腐 + 米饭
+					</div>
+					<div class="rob-info">
+						<span class="tab-red">已抢0份</span>
+						<span class="goods-remaining">剩余5份</span>
+					</div>
+					<div class="price">
+						<i>￥</i>
+						<span class="now-price">7.4</span>
+						<span class="original-price">￥27</span>
+					</div>
+				</div>
+				<a href="" class="button-fill-danger">立即抢购</a>
+			</div>
+			<div class="goods-item border-1px-b row">
+				<div class="col-20">
+					<img src="//fuss10.elemecdn.com/f/4c/30ce2da57b7384c0bda162ab18316jpeg.jpeg?imageMogr/format/webp/" alt="">
+				</div>
+				<div class="col-80">
+					<div class="store-title">
+						<i></i>美食佳 (北张店)
+					</div>
+					<div class="goods-title">
+						<img src="" alt="">土豆炖鸡块 + 千叶豆腐 + 米饭
+					</div>
+					<div class="rob-info">
+						<span class="tab-red">已抢0份</span>
+						<span class="goods-remaining">剩余5份</span>
+					</div>
+					<div class="price">
+						<i>￥</i>
+						<span class="now-price">7.4</span>
+						<span class="original-price">￥27</span>
+					</div>
+				</div>
+				<a href="" class="button-fill-danger">立即抢购</a>
+			</div>
+			<div class="goods-item border-1px-b row">
+				<div class="col-20">
+					<img src="//fuss10.elemecdn.com/f/4c/30ce2da57b7384c0bda162ab18316jpeg.jpeg?imageMogr/format/webp/" alt="">
+				</div>
+				<div class="col-80">
+					<div class="store-title">
+						<i></i>美食佳 (北张店)
+					</div>
+					<div class="goods-title">
+						<img src="" alt="">土豆炖鸡块 + 千叶豆腐 + 米饭
+					</div>
+					<div class="rob-info">
+						<span class="tab-red">已抢0份</span>
+						<span class="goods-remaining">剩余5份</span>
+					</div>
+					<div class="price">
+						<i>￥</i>
+						<span class="now-price">7.4</span>
+						<span class="original-price">￥27</span>
+					</div>
+				</div>
+				<a href="" class="button-fill-danger">立即抢购</a>
+			</div>
+			<div class="goods-item border-1px-b row">
+				<div class="col-20">
+					<img src="//fuss10.elemecdn.com/f/4c/30ce2da57b7384c0bda162ab18316jpeg.jpeg?imageMogr/format/webp/" alt="">
+				</div>
+				<div class="col-80">
+					<div class="store-title">
+						<i></i>美食佳 (北张店)
+					</div>
+					<div class="goods-title">
+						<img src="" alt="">土豆炖鸡块 + 千叶豆腐 + 米饭
+					</div>
+					<div class="rob-info">
+						<span class="tab-red">已抢0份</span>
+						<span class="goods-remaining">剩余5份</span>
+					</div>
+					<div class="price">
+						<i>￥</i>
+						<span class="now-price">7.4</span>
+						<span class="original-price">￥27</span>
+					</div>
+				</div>
+				<a href="" class="button-fill-danger">立即抢购</a>
+			</div>
+		</div>
+	</div>
+</div>
+{/if}
+{itemplate 'public/footer'}

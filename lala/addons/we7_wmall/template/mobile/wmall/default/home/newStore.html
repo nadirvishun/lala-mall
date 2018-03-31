@@ -1,0 +1,227 @@
+{itemplate 'public/header'}
+<style>
+	header.bar.bar-nav{border: none}
+	.new-store .tab-bluefill{padding: 0.1rem .1rem 0; border: 1px solid #44a5ff; border-radius: .05rem; background-color: #2395ff; color: #fff; font-size: 0.55rem; line-height: 1rem;}
+	.new-store .bar.bar-nav{background-color: #0096ff}
+	.new-store .store-detail{padding: 0.8rem; background-color: #fff}
+	.new-store .store-detail .store-info{margin-left: 0;}
+	.new-store .shop-label span{position: absolute; top: .13rem; left: .03rem; display: block; color: #fff; font-weight: 700; transform: rotate(-45deg);}
+	.new-store .store-logo img{width: 3rem; height: 3rem; border-radius: 0.2rem;}
+	.new-store .store-title{position: relative}
+	.new-store .store-title h3{overflow: hidden; margin: 0; padding: 0; max-width: 10rem; color: #333; text-overflow: ellipsis; white-space: nowrap; line-height: 1rem;  font-size: 0.8rem;}
+	.new-store .store-title .store-label{position: absolute; right: 0; top: -0.2rem;}
+	.new-store .store-title .store-label span{display: inline-block; width: 0.88rem; height: 0.88rem; text-align: center; line-height: 0.88rem; border: 1px solid #eee; border-radius: 4px; color: #979797; font-size: 0.6rem;}
+	.new-store .month-sale{font-size: 0.55rem; margin: 0.2rem}
+	.new-store .stars-rank-value{color: #f90; margin-left: 0.2rem}
+	.new-store .sales{color: #999; margin-left: 0.2rem}
+	.new-store .store-tab{display: block; margin-top: -0.1rem}
+	.new-store .delivery-info{color: #666; font-size: 0.55rem; padding: 0; margin: 0.2rem 0}
+	.new-store .store-other{font-size: 0.55rem; padding: 0.5rem; color: #333; background: rgba(211,211,211,0.1)}
+	.new-store .store-other .col-15{margin-left: 0; width: 15%}
+	.new-store .store-other .col-85{margin-left: 0; width: 85%}
+	.new-store .delivery-fee{padding-bottom: 0.25rem; margin-left: 0}
+	.new-store .notice{padding-top: 0.25rem; margin-left: 0}
+	.new-store .comment-wrapper{margin-top: 0.5rem; background-color: #fff}
+	.new-store .comment-wrapper .comment-info{color: #333; display: block; width: 100%; padding: 0.5rem 0.8rem; font-size: 0.6rem}
+	.new-store .comment-wrapper .comment-info .score{color: #f90; font-size: 0.65rem; font-weight: bold}
+	.new-store .comment-wrapper .comment-info .comment-num{color: #999}
+	.new-store .comment-wrapper .comment-info .comment-num .icon{font-size: 0.5rem; vertical-align: middle}
+	.new-store .comment-wrapper .customer-info{padding: 0.8rem; font-size: 0.55rem;}
+	.new-store .comment-wrapper .customer-info .customer-logo{width: 1.5rem; height: 1.5rem}
+	.new-store .comment-wrapper .customer-info .comment-time{color: #999;}
+	.new-store .comment-wrapper .customer-info .customer-comment{font-size: 0.65rem; color: #000; margin: 0.2rem 0;}
+	.new-store .comment-wrapper .customer-info .shop-reply{background-color: rgba(211,211,211,0.2); padding: 0.4rem; position: relative;}
+	.new-store .comment-wrapper .customer-info .shop-reply .arrow{position:absolute; top: -16px; left: 1rem; width:0; height:0; font-size:0; border:solid 8px; border-color: rgba(211,211,211,0) rgba(211,211,211,0) rgba(211,211,211,0.2) rgba(211,211,211,0);}
+	.new-store .comment-wrapper .customer-info .goods-image{margin: 0.4rem 0; padding-top: 0.4rem;}
+	.new-store .comment-wrapper .customer-info .goods-image img{width: 4rem; height: 4rem;}
+	.new-store .comment-wrapper .customer-info .favourable-goods{margin: 0.3rem 0}
+	.new-store .comment-wrapper .customer-info .favourable-goods .icon.favor{display: inline-block; width: 0.6rem; height: 0.6rem; margin-right: 0.2rem; background: url(../addons/we7_wmall/template/mobile/wmall/default/static/img/comment_favor_icon.png) no-repeat; background-size: cover; vertical-align: middle;}
+	.new-store .comment-wrapper .favourable-goods .goods-label{margin: 0 .15rem; height: .9rem; line-height: .9rem; display: inline-block; background: #eceff2; color: #919cae; border-radius: .9rem; padding: 0 .3rem; font-size: .6rem;}
+	.new-store .comment-wrapper .scan-all-comments{display: block; text-align: center; color: #999; font-size: 0.65rem; padding: 0.5rem 0}
+	.new-store .comment-wrapper .scan-all-comments .icon{font-size: 0.5rem; vertical-align: middle;}
+	.new-store .activity{margin-top: 0.5rem; background-color: #fff}
+	.new-store .heading{padding: 0.5rem 0.8rem; font-size: 0.8rem; color: #333; width: 100%}
+	.new-store .activity .activity-container{padding-left: 0.8rem; font-size: 0.6rem}
+	.new-store .activity .activity-container .activity-item{padding: 0.4rem 0}
+	.new-store .real-business{margin-top: 0.5rem; background-color: #fff;}
+	.new-store .real-business .business-container{padding: 0.5rem 0.8rem; line-height: 1;}
+	.new-store .real-business .business-container .shop-image{display: inline-block; line-height: 1; border-radius: 0.1rem;}
+	.new-store .real-business .business-container img{width: 4rem; height: 4rem;}
+	.new-store .business-info{margin-top: 0.5rem; background-color: #fff}
+	.new-store .business-info-item{padding-left: 0.8rem; font-size: 0.65rem; color: #333}
+	.new-store .business-info-item .item-inner{padding: 0.5rem 0}
+	.new-store a.business-info-item{display: block}
+	.new-store a.business-info-item .icon{font-size: 0.5rem; color: #666; margin-top: 0.2rem; margin-right: 0.8rem}
+	.new-store .store-qualification{background-color: #fff; margin: 0.5rem 0}
+	.new-store .store-qualification .col-25{padding: 0.5rem}
+	.new-store .store-qualification .col-25 img{width: 100%; height: 3rem;}
+</style>
+<div class="page new-store">
+	<header class="bar bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title">商家详情</h1>
+	</header>
+	<div class="content">
+		<div class="store-detail">
+			<div class="row">
+				<div class="col-25 store-logo">
+					<img src="{php echo tomedia($store['logo']);}" alt="">
+				</div>
+				<div class="col-75 store-info">
+					<div class="store-title">
+						<h3>{$store['title']}</h3>
+						<div class="store-label">
+							{if $store['token_status'] == '1'}
+								<span>券</span>
+							{/if}
+							{if $store['invoice_status'] == '1'}
+								<span>票</span>
+							{/if}
+							<span>付</span>
+						</div>
+					</div>
+					<div class="month-sale">
+						<span class="star-rank-outline">
+							<span class="star-rank-active" style="width:{$store['score_cn']}%"></span>
+						</span>
+						<span class="stars-rank-value">{$store['score']}</span>
+						<span class="sales">已售:{$store['sailed']}份</span>
+					</div>
+					<div class="delivery-info">￥{$store['send_price']}起送
+						<span class="pipe">|</span>
+						<span>平均{$store['delivery_time']}分钟</span>
+						{if !empty($store['distance'])}
+						<span class="pipe">|</span> {$store['distance']}km
+						{/if}
+						<div class="store-tab pull-right">
+							<span class="tab-bluefill">{$_config_mall['delivery_title']}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="store-other">
+				<div class="delivery-fee row"><span class="col-15">配送费:</span><span class="col-85">{$store['delivery_price']}元</span></div>
+				<div class="notice row border-1px-t"><span class="col-15">公告:</span><span class="col-85">{$store['notice']}</span></div>
+			</div>
+		</div>
+		<div class="comment-wrapper">
+			<a class="comment-info border-1px-b">
+				<span class="score">{$stat['score']}分</span>
+				<div class="pull-right comment-num">{$stat['all']}条评价 <span class="icon icon-right"></span></div>
+			</a>
+			<div class="customer-info row">
+				<div class="customer-logo col-15">
+					<img src="{$comment['avatar']}" alt="">
+				</div>
+				<div class="col-85">
+					<div class="customer-title">
+						{$comment['mobile']}
+						<span class="comment-time pull-right">{$comment['addtime']}</span>
+					</div>
+					<span class="star-rank-outline">
+						<span class="star-rank-active" style="width:{$comment['score']}%"></span>
+					</span>
+					{if !empty($comment['note'])}
+						<div class="customer-comment">{$comment['note']}</div>
+					{/if}
+					{if !empty($comment['reply'])}
+						<div class="shop-reply">
+							商家回复:  {$comment['reply']}
+							<span class="arrow"></span>
+						</div>
+					{/if}
+					{if !empty($comment['thumbs'])}
+						<div class="goods-image border-1px-t row">
+							{loop $comment['thumbs'] $thumb}
+							<div class="col-33 photoBrowser-image-item">
+								<img src="{$thumb}" alt=""/>
+							</div>
+							{/loop}
+						</div>
+					{/if}
+					{if !empty($comment['data']['good'])}
+						<div class="favourable-goods">
+							<i class="icon favor"></i>
+							{loop $comment['data']['good'] $good}
+							<span class="goods-label">{$good}</span>
+							{/loop}
+						</div>
+					{/if}
+				</div>
+			</div>
+			<a href="{php echo imurl('wmall/home/newComment', array('sid' => $sid))}" class="scan-all-comments border-1px-t">查看全部评价<span class="icon icon-right"></span></a>
+		</div>
+		{if $activity['num'] > 0}
+			<div class="activity">
+				<div class="heading border-1px-b">活动与服务</div>
+				<div class="activity-container">
+					{loop $activity['items'] $item}
+						<div class="activity-item border-1px-b tags tags-{$item['type']}">
+							{$item['title']}
+						</div>
+					{/loop}
+				</div>
+			</div>
+		{/if}
+		{if !empty($store['thumbs'])}
+			<div class="real-business">
+				<div class="heading border-1px-b">商家实景</div>
+				<div class="business-container">
+					{loop $store['thumbs'] $thumb}
+					<div class="shop-image photoBrowser-image-item">
+						<img src="{php echo tomedia($thumb['image'])}" alt="">
+					</div>
+					{/loop}
+				</div>
+			</div>
+		{/if}
+
+		{if !empty($store['qualification']) && !empty($store['qualification']['business']) || !empty($store['qualification']['service'])}
+			<div class="store-qualification">
+				<div class="heading border-1px-b">资质证照</div>
+				<div class="row no-gutter">
+					{if !empty($store['qualification']['business']['thumb'])}
+						<div class="col-25 photoBrowser-image-item">
+							<img src="{php echo tomedia($store['qualification']['business']['thumb']);}" alt="">
+						</div>
+					{/if}
+					{if !empty($store['qualification']['service']['thumb'])}
+						<div class="col-25 photoBrowser-image-item">
+							<img src="{php echo tomedia($store['qualification']['service']['thumb']);}" alt="">
+						</div>
+					{/if}
+				</div>
+			</div>
+		{/if}
+		<div class="business-info">
+			<div class="heading border-1px-b">商家信息</div>
+			<div class="business-info-item">
+				<div class="item-inner border-1px-b">
+					{if empty($store['content'])}暂无简介{else}{$store['content']}{/if}
+				</div>
+			</div>
+			<div class="business-info-item">
+				<div class="item-inner border-1px-b">
+					品类: {$store['category']}
+				</div>
+			</div>
+			<div class="business-info-item">
+				<div class="item-inner border-1px-b">
+					地址: {$store['address']}
+				</div>
+			</div>
+			<div class="business-info-item">
+				<div class="item-inner border-1px-b">
+					营业时间: {$store['business_hours_cn']}
+				</div>
+			</div>
+			<a href="{php echo imurl('wmall/store/report', array('sid' => $sid));}" class="business-info-item">
+				<div class="item-inner">
+					举报商家
+					<span class="icon icon-right pull-right"></span>
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
+{itemplate 'public/footer'}

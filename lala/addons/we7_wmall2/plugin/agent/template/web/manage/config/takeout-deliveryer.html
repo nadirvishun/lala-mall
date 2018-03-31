@@ -1,0 +1,50 @@
+{itemplate 'public/header'}
+<div class="page clearfix page-config-store-delivery">
+	<h2>配送员提成</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require">* </span>平台给配送员每单支付金额(外卖单)</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<label class="input-group-addon">
+						<input type="radio" name="deliveryer_fee_type" value="1" {if $order['deliveryer_fee_type'] == 1 || !$order['deliveryer_fee_type']}checked{/if}>
+					</label>
+					<span class="input-group-addon">每单固定</span>
+					<input type="text" class="form-control" name="deliveryer_fee_1" {if $order['deliveryer_fee_type'] == 1}value="{$order['deliveryer_fee']}"{/if}>
+					<span class="input-group-addon">元</span>
+				</div>
+				<br>
+				<div class="input-group">
+					<label class="input-group-addon">
+						<input type="radio" name="deliveryer_fee_type" value="2" {if $order['deliveryer_fee_type'] == 2}checked{/if}>
+					</label>
+					<span class="input-group-addon">每单按照订单配送费提成</span>
+					<input type="text" class="form-control" name="deliveryer_fee_2" {if $order['deliveryer_fee_type'] == 2}value="{$order['deliveryer_fee']}"{/if}>
+					<span class="input-group-addon">%</span>
+				</div>
+				<br>
+				<div class="input-group">
+					<label class="input-group-addon">
+						<input type="radio" name="deliveryer_fee_type" value="3" {if $order['deliveryer_fee_type'] == 3}checked{/if}>
+					</label>
+					<span class="input-group-addon">每单基础配送费</span>
+					<input type="text" class="form-control" name="deliveryer_fee_3[start_fee]" {if $order['deliveryer_fee_type'] == 3}value="{$order['deliveryer_fee']['start_fee']}"{/if}>
+					<span class="input-group-addon">元,超过</span>
+					<input type="text" class="form-control" name="deliveryer_fee_3[start_km]" {if $order['deliveryer_fee_type'] == 3}value="{$order['deliveryer_fee']['start_km']}"{/if}>
+					<span class="input-group-addon">公里,超过部分每公里增加</span>
+					<input type="text" class="form-control" name="deliveryer_fee_3[pre_km]" {if $order['deliveryer_fee_type'] == 3}value="{$order['deliveryer_fee']['pre_km']}"{/if}>
+					<span class="input-group-addon">元,最高</span>
+					<input type="text" class="form-control" name="deliveryer_fee_3[max_fee]" {if $order['deliveryer_fee_type'] == 3}value="{$order['deliveryer_fee']['max_fee']}"{/if}>
+					<span class="input-group-addon">元</span>
+				</div>
+				<div class="help-block text-danger">第三种提成模式仅适用于开启按照距离收取配送费的计费模式。</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="submit" value="提交" class="btn btn-primary col-lg-1">
+			</div>
+		</div>
+	</form>
+</div>
+{itemplate 'public/footer'}

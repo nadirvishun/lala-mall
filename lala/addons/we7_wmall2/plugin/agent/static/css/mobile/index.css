@@ -1,0 +1,29 @@
+.address .bar-header-secondary{border: none}
+.address .search-input-container .city{width: 20%; padding-right:  2%; background-color: #fff; height: 1.4rem; font-size: 0.6rem; line-height: 1.4rem; text-align: center; border-bottom-left-radius: 0.25rem; border-top-left-radius: 0.25rem;}
+.address .search-input-container .city .city-name{display: inline-block; max-width: 75%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.address .search-input-container .city .icon{color: #333; font-size: 0.5rem; display: inline-block; padding: 0; top: .6rem; position: absolute;}
+.address .search-input-container .city.active .icon{transform:rotate(180deg); top: 0.4rem;}
+.address .search-input-container input{width: 74%; border-bottom-right-radius: 0.25rem; border-top-right-radius: 0.25rem; outline: 0; border: none; margin: 0; padding: 0 2%; height: 1.4rem; font-size: 0.7rem;}
+.address .current-city{background-color: #fff; height: 2.5rem; font-size: 0.6rem; line-height: 2.5rem; padding: 0 0.5rem; color: #666; position: absolute; top: 4.8rem; width: 100%; z-index: 100;}
+.address .current-city .city-name{color: #333; font-size: 0.7rem}
+.address .list-block{margin: 0;}
+.address .index-list-bar{color: #333; display: none;}
+.address .content{margin-top: 2.9rem;}
+.address .current-position{background-color: #fff; height: 2.5rem; font-size: 0.6rem; line-height: 2.5rem; padding: 0 0.5rem; color: #666; position: absolute; top: 4.8rem; width: 100%; text-align: center;}
+.address .current-position .icon{color: #f60; font-size: 0.7rem;}
+.address .my-address .address-list-title{margin-top: 0.5rem;}
+.address .my-address .address-list-title .icon:before{vertical-align: middle}
+.address .my-address .item-content{font-size: 0.6rem;}
+.address .my-address .item-content .detail-address{width: 100%; margin-bottom: 0.5rem;}
+.address .my-address .item-content .name{color: #666; margin-right: 0.3rem;}
+.address .my-address .item-content .mobile{margin-left: 1rem;}
+.address .search-list{width: 100%; max-width: 640px; padding: 0 0.5rem 4.4rem; height: 100%; background-color: #fff; position: fixed; z-index: 10000; top: 4.4rem; overflow-y: auto;}
+.address .search-list li{padding: .3rem .75rem;}
+.address .search-list .locate-ls-info{line-height: 1.2rem;}
+.address .search-list .locate-ls-info:before{content: ""; display: block; float: left; width: .9rem; height: .9rem; background: url(../../img/location-grey.png); background-size: cover; margin-top: .2rem; margin-right: .75rem;}
+.address .search-list li span{font-size: .6rem; color: #c6c6c8; padding-left: 1.65rem;}
+.address .search-list li span.locate{font-size: 0.8rem; display: block; max-width: 65%; padding: 0; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+.address .search-list li span.pull-right{padding: 0;}
+.address .search-list .locate-ls-active .locate-ls-info span.locate{color: #ff2d4b;}
+.address .search-list .locate-ls-active span{color: #3d4145;}
+.address .search-list .locate-ls-active .locate-ls-info:before{background: url(../../img/location-org.png);background-size: cover;}

@@ -1,0 +1,26 @@
+{itemplate 'public/header'}
+<link href="../addons/we7_wmall/plugin/diypage/static/css/diy.app.css?t={php echo time();}" rel="stylesheet" type="text/css"/>
+<div class="page page-diy" style="background-color: {$page['data']['page']['background']}; ">
+	{php $_followbar = $diypage['followbar'];}
+	{if $diypage['diymenu'] > -1}
+		{php get_mall_menu($diypage['diymenu']);}
+	{/if}
+	{if $diypage['danmu'] == 1}
+		{php get_mall_danmu();}
+	{/if}
+	<div class="content">
+		{if !empty($diyitems)}
+			{loop $diyitems $diyitemid $diyitem}
+				{php $part = ucfirst($diyitem['id']);}
+				{itemplate "parts/tpl" . $part}
+			{/loop}
+		{/if}
+	</div>
+</div>
+<script>
+	var path = '../../../plugin/diypage/static/js/diy.app';
+	require([path],function(diy){
+		diy.init();
+	});
+</script>
+{itemplate 'public/footer'}

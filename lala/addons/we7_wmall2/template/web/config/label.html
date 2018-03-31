@@ -1,0 +1,250 @@
+{itemplate 'public/header'}
+{if $op == 'TY_store_label'}
+<form action="" class="form-table form-validate" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			<table class="table table-hover">
+				<thead class="navbar-inner">
+					<tr>
+						<th width="100">排序</th>
+						<th width="300">标签名称</th>
+						<th>颜色</th>
+						<th>类型</th>
+						<th style="width:100px; text-align:right;">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				{loop $labels $label}
+				<tr>
+					<td>
+						<input type="hidden" name="id[]" value="{$label['id']}"/>
+						<input type="text" name="displayorder[]" value="{$label['displayorder']}" class="form-control width-100"/>
+					</td>
+					<td>
+						<input type="text" name="title[]" value="{$label['title']}" class="form-control"/>
+					</td>
+					<td>
+						<div class="input-group">
+							<input class="form-control" type="text" name="color[]" value="{$label['color']}" placeholder="请选择颜色">
+							<span class="input-group-addon" style="width:35px;border-left:none;background-color:{$label['color']}"></span>
+							<span class="input-group-btn">
+								<button class="btn btn-default btn-colorpicker" type="button">选择颜色 <i class="fa fa-caret-down"></i></button>
+							</span>
+						</div>
+					</td>
+					<td>
+						{if $label['is_system'] == 1}
+							<span class="label label-danger">系统标签</span>
+						{else}
+							<span class="label label-success">自定义</span>
+						{/if}
+					</td>
+					<td class="text-right">
+						{if !$label['is_system']}
+							<a href="javascript:;" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-times"></i></a>
+						{/if}
+					</td>
+				</tr>
+				{/loop}
+				<tr>
+					<td colspan="5">
+						<a href="javascript:;" id="label-add"><i class="fa fa-plus-circle"></i> 添加商户标签</a>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<div class="btn-region clearfix">
+				<div class="pull-left">
+					<input name="token" type="hidden" value="{$_W['token']}" />
+					<input type="submit" class="btn btn-primary btn-sm" name="submit" value="提交修改" />
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<script>
+$(function(){
+	$('#label-add').click(function(){
+		var html = '	<tr>'+
+				'		<td>'+
+				'			<input type="text" name="add_displayorder[]" class="form-control width-100"/>'+
+				'		</td>'+
+				'		<td>'+
+				'			<input type="text" name="add_title[]" class="form-control" placeholder="两个字,例如:品牌"/>'+
+				'		</td>'+
+				'		<td>'+
+				'			<div class="input-group">'+
+				'				<input class="form-control" type="text" name="add_color[]" placeholder="请选择颜色">'+
+				'				<span class="input-group-addon" style="width:35px;border-left:none;"></span>'+
+				'				<span class="input-group-btn">'+
+				'					<button class="btn btn-default btn-colorpicker" type="button">选择颜色 <i class="fa fa-caret-down"></i></button>'+
+				'				</span>'+
+				'			</div>'+
+				'		</td>'+
+				'		<td>'+
+				'			<lable class="label label-success">自定义</lable>'+
+				'		</td>'+
+				'		<td class="text-right">'+
+				'			<a href="javascript:;" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-times"></i></a>'+
+				'		</td>'+
+				'	</tr>';
+		;
+		$(this).parents('tr').before(html);
+		var elm = $(this).parents('tr').prev().find('.btn-colorpicker').get(0);
+		util.colorpicker(elm, function(color){
+			$(elm).parent().prev().prev().val(color.toHexString());
+			$(elm).parent().prev().css("background-color", color.toHexString());
+		});
+	});
+	$(document).on('click', '.btn-delete', function(){
+		$(this).parents('tr').remove();
+	});
+	$('.btn-colorpicker').each(function(){
+		var elm = this;
+		util.colorpicker(elm, function(color){
+			$(elm).parent().prev().prev().val(color.toHexString());
+			$(elm).parent().prev().css("background-color", color.toHexString());
+		});
+	});
+});
+</script>
+{/if}
+{if $op == 'TY_delivery_label'}
+<form action="./index.php" class="form-table form-validate" method="post">
+	<div class="btn-region clearfix">
+		<div class="pull-left">
+			<a href="{php echo iurl('config/label/post')}" class="btn btn-primary btn-sm">添加标签</a>
+		</div>
+	</div>
+</form>
+<form action="./index.php?" class="form-horizontal form-filter" id="form1">
+	{php echo tpl_form_filter_hidden('config/label/TY_delivery_label');}
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">筛选</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('score:0');}" class="btn {if $score == 0}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo ifilter_url('score:1');}" class="btn {if $score == 1}btn-primary{else}btn-default{/if}">一星</a>
+				<a href="{php echo ifilter_url('score:2');}" class="btn {if $score == 2}btn-primary{else}btn-default{/if}">二星</a>
+				<a href="{php echo ifilter_url('score:3');}" class="btn {if $score == 3}btn-primary{else}btn-default{/if}">三星</a>
+				<a href="{php echo ifilter_url('score:4');}" class="btn {if $score == 4}btn-primary{else}btn-default{/if}">四星</a>
+				<a href="{php echo ifilter_url('score:5');}" class="btn {if $score == 5}btn-primary{else}btn-default{/if}">五星</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group form-inline">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">标签名称</label>
+		<div class="col-sm-9 col-xs-12">
+			<input class="form-control" name="keyword" placeholder="输入标签名称" type="text" value="{$_GPC['keyword']}">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-9 col-xs-12">
+			<button class="btn btn-primary">筛选</button>
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		{if empty($labels)}
+		<div class="no-result">
+			<p>还没有相关数据</p>
+		</div>
+		{else}
+		<div class="panel-body table-responsive js-table">
+			<table class="table table-hover">
+				<thead class="navbar-inner">
+					<tr>
+						<th>标签名称</th>
+						<th>星级</th>
+						<th>排序</th>
+						<th class="text-right">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{loop $labels $item}
+						<tr>
+							<td>{$item['title']}</td>
+							<td>
+								{if $item['score'] == 1}
+									一星
+								{elseif $item['score'] == 2}
+									二星
+								{elseif $item['score'] == 3}
+									三星
+								{elseif $item['score'] == 4}
+									四星
+								{elseif $item['score'] == 5}
+									五星
+								{/if}
+							</td>
+							<td>{$item['displayorder']}</td>
+							<td class="text-right">
+								<a href="{php echo iurl('config/label/post', array('id' => $item['id']))}" class="btn btn-default btn-sm" title="编辑" data-toggle="tooltip" data-placement="top" >编辑</a>
+								<a href="{php echo iurl('config/label/del', array('id' => $item['id']))}" class="btn btn-default btn-sm js-remove" data-confirm="确定删除该标签?">删除</a>
+							</td>
+						</tr>
+					{/loop}
+				</tbody>
+			</table>
+			<div class="btn-region clearfix">
+				<div class="pull-right">
+					{$pager}
+				</div>
+			</div>
+		</div>
+		{/if}
+	</div>
+</form>
+{/if}
+{if $op == 'post'}
+<div class="page clearfix">
+	<h2>配送评分标签</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">标签名称</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" class="form-control" name="title" value="{$label['title']}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" class="form-control" name="displayorder" value="{$label['displayorder']}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">等级</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" name="score" id="score-1" value="1" {if $label['score'] == 1 || !$label['score']}checked{/if}>
+					<label for="score-1">一星</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="score" id="score-2" value="2" {if $label['score'] == 2}checked{/if}>
+					<label for="score-2">二星</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="score" id="score-3" value="3" {if $label['score'] == 3}checked{/if}>
+					<label for="score-3">三星</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="score" id="score-4" value="4" {if $label['score'] == 4}checked{/if}>
+					<label for="score-4">四星</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" name="score" id="score-5" value="5" {if $label['score'] == 5}checked{/if}>
+					<label for="score-5">五星</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{/if}
+{itemplate 'public/footer'}

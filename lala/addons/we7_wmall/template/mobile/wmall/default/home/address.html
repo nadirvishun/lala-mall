@@ -1,0 +1,203 @@
+{itemplate 'public/header'}
+<div class="page address">
+	<header class="bar bar-nav">
+		<a class="pull-left" href="{php echo imurl('wmall/home/index');}"><i class="icon icon-arrow-left"></i></a>
+		<a class="button button-link button-nav pull-right external" href="{php echo imurl('wmall/member/address');}">新增地址</a>
+		<h1 class="title">选择收货地址</h1>
+	</header>
+	<div class="bar bar-header-secondary">
+		<div class="searchbar">
+			<div class="search-input row no-gutter">
+				<span class="col-10 city">太原<span class="icon icon-arrow-down-fill"></span></span>
+				<input class="col-90" type="search" id='search' placeholder='请输入您的收货地址'/>
+			</div>
+		</div>
+	</div>
+	<div class="current-city">
+		<span class="city-name">太原</span>&nbsp;&nbsp;&nbsp;&nbsp;当前定位城市
+	</div>
+	<div class="content">
+		<div class="city-list list-block contacts-block">
+			<div class="list-group">
+				<ul>
+					<li class="list-group-title">A</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">标题1</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">标题2</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">标题3</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">标题4</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">标题5</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">标题6</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner border-1px-b">
+								<div class="item-title">标题7</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题8</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="list-group">
+				<ul>
+					<li class="list-group-title">B</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题1</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题2</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题3</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题4</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题5</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题6</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="list-group">
+				<ul>
+					<li class="list-group-title">C</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题1</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题2</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题3</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题4</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题5</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题6</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题7</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="list-group">
+				<ul>
+					<li class="list-group-title">V</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title">标题1</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(document).on('click', '.city', function() {
+		$(this).find('.icon').toggleClass('active');
+	});
+</script>
+{itemplate 'public/footer'}

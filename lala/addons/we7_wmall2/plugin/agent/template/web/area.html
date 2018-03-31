@@ -1,0 +1,96 @@
+{itemplate 'public/header'}
+{if $op == 'list'}
+<form action="" class="form-table form form-validate" method="post">
+	<div class="panel panel-table">
+		<div class="panel-heading">
+			<a href="{php echo iurl('agent/area/post');}" class="btn btn-primary btn-sm">添加区域</a>
+		</div>
+		<div class="panel-body table-responsive js-table">
+			{if empty($areas)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+					<tr>
+						<th width="40">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" name="ids[]"/>
+								<label></label>
+							</div>
+						</th>
+						<th>排序</th>
+						<th>区域名称</th>
+						<th>是否显示</th>
+						<th style="width:150px; text-align:right;">操作</th>
+					</tr>
+					</thead>
+					<tbody>
+						{loop $areas $area}
+							<tr>
+								<td>
+									<div class="checkbox checkbox-inline">
+										<input type="checkbox" name="ids[]" value="{$area['id']}"/>
+										<label></label>
+									</div>
+								</td>
+								<td width="500">
+									<input type="text" style="width: 100px;" name="displayorder[]" class="form-control" value="{$area['displayorder']}">
+								</td>
+								<td width="500">
+									<input type="text" style="width: 100px;" name="title[]" value="{$area['title']}" class="form-control">
+									<input type="hidden" name="hids[]" value="{$area['id']}">
+								</td>
+								<td>
+									<input type="checkbox" class="js-checkbox" data-href="{php echo iurl('agent/area/status', array('id' => $area['id']));}" data-name="status" value="1" {if $area['status'] == 1}checked{/if}>
+								</td>
+								<td style="text-align:right;">
+									<a href="{php echo iurl('agent/area/post', array('id' => $area['id']))}" class="btn btn-default btn-sm">编辑</a>
+									<a href="{php echo iurl('agent/area/del', array('id' => $area['id']))}" class="btn btn-default btn-sm js-remove" data-confirm="删除后将不可恢复，确定删除吗">删除</a>
+								</td>
+							</tr>
+						{/loop}
+					</tbody>
+				</table>
+				<div class="btn-region clearfix">
+					<div class="pull-left">
+						<input name="token" type="hidden" value="{$_W['token']}" />
+						<input type="submit" class="btn btn-primary btn-sm" name="submit" value="保存" />
+						<a href="{php echo iurl('agent/area/del')}" class="btn btn-sm btn-primary btn-danger js-batch" data-batch="remove" data-confirm="删除后将不可恢复，确定删除吗">删除</a>
+					</div>
+					<div class="pull-right">
+						{$pager}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{/if}
+
+{if $op == 'post'}
+<div class="page clearfix">
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">区域名称</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="title" value="{$area['title']}" class="form-control" required="true">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="displayorder" value="{$area['displayorder']}" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{/if}
+{itemplate 'public/footer'}

@@ -1,0 +1,75 @@
+{if !empty($diyitem['data'])}
+	{php $diyitem['data'] = array_values($diyitem['data']);}
+	{if $diyitem['params']['row']==1}
+		<div class="diy-cube lazyload-container" style="background: {$diyitem['style']['background']}; {if count($diyitem['data'])==1}padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;{/if}">
+			{if count($diyitem['data'])==1}
+				<a href="{$diyitem['data'][0]['linkurl']}" data-nocache="true"><img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="lazyload lazyload-store" data-original="{php echo tomedia($diyitem['data'][0]['imgurl'])}" /></a>
+			{elseif count($diyitem['data'])>1}
+				<div class="diy-cube-left" style="padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px; padding-right: 0;">
+					<a href="{$diyitem['data'][0]['linkurl']}" data-nocache="true"><img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="lazyload lazyload-store" data-original="{php echo tomedia($diyitem['data'][0]['imgurl'])}" /></a>
+				</div>
+				<div class="diy-cube-right" {if count($diyitem['data'])==2} style="padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;"{/if}>
+					{if count($diyitem['data'])==2}
+						<a href="{$diyitem['data'][1]['linkurl']}" data-nocache="true"><img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="lazyload lazyload-store" data-original="{php echo tomedia($diyitem['data'][1]['imgurl'])}" /></a>
+					{elseif count($diyitem['data'])>2}
+						<div class="diy-cube-right1" style="padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px; padding-bottom: 0;">
+							<a href="{$diyitem['data'][1]['linkurl']}" data-nocache="true"><img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="lazyload lazyload-store" data-original="{php echo tomedia($diyitem['data'][1]['imgurl'])}" /></a>
+						</div>
+						<div class="diy-cube-right2" {if count($diyitem['data'])==3} style="padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;"{/if}>
+							{if count($diyitem['data'])==3}
+								<a href="{$diyitem['data'][2]['linkurl']}" data-nocache="true"><img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="lazyload lazyload-store" data-original="{php echo tomedia($diyitem['data'][2]['imgurl'])}" /></a>
+							{elseif count($diyitem['data'])>3}
+								<div class="left" style="padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px; padding-right: 0;">
+									<a href="{$diyitem['data'][2]['linkurl']}" data-nocache="true"><img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="lazyload lazyload-store" data-original="{php echo tomedia($diyitem['data'][2]['imgurl'])}" /></a>
+								</div>
+							 {/if}
+							 {if count($diyitem['data'])>=4}
+								<div class="right" style="padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;">
+									<a href="{$diyitem['data'][3]['linkurl']}" data-nocache="true"><img src="{WE7_WMALL_TPL_URL}static/img/hm.gif" class="lazyload lazyload-store" data-original="{php echo tomedia($diyitem['data'][3]['imgurl'])}" /></a>
+								</div>
+							 {/if}
+						</div>
+					{/if}
+				 </div>
+			{/if}
+		</div>
+	{elseif $diyitem['params']['row']>1}
+		{if empty($diyitem['params']['showtype']) || count($diyitem['data'])<=intval($diyitem['style']['pagenum'])}
+			<div class="diy-picturew row-{$diyitem['params']['row']} lazyload-container" style="padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px; background: {$diyitem['style']['background']};">
+				{loop $diyitem['data'] $pictureitem}
+					<div class="item" style="padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;">
+						<a href="{$pictureitem['linkurl']}" data-nocache="true">
+							<img src="{php echo tomedia($pictureitem['imgurl'])}" class="lazyload lazyload-store" data-original="{php echo tomedia($pictureitem['imgurl'])}">
+						</a>
+					</div>
+				{/loop}
+			</div>
+		{else}
+			{php $diyitem['data_temp'] = array_chunk($diyitem['data'], $diyitem['style']['pagenum']);}
+			<style>
+				.swiper-{$diyitemid} .swiper-pagination{bottom: 15px;}
+				.swiper-{$diyitemid} .swiper-pagination-bullet-active {background: {$diyitem['style']['dotbackground']};}
+			</style>
+			<div class="swiper swiper-{$diyitemid}" data-element=".swiper-{$diyitemid}">
+				<div class="swiper-container diy-picturew row-{$diyitem['params']['row']}" data-pagination=".swiper-pagination-{$diyitemid}" data-autoplay="2000" style="padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px; background: {$diyitem['style']['background']};">
+					<div class="swiper-wrapper">
+						{loop $diyitem['data_temp'] $data_temp}
+							<div class="swiper-slide">
+									{loop $data_temp $pictureitem}
+									<div class="item" style="padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;">
+										<a href="{$pictureitem['linkurl']}" data-nocache="true">
+											<img src="{php echo tomedia($pictureitem['imgurl'])}" class="lazyload lazyload-store" data-original="{php echo tomedia($pictureitem['imgurl'])}">
+										</a>
+									</div>
+								{/loop}
+							</div>
+						{/loop}
+					</div>
+					{if $diyitem['style']['showdot'] == 1}
+						<div class="swiper-pagination swiper-pagination-{$diyitemid}"></div>
+					{/if}
+				</div>
+			</div>
+		{/if}
+	{/if}
+{/if}

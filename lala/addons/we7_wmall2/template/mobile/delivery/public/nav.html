@@ -1,0 +1,16 @@
+<nav class="bar bar-tab footer-bar">
+	<a class="tab-item external {if $_W['_op'] == 'takeout'}active{/if}" href="{php echo imurl('delivery/order/takeout');}">
+		<span class="icon icon icon-takeout"></span>
+		<span class="tab-label">外卖</span>
+	</a>
+	{if $config_errander['status'] == 1 && $_deliveryer_type != 2}
+		<a class="tab-item external {if $_W['_op'] == 'errander'}active{/if}" href="{php echo imurl('delivery/order/errander');}">
+			<span class="icon icon-errander"></span>
+			<span class="tab-label">跑腿</span>
+		</a>
+	{/if}
+	<a class="tab-item {if $_W['_action'] == 'member'}active{/if}" href="{php echo imurl('delivery/member/mine');}">
+		<span class="icon icon-mine"></span>
+		<span class="tab-label">我的</span>
+	</a>
+</nav>

@@ -1,0 +1,185 @@
+{itemplate 'public/header'}
+<style>
+	.type{display: none;}
+</style>
+<div class="page clearfix">
+	<h2>{$_W['page']['title']}</h2>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="op" value="{$op}"/>
+		<div class="alert alert-info">排行榜类型如果选择已提现佣金, 则排行榜中的累积金额为已提现佣金。</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">直接连接</label>
+			<div class="col-sm-9 col-xs-12">
+				<p class="form-control-static">
+					<a href="javascript:;" class="js-clip" data-href="{$rank['url']}">{$rank['url']}</a>
+				</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">排行榜开关</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="status" id="status-1" {if $rank['status'] == 1 || empty($rank['status'])}checked{/if}>
+					<label for="status-1">启用</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="status" id="status-0" {if $rank['status'] == 0}checked{/if}>
+					<label for="status-0">禁用</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">排行榜类型</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="type" id="type-0" {if empty($rank['type'])}checked{/if}  required="true" onclick="$('.type').hide();">
+					<label for="type-0">按累计佣金</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="type" id="type-1" {if $rank['type'] == 1}checked{/if}  required="true" onclick="$('.type').hide();">
+					<label for="type-1">按已成功提现佣金</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="2" name="type" id="type-2" {if $rank['type'] == 2}checked{/if}  required="true" onclick="$('.type').hide();$('.type-2').show();">
+					<label for="type-2">虚拟排行榜</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group type type-2" {if $rank['type'] == 2}style="display:block;{/if}">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+			<div class="col-sm-9 col-xs-9 col-md-9">
+				<table class="table table-hover table-bordered">
+					<thead class="navbar-inner">
+					<tr>
+						<th>头像</th>
+						<th>昵称</th>
+						<th width="200">佣金</th>
+						<th class="text-right">操作</th>
+					</tr>
+					</thead>
+					<tbody id="tpl-fictitious-container">
+						{if $rank['infomation']}
+							{loop $rank['infomation'] $value}
+							<tr>
+								<td>
+									<div class="input-group ">
+										<div class="input-group-addon">
+											<img src="{php echo tomedia($value['avatar'])}" width="20" height="20">
+										</div>
+										<input type="text" name="avatar[]" value="{$value['avatar']}" class="form-control" autocomplete="off">
+										<span class="input-group-btn">
+											<button class="btn btn-default btn-image" type="button">选择图片</button>
+										</span>
+									</div>
+								</td>
+								<td>
+									<input type="text" name="nickname[]" class="form-control" value="{$value['nickname']}">
+								</td>
+								<td>
+									<input type="text" name="commission[]" class="form-control" value="{$value['commission']}">
+								</td>
+								<td class="text-right">
+									<a href="javascript:;" class="btn btn-default btn-del" title="删除" data-toggle="tooltip" data-placement="top"><i class="fa fa-times"> </i></a>
+								</td>
+							</tr>
+							{/loop}
+						{else}
+							<tr>
+								<td>
+									<div class="input-group ">
+										<div class="input-group-addon">
+											<img src="" width="20" height="20">
+										</div>
+										<input type="text" name="avatar[]" value="" class="form-control" autocomplete="off">
+										<span class="input-group-btn">
+											<button class="btn btn-default btn-image" type="button">选择图片</button>
+										</span>
+									</div>
+								</td>
+								<td>
+									<input type="text" name="nickname[]" class="form-control" value="">
+								</td>
+								<td>
+									<input type="text" name="commission[]" class="form-control" value="">
+								</td>
+								<td class="text-right">
+									<a href="javascript:;" class="btn btn-default btn-del" title="删除" data-toggle="tooltip" data-placement="top"><i class="fa fa-times"> </i></a>
+								</td>
+							</tr>
+						{/if}
+					</tbody>
+					<tfooter>
+						<tr>
+							<td colspan="4">
+								<a href="javascipt:;" class="text-primary" id="edit-add"><i class="fa fa-plus-circle"></i> 继续添加</a>
+							</td>
+						</tr>
+					</tfooter>
+				</table>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">排行榜显示数量</label>
+			<div class="col-sm-5 col-xs-12">
+				<input type="text" class="form-control" name="num" value="{$rank['num']}" required="true">
+				<span class="help-block">最大可设置为300,超过300按300计算</span>
+			</div>
+		</div>
+		<div class="form-group col-sm-12">
+			<input type="submit" value="提交" class="btn btn-primary">
+		</div>
+	</form>
+</div>
+<script>
+irequire(['web/tiny'], function(tiny){
+	var html = 	'<tr>'+
+				'	<td>'+
+				'		<div class="input-group ">'+
+				'			<div class="input-group-addon">'+
+				'				<img src="" width="20" height="20">'+
+				'			</div>'+
+				'			<input type="text" name="avatar[]" value="" class="form-control" autocomplete="off">'+
+				'			<span class="input-group-btn">'+
+				'				<button class="btn btn-default btn-image" type="button">选择图片</button>'+
+				'			</span>'+
+				'		</div>'+
+				'	</td>'+
+				'	<td>'+
+				'		<input type="text" name="nickname[]" class="form-control" value="">'+
+				'	</td>'+
+				'	<td>'+
+				'		<input type="text" name="commission[]" class="form-control" value="">'+
+				'	</td>'+
+				'	<td class="text-right">'+
+				'		<a href="javascript:;" class="btn btn-default btn-del" title="删除" data-toggle="tooltip" data-placement="top"><i class="fa fa-times"> </i></a>'+
+				'	</td>'+
+				'</tr>'
+
+	$(document).on('click', '.btn-image', function(){
+		var btn = $(this);
+		var ipt = btn.parent().prev();
+		var val = ipt.val();
+		var img = ipt.parent().parent().find(".input-group-addon img");
+		util.image(val, function(url){
+			if(url.url){
+				if(img.length > 0){
+					img.get(0).src = url.url;
+				}
+				ipt.val(url.attachment);
+				ipt.attr("filename",url.filename);
+				ipt.attr("url",url.url);
+			}
+		}, null);
+	});
+
+	$(document).on('click', '#edit-add', function(){
+		$('#tpl-fictitious-container').append(html);
+	});
+
+	$(document).on('click', '.btn-del', function(){
+		$(this).parent().parent().remove();
+	});
+})
+</script>
+
+{itemplate 'public/footer'}

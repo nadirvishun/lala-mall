@@ -1,0 +1,20 @@
+{if $op == 'remind'}
+<form class="form-horizontal form-validate" action="{php echo iurl('order/tangshi/remind');}" method="post" enctype="multipart/form-data">
+	<input type='hidden' name='id' value='{$id}' />
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button data-dismiss="modal" class="close" type="button">×</button>
+				<h4 class="modal-title">回复催单</h4>
+			</div>
+			<div class="modal-body">
+				<textarea class="form-control" name="reply"  placeholder="回复催单" rows="4" required="true"></textarea>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" type="submit">提交</button>
+				<button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+			</div>
+		</div>
+	</div>
+</form>
+{/if}

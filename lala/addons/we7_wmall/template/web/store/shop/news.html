@@ -1,0 +1,41 @@
+{itemplate 'public/header'}
+{if $ta == 'list'}
+<div class="page news-category clearfix">
+	<ul class="nav nav-tabs">
+		<li role="presentation" {if $cateid == 0}class="active"{/if}><a href="{php echo iurl('store/shop/news/list', array('cateid' => 0))}">全部</a></li>
+		{loop $categorys $category}
+			<li role="presentation" {if $category['id'] == $cateid}class="active"{/if}><a href="{php echo iurl('store/shop/news/list', array('cateid' => $category['id']))}">{$category['title']}</a></li>
+		{/loop}
+	</ul>
+	{loop $news $new}
+		<div class="col-md-3">
+			<a href="{php echo iurl('store/shop/news/detail', array('id' => $new['id']))}">
+				<div class="news-tab">
+					<img width="100%" height="200px" src="{php echo tomedia($new['thumb'])}" alt="">
+					<div class="watched-tab">
+						<span class="watched-txt pull-right">{$new['click']}人看过</span>
+					</div>
+				</div>
+				<div class="news-des">
+					<div class="title">
+						{$new['title']}
+					</div>
+					<div class="grayest des">
+						{$new['desc']}
+					</div>
+				</div>
+			</a>
+		</div>
+	{/loop}
+</div>
+{/if}
+
+{if $ta == 'detail'}
+<div class="page news-detail clearfix">
+	<h2 class="text-center">{$news[title]}</h2>
+	<h3>{$news['author']} 著 &nbsp;&nbsp;{$news['click']}人阅读</h3>
+	<div>{$news['content']}</div>
+</div>
+{/if}
+
+{itemplate 'public/footer'}

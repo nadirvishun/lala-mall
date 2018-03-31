@@ -1,0 +1,271 @@
+{itemplate 'public/header'}
+{if $op == 'config'}
+<div class="page clearfix">
+	<div class="alert alert-warning">
+		分享红包活动玩法：<br>
+		&nbsp; &nbsp; &nbsp;1. 分享人给好友发红包，邀请好友成为平台新用户，好友领取红包并完成首单，您即可获得奖励红包<br>
+		&nbsp; &nbsp; &nbsp;2. 分享人的好友必须是从未使用过平台的新用户<br>
+		&nbsp; &nbsp; &nbsp;3. 好友领取红包后需在平台完成首单(注意：只是首单奖励)，且无退款行为<br>
+		&nbsp; &nbsp; &nbsp;4. 奖励红包将会在订单完成的24小时内发送到分享人的账户中
+		<br>
+	</div>
+	<form class="form-horizontal form form-validate" id="form1" action="" method="post" enctype="multipart/form-data">
+	<h3>基本设置</h3>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="radio radio-inline">
+					<input type="radio" value="1" name="status" id="status-1" {if $activity['status'] == 1}checked{/if}>
+					<label for="status-1">开启</label>
+				</div>
+				<div class="radio radio-inline">
+					<input type="radio" value="0" name="status" id="status-0" {if $activity['status'] == 0}checked{/if}>
+					<label for="status-0">关闭</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动主题</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="title" value="{$activity['title']}" class="form-control" required="true">
+				<input type="hidden" name="id" value="{$activity['id']}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动开始时间</label>
+			<div class="col-sm-9 col-xs-12">
+				{php echo tpl_form_field_date('starttime', $activity['starttime'], true);}
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动结束时间</label>
+			<div class="col-sm-9 col-xs-12">
+				{php echo tpl_form_field_date('endtime', $activity['endtime'], true);}
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享人获得红包金额</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<input type="number" name="share_redpacket_min" value="{$activity['share_redpacket_min']}" class="form-control"  required="true" number="true">
+					<span class="input-group-addon">至</span>
+					<input type="number" name="share_redpacket_max" value="{$activity['share_redpacket_max']}" class="form-control"  required="true" number="true">
+					<span class="input-group-addon">元</span>
+				</div>
+				<span class="help-block">此项设置分享人在被分享人订单完成后可获得的红包金额范围。系统会在这个范围内随机赠送</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享人获得红包的使用条件</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon">满</span>
+					<input type="number" name="share_redpacket_condition" value="{$activity['share_redpacket_condition']}" class="form-control"  required="true" number="true">
+					<span class="input-group-addon">元</span>
+				</div>
+				<span class="help-block">此项设置分享人在被分享人订单完成后获得的红包的使用条件</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享人获得红包的有效期限</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<input class="form-control" type="number" value="{$activity['share_redpacket_days_limit']}" name="share_redpacket_days_limit" required="true" digtis="true" aria-required="true">
+					<span class="input-group-addon">天</span>
+				</div>
+				<span class="help-block">此项设置分享人在被分享人订单完成后获得的红包在几天内有效</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">被分享人获得红包金额</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<input type="number" name="follow_redpacket_min" value="{$activity['follow_redpacket_min']}" class="form-control" required="true" number="true">
+					<span class="input-group-addon">至</span>
+					<input type="number" name="follow_redpacket_max" value="{$activity['follow_redpacket_max']}" class="form-control" required="true" number="true">
+					<span class="input-group-addon">元</span>
+				</div>
+				<span class="help-block">此项设置被分享人在注册成为新用户后可获得的红包金额。系统会在这个范围内随机赠送。注意：被分享人获得的红包可无门槛使用</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">被分享人获得红包有效期限</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<input class="form-control" type="number" value="{$activity['follow_redpacket_days_limit']}" name="follow_redpacket_days_limit" required="true" digtis="true">
+					<span class="input-group-addon">天</span>
+				</div>
+				<span class="help-block">此项设置被分享人在注册成为新用户后获得的红包在几天内有效</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动规则</label>
+			<div class="col-sm-9 col-xs-12">
+				{php echo tpl_ueditor('agreement', $activity['agreement']);}
+			</div>
+		</div>
+		<h3>分享设置</h3>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享标题</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="share_title" value="{$activity['share']['title']}" class="form-control" required="true">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享描述</label>
+			<div class="col-sm-9 col-xs-12">
+				<input type="text" name="desc" value="{$activity['share']['desc']}" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动图片</label>
+			<div class="col-sm-9 col-xs-12">
+				{php echo tpl_form_field_image('imgUrl', $activity['share']['imgUrl'])}
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-xs-12">
+			<input type="submit" value="提交" class="btn btn-primary">
+			</div>
+		</div>
+	</form>
+</div>
+{/if}
+
+{if $op == 'invite'}
+<form action="./index.php" class="form-horizontal form-invite">
+	{php echo tpl_form_filter_hidden('shareRedpacket/activity/invite');}
+	<input type="hidden" name="status" value="{$status}">
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">被邀请人是否已下单</label>
+		<div class="col-sm-9 col-xs-12">
+			<div class="btn-group">
+				<a href="{php echo ifilter_url('status:-1');}" class="btn {if $status == -1}btn-primary{else}btn-default{/if}">不限</a>
+				<a href="{php echo ifilter_url('status:1');}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">已下单</a>
+				<a href="{php echo ifilter_url('status:0');}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">未下单</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">领取时间</label>
+		<div class="col-sm-4 col-xs-4">
+			{php echo tpl_form_field_daterange('addtime', array('start' => date('Y-m-d', $starttime), 'end' => date('Y-m-d', $endtime)));}
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">搜索</label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="text" name="keyword" class="form-control" value="{$keyword}" placeholder="搜索邀请人的姓名、昵称、手机号">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="submit" value="筛选" class="btn btn-primary">
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			{if empty($invites)}
+			<div class="no-result">
+				<p>还没有相关数据</p>
+			</div>
+			{else}
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>邀请人</th>
+					<th>被邀请人</th>
+					<th>邀请人可获得金额</th>
+					<th width="300px">被邀请人可领取金额</th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $invites $invite}
+				<tr>
+					<td><img width="50" height="50" src="{$invite['share_avatar']}" alt="">&nbsp;&nbsp;{$invite['share_realname']}</td>
+					<td><img width="50" height="50" src="{$invite['follow_avatar']}" alt="">&nbsp;&nbsp;{$invite['follow_realname']}</td>
+					<td>{$invite['share_redpacket_discount']}元</td>
+					<td>{$invite['follow_redpacket_discount']}元</td>
+				</tr>
+				{/loop}
+				</tbody>
+			</table>
+			<div class="btn-region clearfix">
+				<div class="pull-right">
+					{$pager}
+				</div>
+			</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{/if}
+
+{if $op == 'ranking'}
+<form action="./index.php" class="form-horizontal form-invite">
+	{php echo tpl_form_filter_hidden('shareRedpacket/activity/ranking');}
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">领取时间</label>
+		<div class="col-sm-4 col-xs-4">
+			{php echo tpl_form_field_daterange('addtime', array('start' => date('Y-m-d', $starttime), 'end' => date('Y-m-d', $endtime)));}
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">搜索</label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="text" name="keyword" value="{$keyword}" class="form-control" placeholder="搜索邀请人的姓名、昵称、手机号">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-4 col-xs-4">
+			<input type="submit" value="筛选" class="btn btn-primary">
+		</div>
+	</div>
+</form>
+<form action="" class="form-table form" method="post">
+	<div class="panel panel-table">
+		<div class="panel-body table-responsive js-table">
+			{if empty($rankings)}
+				<div class="no-result">
+					<p>还没有相关数据</p>
+				</div>
+			{else}
+				<table class="table table-hover">
+					<thead>
+					<tr>
+						<th>邀请人</th>
+						<th>邀请新用户总数</th>
+						<th>被邀请人成功下单</th>
+						<th>邀请人预计领取的红包金额</th>
+						<th>邀请人已领取的红包金额</th>
+						<th style="text-align: right">操作</th>
+					</tr>
+					</thead>
+					<tbody>
+					{loop $rankings $ranking}
+						<tr>
+							<td><img width="50" height="50" src="{php echo $ranking['share_avatar']}" alt="">&nbsp;&nbsp;{$ranking['share_realname']}</td>
+							<td>{$ranking['total']}人</td>
+							<td>{$ranking['has_ordered']}人</td>
+							<td>{$ranking['pre_sum']}元</td>
+							<td>{$ranking['sum']}元</td>
+							<td align="right"><a href="{php echo iurl('shareRedpacket/activity/invite', array('share_uid' => $ranking['share_uid']))}" class="btn btn-default btn-sm">查看</a></td>
+						</tr>
+					{/loop}
+					</tbody>
+				</table>
+				<div class="btn-region clearfix">
+					<div class="pull-right">
+						{$pager}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</form>
+{/if}
+{itemplate 'public/footer'}

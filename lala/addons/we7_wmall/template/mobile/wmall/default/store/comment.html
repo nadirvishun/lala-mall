@@ -1,0 +1,258 @@
+{itemplate 'public/header'}
+<div class="page store shopcategory" id="page-app-store-comment">
+	{php get_mall_menu();}
+	<header class="bar bar-nav common-bar-nav">
+		<a class="pull-left back" href="javascript:;"><i class="icon icon-arrow-left"></i></a>
+		<h1 class="title open-popup" data-popup=".popup-privilege">{$store['title']}</h1>
+		<a class="pull-right" href="javascript:;" id="btn-favorite" data-id="{$store['id']}" data-uid="{$_W['member']['uid']}">
+			<i class="fa {if !empty($is_favorite)}icon icon-favorfill{else}icon icon-favor{/if}"></i>
+		</a>
+	</header>
+	<div class="store-notice open-popup" data-popup=".popup-privilege">
+		<span class="js-scroll-notice">
+			<span class="icon icon-voice"></span>
+			{if !empty($store['notice'])}
+				{$store['notice']}
+			{else}
+				营业时间: {$store['business_hours_cn']}
+			{/if}
+		</span>
+	</div>
+	<div class="buttons-tab">
+		<a href="{php echo imurl('wmall/store/goods', array('sid' => $store['id']));}" class="button">商品</a>
+		<a href="{php echo imurl('wmall/store/comment', array('sid' => $store['id']));}" class="button active">评价</a>
+		<a href="{php echo imurl('wmall/store/index', array('sid' => $store['id']));}" class="button">商家</a>
+		{if !empty($store['sns']['qq'])}
+			<a href="http://wpa.qq.com/msgrd?v=3&uin={$store['sns']['qq']}&site=qq&menu=yes" class="button">客服</a>
+		{/if}
+	</div>
+	<div class="content infinite-scroll js-infinite" data-href="{php echo imurl('wmall/store/comment', array('sid' => $sid, 'type' => $_GPC['type']));}" data-distance="50" data-min="{$min}" data-container=".comment-list ul" data-tpl="tpl-comment">
+		{if empty($comments)}
+			<div class="common-no-con">
+				<img src="{WE7_WMALL_TPL_URL}static/img/comment_no_con.png" alt="" />
+				<p>这个店铺还没有评价！</p>
+			</div>
+		{else}
+			<div id="comment">
+				<div class="table comment-nav">
+					<div class="table-cell border-1px-r">
+						<a href="">
+							<div class="count">{$stat['score']}</div>
+							<div class="">整体评价</div>
+						</a>
+					</div>
+					<div class="table-cell border-1px-r">
+						<a href="">
+							<div class="count">{$stat['goods_quality']}</div>
+							<div class="">商品质量</div>
+						</a>
+					</div>
+					<div class="table-cell">
+						<a href="">
+							<div class="count">{$stat['delivery_service']}</div>
+							<div class="">配送服务</div>
+						</a>
+					</div>
+				</div>
+				<div class="comment-list">
+					<div class="list-item-top">
+						<div class="btn-tab row no-gutter">
+							<div class="col-25"><span {if !$type}class="active"{/if}><a href="{php echo imurl('wmall/store/comment', array('type' => 0, 'sid' => $store['id']));}">全部({$stat['all']})</a></span></div>
+							<div class="col-25"><span {if $type == 1}class="active"{/if}><a href="{php echo imurl('wmall/store/comment', array('type' => 1, 'sid' => $store['id']));}">好评({$stat['good']})</a></span></div>
+							<div class="col-25"><span {if $type == 2}class="active"{/if}><a href="{php echo imurl('wmall/store/comment', array('type' => 2, 'sid' => $store['id']));}">中评({$stat['middle']})</a></span></div>
+							<div class="col-25"><span {if $type == 3}class="active"{/if}><a href="{php echo imurl('wmall/store/comment', array('type' => 3, 'sid' => $store['id']));}">差评({$stat['bad']})</a></span></div>
+						</div>
+						<div class="content-padded"></div>
+					</div>
+					<div class="list-block media-list">
+						<ul>
+							{loop $comments $comment}
+								<li class="border-1px-b">
+									<a href="javascript:;" class="item-content">
+										<div class="item-media">
+											<img src="{$comment['avatar']}" alt="">
+										</div>
+										<div class="item-inner">
+											<div class="item-title-row">
+												<div class="item-title">{$comment['mobile']}</div>
+												<div class="item-after">{$comment['addtime']}</div>
+											</div>
+											<div class="item-text">
+												<div>
+													<div class="star-rank">
+														<span class="star-rank-outline">
+															<span class="star-rank-active" style="width:{$comment['score']}%"></span>
+														</span>
+													</div>
+													<span class="color-muted hide">送货速度:40分钟</span>
+												</div>
+												{if !empty($comment['note'])}
+													<div class="comment-info">{$comment['note']}</div>
+												{/if}
+												{if !empty($comment['data']['good'])}
+													<div class="comment-favor-oppose">
+														<i class="icon favor"></i>
+														{loop $comment['data']['good'] $good}
+															<span>{$good}</span>
+														{/loop}
+													</div>
+												{/if}
+												{if !empty($comment['thumbs'])}
+													<div class="comment-images-containter row">
+														{loop $comment['thumbs'] $thumb}
+														<div class="col-33 photoBrowser-image-item">
+															<img src="{$thumb}" alt=""/>
+														</div>
+														{/loop}
+													</div>
+												{/if}
+												{if !empty($comment['reply'])}
+													<div class="store-comment">
+														<div class="clearfix store-comment-top">
+															店家回复<span class="pull-right">{$comment['replytime']}</span>
+														</div>
+														<div class="info">{$comment['reply']}</div>
+													</div>
+												{/if}
+											</div>
+										</div>
+									</a>
+								</li>
+							{/loop}
+						</ul>
+					</div>
+				</div>
+				<div class="infinite-scroll-preloader hide">
+					<div class="preloader"></div>
+				</div>
+			</div>
+		{/if}
+	</div>
+</div>
+
+<script id="tpl-comment" type="text/html">
+	<{# for(var i = 0, len = d.length; i < len; i++){ }>
+	<li class="border-1px-b">
+		<a href="javascript:;" class="item-content">
+			<div class="item-media">
+				<img src="<{d[i].avatar}>" alt="">
+			</div>
+			<div class="item-inner">
+				<div class="item-title-row">
+					<div class="item-title"><{d[i].mobile}></div>
+					<div class="item-after"><{d[i].addtime}></div>
+				</div>
+				<div class="item-text">
+					<div>
+						<div class="star-rank">
+							<span class="star-rank-outline">
+								<span class="star-rank-active" style="width:<{d[i].score}>%"></span>
+							</span>
+						</div>
+						<span class="color-muted hide">送货速度:40分钟</span>
+					</div>
+					<{# if(d[i].note != ''){ }>
+						<div class="comment-info"><{d[i].note}></div>
+					<{# } }>
+					<{# if(d[i].data && d[i].data.good && d[i].data.good.length > 0){ }>
+						<div class="comment-favor-oppose">
+							<i class="icon favor"></i>
+							<{# for(var j = 0, lenj = d[i].data.good.length; j < lenj; j++){ }>
+							<span><{d[i].data.good[j]}></span>
+							<{# } }>
+						</div>
+					<{# } }>
+					<{# if(d[i].thumbs && d[i].thumbs.length > 0){ }>
+						<div class="comment-images-containter row">
+							<{# for(var j = 0, lenj = d[i].thumbs.length; j < lenj; j++){ }>
+								<div class="col-33 photoBrowser-image-item">
+									<img src="<{d[i].thumbs[j]}>" alt=""/>
+								</div>
+							<{# } }>
+						</div>
+					<{# } }>
+					<{# if(d[i].reply != ''){ }>
+						<div class="store-comment">
+							<div class="clearfix store-comment-top">
+								店家回复<span class="pull-right"><{d[i].replytime}></span>
+							</div>
+							<div class="info"><{d[i].reply}></div>
+						</div>
+					<{# } }>
+				</div>
+			</div>
+		</a>
+	</li>
+	<{# } }>
+</script>
+<div class="popup popup-privilege">
+	<div class="popup-opacity">
+		<div class="content-block">
+			<div class="store-name">{$store['title']}</div>
+			<div class="star-rank">
+				<span class="star-rank-outline">
+					<span class="star-rank-active" style="width:{$store['score_cn']}%"></span>
+					<span class="star-rank-value">{$store['score']}</span>
+				</span>
+			</div>
+			<div class="sell-info">已售{$store['sailed']}份&nbsp;&nbsp;营业时间: {$store['business_hours_cn']}</div>
+			<div class="evaluate">优惠活动</div>
+			{if $activity['first_order_status'] == 1}
+				<div class="xin text-left">
+					新用户在线支付
+					{loop $activity['first_order_data'] $first}
+						满{$first['condition']}元减{$first['back']}元,
+					{/loop}
+				</div>
+			{/if}
+			{if $activity['discount_status'] == 1}
+				<div class="minus text-left">
+					在线支付
+					{loop $activity['discount_data'] $discount}
+						满{$first['condition']}元减{$discount['back']}元,
+					{/loop}
+				</div>
+			{/if}
+			{if $activity['grant_status'] == 1}
+				<div class="zeng text-left">
+					在线支付
+					{loop $activity['grant_data'] $grant}
+						满{$grant['$discount']}元赠{$grant['back']},
+					{/loop}
+				</div>
+			{/if}
+			{if $store['collect_coupon_status'] == 1}
+				<div class="coupon text-left">
+					进店可领取代金券
+				</div>
+			{/if}
+			{if $store['delivery_free_price'] > 0}
+				<div class="free text-left">
+					满{$store['delivery_free_price']}元免配送费
+				</div>
+			{/if}
+			<div class="announcement">商家公告</div>
+			<div class="announcement-con">
+				{if !empty($store['notice'])}
+					{$store['notice']}<br>
+				{/if}
+				本店欢迎您下单，用餐高峰请提前下单，谢谢！
+			</div>
+			<p><a href="#" class="close-popup"><span class="icon icon-close"></span></a></p>
+		</div>
+	</div>
+</div>
+<script>
+require(['member'], function(member){
+	member.initFavorite();
+	var left = 0, notice = $(this).find('.js-scroll-notice');
+	setInterval(function(){
+		left--;
+		0 > left + notice.width() && (left = notice.width());
+		notice.css({
+			'left': left
+		});
+	}, 25);
+});
+</script>
+{itemplate 'public/footer'}

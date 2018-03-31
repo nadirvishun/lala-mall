@@ -1,0 +1,138 @@
+{itemplate 'public/header'}
+<div class="page agent-address">
+	<header class="bar bar-nav">
+		<a class="pull-left" href="{php echo imurl('wmall/home/index');}"><i class="icon icon-arrow-left"></i></a>
+		<a class="button button-link button-nav pull-right external" href="{php echo imurl('wmall/member/address');}">新增地址</a>
+		<h1 class="title">选择收货地址</h1>
+	</header>
+	<div class="bar bar-header-secondary">
+		<div class="searchbar">
+			<div class="search-input-container clearfix">
+				<div class="city pull-left">
+					<span class="city-name" id="city-name">{$agent['area']}</span>
+					<span class="icon icon-arrow-down-fill"></span>
+					<input name="lat" id="lat" value="" type="hidden"/>
+					<input name="lng" id="lng" value="" type="hidden"/>
+				</div>
+				<input class="pull-left" type="search" id='search' placeholder='请输入您的收货地址'/>
+			</div>
+		</div>
+	</div>
+	<div class="content">
+		<div class="my-address list-block media-list">
+			{if empty($addresss)}
+				<div class="common-no-con">
+					<img src= "{WE7_WMALL_TPL_URL}static/img/address_no_con.png" alt="" />
+					<p>您还没有送货地址，快去添加吧！</p>
+				</div>
+			{else}
+				<div class="address-list-title"><span class="icon icon-clock"></span> 我的收货地址</div>
+				<ul class="border-1px-tb">
+					{loop $addresss $key $address}
+						<li class="item-content">
+							<a href="{php echo imurl('wmall/home/index', array('aid' => $address['id'], 'lat' => $address['location_x'], 'lng' => $address['location_y'], 'address' => $address['address'], 'd' => 1));}">
+								<div class="item-inner {if $key != 0}border-1px-t{/if}">
+									<div class="detail-address">{$address['address']}</div>
+									<div><span class="name">{$address['realname']}</span><span class="sex">{$address['sex']}</span><span class="mobile">{$address['mobile']}</span></div>
+								</div>
+							</a>
+						</li>
+					{/loop}
+				</ul>
+			{/if}
+		</div>
+		<div class="city-list list-block hide contacts-block">
+			{loop $initials $initial}
+				<div class="list-group">
+					<ul>
+						<li class="list-group-title">{$initial['initial']}</li>
+						{loop $initial['agent'] $key $agent}
+							<li class="city-item" data-title="{$agent['area']}" data-id="{$agent['id']}">
+								<div class="item-content">
+									<div class="item-inner {if $key != 0}border-1px-t{/if}">
+										<div class="item-title">{$agent['area']}</div>
+									</div>
+								</div>
+							</li>
+						{/loop}
+					</ul>
+				</div>
+			{/loop}
+		</div>
+		<ul class="search-list hide" id="search-list"></ul>
+	</div>
+</div>
+<script type="text/javascript" src="//webapi.amap.com/maps?v=1.3&key=550a3bf0cb6d96c3b43d330fb7d86950"></script>
+<script>
+	$(function() {
+		var agent_id = {$agent['id']};
+		function getAdress(re){
+			var addressHtml = '';
+			for(var i=0; i < re.length; i++){
+				addressHtml += '<li class="border-1px-b select-locate '+ (i == 0 ? 'locate-ls-active' : '') +'" data-lng="'+re[i]['lng']+'" data-lat="'+re[i]['lat']+'" data-name="'+re[i]['name']+'" data-address="'+re[i]['address']+'">';
+				addressHtml += '<div class="locate-ls-info clearfix"><span class="locate pull-left">'+(i == 0 ? '[推荐位置]' : '')+'   '+re[i]['name']+' </span> <span class="pull-right">'+re[i]['distance']+'km</span></div>';
+				addressHtml += '<span> '+re[i]['address']+' </span>';
+				addressHtml += '</li>';
+			}
+			$('#search-list').html(addressHtml);
+		}
+
+		$(document).on('click', '.city', function() {
+			$(this).toggleClass('active');
+			$('.search-list').addClass('hide');
+			if($(this).hasClass('active')) {
+				$('.current-city').removeClass('hide');
+				$('.city-list').removeClass('hide');
+				$('.my-address').addClass('hide');
+				$('.index-list-bar').show();
+			} else {
+				$('.current-city').addClass('hide');
+				$('.city-list').addClass('hide');
+				$('.my-address').removeClass('hide');
+				$('.index-list-bar').hide();
+			}
+		});
+
+		$(document).on('click', '.city-list .city-item', function() {
+			var title = $(this).data('title');
+			agent_id =  $(this).data('id');
+			$('#city-name').html(title);
+			$('.city').removeClass('active');
+			$('.current-city').addClass('hide');
+			$('.city-list').addClass('hide');
+			$('.my-address').removeClass('hide');
+			$('.index-list-bar').hide();
+		});
+
+		$('#search').bind('input', function(){
+			var key = $.trim($(this).val());
+			if(!key) {
+				return false;
+			}
+			var city = $('#city-name').html();
+			var lat = $('#lat').val();
+			var lng = $('#lng').val();
+			$('#search-list').removeClass('hide');
+			$.post("{php echo imurl('wmall/home/agent/suggestion');}", {key: key, city: city, lat: lat, lng: lng}, function(data){
+				var result = $.parseJSON(data);
+				if(result.message.error != -1) {
+					getAdress(result.message.message, '#search-list');
+				}
+			});
+		});
+
+		$(document).on('click', '.select-locate', function() {
+			var lng = $(this).data('lng');
+			var lat = $(this).data('lat');
+			var address = $(this).data('name');
+			var params = '&lat='+lat+'&lng='+lng+'&address='+address;
+			var url = "{php echo imurl('wmall/home/index', array('d' => 1));}"+params;
+			location.href = url;
+		});
+
+		if(!agent_id) {
+			$('.city').trigger('click');
+		}
+	});
+</script>
+{itemplate 'public/footer'}

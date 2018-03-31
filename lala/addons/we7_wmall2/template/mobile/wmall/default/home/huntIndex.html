@@ -1,0 +1,66 @@
+{itemplate 'public/header'}
+<div class="page search-result search-hot">
+	<div class="bar bar-header-secondary">
+		<div class="searchbar">
+			<a class="searchbar-arrow back"><i class="icon icon-arrow-left"></i></a>
+			<a class="searchbar-cancel">搜索</a>
+			<div class="search-input">
+				<label class="icon icon-search" for="search"></label>
+				<input type="search" id='search' name="search" placeholder='请输入商户或商品名称'/>
+			</div>
+		</div>
+	</div>
+	{php get_mall_menu();}
+	<div class="content">
+		{if !empty($stores)}
+			<div class="search-tag">
+				<div class="search-tag-title">热门搜索</div>
+				{loop $stores $store}
+					<span class="search-history" data-value="{$store['title']}"><a href="javascript:;">{$store['title']}</a></span>
+				{/loop}
+			</div>
+		{/if}
+		{if !empty($member['search_data'])}
+			<div class="search-text-list">
+				<ul>
+					{loop $member['search_data'] $data}
+						<li class="search-history" data-value="{$data}"><a href="javascript:;"><i class="icon icon-time"></i> {$data}</a></li>
+					{/if}
+					<li class="last-item"><a href="javascript:;" id="truncate-search-data">清空历史记录</a></li>
+				</ul>
+			</div>
+		{/loop}
+	</div>
+</div>
+<script>
+$(function(){
+	$(document).on('click', '#truncate-search-data', function(){
+		$.post("{php echo imurl('wmall/home/hunt/truncate');}", {}, function(data){
+			$('.search-text-list').remove();
+		});
+	});
+	$(document).on('click', '.search-history', function(){
+		var value = $(this).data('value');
+		if(!value) {
+			return false;
+		}
+		$('.search-input input').val(value);
+		setTimeout(function(){
+			$('.searchbar-cancel').trigger('click');
+		}, 200)
+	});
+
+	$(document).on('click', '.searchbar-cancel', function(){
+		var key = $('.search-input input').val();
+		if(!key) {
+			return false;
+		}
+		$.showIndicator();
+		$.post("{php echo imurl('wmall/home/hunt/search_data');}", {key: key}, function(data){
+			location.href = "{php echo imurl('wmall/home/hunt/search');}&key=" + key;
+		});
+		return false;
+	});
+});
+</script>
+{itemplate 'public/footer'}

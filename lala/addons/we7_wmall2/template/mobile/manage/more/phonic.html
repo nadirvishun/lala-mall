@@ -1,0 +1,132 @@
+{itemplate 'public/header'}
+<div class="page page-manager page-manager-phonic" id="page-manager">
+	<header class="bar bar-nav common-bar-nav">
+		<a class="icon pull-left icon icon-arrow-left back"></a>
+		<h1 class="title">语音提示设置</h1>
+	</header>
+	{itemplate 'public/nav'}
+	<div class="content">
+		<div class="content-block-title">新消息提示</div>
+		<div class="list-block">
+			<ul class="border-1px-tb">
+				<li>
+					<div class="item-content">
+						<div class="item-inner border-1px-b">
+							<div class="item-title">语音提示</div>
+							<div class="item-after">
+								<label class="label-switch switch-sm">
+									<input type="checkbox" class="api-checkbox" name="phonic.voice" value="1">
+									<div class="checkbox"></div>
+								</label>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item-content">
+						<div class="item-inner">
+							<div class="item-title">新消息振动</div>
+							<div class="item-after">
+								<label class="label-switch switch-sm">
+									<input type="checkbox" class="api-checkbox" name="phonic.vibrate" value="1">
+									<div class="checkbox"></div>
+								</label>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="content-block-title">播放频率</div>
+		<div class="list-block">
+			<ul class="border-1px-tb">
+				<li class="item-content item-link js-modal-times phonic-times-new" data-name="phonic.new.times" data-value="">
+					<div class="item-inner border-1px-b">
+						<div class="item-title">接单</div>
+						<div class="item-after">获取中...</div>
+					</div>
+				</li>
+				<li class="item-content item-link js-modal-times phonic-times-refund" data-name="phonic.refund.times" data-value="">
+					<div class="item-inner border-1px-b">
+						<div class="item-title">退单</div>
+						<div class="item-after">获取中...</div>
+					</div>
+				</li>
+				<li class="item-content item-link js-modal-times phonic-times-remind" data-name="phonic.remind.times" data-value="">
+					<div class="item-inner">
+						<div class="item-title">催单</div>
+						<div class="item-after">获取中...</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="content-block-title">铃声</div>
+		<div class="list-block">
+			<ul class="border-1px-tb">
+				<li>
+					<label class="label-checkbox item-content">
+						<input type="radio" class="api-radio" name="phonic.voice_type" value="2">
+						<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+						<div class="item-inner border-1px-b">
+							<div class="item-title">音乐</div>
+							<div class="item-after"></div>
+						</div>
+					</label>
+				</li>
+				<li>
+					<label class="label-checkbox item-content">
+						<input type="radio" class="api-radio" name="phonic.voice_type" value="1">
+						<div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+						<div class="item-inner">
+							<div class="item-title">订单内容</div>
+							<div class="item-after"></div>
+						</div>
+					</label>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<script>
+$(function() {
+	{if !is_cloud()}
+		$.toptip('此功能只能在商户APP中使用', 20000, 'warning');
+	{/if}
+	$(document).on('click', '.js-modal-times', function() {
+		var name = $(this).data('name');
+		var times = $(this).data('value');
+		var html = '<div class="list-block">'+
+				'		<ul>'+
+				'			<li class="border-1px-b">'+
+				'				<label class="label-checkbox item-content">'+
+				'					<div class="item-inner">'+
+				'						<div class="item-title-row">'+
+				'							<div class="item-title">循环播放</div>'+
+				'						</div>'+
+				'					</div>'+
+				'					<input type="radio" class="play-times api-radio" name="' + name + '" value="loop" '+ (times == 'loop' ? 'checked': '') +'>'+
+				'					<div class="item-media"><i class="icon icon-form-checkbox"></i></div>'+
+				'				</label>'+
+				'			</li>'+
+				'			<li>'+
+				'				<label class="label-checkbox item-content">'+
+				'					<div class="item-inner">'+
+				'						<div class="item-title-row">'+
+				'							<div class="item-title">播放3遍</div>'+
+				'						</div>'+
+				'					</div>'+
+				'					<input type="radio" class="play-times api-radio" name="' + name + '" value="three" '+ (times == 'three' ? 'checked': '') +'>'+
+				'					<div class="item-media"><i class="icon icon-form-checkbox"></i></div>'+
+				'				</label>'+
+				'			</li>'+
+				'		</ul>'+
+				'	</div>';
+		var title = '选择播放次数';
+		$.alert(html, title,
+				function() {
+				}
+		);
+	});
+});
+</script>
+{itemplate 'public/footer'}
